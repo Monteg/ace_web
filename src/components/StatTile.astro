@@ -1,0 +1,42 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  icon: string;
+  tint: string;
+  value: string | null;
+  label: string;
+  /** Shown in place of the value when the owner has not supplied it yet. */
+  placeholder?: string;
+}
+
+const { icon, tint, value, label, placeholder = 'TBC' } = Astro.props;
+---
+
+<div class="stat">
+  <span class={`tile tile--${tint}`} aria-hidden="true"><Icon name={icon} /></span>
+  <div class="stat-body">
+    <p class="stat-value tnum">
+      {value ? value : <span class="need">{placeholder}</span>}
+    </p>
+    <p class="stat-label">{label}</p>
+  </div>
+</div>
+
+<style>
+  .stat {
+    display: flex; gap: var(--sp-4); align-items: flex-start;
+    padding: var(--sp-5); border-right: 1px solid var(--line);
+  }
+  .stat:last-child { border-right: 0; }
+  .stat-value {
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
+    font-size: clamp(1.6rem, 2.6vw, 2.1rem); line-height: 1; color: var(--fg);
+  }
+  .stat-label { font-size: 13px; color: var(--fg-2); margin-top: var(--sp-2); line-height: 1.4; }
+
+  @media (max-width: 900px) {
+    .stat { border-right: 0; border-bottom: 1px solid var(--line); }
+    .stat:nth-child(2n) { border-right: 0; }
+  }
+</style>

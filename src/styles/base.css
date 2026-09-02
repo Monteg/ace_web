@@ -1,0 +1,146 @@
+@import './tokens.css';
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; background: var(--ink); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--fg);
+  font-family: 'Inter Variable', Inter, system-ui, 'Segoe UI', sans-serif;
+  font-size: var(--step-0);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg, video { display: block; max-width: 100%; }
+a { color: inherit; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; }
+
+/* one focus rule for the whole site, never overridden per component */
+:focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; border-radius: 4px; }
+
+.wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+.tnum { font-variant-numeric: tabular-nums; }
+.mono { font-family: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* display type */
+.d0, .d1, .d2, .d3, .d4 {
+  font-family: Tanker, 'Tanker Fallback', 'Arial Narrow', Impact, sans-serif;
+  font-weight: 400; letter-spacing: 0.004em; line-height: 0.92;
+  margin: 0; text-wrap: balance;
+}
+.d0 { font-size: var(--step-5); letter-spacing: -0.005em; }
+.d1 { font-size: var(--step-4); }
+.d2 { font-size: var(--step-3); }
+.d3 { font-size: var(--step-2); line-height: 1.02; }
+.d4 { font-size: var(--step-1); line-height: 1.1; }
+
+.eyebrow {
+  font-family: 'JetBrains Mono Variable', monospace; font-size: 11px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--brand); margin: 0;
+}
+.lead { font-size: var(--step-1); color: var(--fg-2); line-height: 1.5; max-width: 52ch; }
+.body { color: var(--fg-2); max-width: 60ch; }
+
+section { padding-block: var(--sp-9); }
+.sec-top { display: flex; flex-direction: column; gap: var(--sp-3); margin-bottom: var(--sp-7); max-width: 60ch; }
+
+/* reveal on scroll: content ships visible, the script adds the hidden start
+   state, so a JS failure leaves the page readable instead of blank */
+.rv-on .rv { opacity: 0; transform: translateY(22px); }
+.rv-on .rv.in {
+  opacity: 1; transform: none;
+  transition: opacity var(--dur-3) var(--ease-out), transform var(--dur-3) var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) { .rv-on .rv { opacity: 1; transform: none; } }
+
+.skip {
+  position: absolute; left: var(--sp-4); top: -100px; z-index: var(--z-skip);
+  background: var(--brand); color: var(--on-brand);
+  font-family: Tanker, Arial, sans-serif; font-size: 1rem;
+  padding: 12px 20px; border-radius: var(--radius); text-decoration: none;
+  transition: top var(--dur-1);
+}
+.skip:focus { top: var(--sp-3); }
+
+/* ---------- buttons: one shape system, one label per intent ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  white-space: nowrap; text-decoration: none; cursor: pointer;
+  font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
+  font-size: 1.05rem; letter-spacing: 0.02em;
+  padding: 14px 26px; min-height: 52px;
+  border-radius: var(--radius-pill); border: 1.5px solid transparent;
+  transition: transform var(--dur-1) var(--ease), background var(--dur-1), border-color var(--dur-1), color var(--dur-1);
+}
+.btn:active { transform: translateY(1px) scale(0.985); }
+.btn-primary { background: var(--brand); color: var(--on-brand); }
+.btn-primary:hover { background: var(--brand-hover); }
+.btn-ghost { border-color: var(--line-2); color: var(--fg); background: rgb(17 17 16 / 0.45); backdrop-filter: blur(8px); }
+.btn-ghost:hover { border-color: var(--fg-3); background: var(--ink-3); }
+.btn-sm { min-height: 44px; padding: 10px 18px; font-size: 0.95rem; }
+/* trailing glyph sits in its own disc, flush with the right padding */
+.btn .disc {
+  width: 28px; height: 28px; margin-right: -12px; border-radius: var(--radius-pill);
+  display: grid; place-items: center; background: rgb(21 19 14 / 0.14);
+  transition: transform var(--dur-2) var(--ease);
+}
+.btn-ghost .disc { background: rgb(255 255 255 / 0.08); }
+.btn:hover .disc { transform: translate(2px, -1px); }
+.btn .disc svg { width: 14px; height: 14px; }
+
+/* ---------- icon tile: a Phosphor glyph on one of the brand tints ---------- */
+.tile {
+  width: 40px; height: 40px; flex: none;
+  display: grid; place-items: center;
+  border-radius: 11px; color: var(--tint-ink);
+}
+.tile svg { width: 21px; height: 21px; }
+.tile--mint { background: var(--tint-mint); }
+.tile--ice { background: var(--tint-ice); }
+.tile--lemon { background: var(--tint-lemon); }
+.tile--peach { background: var(--tint-peach); }
+.tile--pink { background: var(--tint-pink); }
+.tile--sky { background: var(--tint-sky); }
+
+/* ---------- "the owner still has to supply this" ---------- */
+.need { color: var(--peach); border-bottom: 1.5px dashed var(--brand); padding-bottom: 1px; }
+.cream .need { color: #8a4a00; border-bottom-color: var(--brand-deep); }
+
+/* ---------- the one inverted colour block ---------- */
+.cream {
+  background: var(--cream); color: var(--cream-ink);
+  border-block: 1px solid var(--cream-line);
+}
+.cream .d1, .cream .d2, .cream .d3, .cream .d4 { color: var(--cream-ink); }
+.cream .body, .cream .lead { color: var(--cream-ink-2); }
+.cream .eyebrow { color: var(--brand-deep); }
+
+/* ---------- filter chips, shared by the catalogue pages ---------- */
+.chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.chip {
+  font: inherit; font-size: 13.5px; font-weight: 500; cursor: pointer;
+  background: transparent; color: var(--fg-2); border: 1px solid var(--line-2);
+  padding: 11px 18px; min-height: 44px; border-radius: var(--radius-pill);
+  display: inline-flex; align-items: center; transition: var(--dur-1);
+}
+.chip:hover { color: var(--fg); border-color: var(--fg-3); }
+.chip[aria-pressed='true'] { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+
+/* ---------- volatility meter, four bars ---------- */
+.vmeter { display: inline-flex; gap: 3px; align-items: flex-end; height: 14px; }
+.vmeter i { display: block; width: 5px; border-radius: 2px; background: var(--line-2); }
+.vmeter i:nth-child(1) { height: 5px; }
+.vmeter i:nth-child(2) { height: 8px; }
+.vmeter i:nth-child(3) { height: 11px; }
+.vmeter i:nth-child(4) { height: 14px; }
+.vmeter i.on { background: var(--brand); }

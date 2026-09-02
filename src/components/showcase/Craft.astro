@@ -1,0 +1,122 @@
+---
+/**
+ * The "built in-house" block. This is the page's one inverted cream section,
+ * so it must stay the only `.cream` on the home page: a second light block
+ * would turn the accent into a stripe pattern instead of a single pause.
+ *
+ * The three crops are real key art, not stock: a buyer should see our own
+ * pipeline output next to the claim that we run it.
+ */
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import mathsArt from '../../assets/heroes/zeus-run.webp';
+import artArt from '../../assets/games/vikings-gold.webp';
+import engineArt from '../../assets/heroes/star-rocket.webp';
+
+const columns = [
+  {
+    title: 'Maths',
+    icon: 'ph:function',
+    tint: 'mint',
+    art: mathsArt,
+    alt: 'Zeus Run key art',
+    copy: [
+      'RTP bands, volatility modes and bet ranges are configuration, certified per market.',
+      'The maths sheet ships with the game as part of the deliverable.',
+    ],
+  },
+  {
+    title: 'Art',
+    icon: 'ph:paint-brush',
+    tint: 'pink',
+    art: artArt,
+    alt: 'Vikings Gold key art',
+    copy: [
+      'Characters, symbols and animation are drawn by our own artists.',
+      'A theme can be reskinned for your brand or built from scratch.',
+    ],
+  },
+  {
+    title: 'Engine',
+    icon: 'ph:cpu',
+    tint: 'ice',
+    art: engineArt,
+    alt: 'Star Rocket key art',
+    copy: [
+      'An HTML5 client running on our own RGS.',
+      'One integration switches on the whole catalogue.',
+    ],
+  },
+];
+---
+
+<section class="cream craft" id="craft">
+  <div class="wrap">
+    <div class="sec-top rv">
+      <h2 class="d2">Maths, art and engine, all under one roof</h2>
+      <p class="body">
+        Every title is designed, drawn, coded and served by the same team, so nothing waits on a
+        third party.
+      </p>
+    </div>
+
+    <div class="cols">
+      {columns.map((c) => (
+        <article class="col rv">
+          <div class="art">
+            <Image
+              src={c.art}
+              alt={c.alt}
+              widths={[480, 720, 960]}
+              sizes="(max-width: 900px) 92vw, 30vw"
+              loading="lazy"
+            />
+          </div>
+          <div class="col-head">
+            <span class={`tile tile--${c.tint}`} aria-hidden="true"><Icon name={c.icon} /></span>
+            <h3 class="d3">{c.title}</h3>
+          </div>
+          <p class="col-copy">{c.copy.join(' ')}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cols {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-6);
+  }
+  .col { display: flex; flex-direction: column; gap: var(--sp-4); }
+
+  /* isolation keeps the rounded clip intact while the image scales; without
+     it Safari paints square corners for the duration of the transform */
+  .art {
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-l);
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--cream-2);
+  }
+  .art :global(img) {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+    transition: transform var(--dur-2) var(--ease);
+  }
+  .art:hover :global(img) { transform: scale(1.04); }
+
+  .col-head { display: flex; align-items: center; gap: var(--sp-3); margin-top: var(--sp-2); }
+  .col-copy { color: var(--cream-ink-2); line-height: 1.55; max-width: 40ch; }
+
+  @media (max-width: 900px) {
+    .cols { grid-template-columns: 1fr; gap: var(--sp-7); }
+    .art { aspect-ratio: 16 / 9; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .art :global(img) { transition: none; }
+    .art:hover :global(img) { transform: none; }
+  }
+</style>

@@ -1,0 +1,96 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import GameTile from '../../components/showcase/GameTile.astro';
+import { CTA, company } from '../../data/site';
+import { TYPE_PLURAL } from '../../lib/format';
+
+// /portfolio returned a 404 on the old site: the catalogue existed only as a
+// section of the home page and a dropdown listing 17 of 24 titles.
+const games = (await getCollection('games')).sort(
+  (a, b) =>
+    Number(a.data.status === 'coming_soon') - Number(b.data.status === 'coming_soon') ||
+    a.data.order - b.data.order ||
+    a.data.name.localeCompare(b.data.name),
+);
+
+const types = ['slot', 'instant', 'table'] as const;
+const present = types.filter((t) => games.some((g) => g.data.type === t));
+
+const listSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Ace Games catalogue',
+  numberOfItems: games.length,
+  itemListElement: games.map((g, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: g.data.name,
+    url: `${company.origin}/portfolio/${g.id}`,
+  })),
+};
+---
+
+<Base
+  title="Casino game catalogue: slots, crash and instant games | Ace Games"
+  description={`All ${games.length} Ace Games titles with published RTP, volatility and a playable demo on every page. Slot, instant and table games for licensed operators.`}
+  schema={listSchema}
+>
+  <section>
+    <div class="wrap">
+      <div class="sec-top">
+        <p class="eyebrow">Catalogue</p>
+        <h1 class="d1">Every game we have built</h1>
+        <p class="lead">
+          Published RTP and volatility on each title, and a demo you can play without talking to
+          anyone first. Configuration is per operator and per market.
+        </p>
+      </div>
+
+      <div class="chips filters" role="group" aria-label="Filter games by type">
+        <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+        {present.map((t) => (
+          <button class="chip" type="button" data-filter={t} aria-pressed="false">
+            {TYPE_PLURAL[t]}
+          </button>
+        ))}
+      </div>
+
+      <div class="grid-games" id="gameGrid">
+        {games.map((g, i) => <GameTile game={g} eager={i < 4} />)}
+      </div>
+      <p class="filter-note" data-filter-note aria-live="polite"></p>
+
+      <div class="tail rv">
+        <h2 class="d3">Missing a mechanic?</h2>
+        <p class="body">
+          Tell us what your lobby is short of and we will design the maths around it rather than
+          reskinning something we already made.
+        </p>
+        <a class="btn btn-primary" href={CTA.href}>{CTA.label}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .filters { margin-bottom: var(--sp-5); }
+
+  .grid-games { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-4); }
+  @media (max-width: 1040px) { .grid-games { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 780px) { .grid-games { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); } }
+  @media (max-width: 440px) { .grid-games { grid-template-columns: 1fr; } }
+  .filter-note { margin-top: var(--sp-4); font-size: 13px; color: var(--fg-3); min-height: 1.4em; }
+  .grid-games :global(.is-dim) { opacity: 0.38; filter: grayscale(0.7); }
+  .grid-games :global(.is-dim:hover) { opacity: 1; filter: none; }
+
+  .tail {
+    margin-top: var(--sp-8); padding-top: var(--sp-7); border-top: 1px solid var(--line);
+    display: flex; flex-direction: column; gap: var(--sp-4); align-items: flex-start;
+  }
+</style>
+
+<script>
+  import { mountCatalogueFilter } from '../../lib/catalogue-filter';
+  mountCatalogueFilter('gameGrid', '.filters .chip[data-filter]');
+</script>

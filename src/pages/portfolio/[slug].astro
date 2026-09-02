@@ -1,0 +1,152 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import DemoEmbed from '../../components/DemoEmbed.astro';
+import GameHeader from '../../components/showcase/GameHeader.astro';
+import SpecStrip from '../../components/showcase/SpecStrip.astro';
+import GameTile from '../../components/showcase/GameTile.astro';
+import { CTA, company } from '../../data/site';
+import { demoUrl, TYPE_LABEL } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const games = await getCollection('games');
+  return games.map((game) => ({ params: { slug: game.id }, props: { game, all: games } }));
+}
+
+const { game, all } = Astro.props;
+const d = game.data;
+const { Content } = await render(game);
+
+const soon = d.status === 'coming_soon';
+const demo = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
+
+const related = all
+  .filter((g) => g.id !== game.id && g.data.type === d.type && g.data.status === 'live')
+  .slice(0, 3);
+
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: d.name,
+  brand: { '@type': 'Brand', name: company.name },
+  category: `${TYPE_LABEL[d.type]} game`,
+  description: d.seo.description,
+  url: `${company.origin}/portfolio/${game.id}`,
+};
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Games', item: `${company.origin}/games` },
+    { '@type': 'ListItem', position: 2, name: d.name, item: `${company.origin}/portfolio/${game.id}` },
+  ],
+};
+---
+
+<Base title={d.seo.title} description={d.seo.description} schema={[productSchema, breadcrumbSchema]}>
+  <GameHeader game={game} demoAvailable={demo !== null} />
+
+  <!-- spec strip sits right under the header: the numbers are what a games team reads first -->
+  <div class="wrap strip-wrap rv">
+    <SpecStrip game={game} />
+  </div>
+
+  {demo ? (
+    <section id="demo" class="pt-0">
+      <div class="wrap">
+        <div class="sec-top rv">
+          <h2 class="d1">Play the demo</h2>
+          <p class="lead">Loads only when you press play, so the page opens instantly and the game does not use your data unless you asked for it.</p>
+        </div>
+        <div class="rv"><DemoEmbed name={d.name} src={demo} poster={d.hero} /></div>
+      </div>
+    </section>
+  ) : (
+    <section id="demo" class="pt-0">
+      <div class="wrap">
+        <div class="no-demo rv">
+          <h2 class="d2">{soon ? 'In development' : 'Demo on request'}</h2>
+          <p class="body">
+            {soon
+              ? `${d.name} is not released yet. Ask us for the current build and the maths sheet, and we will send them over.`
+              : `A playable build of ${d.name} is available on request.`}
+          </p>
+          <a class="btn btn-primary" href={CTA.href}>{CTA.label}</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="pt-0">
+    <div class="wrap">
+      <div class="over">
+        <div class="over-copy">
+          <div class="sec-top rv"><h2 class="d1">Overview</h2></div>
+          <div class="prose rv"><Content /></div>
+          {d.highlights.length > 0 && (
+            <ul class="highlights rv">
+              {d.highlights.map((h) => <li>{h}</li>)}
+            </ul>
+          )}
+        </div>
+        {d.features.length > 0 && (
+          <aside class="over-side rv">
+            <h3 class="d3">Features</h3>
+            <ol class="feats">
+              {d.features.map((f) => (
+                <li>
+                  <h4 class="d4">{f.title}</h4>
+                  <p>{f.body}</p>
+                </li>
+              ))}
+            </ol>
+          </aside>
+        )}
+      </div>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="pt-0">
+      <div class="wrap">
+        <div class="sec-top rv"><h2 class="d1">More {TYPE_LABEL[d.type].toLowerCase()} games</h2></div>
+        <div class="related rv">
+          {related.map((g) => <GameTile game={g} />)}
+        </div>
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .pt-0 { padding-top: 0; }
+  .strip-wrap { margin-top: calc(-1 * var(--sp-7)); position: relative; z-index: 2; margin-bottom: var(--sp-9); }
+  @media (max-width: 992px) { .strip-wrap { margin-top: var(--sp-6); } }
+
+  .no-demo {
+    border: 1px dashed var(--line-2); border-radius: var(--radius-l);
+    padding: var(--sp-7); display: flex; flex-direction: column; gap: var(--sp-4);
+    align-items: flex-start; background: var(--ink-2);
+  }
+
+  .over { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+  @media (max-width: 992px) { .over { grid-template-columns: 1fr; } }
+  .prose { max-width: 66ch; display: flex; flex-direction: column; gap: var(--sp-4); }
+  .prose :global(p) { color: var(--fg-2); }
+  .prose :global(h2) {
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-weight: 400;
+    font-size: var(--step-2); line-height: 1.05; color: var(--fg); margin: var(--sp-5) 0 0;
+  }
+  .highlights { list-style: none; margin-top: var(--sp-6); display: grid; gap: var(--sp-3); }
+  .highlights li { position: relative; padding-left: var(--sp-5); font-size: 14.5px; color: var(--fg-2); line-height: 1.5; }
+  .highlights li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 8px; height: 8px; border-radius: 2px; background: var(--brand); }
+
+  .over-side { background: var(--ink-2); border-radius: var(--radius-l); padding: var(--sp-6); box-shadow: var(--shadow-1); position: sticky; top: 96px; }
+  .feats { list-style: none; margin-top: var(--sp-5); display: flex; flex-direction: column; }
+  .feats li { padding: var(--sp-4) 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+  .feats p { font-size: 14px; color: var(--fg-2); line-height: 1.5; }
+
+  .related { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4); }
+  @media (max-width: 760px) { .related { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 440px) { .related { grid-template-columns: 1fr; } }
+</style>

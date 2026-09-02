@@ -1,0 +1,97 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/logo.webp';
+import { company, nav, social } from '../data/site';
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <a class="brand" href="/">
+          <Image src={logo} alt={company.name} widths={[180]} sizes="90px" loading="lazy" />
+        </a>
+        <p class="blurb">
+          Custom slot and crash game development for licensed operators. Maths, art and engineering
+          in-house.
+        </p>
+      </div>
+
+      <div class="foot-col">
+        <h2>Company</h2>
+        <ul>
+          {nav.map((item) => (
+            <li><a href={item.href}>{item.label}</a></li>
+          ))}
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <h2>Legal</h2>
+        <ul>
+          <li><a href="/privacy-policy">Privacy policy</a></li>
+          <li><a href="/terms-conditions">Terms and conditions</a></li>
+          <li><a href={`mailto:${company.legalEmail}`}>{company.legalEmail}</a></li>
+        </ul>
+        {social.length > 0 && (
+          <ul class="social">
+            {social.map((s) => (
+              <li><a href={s.href} rel="noopener me">{s.label}</a></li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <span class="age">18+</span>
+      <p class="legal">
+        {company.legalName}, {company.address}. Ace Games supplies games to licensed operators and
+        does not offer gambling to consumers. Demo games on this site are free play only, with no
+        prizes of monetary value.
+      </p>
+      <span class="copy">{new Date().getFullYear()} {company.name}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { border-top: 1px solid var(--line); background: var(--ink-2); padding: var(--sp-8) 0 var(--sp-6); }
+  .foot-grid {
+    display: grid; grid-template-columns: minmax(0, 1.2fr) repeat(2, minmax(0, 1fr));
+    gap: var(--sp-7); padding-bottom: var(--sp-7); border-bottom: 1px solid var(--line);
+  }
+  @media (max-width: 768px) {
+    .foot-grid { grid-template-columns: 1fr 1fr; gap: var(--sp-6); }
+    .foot-grid > :first-child { grid-column: 1 / -1; }
+  }
+  .brand { display: inline-flex; min-height: 44px; align-items: center; margin-bottom: var(--sp-4); }
+  .brand :global(img) { height: 42px; width: auto; }
+  .blurb { font-size: 14px; color: var(--fg-2); max-width: 38ch; }
+
+  .foot-col h2 {
+    font-family: 'JetBrains Mono Variable', monospace; font-size: 10.5px; font-weight: 500;
+    letter-spacing: 0.13em; text-transform: uppercase; color: var(--fg-3);
+    margin: 0 0 var(--sp-3);
+  }
+  .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+  .foot-col li a {
+    display: inline-flex; align-items: center; min-height: 40px;
+    font-size: 14px; color: var(--fg-2); text-decoration: none;
+  }
+  .foot-col li a:hover { color: var(--fg); }
+  .social { margin-top: var(--sp-3); }
+
+  .foot-bottom {
+    padding-top: var(--sp-5); display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-6);
+    align-items: baseline; font-size: 12.5px; color: var(--fg-3);
+  }
+  .legal { max-width: 70ch; line-height: 1.6; }
+  .copy { margin-left: auto; }
+  .age {
+    font-family: 'JetBrains Mono Variable', monospace; font-size: 11px;
+    border: 1px solid var(--line-2); border-radius: var(--radius-pill);
+    padding: 4px 10px; color: var(--fg-2);
+  }
+</style>
