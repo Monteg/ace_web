@@ -62,7 +62,7 @@ functions/api/contact.ts        Cloudflare Pages Function: the contact form
 public/_headers, _redirects     CSP, caching, five redirects
 scripts/verify.mjs              the gates
 scripts/new-game.mjs            the scaffolder
-Dockerfile                      builds the site, serves it from nginx
+Dockerfile                      serves the built dist from nginx
 deploy/nginx/                   the serving rules: _headers and _redirects again
 deploy/bootstrap/               namespace, RBAC, pull secret; once, by hand
 helm/chart, helm/env/           the deployment

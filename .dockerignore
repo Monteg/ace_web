@@ -1,9 +1,14 @@
+# dist/ is the payload and deploy/nginx the serving rules; the sources that
+# produced them have no business in the image context.
 .git
 .gitignore
 .claude
 node_modules
-dist
 .astro
-docs
+src
+public
+scripts
+functions
 helm
+docs
 *.md

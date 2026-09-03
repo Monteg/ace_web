@@ -5,8 +5,8 @@ commit. Nobody clicks anything.
 
 ```
 push to main
-  ├─ check:astro        astro check, 0 errors required
-  ├─ build:image        docker build, which runs `npm run ship` inside the image
+  ├─ build:site         astro check, then `npm run ship`: the 14 parity gates
+  ├─ package:image      the gated dist/ into an nginx image
   ├─ deploy:production  helm upgrade against the gamma cluster
   └─ purge:cloudflare   drop the edge copy of every page
 ```
@@ -16,11 +16,18 @@ broken gate or a broken Dockerfile shows up in review) but not pushed.
 
 ## The pieces
 
-**The image.** `Dockerfile` builds the site with Node 22 and serves the result
-from nginx. The build stage runs `npm run ship`, so the fourteen parity gates in
-`scripts/verify.mjs` run against the very `dist/` that ends up in the image. A
-failed gate fails the build; there is no way to ship past it. The runtime stage
-runs `nginx -t` for the same reason.
+**The build.** `build:site` runs on Node 22 and produces `dist/` as an artifact,
+having first run `astro check` and then the fourteen gates in
+`scripts/verify.mjs`. A failed gate fails the pipeline; there is no way to ship
+past it.
+
+**The image.** `Dockerfile` only copies that artifact into nginx, and runs
+`nginx -t` so a broken serving rule fails the build rather than the rollout.
+Building the site inside the docker daemon was tried and abandoned: `npm ci`
+there stalled for 527 seconds and died with npm's "Exit handler never called!",
+twice, while the same install outside the daemon takes 29 seconds. The gate
+still binds, because the artifact that passed it is the artifact copied in.
+Locally this means `npm run ship` before `docker build .`.
 
 **The serving rules.** `deploy/nginx/`. Cloudflare Pages read `public/_headers`
 and `public/_redirects`; nginx does not, so both files are mirrored there. They

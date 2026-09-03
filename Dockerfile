@@ -1,36 +1,21 @@
-# The site image: Astro builds the pages, nginx serves the folder.
+# Serves a dist/ that has already been built and gated.
 #
-# The build stage runs `npm run ship`, so the parity gates run against the very
-# dist that ships. A failed gate fails the image, not the deploy. AGENTS.md
-# calls ship the definition of done; here it is also the definition of buildable.
-
-FROM node:22-alpine AS build
-WORKDIR /app
-
-# package-lock.json carries every platform's sharp binary, so npm ci resolves
-# @img/sharp-linuxmusl-x64 here with no rebuild step.
+# The build deliberately does NOT happen in here. Running `npm ci` inside the CI
+# docker daemon took 527 seconds and then died with npm's "Exit handler never
+# called!", twice, on two Node versions — while the identical install on the
+# same runner outside the daemon takes 29. So the site is built by the
+# build:site CI job, which runs `npm run ship`, and the dist that passed the
+# fourteen parity gates is the dist copied in below.
 #
-# The retries and the socket cap are not cosmetic. Inside the CI docker daemon,
-# npm 10.8 spent two minutes on this and then died with "Exit handler never
-# called!" — while still exiting 0, so the build carried on with half a
-# node_modules and failed further down with `astro: not found`. The last line is
-# the guard against that ever being silent again.
-COPY package.json package-lock.json ./
-RUN npm config set fetch-retries 5 \
- && npm config set fetch-retry-maxtimeout 120000 \
- && npm config set maxsockets 8 \
- && npm ci --no-audit --no-fund \
- && test -x node_modules/.bin/astro
+# Locally that means: `npm run ship` first, then `docker build .`. A missing
+# dist/ fails the COPY rather than shipping an empty site.
 
-COPY . .
-RUN npm run ship
+FROM nginxinc/nginx-unprivileged:1.30.4-alpine
 
-FROM nginxinc/nginx-unprivileged:1.30.4-alpine AS runtime
-
-# This image runs as uid 101 and listens on 8080. Nothing below needs root.
+# This image runs as uid 101 and listens on 8080. Nothing here needs root.
 COPY deploy/nginx/snippets/ /etc/nginx/snippets/
 COPY deploy/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY dist/ /usr/share/nginx/html/
 
 # A bad regex or a missing snippet should fail the build, not the rollout.
 RUN nginx -t

@@ -1,11 +1,10 @@
 # Every push to main rebuilds the site, ships it to the gamma cluster and drops
-# the Cloudflare edge copy. Roughly three minutes end to end.
+# the Cloudflare edge copy. Roughly four minutes end to end.
 #
-#   check   astro check, the TypeScript diagnostics AGENTS.md requires
-#   build   docker build, which runs `npm run ship` inside the image, so the
-#           14 parity gates run against exactly the dist that ships
-#   deploy  helm upgrade against gamma through the GitLab agent
-#   purge   Cloudflare cache, after the rollout is actually live
+#   build    astro check, then `npm run ship`: the 14 parity gates
+#   package  the gated dist/ into an nginx image
+#   deploy   helm upgrade against gamma through the GitLab agent
+#   purge    Cloudflare cache, after the rollout is actually live
 #
 # The deploy job talks to the cluster through the agent in money.energy/devops/
 # infra (.gitlab/agents/gamma-k8s-agent/config.yaml). This project has to be
@@ -13,8 +12,8 @@
 # nothing. Nothing else here needs cluster credentials.
 
 stages:
-  - check
   - build
+  - package
   - deploy
   - purge
 
@@ -33,8 +32,12 @@ workflow:
 default:
   interruptible: true
 
-check:astro:
-  stage: check
+# The gates run here rather than inside the docker build, because npm inside the
+# CI docker daemon stalls for ten minutes and then dies; out here the same
+# install takes half a minute. What passes the gates is what gets packaged: the
+# artifact below is copied into the image verbatim.
+build:site:
+  stage: build
   image: node:22-alpine
   tags: [build]
   cache:
@@ -46,11 +49,17 @@ check:astro:
   script:
     - npm ci --cache .npm --prefer-offline --no-audit --no-fund
     - npx astro check
+    - npm run ship
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
 
-build:image:
-  stage: build
+package:image:
+  stage: package
   image: docker:28
   tags: [build]
+  needs: ["build:site"]
   services:
     - name: docker:28-dind
       alias: docker
@@ -64,9 +73,8 @@ build:image:
     - until docker info >/dev/null 2>&1; do echo "waiting for dockerd..."; sleep 1; done
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
   script:
-    # --network=host: BuildKit RUN steps do not inherit the daemon's --dns, and
-    # `npm ci` has to reach registry.npmjs.org.
-    - docker build --network=host --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
+    - test -f dist/index.html
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
     - |
       if [ "$CI_COMMIT_BRANCH" = "$CI_DEFAULT_BRANCH" ]; then
         docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
@@ -78,7 +86,7 @@ deploy:production:
   stage: deploy
   image: $DEPLOY_IMAGE
   tags: [k8s-deploy-gamma]
-  needs: ["build:image"]
+  needs: ["package:image"]
   # A second push while this one is rolling out waits its turn instead of
   # racing it.
   resource_group: production
