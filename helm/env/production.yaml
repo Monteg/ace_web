@@ -10,9 +10,15 @@ ingress:
   enabled: true
   className: nginx
   annotations:
-    # A fresh certificate for both hosts. There is no acegames.io wildcard in
-    # this cluster to reuse, so ingress-shim issues one; the HTTP-01 challenge
-    # reaches the cluster through Cloudflare like any other request.
+    # A fresh certificate for both hosts: there is no acegames.io wildcard in
+    # this cluster to reuse.
+    #
+    # The `letsencrypt` issuer solves DNS-01 through Cloudflare, with one token
+    # in cert-manager (secret cloudflare-api-token). So this certificate cannot
+    # be issued until acegames.io is a zone in that Cloudflare account and the
+    # token can write records in it. Until then the ingress answers with the
+    # default certificate and the Certificate sits pending — which is harmless
+    # while DNS still points at Webflow, and blocking on the day it does not.
     cert-manager.io/cluster-issuer: letsencrypt
   hosts:
     # Both hosts route to the same pods. The www -> apex 301 is served by the

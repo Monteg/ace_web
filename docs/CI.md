@@ -16,7 +16,7 @@ broken gate or a broken Dockerfile shows up in review) but not pushed.
 
 ## The pieces
 
-**The image.** `Dockerfile` builds the site with Node 20 and serves the result
+**The image.** `Dockerfile` builds the site with Node 22 and serves the result
 from nginx. The build stage runs `npm run ship`, so the fourteen parity gates in
 `scripts/verify.mjs` run against the very `dist/` that ends up in the image. A
 failed gate fails the build; there is no way to ship past it. The runtime stage
@@ -65,9 +65,13 @@ curl -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache
 - **`CF_ZONE_ID` and `CF_API_TOKEN`.** Masked, protected project variables. The
   purge job does not exist until both are set, so the pipeline stays green and
   the edge simply holds pages for their TTL.
-- **DNS.** `acegames.io` still resolves to Webflow through GoDaddy nameservers.
-  Moving the zone to Cloudflare is section 6 of `DEPLOY.md`, and the records
-  point at the cluster's public entry rather than at Pages.
+- **DNS, and with it the certificate.** `acegames.io` still resolves to Webflow
+  through GoDaddy nameservers. Moving the zone to Cloudflare is section 6 of
+  `DEPLOY.md`, and the records point at the cluster's public entry rather than
+  at Pages. The move is also what makes HTTPS possible: the cluster's
+  `letsencrypt` issuer solves DNS-01 through one Cloudflare token, so the
+  certificate for `acegames.io` cannot be issued until that zone is in the same
+  Cloudflare account and the token can write in it.
 - **The contact form.** `functions/api/contact.ts` is a Cloudflare Pages
   Function and does not run on the cluster. Until it has a home, nginx answers
   `POST /api/contact` the way that function answers when it has no inbox:

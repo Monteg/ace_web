@@ -28,8 +28,10 @@ token expires with the job and a pod may be rescheduled months later. A project
 deploy token scoped to `read_registry` is the smallest thing that works.
 
 ```bash
-glab api --method POST projects/86013072/deploy_tokens \
-  -f name=acegames-www-pull -f username=acegames-www-pull -f "scopes[]=read_registry"
+cat > /tmp/deploy-token.json <<'JSON'
+{"name": "acegames-www-pull", "username": "acegames-www-pull", "scopes": ["read_registry"]}
+JSON
+glab api --method POST projects/86013072/deploy_tokens --input /tmp/deploy-token.json
 ```
 
 The response shows the token once. Feed it straight in:

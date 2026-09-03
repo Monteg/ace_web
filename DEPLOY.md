@@ -18,7 +18,7 @@ If you are doing this with an AI assistant, point it at `AGENTS.md` first.
 
 ## 0. Run it on your own machine first
 
-You need [Node.js](https://nodejs.org) 20 or newer. Check with `node --version`.
+You need [Node.js](https://nodejs.org) 22 or newer. Check with `node --version`.
 
 ```bash
 npm install
@@ -84,7 +84,7 @@ an art-heavy site does not turn into a bill that grows with traffic.
    - Framework preset: **Astro**
    - Build command: `npm run build`
    - Build output directory: `dist`
-   - Node version: add an environment variable `NODE_VERSION` = `20`
+   - Node version: add an environment variable `NODE_VERSION` = `22`
 4. Save and deploy. A few minutes later you get a `*.pages.dev` address.
 
 Open it and click around. This is the real site, just not on your domain yet.

@@ -25,7 +25,7 @@ pages. The result is a folder of files any CDN can serve.
 ## Commands
 
 ```bash
-npm install          # once, Node 20 or newer (see .nvmrc)
+npm install          # once, Node 22 or newer (see .nvmrc)
 npm run dev          # http://localhost:4321, hot reload (add -- --port 4400 if 4321 is busy)
 npm run build        # writes dist/
 npm run verify       # the parity gates against dist/
