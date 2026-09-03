@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import { CTA } from '../data/site';
+---
+
+<Base
+  title="Page not found | Ace Games"
+  description="That page does not exist. Browse the game catalogue or get in touch."
+  noindex={true}
+>
+  <section>
+    <div class="wrap">
+      <div class="not-found">
+        <p class="eyebrow">404</p>
+        <h1 class="d1">That page does not exist</h1>
+        <p class="lead">
+          It may have moved, or the link may be wrong. The catalogue is the fastest way back.
+        </p>
+        <div class="row">
+          <a class="btn btn-primary" href="/games">See the games</a>
+          <a class="btn btn-ghost" href={CTA.href}>{CTA.label}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .not-found {
+    display: flex; flex-direction: column; gap: var(--sp-4);
+    align-items: flex-start; padding-block: var(--sp-8);
+  }
+  .row { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-3); }
+</style>

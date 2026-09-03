@@ -1,0 +1,100 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { CollectionEntry } from 'astro:content';
+import { bet, maxWin, rtp, volatility, type Volatility } from '../../lib/format';
+
+/**
+ * The six figures a buyer scans first, in one strip under the header.
+ * Replaces the 3x2 spec cards: no boxes, hairlines only, one row on desktop.
+ */
+interface Props {
+  game: CollectionEntry<'games'>;
+}
+
+const { game } = Astro.props;
+const s = game.data.specs;
+
+type Cell = {
+  icon: string;
+  tint: 'mint' | 'ice' | 'lemon' | 'peach' | 'sky' | 'pink';
+  label: string;
+  value: string | null;
+  meter?: boolean;
+};
+
+// The labels live here and the values come from the record: on the old CMS
+// both were free text and 14 of 24 games had them swapped.
+const cells: Cell[] = [
+  { icon: 'ph:percent', tint: 'mint', label: 'RTP', value: rtp(s.rtp) },
+  { icon: 'ph:wave-sine', tint: 'ice', label: 'Volatility', value: volatility(s.volatility), meter: true },
+  { icon: 'ph:trend-up', tint: 'lemon', label: 'Max win', value: maxWin(s.maxWin) },
+  { icon: 'ph:coins', tint: 'peach', label: 'Bet range', value: bet(s.bet) },
+  { icon: 'ph:grid-four', tint: 'sky', label: 'Layout', value: s.layout ?? null },
+  { icon: 'ph:sparkle', tint: 'pink', label: 'Main feature', value: s.mainFeature ?? null },
+];
+
+// Volatility as a meter, the way every competitor's catalogue shows it. A bar
+// is lit for each band the game runs in, so a two-mode game lights two bars.
+const BANDS: Volatility[] = ['low', 'medium', 'high', 'very_high'];
+const lit = new Set<Volatility>(s.volatility);
+---
+
+<dl class="ss">
+  {cells.map((c) => (
+    <div class="ss-cell">
+      <dt class="ss-head">
+        <span class={`tile tile--${c.tint}`} aria-hidden="true"><Icon name={c.icon} /></span>
+        <span class="ss-label">{c.label}</span>
+      </dt>
+      <dd class="ss-value">
+        <span class="ss-figure tnum">{c.value ? c.value : <span class="need">On request</span>}</span>
+        {c.meter && (
+          <span class="ss-meter" aria-hidden="true">
+            {BANDS.map((b) => <i class={`ss-bar${lit.has(b) ? ' is-on' : ''}`} />)}
+          </span>
+        )}
+      </dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  .ss {
+    margin: 0;
+    display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1px;
+    background: var(--line);
+    border-radius: var(--radius-l); overflow: hidden;
+  }
+  .ss-cell {
+    min-width: 0; background: var(--ink-2);
+    padding: var(--sp-5);
+    display: flex; flex-direction: column; gap: var(--sp-4);
+  }
+  .ss-head { display: flex; align-items: center; gap: var(--sp-3); }
+  .ss-label {
+    font-family: 'JetBrains Mono Variable', ui-monospace, monospace;
+    font-size: 10.5px; letter-spacing: 0.11em; text-transform: uppercase; color: var(--fg-3);
+  }
+  .ss-value {
+    margin: auto 0 0; display: flex; flex-direction: column; gap: var(--sp-3);
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-weight: 400;
+    font-size: var(--step-2); line-height: 1.02; color: var(--fg);
+  }
+  .ss-figure { display: block; text-wrap: balance; overflow-wrap: anywhere; }
+
+  .ss-meter { display: flex; align-items: flex-end; gap: var(--sp-1); height: 14px; }
+  .ss-bar { display: block; width: 18px; border-radius: 2px; background: var(--line-2); }
+  .ss-bar:nth-child(1) { height: 5px; }
+  .ss-bar:nth-child(2) { height: 8px; }
+  .ss-bar:nth-child(3) { height: 11px; }
+  .ss-bar:nth-child(4) { height: 14px; }
+  .ss-bar.is-on { background: var(--brand); }
+
+  @media (max-width: 992px) {
+    .ss { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 560px) {
+    .ss { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ss-cell { padding: var(--sp-4); }
+  }
+</style>

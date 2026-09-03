@@ -1,0 +1,303 @@
+---
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import Base from '../layouts/Base.astro';
+import Wall from '../components/showcase/Wall.astro';
+import GameTile from '../components/showcase/GameTile.astro';
+import StatTile from '../components/StatTile.astro';
+import DemoEmbed from '../components/DemoEmbed.astro';
+import Craft from '../components/showcase/Craft.astro';
+import PartnerWall from '../components/showcase/PartnerWall.astro';
+import MathsExplorer from '../components/showcase/MathsExplorer.astro';
+import { CTA, company, faq, heroStats, integration, partners } from '../data/site';
+import { demoUrl, TYPE_PLURAL } from '../lib/format';
+
+const games = (await getCollection('games')).sort(
+  (a, b) =>
+    Number(a.data.status === 'coming_soon') - Number(b.data.status === 'coming_soon') ||
+    a.data.order - b.data.order ||
+    a.data.name.localeCompare(b.data.name),
+);
+const live = games.filter((g) => g.data.status === 'live');
+
+// the spotlight: one live title with a demo, shown large with click-to-play
+const spotlight = live.find((g) => g.id === 'gold-of-ra' && g.data.demo) ?? live.find((g) => g.data.demo)!;
+const spotlightDemo = spotlight.data.demo ? demoUrl(spotlight.data.demo, spotlight.id, company.origin) : null;
+const gridGames = games.filter((g) => g.id !== spotlight.id).slice(0, 11);
+
+const types = ['slot', 'instant', 'table'] as const;
+const present = types.filter((t) => games.some((g) => g.data.type === t));
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq
+    .filter((f) => f.a)
+    .map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Base
+  title="Custom casino game development for operators | Ace Games"
+  description="Ace Games builds slots, crash and instant games for licensed operators. Maths, art, engine and RGS in-house, published RTP on every title, playable demos for all of them."
+  schema={faqSchema}
+>
+  <Wall games={games} />
+
+  <!-- ============ proof ============ -->
+  <div class="proof">
+    <div class="wrap">
+      <div class="proof-in">
+        {heroStats.map((s) => <StatTile {...s} />)}
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ catalogue ============ -->
+  <section id="games">
+    <div class="wrap">
+      <div class="sec-top rv">
+        <h2 class="d1">The catalogue</h2>
+        <p class="lead">
+          Published RTP and volatility on every title, and a demo one click away. Configuration is per
+          operator, per market.
+        </p>
+      </div>
+
+      <div class="chips rv" role="group" aria-label="Filter games by type">
+        <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+        {present.map((t) => (
+          <button class="chip" type="button" data-filter={t} aria-pressed="false">{TYPE_PLURAL[t]}</button>
+        ))}
+      </div>
+
+      <div class="cat rv" id="gameGrid">
+        <div class="cat-spot" data-type={spotlight.data.type}>
+          {spotlightDemo ? (
+            <DemoEmbed name={spotlight.data.name} src={spotlightDemo} poster={spotlight.data.hero} />
+          ) : (
+            <GameTile game={spotlight} eager featured />
+          )}
+          <div class="cat-spot-cap">
+            <p class="eyebrow">Spotlight</p>
+            <a class="cat-spot-name" href={`/portfolio/${spotlight.id}`}>{spotlight.data.name}</a>
+          </div>
+        </div>
+        {gridGames.map((g, i) => <GameTile game={g} eager={i < 3} />)}
+      </div>
+      <p class="filter-note" data-filter-note aria-live="polite"></p>
+
+      <a class="btn btn-ghost see-all rv" href="/games">
+        All {games.length} games
+        <span class="disc" aria-hidden="true"><Icon name="ph:arrow-right" /></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ maths explorer ============ -->
+  <section id="maths" class="pt-0">
+    <div class="wrap">
+      <div class="sec-top rv">
+        <h2 class="d1">Every game, by the numbers</h2>
+        <p class="lead">
+          The whole catalogue on one board: each lane is a volatility level, each game sits at its published RTP. Hover a game for the figures, click to open it.
+        </p>
+      </div>
+      <div class="rv">
+        <MathsExplorer games={games}>
+          <Fragment slot="caption">Published RTP and volatility for every title. RTP bands and volatility modes are configuration, set per operator and per market.</Fragment>
+        </MathsExplorer>
+      </div>
+    </div>
+  </section>
+
+  <Craft />
+
+  <PartnerWall logos={partners} />
+
+  <!-- ============ integration and compliance ============ -->
+  <section id="integration">
+    <div class="wrap">
+      <div class="sec-top rv">
+        <h2 class="d1">The answers your compliance team asks for</h2>
+        <p class="lead">Everything a game acquisition team needs before booking a call. Documentation and certificates on request.</p>
+      </div>
+      <div class="groups rv">
+        {integration.map((g) => (
+          <section class="group">
+            <div class="group-head">
+              <span class={`tile tile--${g.tint}`} aria-hidden="true"><Icon name={g.icon} /></span>
+              <h3 class="d3">{g.title}</h3>
+            </div>
+            <dl>
+              {g.rows.map((r) => (
+                <div class="row">
+                  <dt>{r.label}</dt>
+                  <dd>{r.value ? r.value : <span class="need">{r.hint}</span>}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ faq ============ -->
+  <section id="faq" class="pt-0">
+    <div class="wrap">
+      <div class="sec-top rv"><h2 class="d1">Frequently asked questions</h2></div>
+      <div class="faq rv">
+        {faq.map((f, i) => (
+          <details open={i === 0}>
+            <summary>{f.q}</summary>
+            <div class="answer">
+              {f.a ? <p>{f.a}</p> : <p><span class="need">{f.hint}</span></p>}
+              {f.extra && <p>{f.extra}</p>}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ contact ============ -->
+  <section id="contact" class="pt-0">
+    <div class="wrap">
+      <div class="contact-grid">
+        <div class="rv">
+          <h2 class="d1">{CTA.label}</h2>
+          <p class="lead mt">
+            Tell us the market, the mechanic your lobby is missing, or just ask for the integration pack.
+            We answer in one working day.
+          </p>
+          <div class="direct">
+            <a href={`mailto:${company.email}`}>{company.email}</a>
+            <p class="pending"><span class="need">Booking link: add a calendar URL</span></p>
+            <p class="pending"><span class="need">Game sheet: add the PDF</span></p>
+          </div>
+        </div>
+
+        <form class="form rv" method="post" action="/api/contact">
+          <div class="pair">
+            <p class="field">
+              <label for="f-name">Your name</label>
+              <input id="f-name" name="name" type="text" autocomplete="name" required />
+            </p>
+            <p class="field">
+              <label for="f-company">Company</label>
+              <input id="f-company" name="company" type="text" autocomplete="organization" required />
+            </p>
+          </div>
+          <p class="field">
+            <label for="f-email">Work email</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" placeholder="you@operator.com" required />
+          </p>
+          <p class="field">
+            <label for="f-msg">What are you looking for?</label>
+            <textarea id="f-msg" name="message" rows="4"></textarea>
+          </p>
+          <input type="text" name="website" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <button class="btn btn-primary submit" type="submit">{CTA.label}</button>
+          <p class="consent">
+            We use what you send here only to answer you. See the <a href="/privacy-policy">privacy policy</a>.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .pt-0 { padding-top: 0; }
+
+  .proof { border-bottom: 1px solid var(--line); background: var(--ink-2); }
+  .proof-in { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  @media (max-width: 900px) { .proof-in { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .proof-in { grid-template-columns: 1fr; } }
+
+  /* catalogue: spotlight spans 2x2, the rest flow in threes */
+  .chips { margin-bottom: var(--sp-5); }
+  .cat { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-4); }
+  .cat-spot { grid-column: span 2; grid-row: span 2; display: flex; flex-direction: column; gap: var(--sp-3); min-width: 0; }
+  .cat-spot :global(.demo) { max-height: none; aspect-ratio: 16 / 10; }
+  .cat-spot-cap { display: flex; align-items: baseline; gap: var(--sp-4); }
+  .cat-spot-name {
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-size: var(--step-2);
+    color: var(--fg); text-decoration: none;
+  }
+  .cat-spot-name:hover { color: var(--peach); }
+  @media (max-width: 1100px) { .cat { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 768px) {
+    .cat { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); }
+    .cat-spot { grid-column: 1 / -1; grid-row: auto; }
+  }
+  @media (max-width: 440px) { .cat { grid-template-columns: 1fr; } }
+  .filter-note { margin-top: var(--sp-4); font-size: 13px; color: var(--fg-3); min-height: 1.4em; }
+  .cat :global(.is-dim) { opacity: 0.38; filter: grayscale(0.7); }
+  .cat :global(.is-dim:hover) { opacity: 1; filter: none; }
+  .see-all { margin-top: var(--sp-6); }
+
+  /* integration */
+  .groups {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4);
+  }
+  @media (max-width: 900px) { .groups { grid-template-columns: 1fr; } }
+  .group { background: var(--ink-2); border-radius: var(--radius-l); padding: var(--sp-6) var(--sp-5); box-shadow: var(--shadow-1); }
+  .group-head { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-5); }
+  .group dl { margin: 0; display: flex; flex-direction: column; gap: var(--sp-4); }
+  .row dt {
+    font-family: 'JetBrains Mono Variable', monospace; font-size: 10.5px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-3); margin-bottom: 3px;
+  }
+  .row dd { margin: 0; font-size: 14.5px; color: var(--fg); line-height: 1.45; }
+
+  /* faq */
+  .faq { border-top: 1px solid var(--line); max-width: 900px; }
+  .faq details { border-bottom: 1px solid var(--line); }
+  .faq summary {
+    list-style: none; cursor: pointer; position: relative;
+    padding: var(--sp-5) 44px var(--sp-5) 0;
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-size: 1.2rem; line-height: 1.25; color: var(--fg);
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: ''; position: absolute; right: 6px; top: 50%; width: 13px; height: 2px; background: var(--brand); transform: translateY(-50%); }
+  .faq summary::before { content: ''; position: absolute; right: 11.5px; top: 50%; width: 2px; height: 13px; background: var(--brand); transform: translateY(-50%); transition: opacity var(--dur-1); }
+  .faq details[open] summary::before { opacity: 0; }
+  .answer { padding: 0 60px var(--sp-5) 0; color: var(--fg-2); font-size: 15px; max-width: 70ch; display: flex; flex-direction: column; gap: var(--sp-3); }
+
+  /* contact */
+  .contact-grid { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+  @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+  .mt { margin-top: var(--sp-3); }
+  .direct { display: flex; flex-direction: column; gap: var(--sp-2); margin-top: var(--sp-6); padding-top: var(--sp-5); border-top: 1px solid var(--line); }
+  .direct a {
+    font-family: 'JetBrains Mono Variable', monospace; font-size: 14px; color: var(--peach);
+    text-decoration: none; align-self: flex-start; padding: 8px 0; min-height: 40px; display: inline-flex; align-items: center;
+  }
+  .direct a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .pending { font-family: 'JetBrains Mono Variable', monospace; font-size: 13px; padding: 8px 0; }
+
+  .form { display: grid; gap: var(--sp-4); background: var(--ink-2); padding: var(--sp-6); border-radius: var(--radius-l); box-shadow: var(--shadow-1); }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); margin: 0; }
+  @media (max-width: 560px) { .pair { grid-template-columns: 1fr; } }
+  .field { display: flex; flex-direction: column; gap: 7px; margin: 0; }
+  .field label { font-size: 13px; font-weight: 500; color: var(--fg-2); }
+  .field input, .field textarea {
+    font: inherit; font-size: 15px; width: 100%;
+    background: var(--ink); border: 1px solid var(--line-2); color: var(--fg);
+    border-radius: var(--radius); padding: 13px 15px; min-height: 48px;
+    transition: border-color var(--dur-1);
+  }
+  .field input::placeholder, .field textarea::placeholder { color: var(--fg-3); }
+  .field input:focus, .field textarea:focus { border-color: var(--brand); outline: none; }
+  .field textarea { min-height: 120px; resize: vertical; }
+  .submit { justify-self: start; }
+  .consent { font-size: 12.5px; color: var(--fg-3); line-height: 1.5; }
+  .consent a { color: var(--fg-2); }
+</style>
+
+<script>
+  import { mountCatalogueFilter } from '../lib/catalogue-filter';
+  mountCatalogueFilter('gameGrid', '#games .chip[data-filter]');
+</script>

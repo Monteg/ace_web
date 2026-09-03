@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://acegames.io/sitemap-index.xml

@@ -1,0 +1,168 @@
+---
+/**
+ * The hero. A wall of the catalogue's own key art, three rows drifting at
+ * different speeds in shallow perspective, the way a lobby reads when you
+ * scroll it. It answers "do they ship finished games?" before a word is read.
+ *
+ * Motion is layered so it degrades cleanly:
+ *   - no JS, or reduced motion: a static tilted wall
+ *   - JS: the rows drift (CSS keyframes) and, on scroll, the wall flattens and
+ *     falls away while the headline holds (GSAP ScrollTrigger, loaded lazily)
+ */
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import type { CollectionEntry } from 'astro:content';
+import { CTA } from '../../data/site';
+
+interface Props {
+  games: CollectionEntry<'games'>[];
+}
+
+const { games } = Astro.props;
+const live = games.filter((g) => g.data.status === 'live');
+const pool = live.length >= 12 ? live : games;
+
+// three rows of eight, each row a different slice so no tile repeats next to itself
+const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 5 + i * 3) % pool.length]));
+---
+
+<section class="wall" id="top" data-wall>
+  <div class="wall-stage" aria-hidden="true">
+    <div class="wall-tilt" data-wall-tilt>
+      {rows.map((row, r) => (
+        <div class={`wall-row wall-row-${r}`} data-row={r}>
+          {[...row, ...row].map((g) => (
+            <div class="wall-tile">
+              <Image
+                src={g.data.card}
+                alt=""
+                widths={[240, 360]}
+                sizes="220px"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+    <div class="wall-scrim"></div>
+  </div>
+
+  <div class="wrap">
+    <div class="wall-copy" data-wall-copy>
+      <h1 class="d0">Slots and crash games, <em>built end to end</em></h1>
+      <p class="lead">
+        {live.length} slot, crash and instant titles, built and certified in-house, playable here before you email us.
+      </p>
+      <div class="wall-btns">
+        <a class="btn btn-primary" href="#games">
+          See the games
+          <span class="disc" aria-hidden="true"><Icon name="ph:arrow-down" /></span>
+        </a>
+        <a class="btn btn-ghost" href={CTA.href}>{CTA.label}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .wall {
+    position: relative; overflow: hidden; padding: 0;
+    min-height: min(100dvh, 920px);
+    display: flex; align-items: flex-end;
+    background: var(--ink-0);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .wall-stage {
+    position: absolute; inset: 0; z-index: 0;
+    perspective: 1400px; perspective-origin: 50% 30%;
+    overflow: hidden;
+  }
+  .wall-tilt {
+    position: absolute; left: 50%; top: 50%;
+    width: 150vw; max-width: 2400px;
+    transform: translate(-50%, -52%) rotateX(24deg) rotateZ(-7deg) scale(1.02);
+    display: flex; flex-direction: column; gap: clamp(12px, 1.4vw, 22px);
+    backface-visibility: hidden;
+  }
+  .wall-row {
+    display: flex; gap: clamp(12px, 1.4vw, 22px);
+    width: max-content;
+    will-change: transform;
+  }
+  .wall-tile {
+    width: clamp(150px, 15vw, 240px);
+    aspect-ratio: 1200 / 1057;
+    border-radius: var(--radius);
+    overflow: hidden; flex: none;
+    background: var(--ink-3);
+    opacity: 0.86;
+    contain: paint;
+  }
+  .wall-tile :global(img) { width: 100%; height: 100%; object-fit: cover; }
+
+  /* three speeds, two directions: the depth cue */
+  .wall-row-0 { animation: drift-l 64s linear infinite; }
+  .wall-row-1 { animation: drift-r 84s linear infinite; }
+  .wall-row-2 { animation: drift-l 104s linear infinite; }
+  @keyframes drift-l { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes drift-r { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+  @media (prefers-reduced-motion: reduce) {
+    .wall-row-0, .wall-row-1, .wall-row-2 { animation: none; }
+  }
+
+  .wall-scrim {
+    position: absolute; inset: 0; z-index: 1;
+    background:
+      linear-gradient(180deg, rgb(12 12 11 / 0.55) 0%, rgb(12 12 11 / 0.15) 35%, rgb(12 12 11 / 0.72) 72%, var(--ink-0) 100%),
+      linear-gradient(100deg, rgb(12 12 11 / 0.85) 0%, rgb(12 12 11 / 0.35) 45%, rgb(12 12 11 / 0) 75%);
+  }
+
+  .wall > .wrap { width: 100%; }
+  .wall-copy {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; gap: var(--sp-5); align-items: flex-start;
+    padding-top: clamp(120px, 24vh, 260px);
+    padding-bottom: clamp(48px, 8vh, 96px);
+  }
+  .wall-copy .d0 { max-width: 23ch; font-size: clamp(2.8rem, 5.6vw, 5.8rem); }
+  .wall-copy .d0 em { font-style: normal; color: var(--peach); }
+  .wall-copy .lead { max-width: 40ch; }
+  .wall-btns { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+
+  @media (max-width: 768px) {
+    .wall { min-height: min(92dvh, 760px); }
+    .wall-tilt {
+      width: 230vw;
+      transform: translate(-50%, -50%) rotateX(16deg) rotateZ(-6deg);
+    }
+    .wall-tile { width: 120px; }
+    .wall-copy { padding-top: 140px; max-width: none; }
+    .wall-copy .d0 { max-width: 12ch; font-size: clamp(2.4rem, 12.5vw, 3.8rem); }
+  }
+</style>
+
+<script>
+  // Scroll choreography: as the visitor leaves the hero the wall flattens,
+  // scales and falls away, and the copy lifts slightly. One motion, one
+  // reason: it hands over from "the games" to "the catalogue".
+  const root = document.querySelector<HTMLElement>('[data-wall]');
+  const tilt = document.querySelector<HTMLElement>('[data-wall-tilt]');
+  const copy = document.querySelector<HTMLElement>('[data-wall-copy]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wide = window.matchMedia('(min-width: 769px)').matches;
+
+  if (root && tilt && copy && !reduce && wide) {
+    Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(([{ gsap }, { ScrollTrigger }]) => {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap
+        .timeline({
+          scrollTrigger: { trigger: root, start: 'top top', end: 'bottom top', scrub: 0.6 },
+        })
+        .to(tilt, { rotateX: 4, rotateZ: -2, yPercent: 18, scale: 1.12, opacity: 0.18, ease: 'none' }, 0)
+        .to(copy, { yPercent: -18, opacity: 0.35, ease: 'none' }, 0);
+    });
+  }
+</script>

@@ -1,0 +1,19 @@
+/* Tanker is the brand display face. Self-hosted so the site does not depend
+   on a CDN we do not control, and metric-matched to its fallback so 100px
+   headings do not jump when it swaps in. */
+@font-face {
+  font-family: 'Tanker';
+  src: url('/fonts/Tanker-Regular.woff2') format('woff2'),
+       url('/fonts/Tanker-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Tanker Fallback';
+  src: local('Arial Narrow'), local('Impact'), local('Haettenschweiler');
+  size-adjust: 108%;
+  ascent-override: 92%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}

@@ -1,0 +1,80 @@
+---
+/**
+ * Operator logo wall. Renders nothing at all until the owner supplies real
+ * logos: a strip of invented brands is worse than no strip, and the old site
+ * was full of borrowed ones. Drop SVGs in public/partners and list them as
+ * `partners` in src/data/site.ts.
+ */
+interface Props {
+  logos: { name: string; src: string }[];
+}
+
+const { logos } = Astro.props;
+const show = logos.length > 0;
+// Speed stays constant however many logos there are: about 5s per logo,
+// with a floor so a short list does not whip past.
+const seconds = Math.max(24, logos.length * 5);
+---
+
+{show && (
+  <section class="partners" id="partners" aria-labelledby="partners-h">
+    <div class="wrap">
+      <h2 class="d3" id="partners-h">Live with</h2>
+    </div>
+    <div class="marquee" style={`--marquee-s: ${seconds}s`}>
+      <ul class="track">
+        {logos.map((l) => (
+          <li><img src={l.src} alt={l.name} width="160" height="64" loading="lazy" decoding="async" /></li>
+        ))}
+      </ul>
+      <ul class="track" aria-hidden="true">
+        {logos.map((l) => (
+          <li><img src={l.src} alt="" width="160" height="64" loading="lazy" decoding="async" /></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+<style>
+  .partners .d3 { margin-bottom: var(--sp-6); }
+
+  .marquee {
+    --marquee-gap: var(--sp-7);
+    display: flex; gap: var(--marquee-gap); overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  /* Each track is the full row; the second is a copy, so when the first has
+     moved exactly its own width plus one gap the second sits where the first
+     started and the loop restarts with no visible seam. */
+  .track {
+    flex: none; min-width: 100%;
+    display: flex; justify-content: space-around; align-items: center;
+    gap: var(--marquee-gap); list-style: none; margin: 0; padding: 0;
+    animation: marquee var(--marquee-s) linear infinite;
+  }
+  .marquee:hover .track { animation-play-state: paused; }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-100% - var(--marquee-gap))); }
+  }
+
+  .track li { flex: none; }
+  .track img {
+    width: 160px; height: 64px; object-fit: contain;
+    opacity: 0.75; transition: opacity var(--dur-1) var(--ease);
+  }
+  .track img:hover { opacity: 1; }
+
+  /* No motion asked for: a plain wrapped grid of the one row, copy dropped. */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee { display: block; overflow: visible; mask-image: none; }
+    .marquee > .track {
+      animation: none; min-width: 0;
+      display: grid; grid-template-columns: repeat(auto-fill, 160px);
+      justify-content: center; gap: var(--sp-5) var(--marquee-gap);
+      max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter);
+    }
+    .marquee > .track[aria-hidden] { display: none; }
+  }
+</style>

@@ -1,0 +1,109 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/logo.webp';
+import { nav, CTA, company } from '../data/site';
+---
+
+<header class="site-header" id="siteHeader">
+  <div class="wrap">
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="/">
+        <Image src={logo} alt={company.name} widths={[140, 280]} sizes="140px" loading="eager" />
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        {nav.map((item) => (
+          <li><a href={item.href}>{item.label}</a></li>
+        ))}
+        <li class="nav-links-cta"><a class="btn btn-primary btn-sm" href={CTA.href}>{CTA.label}</a></li>
+      </ul>
+
+      <div class="nav-end">
+        <a class="btn btn-primary btn-sm nav-desktop-cta" href={CTA.href}>{CTA.label}</a>
+        <button class="burger" type="button" id="burger" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu">
+          <span></span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    padding-top: 12px;
+    pointer-events: none;
+  }
+  .site-header .wrap { pointer-events: auto; }
+  .nav {
+    display: flex; align-items: center; gap: var(--sp-6); height: 64px;
+    padding: 0 12px 0 20px;
+    background: color-mix(in srgb, var(--ink-0) 74%, transparent);
+    backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgb(255 240 200 / 0.08);
+    border-radius: var(--radius-pill);
+    box-shadow: 0 10px 30px -18px rgb(5 4 2 / 0.8);
+  }
+  .brand { display: flex; align-items: center; flex: none; min-height: 44px; text-decoration: none; }
+  .brand :global(img) { height: 30px; width: auto; }
+
+  .nav-links { display: flex; gap: var(--sp-6); list-style: none; margin-left: var(--sp-2); }
+  .nav-links a { font-size: 14px; font-weight: 500; color: var(--fg-2); text-decoration: none; white-space: nowrap; transition: color var(--dur-1); }
+  .nav-links a:hover { color: var(--fg); }
+  .nav-links-cta { display: none; }
+
+  .nav-end { margin-left: auto; display: flex; align-items: center; gap: var(--sp-3); }
+  .burger {
+    display: none; background: var(--brand); border: 0; border-radius: var(--radius-pill);
+    width: 46px; height: 46px; cursor: pointer; align-items: center; justify-content: center;
+  }
+  .burger span {
+    display: block; width: 20px; height: 2px; background: var(--on-brand);
+    box-shadow: 0 -6px 0 var(--on-brand), 0 6px 0 var(--on-brand);
+  }
+
+  @media (max-width: 992px) {
+    .nav-links { display: none; }
+    .nav-desktop-cta { display: none; }
+    .burger { display: flex; }
+
+    :global(.menu-open) .nav-links {
+      display: flex; flex-direction: column; gap: 0;
+      position: absolute; left: var(--gutter); right: var(--gutter); top: 84px;
+      background: var(--ink-2); border: 1px solid var(--line); border-radius: var(--radius-l);
+      padding: var(--sp-2) var(--sp-5) var(--sp-5); box-shadow: var(--shadow-2);
+    }
+    :global(.menu-open) .nav-links li { border-bottom: 1px solid var(--line); }
+    :global(.menu-open) .nav-links a { display: block; padding: 14px 0; font-size: 16px; }
+    :global(.menu-open) .nav-links-cta { display: block; border-bottom: 0; }
+    :global(.menu-open) .nav-links-cta a { margin-top: var(--sp-4); justify-content: center; }
+  }
+</style>
+
+<script>
+  const header = document.getElementById('siteHeader');
+  const burger = document.getElementById('burger');
+  if (header && burger) {
+    burger.addEventListener('click', () => {
+      const open = header.classList.toggle('menu-open');
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+    header.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('.nav-links a')) {
+        header.classList.remove('menu-open');
+        burger.setAttribute('aria-expanded', 'false');
+        burger.setAttribute('aria-label', 'Open menu');
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && header.classList.contains('menu-open')) {
+        header.classList.remove('menu-open');
+        burger.setAttribute('aria-expanded', 'false');
+        burger.focus();
+      }
+    });
+  }
+</script>

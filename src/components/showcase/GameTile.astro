@@ -1,0 +1,127 @@
+---
+/**
+ * Catalogue tile. The art is the object; name, RTP and volatility sit in a
+ * bar under it so they are readable on touch, and the hover state adds the
+ * Play affordance and a slow push-in on the art.
+ */
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import type { CollectionEntry } from 'astro:content';
+import { rtp, TYPE_LABEL, volatility } from '../../lib/format';
+
+interface Props {
+  game: CollectionEntry<'games'>;
+  eager?: boolean;
+  /** Renders larger art and copy; used for the first tile of the grid. */
+  featured?: boolean;
+}
+
+const { game, eager = false, featured = false } = Astro.props;
+const d = game.data;
+const soon = d.status === 'coming_soon';
+const href = `/portfolio/${game.id}`;
+const bands = ['low', 'medium', 'high', 'very_high'] as const;
+---
+
+<article class:list={['gt', { 'gt-featured': featured, 'gt-soon': soon }]} data-type={d.type} data-status={d.status}>
+  <a class="gt-link" href={href}>
+    <span class="sr-only">{d.name}, {TYPE_LABEL[d.type]}{soon ? ', coming soon' : ''}</span>
+  </a>
+
+  <div class="gt-art">
+    <Image
+      src={d.card}
+      alt=""
+      widths={featured ? [640, 900, 1200] : [320, 460, 640]}
+      sizes={featured
+        ? '(max-width: 768px) 92vw, (max-width: 1100px) 60vw, 640px'
+        : '(max-width: 480px) 92vw, (max-width: 768px) 46vw, (max-width: 1100px) 31vw, 300px'}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : 'auto'}
+    />
+    <span class:list={['gt-type', `gt-type-${d.type}`]}>{soon ? 'Coming soon' : TYPE_LABEL[d.type]}</span>
+    <span class="gt-play" aria-hidden="true">
+      <Icon name={soon ? 'ph:eye' : 'ph:play-fill'} />
+      <b>{soon ? 'Preview' : 'Play'}</b>
+    </span>
+  </div>
+
+  <div class="gt-bar">
+    <h3 class="gt-name">{d.name}</h3>
+    <dl class="gt-meta">
+      <div><dt>RTP</dt><dd class="tnum">{rtp(d.specs.rtp)}</dd></div>
+      <div>
+        <dt>Volatility</dt>
+        <dd>
+          <span class="vmeter" title={volatility(d.specs.volatility)}>
+            {bands.map((b) => <i class:list={{ on: d.specs.volatility.includes(b) }}></i>)}
+          </span>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</article>
+
+<style>
+  .gt {
+    position: relative; display: flex; flex-direction: column;
+    border-radius: var(--radius-l); overflow: hidden;
+    background: var(--ink-2); box-shadow: var(--shadow-1);
+    transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+  }
+  .gt:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); }
+  .gt:has(.gt-link:focus-visible) { outline: 3px solid var(--brand); outline-offset: 3px; }
+  .gt-link { position: absolute; inset: 0; z-index: 3; }
+  .gt-link:focus-visible { outline: none; }
+
+  .gt-art { position: relative; aspect-ratio: 1200 / 1057; background: var(--ink-3); overflow: hidden; }
+  .gt-art :global(img) {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 1.4s var(--ease);
+  }
+  .gt:hover .gt-art :global(img) { transform: scale(1.06); }
+  .gt-soon .gt-art :global(img) { filter: saturate(0.75) brightness(0.8); }
+
+  .gt-type {
+    position: absolute; left: 12px; top: 12px; z-index: 1;
+    font-family: 'JetBrains Mono Variable', monospace; font-size: 10.5px; font-weight: 500;
+    letter-spacing: 0.09em; text-transform: uppercase;
+    padding: 5px 9px; border-radius: var(--radius-pill); color: var(--tint-ink);
+  }
+  .gt-type-slot { background: var(--tint-ice); }
+  .gt-type-instant { background: var(--tint-mint); }
+  .gt-type-table { background: var(--tint-lemon); }
+  .gt-soon .gt-type { background: var(--peach); }
+
+  .gt-play {
+    position: absolute; right: 12px; bottom: 12px; z-index: 1;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 14px 9px 10px; border-radius: var(--radius-pill);
+    background: var(--brand); color: var(--on-brand);
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-size: 0.95rem;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
+  }
+  .gt-play svg { width: 16px; height: 16px; }
+  .gt:hover .gt-play, .gt:has(.gt-link:focus-visible) .gt-play { opacity: 1; transform: none; }
+  @media (hover: none) { .gt-play { opacity: 1; transform: none; } }
+
+  .gt-bar { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .gt-name {
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-weight: 400;
+    font-size: 1.25rem; line-height: 1.05; margin: 0; color: var(--fg);
+  }
+  .gt-featured .gt-name { font-size: var(--step-2); }
+  .gt-meta {
+    display: flex; gap: var(--sp-5); margin: 0;
+    font-family: 'JetBrains Mono Variable', monospace; font-size: 11.5px;
+  }
+  .gt-meta dt { color: var(--fg-3); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .gt-meta dd { margin: 0; color: var(--fg); display: flex; align-items: center; min-height: 14px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gt, .gt-art :global(img), .gt-play { transition: none; }
+    .gt:hover { transform: none; }
+    .gt:hover .gt-art :global(img) { transform: none; }
+  }
+</style>

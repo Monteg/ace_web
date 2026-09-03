@@ -1,0 +1,80 @@
+/* Ace Games showcase tokens.
+   Same brand as the base build; what changed is depth and scale.
+   Four surface steps replace borders as the way panels read as layered,
+   the type scale gets a poster size for the hero and section marks, and
+   motion gets one curve and three durations so every move shares a rhythm. */
+:root {
+  /* ground and surfaces, near-black with a warm bias */
+  --ink-0: #0c0c0b;
+  --ink: #111110;
+  --ink-2: #171715;
+  --ink-3: #1e1e1b;
+  --ink-4: #262623;
+  --line: #2c2c28;
+  --line-2: #3b3a35;
+
+  /* text on dark */
+  --fg: #f4f1e6;
+  --fg-2: #a9a69a;
+  --fg-3: #7d7a70;
+
+  /* brand */
+  --brand: #ff5600;
+  --brand-hover: #ff6b22;
+  --brand-deep: #c43f00;
+  --on-brand: #15130e;
+  --peach: #f6cb95;
+
+  /* the single inverted block */
+  --cream: #fffff5;
+  --cream-2: #f6f3e4;
+  --cream-ink: #15130e;
+  --cream-ink-2: #4a463a;
+  --cream-ink-3: #6e6959;
+  --cream-line: #dfd9c2;
+
+  /* categorical tints for icon tiles and type badges */
+  --tint-mint: #cbffed;
+  --tint-pink: #fbe8f0;
+  --tint-lemon: #fdfdcd;
+  --tint-ice: #dfeef3;
+  --tint-peach: #ffecde;
+  --tint-sky: #cafcff;
+  --tint-ink: #15130e;
+
+  /* type scale, fluid */
+  --step--1: clamp(0.82rem, 0.79rem + 0.14vw, 0.89rem);
+  --step-0: clamp(0.95rem, 0.92rem + 0.16vw, 1.03rem);
+  --step-1: clamp(1.1rem, 1.02rem + 0.35vw, 1.3rem);
+  --step-2: clamp(1.35rem, 1.16rem + 0.85vw, 1.85rem);
+  --step-3: clamp(1.9rem, 1.35rem + 2.2vw, 3.2rem);
+  --step-4: clamp(2.6rem, 1.6rem + 4.2vw, 5rem);
+  --step-5: clamp(3.4rem, 1.8rem + 7vw, 8.5rem); /* poster size, hero only */
+
+  /* spacing */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
+  --sp-9: clamp(72px, 9vw, 140px);
+
+  --radius-s: 8px;
+  --radius: 14px;
+  --radius-l: 22px;
+  --radius-pill: 999px;
+
+  /* one curve, three durations */
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-1: 0.18s;
+  --dur-2: 0.5s;
+  --dur-3: 0.9s;
+
+  /* shadows tinted to the ground, never pure black */
+  --shadow-1: 0 1px 0 rgb(255 240 200 / 0.05) inset, 0 12px 32px -14px rgb(5 4 2 / 0.7);
+  --shadow-2: 0 1px 0 rgb(255 240 200 / 0.06) inset, 0 30px 70px -30px rgb(5 4 2 / 0.85);
+
+  --gutter: clamp(20px, 4vw, 48px);
+  --maxw: 1320px;
+
+  --z-base: 0; --z-raised: 10; --z-sticky: 100; --z-overlay: 200; --z-skip: 300;
+}
+/* breakpoints used across the site: 480 / 768 / 992 / 1280 / 1440 */

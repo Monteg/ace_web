@@ -1,0 +1,123 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/fonts.css';
+import '../styles/base.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { company } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Absolute or root-relative path to the share image. */
+  image?: string;
+  /** Extra JSON-LD to merge in, e.g. the Product graph on a game page. */
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const { title, description, image = '/og-default.png', schema, noindex = false } = Astro.props;
+
+// Self-referencing canonical on every page. The old site had none, and three
+// URLs served a byte-identical home page.
+const canonical = new URL(Astro.url.pathname, Astro.site ?? company.origin).href.replace(/\/$/, '') || company.origin;
+const ogImage = new URL(image, Astro.site ?? company.origin).href;
+
+const organisation = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: company.name,
+  legalName: company.legalName,
+  url: company.origin,
+  email: company.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: company.street,
+    addressLocality: company.city,
+    postalCode: company.postcode,
+    addressCountry: company.countryCode,
+  },
+  description:
+    'B2B developer of custom casino games: slots, crash and instant titles for licensed operators.',
+};
+
+const graphs = [organisation, ...(schema ? (Array.isArray(schema) ? schema : [schema]) : [])];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={company.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#111111" />
+
+    <link
+      rel="preload"
+      href="/fonts/Tanker-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    {graphs.map((g) => (
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(g)} />
+    ))}
+  </head>
+
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Reveal on scroll. The page ships visible; this adds the hidden start
+      // state, so if the script never runs the content is still readable.
+      (() => {
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const targets = document.querySelectorAll<HTMLElement>('.rv');
+        if (reduce || !('IntersectionObserver' in window) || !targets.length) return;
+
+        document.documentElement.classList.add('rv-on');
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('in');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        for (const el of targets) {
+          if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in');
+          else io.observe(el);
+        }
+      })();
+    </script>
+  </body>
+</html>

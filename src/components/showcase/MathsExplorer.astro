@@ -1,0 +1,382 @@
+---
+/**
+ * The catalogue as a maths map, drawn so a buyer reads it in one glance.
+ *
+ * Four horizontal lanes, one per volatility band, top to bottom from the
+ * wildest to the gentlest. Every game is its own key art, placed along the
+ * lane by published RTP: further right, more returned to the player. A title
+ * whose volatility is adjustable spans lanes with a thin bracket. Filtering
+ * never hides anything, it dims what does not match, so the buyer finds what
+ * they asked for without losing sight of the rest.
+ */
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { maxWin, rtp as fmtRtp, volatility as fmtVol, TYPE_LABEL, TYPE_PLURAL } from '../../lib/format';
+
+interface Props {
+  games: CollectionEntry<'games'>[];
+}
+const { games } = Astro.props;
+
+const BANDS = ['low', 'medium', 'high', 'very_high'] as const;
+const LANE_LABEL: Record<(typeof BANDS)[number], string> = {
+  low: 'Low', medium: 'Medium', high: 'High', very_high: 'Very high',
+};
+// lane 0 is the top row (very high), lane 3 the bottom (low)
+const laneOf = (b: (typeof BANDS)[number]) => 3 - BANDS.indexOf(b);
+
+const numeric = games.filter((g) => typeof g.data.specs.rtp === 'number');
+const configurable = games.filter((g) => g.data.specs.rtp === 'configurable');
+
+const rtps = numeric.map((g) => g.data.specs.rtp as number);
+const lo = Math.floor(Math.min(...rtps) * 100) / 100 - 0.003;
+const hi = Math.ceil(Math.max(...rtps) * 100) / 100 + 0.003;
+const xOf = (r: number) => ((r - lo) / (hi - lo)) * 100;
+
+const ticks: number[] = [];
+for (let t = Math.ceil(lo * 100); t <= Math.floor(hi * 100); t++) ticks.push(t / 100);
+
+type Placed = {
+  game: CollectionEntry<'games'>;
+  x: number;
+  lane: number;
+  row: 0 | 1;
+  from: number;
+  to: number;
+  spans: boolean;
+};
+
+// place every game; two titles closer than 4.5% of the track in the same lane
+// take the second row so nothing overlaps
+const placed: Placed[] = [];
+const perLane: Placed[][] = [[], [], [], []];
+for (const game of numeric.sort((a, b) => (a.data.specs.rtp as number) - (b.data.specs.rtp as number))) {
+  const bands = game.data.specs.volatility;
+  const lanes = bands.map(laneOf);
+  const from = Math.min(...lanes);
+  const to = Math.max(...lanes);
+  // two neighbouring bands sit between the lanes; three or more get a bracket
+  const lane = (from + to) / 2;
+  const x = xOf(game.data.specs.rtp as number);
+  const bucket = perLane[Math.round(lane)];
+  const near = bucket.filter((p) => Math.abs(p.x - x) < 4.5);
+  const row: 0 | 1 = near.some((p) => p.row === 0) ? (near.some((p) => p.row === 1) ? 0 : 1) : 0;
+  const item: Placed = { game, x, lane, row, from, to, spans: to - from >= 2 };
+  bucket.push(item);
+  placed.push(item);
+}
+
+const types = ['slot', 'instant', 'table'] as const;
+const present = types.filter((t) => games.some((g) => g.data.type === t));
+---
+
+<div class="mx" data-mx>
+  <div class="mx-top">
+    <div class="chips" role="group" aria-label="Highlight games by type">
+      <button class="chip" type="button" data-mx-filter="all" aria-pressed="true">All</button>
+      {present.map((t) => (
+        <button class="chip" type="button" data-mx-filter={t} aria-pressed="false">{TYPE_PLURAL[t]}</button>
+      ))}
+    </div>
+    <p class="mx-hint">Further right, more returned to players. Higher up, bigger swings.</p>
+  </div>
+
+  <div class="mx-scroll">
+    <div class="mx-board" style={`--lanes: ${BANDS.length}`}>
+      <div class="mx-labels" aria-hidden="true">
+        {[...BANDS].reverse().map((b) => <span class="mx-lane-label">{LANE_LABEL[b]}</span>)}
+        <span class="mx-axis-name">Volatility</span>
+      </div>
+
+      <div class="mx-track">
+        {[...BANDS].reverse().map(() => <div class="mx-lane"></div>)}
+
+        {ticks.map((t) => (
+          <span class="mx-tick" style={`left: ${xOf(t)}%`}>
+            <b class="tnum">{Math.round(t * 100)}%</b>
+          </span>
+        ))}
+
+        {placed.filter((p) => p.spans).map((p) => (
+          <span
+            class="mx-bracket"
+            style={`left: ${p.x}%; --from: ${p.from}; --to: ${p.to};`}
+            aria-hidden="true"
+          ></span>
+        ))}
+
+        <ul class="mx-marks">
+          {placed.map((p) => (
+            <li
+              class="mx-mark"
+              data-type={p.game.data.type}
+              style={`left: ${p.x}%; --lane: ${p.lane}; --row: ${p.row};`}
+            >
+              <a
+                class="mx-dot"
+                href={`/portfolio/${p.game.id}`}
+                data-name={p.game.data.name}
+                data-type={TYPE_LABEL[p.game.data.type]}
+                data-rtp={fmtRtp(p.game.data.specs.rtp)}
+                data-vol={fmtVol(p.game.data.specs.volatility)}
+                data-max={maxWin(p.game.data.specs.maxWin) ?? 'On request'}
+                aria-label={`${p.game.data.name}: RTP ${fmtRtp(p.game.data.specs.rtp)}, volatility ${fmtVol(p.game.data.specs.volatility)}`}
+              >
+                <Image src={p.game.data.card} alt="" width={96} height={96} loading="lazy" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="mx-foot">
+    <ul class="mx-legend" aria-label="Game types">
+      {present.map((t) => (
+        <li data-type={t}><i></i>{TYPE_PLURAL[t]}</li>
+      ))}
+      <li class="mx-legend-adj"><i class="adj"></i>Adjustable volatility</li>
+    </ul>
+    <p class="mx-caption"><slot name="caption" /></p>
+  </div>
+
+  {configurable.length > 0 && (
+    <div class="mx-config">
+      <p class="mx-config-label">Configurable RTP, set per market</p>
+      <ul class="mx-config-list">
+        {configurable.map((g) => (
+          <li class="mx-mark mx-mark-static" data-type={g.data.type}>
+            <a
+              class="mx-dot"
+              href={`/portfolio/${g.id}`}
+              data-name={g.data.name}
+              data-type={TYPE_LABEL[g.data.type]}
+              data-rtp="Configurable"
+              data-vol={fmtVol(g.data.specs.volatility)}
+              data-max={maxWin(g.data.specs.maxWin) ?? 'On request'}
+              aria-label={`${g.data.name}: configurable RTP, volatility ${fmtVol(g.data.specs.volatility)}`}
+            >
+              <Image src={g.data.card} alt="" width={96} height={96} loading="lazy" />
+            </a>
+            <span class="mx-static-name">{g.data.name}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  <div class="mx-tip" role="tooltip" hidden data-mx-tip>
+    <div class="mx-tip-art"></div>
+    <div class="mx-tip-body">
+      <b data-tip-name></b>
+      <span class="mx-tip-type" data-tip-type></span>
+      <dl>
+        <div><dt>RTP</dt><dd class="tnum" data-tip-rtp></dd></div>
+        <div><dt>Volatility</dt><dd data-tip-vol></dd></div>
+        <div><dt>Max win</dt><dd class="tnum" data-tip-max></dd></div>
+      </dl>
+      <span class="mx-tip-go">Open the game</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .mx {
+    position: relative;
+    background: var(--ink-2); border-radius: var(--radius-l);
+    padding: var(--sp-5) var(--sp-5) var(--sp-4); box-shadow: var(--shadow-1);
+    --lane-h: 108px; --dot: 52px;
+  }
+  .mx-top { display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-5); align-items: center; justify-content: space-between; margin-bottom: var(--sp-4); }
+  .mx-hint { font-size: 13px; color: var(--fg-3); }
+
+  .mx-scroll { overflow-x: auto; overscroll-behavior-x: contain; border-radius: var(--radius); }
+  .mx-board {
+    display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 0 var(--sp-3);
+    min-width: 720px; padding-bottom: 30px; position: relative;
+  }
+  .mx-labels {
+    display: grid; grid-template-rows: repeat(var(--lanes), var(--lane-h)); position: relative;
+  }
+  .mx-lane-label {
+    display: flex; align-items: center;
+    font-family: 'JetBrains Mono Variable', monospace; font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--fg-3);
+  }
+  .mx-axis-name {
+    position: absolute; left: 0; bottom: -26px;
+    font-family: 'JetBrains Mono Variable', monospace; font-size: 10.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--fg-3);
+  }
+
+  .mx-track { position: relative; height: calc(var(--lane-h) * var(--lanes)); }
+  .mx-lane {
+    height: var(--lane-h); border-radius: var(--radius-s);
+    background: linear-gradient(90deg, rgb(255 240 200 / 0.03), rgb(255 240 200 / 0.015));
+    border-bottom: 1px solid var(--line);
+  }
+  .mx-lane:first-child { border-top: 1px solid var(--line); }
+
+  .mx-tick {
+    position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px dashed rgb(255 240 200 / 0.09);
+    pointer-events: none;
+  }
+  .mx-tick b {
+    position: absolute; top: 100%; left: 0; transform: translate(-50%, 8px);
+    font-family: 'JetBrains Mono Variable', monospace; font-weight: 500; font-size: 11px; color: var(--fg-3);
+  }
+
+  .mx-bracket {
+    position: absolute; width: 2px; border-radius: 1px;
+    background: linear-gradient(180deg, var(--peach), rgb(246 203 149 / 0.35));
+    top: calc(var(--from) * var(--lane-h) + var(--lane-h) / 2);
+    height: calc((var(--to) - var(--from)) * var(--lane-h));
+    transform: translateX(-50%); pointer-events: none; opacity: 0.8;
+  }
+  .mx-bracket::before, .mx-bracket::after {
+    content: ''; position: absolute; left: 50%; width: 10px; height: 2px; background: var(--peach);
+    transform: translateX(-50%);
+  }
+  .mx-bracket::before { top: 0; }
+  .mx-bracket::after { bottom: 0; }
+
+  .mx-marks { list-style: none; position: absolute; inset: 0; margin: 0; padding: 0; }
+  .mx-mark {
+    position: absolute;
+    top: calc(var(--lane) * var(--lane-h) + (var(--lane-h) - var(--dot)) / 2 + var(--row) * 26px - 13px);
+    transform: translateX(-50%);
+    transition: opacity var(--dur-2) var(--ease), filter var(--dur-2) var(--ease);
+  }
+  .mx-mark[data-row='0'] { }
+  .mx-dot {
+    display: block; width: var(--dot); height: var(--dot); border-radius: var(--radius-pill);
+    overflow: hidden; background: var(--ink-3);
+    box-shadow: 0 0 0 2.5px var(--ring, var(--fg-3)), 0 8px 18px -8px rgb(5 4 2 / 0.9);
+    transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+  }
+  .mx-dot :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mx-mark[data-type='slot'] { --ring: var(--tint-ice); }
+  .mx-mark[data-type='instant'] { --ring: var(--tint-mint); }
+  .mx-mark[data-type='table'] { --ring: var(--tint-lemon); }
+  .mx-dot:hover, .mx-dot:focus-visible { transform: scale(1.22); box-shadow: 0 0 0 3px var(--brand), 0 14px 28px -10px rgb(5 4 2 / 0.95); z-index: 2; }
+  .mx-mark:has(.mx-dot:hover), .mx-mark:has(.mx-dot:focus-visible) { z-index: 5; }
+
+  /* highlight, never hide */
+  .mx[data-active]:not([data-active='all']) .mx-mark:not([data-type]) {}
+  .mx[data-active='slot'] .mx-mark:not([data-type='slot']),
+  .mx[data-active='instant'] .mx-mark:not([data-type='instant']),
+  .mx[data-active='table'] .mx-mark:not([data-type='table']) { opacity: 0.22; filter: grayscale(1); }
+
+  .mx-foot { display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-6); align-items: center; justify-content: space-between; margin-top: var(--sp-5); }
+  .mx-legend { list-style: none; display: flex; flex-wrap: wrap; gap: var(--sp-4); font-size: 12.5px; color: var(--fg-2); }
+  .mx-legend li { display: inline-flex; align-items: center; gap: 8px; }
+  .mx-legend i { width: 14px; height: 14px; border-radius: 50%; background: var(--ink-3); box-shadow: 0 0 0 2px var(--fg-3); }
+  .mx-legend li[data-type='slot'] i { box-shadow: 0 0 0 2px var(--tint-ice); }
+  .mx-legend li[data-type='instant'] i { box-shadow: 0 0 0 2px var(--tint-mint); }
+  .mx-legend li[data-type='table'] i { box-shadow: 0 0 0 2px var(--tint-lemon); }
+  .mx-legend i.adj { width: 2px; height: 16px; border-radius: 1px; background: var(--peach); box-shadow: none; }
+  .mx-caption { font-size: 13px; color: var(--fg-3); max-width: 60ch; }
+
+  .mx-config { margin-top: var(--sp-5); padding-top: var(--sp-4); border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-6); align-items: center; }
+  .mx-config-label { font-family: 'JetBrains Mono Variable', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); }
+  .mx-config-list { list-style: none; display: flex; flex-wrap: wrap; gap: var(--sp-4); }
+  .mx-mark-static { position: static; transform: none; display: inline-flex; align-items: center; gap: 10px; }
+  .mx-static-name { font-size: 13px; color: var(--fg-2); }
+
+  .mx-tip {
+    position: absolute; z-index: 20; width: 300px; pointer-events: none;
+    display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 0;
+    background: var(--ink-0); border: 1px solid var(--line-2); border-radius: var(--radius);
+    box-shadow: var(--shadow-2); overflow: hidden;
+  }
+  .mx-tip[hidden] { display: none; }
+  .mx-tip-art { background: var(--ink-3); }
+  .mx-tip-art :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mx-tip-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+  .mx-tip-body b { font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-weight: 400; font-size: 1.15rem; line-height: 1.05; color: var(--fg); }
+  .mx-tip-type { font-family: 'JetBrains Mono Variable', monospace; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); }
+  .mx-tip dl { margin: 6px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; }
+  .mx-tip dl div:first-child { grid-column: 1 / -1; }
+  .mx-tip dt { font-family: 'JetBrains Mono Variable', monospace; font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); }
+  .mx-tip dd { margin: 0; font-size: 13px; color: var(--fg); }
+  .mx-tip-go { margin-top: 6px; font-size: 12px; color: var(--peach); }
+
+  @media (hover: none) {
+    .mx-tip { position: fixed; left: var(--sp-4); right: var(--sp-4); bottom: var(--sp-4); width: auto; pointer-events: auto; }
+  }
+  @media (max-width: 768px) {
+    .mx { padding: var(--sp-4); --lane-h: 88px; --dot: 40px; }
+    .mx-board { grid-template-columns: 78px minmax(0, 1fr); }
+    .mx-hint { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mx-mark, .mx-dot { transition: none; }
+  }
+</style>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-mx]')) {
+    const chips = root.querySelectorAll<HTMLButtonElement>('[data-mx-filter]');
+    const tip = root.querySelector<HTMLElement>('[data-mx-tip]')!;
+    const art = tip.querySelector<HTMLElement>('.mx-tip-art')!;
+    const set = (sel: string, v: string) => (tip.querySelector<HTMLElement>(sel)!.textContent = v);
+    const touch = window.matchMedia('(hover: none)').matches;
+
+    root.dataset.active = 'all';
+    for (const c of chips) {
+      c.addEventListener('click', () => {
+        root.dataset.active = c.dataset.mxFilter!;
+        for (const o of chips) o.setAttribute('aria-pressed', String(o === c));
+      });
+    }
+
+    function show(dot: HTMLAnchorElement) {
+      set('[data-tip-name]', dot.dataset.name!);
+      set('[data-tip-type]', dot.dataset.type!);
+      set('[data-tip-rtp]', dot.dataset.rtp!);
+      set('[data-tip-vol]', dot.dataset.vol!);
+      set('[data-tip-max]', dot.dataset.max!);
+      art.replaceChildren(dot.querySelector('img')!.cloneNode(true));
+      tip.hidden = false;
+      if (touch) return;
+      // above the game when there is room, otherwise beside it, so the card
+      // never sits on top of the neighbouring games
+      const r = dot.getBoundingClientRect();
+      const b = root.getBoundingClientRect();
+      const w = tip.offsetWidth;
+      const h = tip.offsetHeight;
+      let left = r.left - b.left + r.width / 2 - w / 2;
+      let top = r.top - b.top - h - 12;
+      if (top < 4) {
+        top = r.top - b.top + r.height / 2 - h / 2;
+        left = r.right - b.left + 14;
+        if (left + w > b.width - 8) left = r.left - b.left - w - 14;
+      }
+      left = Math.max(8, Math.min(left, b.width - w - 8));
+      top = Math.max(4, top);
+      tip.style.left = `${left}px`;
+      tip.style.top = `${top}px`;
+    }
+    const hide = () => (tip.hidden = true);
+
+    let armed: HTMLAnchorElement | null = null;
+    for (const dot of root.querySelectorAll<HTMLAnchorElement>('.mx-dot')) {
+      dot.addEventListener('mouseenter', () => show(dot));
+      dot.addEventListener('mouseleave', hide);
+      dot.addEventListener('focus', () => show(dot));
+      dot.addEventListener('blur', hide);
+      // on touch the first tap shows the figures, the second opens the game
+      dot.addEventListener('click', (e) => {
+        if (!touch) return;
+        if (armed === dot) return;
+        e.preventDefault();
+        armed = dot;
+        show(dot);
+      });
+    }
+    document.addEventListener('click', (e) => {
+      if (touch && !(e.target as HTMLElement).closest('.mx-dot')) { armed = null; hide(); }
+    });
+  }
+</script>
