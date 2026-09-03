@@ -1,0 +1,9 @@
+.git
+.gitignore
+.claude
+node_modules
+dist
+.astro
+docs
+helm
+*.md

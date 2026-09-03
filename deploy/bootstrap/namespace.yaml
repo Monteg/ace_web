@@ -1,0 +1,8 @@
+# The namespace the site lives in. Created once, by hand, because the CI job
+# that deploys into it is deliberately not allowed to create namespaces.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: acegames-www
+  labels:
+    app.kubernetes.io/part-of: acegames-www

@@ -5,6 +5,15 @@ few days, most of it waiting for DNS.
 
 If you are doing this with an AI assistant, point it at `AGENTS.md` first.
 
+> **The hosting changed.** Sections 2 and 3 put the site on Cloudflare Pages.
+> It now builds and deploys to the company's own Kubernetes cluster on every
+> push to `main`: `docs/CI.md` is that runbook and `deploy/bootstrap/README.md`
+> is the one-time setup. Everything else here still holds — the Webflow exit,
+> the DNS and mail care in section 6, analytics, the 30-day rollback — reading
+> "point the records at Pages" as "point them at the cluster's ingress".
+> Section 4's three variables belong wherever the contact form ends up living,
+> which `docs/CI.md` explains is not settled yet.
+
 ---
 
 ## 0. Run it on your own machine first
