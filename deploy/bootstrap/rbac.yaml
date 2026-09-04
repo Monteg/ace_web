@@ -1,15 +1,28 @@
-# What the CI pipeline of money.energy/www may do in this cluster.
-#
-# The GitLab agent grants cluster-admin by default, because a job authenticates
-# as the agent itself. `access_as: ci_job` in the agent config swaps that for the
-# job's own identity: user gitlab:ci_job:<job id>, in groups gitlab:ci_job,
-# gitlab:project:<project id>, gitlab:project_env:<project id>:<env slug> and
-# the group equivalents. Binding a namespaced Role to gitlab:project:86013072
-# leaves this pipeline able to deploy the website and nothing else.
-#
-# 86013072 is money.energy/www. If the project is ever moved or recreated, the
-# path stays but the id does not: check with
-#   glab api projects/money.energy%2Fwww --jq .id
+# What the CI pipeline of money.energy/www may do in this cluster. The deploy
+# job runs on the in-cluster gamma runner and authenticates as this dedicated
+# service account. Its bearer token is stored as the protected, hidden
+# ACEGAMES_KUBE_TOKEN project variable. The Role below is the whole of what it
+# can do.
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ci-deployer
+  namespace: acegames-www
+automountServiceAccountToken: false
+---
+# Kubernetes 1.24+ no longer creates a persistent service-account token
+# automatically. CI needs a credential that survives individual jobs, so this
+# bootstrap-only Secret asks the token controller to create one. It is never
+# consumed by a website pod.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ci-deployer-token
+  namespace: acegames-www
+  annotations:
+    kubernetes.io/service-account.name: ci-deployer
+type: kubernetes.io/service-account-token
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -48,9 +61,9 @@ roleRef:
   kind: Role
   name: ci-deployer
 subjects:
-  - kind: Group
-    name: gitlab:project:86013072
-    apiGroup: rbac.authorization.k8s.io
+  - kind: ServiceAccount
+    name: ci-deployer
+    namespace: acegames-www
 ---
 # Namespaces are cluster-scoped, so a Role cannot cover the one read helm makes
 # before it installs. resourceNames keeps this to the single namespace.
@@ -73,6 +86,6 @@ roleRef:
   kind: ClusterRole
   name: acegames-www-namespace-reader
 subjects:
-  - kind: Group
-    name: gitlab:project:86013072
-    apiGroup: rbac.authorization.k8s.io
+  - kind: ServiceAccount
+    name: ci-deployer
+    namespace: acegames-www
