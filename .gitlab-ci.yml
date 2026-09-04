@@ -1,0 +1,130 @@
+# Every push to main rebuilds the site, ships it to the gamma cluster and drops
+# the Cloudflare edge copy. Roughly four minutes end to end.
+#
+#   build    astro check, then `npm run ship`: the 14 parity gates
+#   package  the gated dist/ into an nginx image
+#   deploy   helm upgrade against gamma through the GitLab agent
+#   purge    Cloudflare cache, after the rollout is actually live
+#
+# The deploy job talks to the cluster through the agent in money.energy/devops/
+# infra (.gitlab/agents/gamma-k8s-agent/config.yaml). This project has to be
+# listed in that agent's ci_access, or `kubectl config use-context` finds
+# nothing. Nothing else here needs cluster credentials.
+
+stages:
+  - build
+  - package
+  - deploy
+  - purge
+
+variables:
+  KUBE_CONTEXT: money.energy/devops/infra:gamma-k8s-agent
+  NAMESPACE: acegames-www
+  RELEASE: www
+  # kubectl + helm + curl in one image, kubectl matching the cluster's 1.35.
+  DEPLOY_IMAGE: alpine/k8s:1.35.8
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+default:
+  interruptible: true
+
+# The gates run here rather than inside the docker build, because npm inside the
+# CI docker daemon stalls for ten minutes and then dies; out here the same
+# install takes half a minute. What passes the gates is what gets packaged: the
+# artifact below is copied into the image verbatim.
+build:site:
+  stage: build
+  image: node:22-alpine
+  tags: [build]
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+  script:
+    - npm ci --cache .npm --prefer-offline --no-audit --no-fund
+    - npx astro check
+    - npm run ship
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+
+package:image:
+  stage: package
+  image: docker:28
+  tags: [build]
+  needs: ["build:site"]
+  services:
+    - name: docker:28-dind
+      alias: docker
+      command: ["--tls=false", "--dns=10.20.8.10", "--mtu=1450"]
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_BUILDKIT: "1"
+  before_script:
+    # The DinD sidecar needs a few seconds to bind 2375.
+    - until docker info >/dev/null 2>&1; do echo "waiting for dockerd..."; sleep 1; done
+    - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+  script:
+    - test -f dist/index.html
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
+    - |
+      if [ "$CI_COMMIT_BRANCH" = "$CI_DEFAULT_BRANCH" ]; then
+        docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+      else
+        echo "merge request pipeline: image built and gates passed, not pushed"
+      fi
+
+deploy:production:
+  stage: deploy
+  image: $DEPLOY_IMAGE
+  tags: [k8s-deploy-gamma]
+  needs: ["package:image"]
+  # A second push while this one is rolling out waits its turn instead of
+  # racing it.
+  resource_group: production
+  interruptible: false
+  environment:
+    name: production
+    deployment_tier: production
+    url: https://acegames.io
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - kubectl config use-context "$KUBE_CONTEXT"
+    - kubectl config current-context
+    - >
+      helm upgrade --install "$RELEASE" ./helm/chart
+      --namespace "$NAMESPACE"
+      -f helm/env/production.yaml
+      --set image.repository="$CI_REGISTRY_IMAGE"
+      --set image.tag="$CI_COMMIT_SHORT_SHA"
+      --wait --timeout 5m
+    - kubectl -n "$NAMESPACE" rollout status "deploy/$RELEASE" --timeout=5m
+
+purge:cloudflare:
+  stage: purge
+  image: $DEPLOY_IMAGE
+  tags: [k8s-deploy-gamma]
+  needs: ["deploy:production"]
+  # No CF_API_TOKEN / CF_ZONE_ID yet means no job, rather than a red pipeline.
+  # Both are masked, protected project variables; main is protected.
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CF_API_TOKEN && $CF_ZONE_ID'
+  script:
+    # Hashed assets under /_astro are immutable and never need this; it is the
+    # HTML pages that would otherwise serve yesterday's build from the edge.
+    - |
+      curl --fail --silent --show-error \
+        -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
+        -H "Authorization: Bearer ${CF_API_TOKEN}" \
+        -H "Content-Type: application/json" \
+        --data '{"purge_everything":true}' > /dev/null
+    - echo "Cloudflare cache purged for zone ${CF_ZONE_ID}"

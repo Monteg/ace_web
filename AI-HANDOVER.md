@@ -199,7 +199,7 @@ Full runbook in `DEPLOY.md`. The short form:
 
 1. Push the repo to GitHub.
 2. Cloudflare Pages, connect the repo, build command `npm run build`, output
-   `dist`, environment variable `NODE_VERSION` = `20`.
+   `dist`, environment variable `NODE_VERSION` = `22`.
 3. Add the three secrets for the contact form: `RESEND_API_KEY`, `CONTACT_TO`,
    `CONTACT_FROM` (see `.env.example`). Until they exist the form lands on
    an honest "not connected yet" page.

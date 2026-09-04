@@ -25,7 +25,7 @@ pages. The result is a folder of files any CDN can serve.
 ## Commands
 
 ```bash
-npm install          # once, Node 20 or newer (see .nvmrc)
+npm install          # once, Node 22 or newer (see .nvmrc)
 npm run dev          # http://localhost:4321, hot reload (add -- --port 4400 if 4321 is busy)
 npm run build        # writes dist/
 npm run verify       # the parity gates against dist/
@@ -62,6 +62,11 @@ functions/api/contact.ts        Cloudflare Pages Function: the contact form
 public/_headers, _redirects     CSP, caching, five redirects
 scripts/verify.mjs              the gates
 scripts/new-game.mjs            the scaffolder
+Dockerfile                      serves the built dist from nginx
+deploy/nginx/                   the serving rules: _headers and _redirects again
+deploy/bootstrap/               namespace, RBAC, pull secret; once, by hand
+helm/chart, helm/env/           the deployment
+.gitlab-ci.yml                  a push to main puts it live, see docs/CI.md
 ```
 
 The showcase components:

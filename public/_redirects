@@ -1,4 +1,8 @@
 # Every line here fixes something that is broken on the current site.
+#
+# Only Cloudflare Pages reads this file. The live copy of these rules is
+# deploy/nginx/conf.d/default.conf, which nginx serves from the cluster.
+# Change both.
 
 # linked from the footer of all 24 game pages today, returns 404
 /utility/style-guide      /terms-conditions          301

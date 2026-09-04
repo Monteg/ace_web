@@ -110,7 +110,7 @@ into a recurring bill.
 
 Full steps in [`DEPLOY.md`](./DEPLOY.md). The short version:
 
-- Build command `npm run build`, output directory `dist`, `NODE_VERSION` = `20`.
+- Build command `npm run build`, output directory `dist`, `NODE_VERSION` = `22`.
 - The contact form works once three environment variables are set. See
   [`.env.example`](./.env.example).
 - **Export the existing form submissions from Webflow before cancelling.** Every
