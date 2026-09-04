@@ -2,9 +2,16 @@
 import { Image } from 'astro:assets';
 import logo from '../assets/brand/logo.webp';
 import { nav, CTA, company } from '../data/site';
+import EventAnnouncementBar from './event/EventAnnouncementBar.astro';
+import { currentEvent } from '../data/events';
+
+const isEvent = Astro.url.pathname.replace(/\/$/, '').replace(/\.html$/, '') === currentEvent.eventUrl;
+const headerCTA = isEvent ? { label: currentEvent.bookingLabel, href: currentEvent.bookingAnchor } : CTA;
+const navigation = [...nav, { label: 'Event', href: currentEvent.eventUrl }];
 ---
 
 <header class="site-header" id="siteHeader">
+  <EventAnnouncementBar />
   <div class="wrap">
     <nav class="nav" aria-label="Main">
       <a class="brand" href="/">
@@ -12,14 +19,14 @@ import { nav, CTA, company } from '../data/site';
       </a>
 
       <ul class="nav-links" id="navLinks">
-        {nav.map((item) => (
-          <li><a href={item.href}>{item.label}</a></li>
+        {navigation.map((item) => (
+          <li><a href={item.href} aria-current={isEvent && item.href === currentEvent.eventUrl ? 'page' : undefined} data-event-track={item.href === currentEvent.eventUrl ? 'event_nav_click' : undefined}>{item.label}</a></li>
         ))}
-        <li class="nav-links-cta"><a class="btn btn-primary btn-sm" href={CTA.href}>{CTA.label}</a></li>
+        <li class="nav-links-cta"><a class="btn btn-primary btn-sm" href={headerCTA.href} data-event-track={isEvent ? 'book_meeting_header' : undefined}>{headerCTA.label}</a></li>
       </ul>
 
       <div class="nav-end">
-        <a class="btn btn-primary btn-sm nav-desktop-cta" href={CTA.href}>{CTA.label}</a>
+        <a class="btn btn-primary btn-sm nav-desktop-cta" href={headerCTA.href} data-event-track={isEvent ? 'book_meeting_header' : undefined}>{headerCTA.label}</a>
         <button class="burger" type="button" id="burger" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu">
           <span></span>
         </button>
@@ -33,10 +40,9 @@ import { nav, CTA, company } from '../data/site';
     position: sticky;
     top: 0;
     z-index: var(--z-sticky);
-    padding-top: 12px;
     pointer-events: none;
   }
-  .site-header .wrap { pointer-events: auto; }
+  .site-header .wrap { pointer-events: auto; padding-top: 12px; }
   .nav {
     display: flex; align-items: center; gap: var(--sp-6); height: 64px;
     padding: 0 12px 0 20px;
@@ -52,6 +58,7 @@ import { nav, CTA, company } from '../data/site';
   .nav-links { display: flex; gap: var(--sp-6); list-style: none; margin-left: var(--sp-2); }
   .nav-links a { font-size: 14px; font-weight: 500; color: var(--fg-2); text-decoration: none; white-space: nowrap; transition: color var(--dur-1); }
   .nav-links a:hover { color: var(--fg); }
+  .nav-links a[aria-current='page'] { color: var(--peach); }
   .nav-links-cta { display: none; }
 
   .nav-end { margin-left: auto; display: flex; align-items: center; gap: var(--sp-3); }
@@ -60,8 +67,8 @@ import { nav, CTA, company } from '../data/site';
     width: 46px; height: 46px; cursor: pointer; align-items: center; justify-content: center;
   }
   .burger span {
-    display: block; width: 20px; height: 2px; background: var(--on-brand);
-    box-shadow: 0 -6px 0 var(--on-brand), 0 6px 0 var(--on-brand);
+    display: block; width: 20px; height: 2.5px; background: var(--on-brand-button);
+    box-shadow: 0 -6px 0 var(--on-brand-button), 0 6px 0 var(--on-brand-button);
   }
 
   @media (max-width: 992px) {
@@ -71,14 +78,14 @@ import { nav, CTA, company } from '../data/site';
 
     :global(.menu-open) .nav-links {
       display: flex; flex-direction: column; gap: 0;
-      position: absolute; left: var(--gutter); right: var(--gutter); top: 84px;
+      position: absolute; left: var(--gutter); right: var(--gutter); top: calc(100% + 8px);
       background: var(--ink-2); border: 1px solid var(--line); border-radius: var(--radius-l);
       padding: var(--sp-2) var(--sp-5) var(--sp-5); box-shadow: var(--shadow-2);
     }
     :global(.menu-open) .nav-links li { border-bottom: 1px solid var(--line); }
     :global(.menu-open) .nav-links a { display: block; padding: 14px 0; font-size: 16px; }
     :global(.menu-open) .nav-links-cta { display: block; border-bottom: 0; }
-    :global(.menu-open) .nav-links-cta a { margin-top: var(--sp-4); justify-content: center; }
+    :global(.menu-open) .nav-links-cta a { margin-top: var(--sp-4); justify-content: center; display: flex; color: var(--on-brand-button); font-weight: 500; }
   }
 </style>
 

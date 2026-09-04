@@ -148,12 +148,17 @@ const faqSchema = {
     <div class="wrap">
       <div class="sec-top rv"><h2 class="d1">Frequently asked questions</h2></div>
       <div class="faq rv">
-        {faq.map((f, i) => (
-          <details open={i === 0}>
-            <summary>{f.q}</summary>
+        {faq.map((f) => (
+          <details class="faq-item">
+            <summary>
+              <span class="faq-question">{f.q}</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </summary>
             <div class="answer">
-              {f.a ? <p>{f.a}</p> : <p><span class="need">{f.hint}</span></p>}
-              {f.extra && <p>{f.extra}</p>}
+              <div class="answer-in">
+                {f.a ? <p>{f.a}</p> : <p><span class="need">{f.hint}</span></p>}
+                {f.extra && <p>{f.extra}</p>}
+              </div>
             </div>
           </details>
         ))}
@@ -253,18 +258,82 @@ const faqSchema = {
   .row dd { margin: 0; font-size: 14.5px; color: var(--fg); line-height: 1.45; }
 
   /* faq */
-  .faq { border-top: 1px solid var(--line); max-width: 900px; }
-  .faq details { border-bottom: 1px solid var(--line); }
-  .faq summary {
-    list-style: none; cursor: pointer; position: relative;
-    padding: var(--sp-5) 44px var(--sp-5) 0;
-    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-size: 1.2rem; line-height: 1.25; color: var(--fg);
+  #faq { scroll-margin-top: 88px; }
+  .faq {
+    --faq-duration: 300ms;
+    display: grid;
+    width: 100%;
+    gap: var(--sp-3);
   }
+  .faq details {
+    overflow: clip;
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-1);
+    transition:
+      background-color var(--faq-duration) var(--ease),
+      border-color var(--faq-duration) var(--ease);
+  }
+  .faq details:hover { border-color: var(--line-2); }
+  .faq details[open] { background: var(--ink-3); border-color: var(--brand-deep); }
+  .faq summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-5);
+    min-height: 72px;
+    padding: var(--sp-5);
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
+    font-size: var(--step-1);
+    line-height: 1.25;
+    color: var(--fg);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--faq-duration) var(--ease);
+  }
+  .faq details[open] summary { border-color: var(--line); }
   .faq summary::-webkit-details-marker { display: none; }
-  .faq summary::after { content: ''; position: absolute; right: 6px; top: 50%; width: 13px; height: 2px; background: var(--brand); transform: translateY(-50%); }
-  .faq summary::before { content: ''; position: absolute; right: 11.5px; top: 50%; width: 2px; height: 13px; background: var(--brand); transform: translateY(-50%); transition: opacity var(--dur-1); }
-  .faq details[open] summary::before { opacity: 0; }
-  .answer { padding: 0 60px var(--sp-5) 0; color: var(--fg-2); font-size: 15px; max-width: 70ch; display: flex; flex-direction: column; gap: var(--sp-3); }
+  .faq summary:focus-visible { outline: 1px solid var(--brand-deep); outline-offset: -3px; border-radius: var(--radius); }
+  .faq-question { min-width: 0; }
+  .faq-icon {
+    position: relative;
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    transition: transform var(--faq-duration) var(--ease);
+  }
+  .faq-icon::before,
+  .faq-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 2px;
+    border-radius: var(--radius-pill);
+    background: var(--brand);
+    transform: translate(-50%, -50%);
+  }
+  .faq-icon::after { transform: translate(-50%, -50%) rotate(90deg); }
+  .faq details[open] .faq-icon { transform: rotate(45deg); }
+  .answer { overflow: hidden; color: var(--fg-2); font-size: 15px; }
+  .answer-in {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    max-width: 78ch;
+    padding: var(--sp-4) clamp(var(--sp-5), 4vw, var(--sp-7)) var(--sp-5) var(--sp-5);
+  }
+  @media (max-width: 560px) {
+    .faq { gap: var(--sp-2); }
+    .faq summary { min-height: 64px; padding: var(--sp-4); gap: var(--sp-4); }
+    .answer-in { padding: var(--sp-3) var(--sp-6) var(--sp-4) var(--sp-4); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .faq details, .faq-icon { transition: none; }
+  }
 
   /* contact */
   .contact-grid { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
@@ -300,4 +369,46 @@ const faqSchema = {
 <script>
   import { mountCatalogueFilter } from '../lib/catalogue-filter';
   mountCatalogueFilter('gameGrid', '#games .chip[data-filter]');
+
+  const faqItems = document.querySelectorAll<HTMLDetailsElement>('#faq .faq-item');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  faqItems.forEach((item) => {
+    const summary = item.querySelector('summary');
+    const answer = item.querySelector<HTMLElement>('.answer');
+    const answerIn = item.querySelector<HTMLElement>('.answer-in');
+    if (!summary || !answer || !answerIn) return;
+
+    summary.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (item.dataset.animating === 'true') return;
+
+      if (reduceMotion.matches) {
+        item.open = !item.open;
+        return;
+      }
+
+      item.dataset.animating = 'true';
+      const opening = !item.open;
+      if (opening) item.open = true;
+
+      const startHeight = opening ? 0 : answer.offsetHeight;
+      const endHeight = opening ? answer.scrollHeight : 0;
+      const heightAnimation = answer.animate(
+        { height: [`${startHeight}px`, `${endHeight}px`] },
+        { duration: 300, easing: 'cubic-bezier(0.32, 0.72, 0, 1)' },
+      );
+      const contentAnimation = answerIn.animate(
+        opening
+          ? { opacity: [0, 1], transform: ['translateY(-6px)', 'translateY(0)'] }
+          : { opacity: [1, 0], transform: ['translateY(0)', 'translateY(-6px)'] },
+        { duration: 300, easing: 'cubic-bezier(0.32, 0.72, 0, 1)' },
+      );
+
+      Promise.all([heightAnimation.finished, contentAnimation.finished]).then(() => {
+        if (!opening) item.open = false;
+        delete item.dataset.animating;
+      });
+    });
+  });
 </script>

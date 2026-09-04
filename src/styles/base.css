@@ -65,8 +65,9 @@ section { padding-block: var(--sp-9); }
 
 .skip {
   position: absolute; left: var(--sp-4); top: -100px; z-index: var(--z-skip);
-  background: var(--brand); color: var(--on-brand);
+  background: var(--brand); color: var(--on-brand-button);
   font-family: Tanker, Arial, sans-serif; font-size: 1rem;
+  font-weight: var(--button-label-weight); letter-spacing: var(--button-label-spacing);
   padding: 12px 20px; border-radius: var(--radius); text-decoration: none;
   transition: top var(--dur-1);
 }
@@ -83,7 +84,11 @@ section { padding-block: var(--sp-9); }
   transition: transform var(--dur-1) var(--ease), background var(--dur-1), border-color var(--dur-1), color var(--dur-1);
 }
 .btn:active { transform: translateY(1px) scale(0.985); }
-.btn-primary { background: var(--brand); color: var(--on-brand); }
+.btn-primary {
+  background: var(--brand); color: var(--on-brand-button);
+  font-weight: var(--button-label-weight); letter-spacing: var(--button-label-spacing);
+}
+.btn-primary svg { color: inherit; stroke: currentColor; stroke-width: var(--button-icon-stroke); stroke-linecap: round; stroke-linejoin: round; }
 .btn-primary:hover { background: var(--brand-hover); }
 .btn-ghost { border-color: var(--line-2); color: var(--fg); background: rgb(17 17 16 / 0.45); backdrop-filter: blur(8px); }
 .btn-ghost:hover { border-color: var(--fg-3); background: var(--ink-3); }
@@ -128,13 +133,13 @@ section { padding-block: var(--sp-9); }
 /* ---------- filter chips, shared by the catalogue pages ---------- */
 .chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
 .chip {
-  font: inherit; font-size: 13.5px; font-weight: 500; cursor: pointer;
+  font: inherit; font-size: 13.5px; font-weight: 500; letter-spacing: var(--button-label-spacing); cursor: pointer;
   background: transparent; color: var(--fg-2); border: 1px solid var(--line-2);
   padding: 11px 18px; min-height: 44px; border-radius: var(--radius-pill);
   display: inline-flex; align-items: center; transition: var(--dur-1);
 }
 .chip:hover { color: var(--fg); border-color: var(--fg-3); }
-.chip[aria-pressed='true'] { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+.chip[aria-pressed='true'] { background: var(--brand); border-color: var(--brand); color: var(--on-brand-button); }
 
 /* ---------- volatility meter, four bars ---------- */
 .vmeter { display: inline-flex; gap: 3px; align-items: flex-end; height: 14px; }

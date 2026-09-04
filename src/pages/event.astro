@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EventHero from '../components/event/EventHero.astro';
+import WhyAceGames from '../components/event/WhyAceGames.astro';
+import EventStats from '../components/event/EventStats.astro';
+import FeaturedGames from '../components/event/FeaturedGames.astro';
+import EventTeam from '../components/event/EventTeam.astro';
+import EventTopics from '../components/event/EventTopics.astro';
+import EventBooking from '../components/event/EventBooking.astro';
+import { currentEvent as event } from '../data/events';
+import { eventDateRange } from '../lib/event';
+
+const games = await getCollection('games');
+const primaryGame = games.find(game => game.id === 'ace-city')!;
+const shareImage = await getImage({ src: primaryGame.data.hero, width: 1200, format: 'jpg' });
+const description = `Meet the Ace Games team at ${event.eventName}, ${eventDateRange(event)}. Explore our games, custom game development and book a meeting with the team.`;
+---
+
+<Base title={`${event.headline} | Ace Games`} description={description} image={shareImage.src} canonicalPath={event.eventUrl}>
+  <EventHero event={event} games={games} />
+  <WhyAceGames event={event} />
+  <EventStats event={event} />
+  <FeaturedGames event={event} games={games} />
+  <EventTeam event={event} />
+  <EventTopics event={event} />
+  <EventBooking event={event} />
+</Base>

@@ -1,0 +1,133 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { EventData } from '../../data/events';
+import { company } from '../../data/site';
+import { eventDateRange, meetingDays } from '../../lib/event';
+interface Props { event: EventData }
+const { event } = Astro.props;
+const days = meetingDays(event);
+---
+
+<section class="event-booking" id="book-meeting" aria-labelledby="booking-title">
+  <div class="wrap booking-layout">
+    <div class="booking-copy">
+      <p class="booking-date"><Icon name="ph:calendar-blank" aria-hidden="true" />{eventDateRange(event)} · {event.eventLocation}</p>
+      <h2 class="d1" id="booking-title">{event.bookingTitle}</h2>
+      <p class="booking-intro">{event.bookingIntro}</p>
+      <p class="body">{event.bookingDescription}</p>
+      <a class="direct-email" href={`mailto:${company.email}`}>{company.email}<Icon name="ph:arrow-up-right" aria-hidden="true" /></a>
+    </div>
+
+    {event.bookingUrl ? (
+      <div class="booking-calendar">
+        <Icon name="ph:calendar-check" aria-hidden="true" />
+        <h3>Find a time that works for you</h3>
+        <a class="btn btn-primary" href={event.bookingUrl} data-event-track="book_meeting_final">Choose a meeting time</a>
+      </div>
+    ) : (
+      <form class="booking-form" id="meetingForm" action={`mailto:${company.email}`} method="post" enctype="text/plain" data-email={company.email} data-event-name={event.eventName}>
+        <p class="booking-note">Request your preferred time by email. The team will confirm availability directly.</p>
+        <div class="form-pair">
+          <p class="field"><label for="meeting-name">Your name</label><input id="meeting-name" name="name" autocomplete="name" maxlength="120" required /></p>
+          <p class="field"><label for="meeting-company">Company</label><input id="meeting-company" name="company" autocomplete="organization" maxlength="160" required /></p>
+        </div>
+        <p class="field"><label for="meeting-email">Work email</label><input id="meeting-email" name="email" type="email" autocomplete="email" maxlength="200" placeholder="you@operator.com" required /></p>
+        <p class="field"><label for="meeting-member">Who would you like to meet?</label><select id="meeting-member" name="member"><option value="team">Ace Games team</option>{event.team.map(member => <option value={member.id}>{member.name}</option>)}</select></p>
+        <div class="form-pair">
+          <p class="field"><label for="meeting-day">Preferred day</label><select id="meeting-day" name="day" required><option value="">Choose a day</option>{days.map(day => <option value={day.value}>{day.label}</option>)}</select></p>
+          <p class="field"><label for="meeting-time">Time in Lisbon (optional)</label><input id="meeting-time" name="time" type="time" /></p>
+        </div>
+        <p class="field"><label for="meeting-message">What would you like to discuss?</label><textarea id="meeting-message" name="message" rows="4" maxlength="5000"></textarea></p>
+        <button class="btn btn-primary" type="submit" data-event-track="book_meeting_final">Prepare meeting email<Icon name="ph:arrow-up-right" aria-hidden="true" /></button>
+        <p class="form-fine-print">This prepares an email, not a confirmed booking. Send the draft from your email app to request your meeting. <a href="/privacy-policy">Privacy policy</a>.</p>
+        <div class="email-draft" id="meetingDraft" hidden>
+          <p class="draft-status" role="status">Your meeting email is ready. Open it in your email app, then send it to the team.</p>
+          <a class="btn btn-ghost" id="meetingMailLink" href={`mailto:${company.email}`}>Open email app<Icon name="ph:envelope-simple" aria-hidden="true" /></a>
+          <details><summary>View or copy your message</summary><pre id="meetingDraftText"></pre></details>
+        </div>
+      </form>
+    )}
+  </div>
+</section>
+
+<style>
+  .event-booking { padding-top: var(--sp-8); background: var(--ink-2); border-top: 1px solid var(--line); scroll-margin-top: 100px; }
+  :global(html.event-campaign-active) .event-booking { scroll-margin-top: 144px; }
+  .booking-layout { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: clamp(28px, 6vw, 80px); align-items: start; }
+  .booking-copy { display: flex; flex-direction: column; gap: var(--sp-5); align-items: flex-start; }
+  .booking-copy .d1 { font-size: clamp(2.8rem, 4.5vw, 4.5rem); }
+  .booking-date { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; color: var(--peach); font-size: 0.875rem; }
+  .booking-date svg { width: 18px; height: 18px; }
+  .booking-intro { font-size: var(--step-1); }
+  .booking-copy .body { font-size: 1rem; }
+  .direct-email { display: inline-flex; gap: var(--sp-3); align-items: center; min-height: 44px; color: var(--peach); text-underline-offset: 5px; }
+  .direct-email svg { width: 18px; height: 18px; }
+  .booking-form, .booking-calendar { padding: var(--sp-6); border: 1px solid var(--line-2); border-radius: var(--radius-l); background: var(--ink); display: grid; gap: var(--sp-5); }
+  .booking-note { color: var(--fg-2); font-size: 0.875rem; line-height: 1.6; }
+  .form-pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+  .field { display: flex; flex-direction: column; gap: var(--sp-2); min-width: 0; }
+  .field label { font-size: 0.875rem; font-weight: 500; color: var(--fg-2); }
+  .field input, .field select, .field textarea { font: inherit; font-size: 1rem; width: 100%; min-width: 0; min-height: 48px; padding: var(--sp-3) var(--sp-4); color: var(--fg); background: var(--ink-2); border: 1px solid var(--line-2); border-radius: var(--radius); color-scheme: dark; }
+  .field input::placeholder { color: var(--fg-2); }
+  .field textarea { resize: vertical; min-height: 112px; }
+  .booking-form > .btn { justify-self: start; }
+  .booking-form .btn svg { width: 18px; height: 18px; }
+  .form-fine-print { font-size: 0.8125rem; line-height: 1.6; color: var(--fg-2); }
+  .form-fine-print a { text-underline-offset: 3px; }
+  .email-draft { border-top: 1px solid var(--line-2); padding-top: var(--sp-5); }
+  .email-draft[hidden] { display: none; }
+  .draft-status { font-size: 0.875rem; margin-bottom: var(--sp-4); color: var(--peach); }
+  .email-draft details { margin-top: var(--sp-4); }
+  .email-draft summary { cursor: pointer; min-height: 44px; font-size: 0.875rem; }
+  .email-draft pre { white-space: pre-wrap; overflow-wrap: anywhere; font-family: inherit; font-size: 0.875rem; color: var(--fg-2); }
+  .booking-calendar { justify-items: start; }
+  .booking-calendar > svg { width: 48px; height: 48px; color: var(--peach); }
+  .booking-calendar h3 { font-size: 1.5rem; margin: 0; }
+  @media (max-width: 900px) { .booking-layout { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) { .booking-form, .booking-calendar { padding: var(--sp-5); } .form-pair { grid-template-columns: 1fr; } .booking-form > .btn { width: 100%; padding-inline: var(--sp-4); } }
+</style>
+
+<script>
+  import { buildMeetingEmail, selectMeetingMember } from '../../lib/event-booking';
+
+  const form = document.querySelector<HTMLFormElement>('#meetingForm');
+  const select = document.querySelector<HTMLSelectElement>('#meeting-member');
+  const draft = document.querySelector<HTMLElement>('#meetingDraft');
+  if (form && select) {
+    selectMeetingMember(select, new URLSearchParams(window.location.search).get('member'));
+    document.querySelectorAll<HTMLAnchorElement>('[data-event-member]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        if (!selectMeetingMember(select, link.dataset.eventMember ?? null)) return;
+        if (draft) draft.hidden = true;
+        event.preventDefault();
+        const url = new URL(window.location.href);
+        url.searchParams.set('member', select.value);
+        url.hash = 'book-meeting';
+        history.replaceState(null, '', url);
+        document.getElementById('book-meeting')?.scrollIntoView();
+        select.focus({ preventScroll: true });
+      });
+    });
+    const draftText = document.querySelector<HTMLElement>('#meetingDraftText');
+    const mailLink = document.querySelector<HTMLAnchorElement>('#meetingMailLink');
+    form.addEventListener('input', () => { if (draft) draft.hidden = true; });
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      if (!form.reportValidity() || !draft || !draftText || !mailLink) return;
+      const data = new FormData(form);
+      const day = form.querySelector<HTMLSelectElement>('#meeting-day');
+      const email = buildMeetingEmail({
+        eventName: form.dataset.eventName!, recipient: form.dataset.email!,
+        name: String(data.get('name') ?? ''), company: String(data.get('company') ?? ''),
+        email: String(data.get('email') ?? ''), member: select.selectedOptions[0].text,
+        day: day?.selectedOptions[0].text ?? '', time: String(data.get('time') ?? ''),
+        message: String(data.get('message') ?? ''),
+      });
+      draftText.textContent = email.body;
+      mailLink.href = email.href;
+      draft.hidden = false;
+      mailLink.focus();
+    });
+  }
+</script>

@@ -1,0 +1,164 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  games: CollectionEntry<'games'>[];
+}
+
+const { games } = Astro.props;
+const poster = games[0]?.data.hero.src;
+const videoUrl =
+  'https://ace-games.s3.eu-north-1.amazonaws.com/ace_games_hero_banner.mp4';
+---
+
+<section class="catalogue-hero" aria-labelledby="catalogue-title">
+  <div class="video-layer" aria-hidden="true">
+    <video
+      data-catalogue-video
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster={poster}
+      disablepictureinpicture
+    >
+      <source src={videoUrl} type="video/mp4" />
+    </video>
+    <div class="video-grade"></div>
+    <div class="video-grain"></div>
+  </div>
+
+  <div class="wrap hero-content">
+    <div class="catalogue-copy">
+      <p class="eyebrow">Catalogue</p>
+      <h1 class="d1" id="catalogue-title">Every game we have <em>built</em></h1>
+      <p class="lead">
+        Published RTP and volatility on each title, and a demo you can play without talking to
+        anyone first. Configuration is per operator and per market.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .catalogue-hero {
+    position: relative;
+    min-height: clamp(560px, 78svh, 820px);
+    overflow: hidden;
+    padding: 0;
+    display: flex;
+    align-items: flex-end;
+    background: var(--ink-0);
+    border-bottom: 1px solid var(--line);
+    isolation: isolate;
+  }
+
+  .video-layer {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background: var(--ink-0);
+  }
+
+  .video-layer video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    filter: saturate(1.06) contrast(1.04);
+    transform: scale(1.01);
+  }
+
+  .video-grade,
+  .video-grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .video-grade {
+    background:
+      linear-gradient(90deg, rgb(12 12 11 / 0.94) 0%, rgb(12 12 11 / 0.76) 27%, rgb(12 12 11 / 0.23) 57%, rgb(12 12 11 / 0.08) 100%),
+      linear-gradient(180deg, rgb(12 12 11 / 0.36) 0%, transparent 28%, transparent 57%, rgb(12 12 11 / 0.82) 100%);
+  }
+
+  .video-grain {
+    background-image: radial-gradient(rgb(255 255 255 / 0.14) 0.55px, transparent 0.55px);
+    background-size: 5px 5px;
+    opacity: 0.08;
+    mix-blend-mode: soft-light;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    min-height: inherit;
+    padding-block: clamp(128px, 18vh, 210px) clamp(48px, 7vh, 76px);
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .catalogue-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-4);
+    max-width: 610px;
+    text-shadow: 0 4px 32px rgb(0 0 0 / 0.88);
+  }
+
+  .catalogue-copy .d1 {
+    max-width: 9.5ch;
+    font-size: clamp(4.1rem, 7.4vw, 8rem);
+  }
+
+  .catalogue-copy .d1 em {
+    color: var(--peach);
+    font-style: normal;
+  }
+
+  .catalogue-copy .lead {
+    max-width: 39ch;
+    color: rgb(244 241 230 / 0.8);
+  }
+
+  @media (max-width: 900px) {
+    .catalogue-hero { min-height: min(760px, 90dvh); }
+
+    .video-layer video { object-position: 62% center; }
+
+    .video-grade {
+      background:
+        linear-gradient(90deg, rgb(12 12 11 / 0.7), rgb(12 12 11 / 0.14) 78%),
+        linear-gradient(180deg, rgb(12 12 11 / 0.22), transparent 35%, rgb(12 12 11 / 0.38) 60%, var(--ink-0) 100%);
+    }
+
+    .catalogue-copy { max-width: 680px; }
+    .catalogue-copy .d1 { max-width: 10ch; }
+  }
+
+  @media (max-width: 600px) {
+    .catalogue-hero { min-height: 650px; }
+    .video-layer video { object-position: 66% center; }
+    .hero-content { padding-block: 128px var(--sp-7); }
+    .catalogue-copy .d1 { font-size: clamp(3.5rem, 17vw, 5rem); }
+    .catalogue-copy .lead { font-size: 1rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .video-layer video { transform: none; }
+  }
+</style>
+
+<script>
+  const video = document.querySelector<HTMLVideoElement>('[data-catalogue-video]');
+
+  if (video && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    video.pause();
+    video.removeAttribute('autoplay');
+  }
+</script>

@@ -1,0 +1,33 @@
+---
+import type { EventData } from '../../data/events';
+interface Props { event: EventData }
+const { event } = Astro.props;
+---
+
+<section class="event-stats" aria-label="Ace Games in numbers">
+  <div class="wrap">
+    <dl class="stats-strip">
+      {event.stats.map(stat => (
+        <div class="event-stat rv">
+          <dt>{stat.label}</dt>
+          <dd class="tnum">{stat.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .event-stats { padding-block: var(--sp-7); background: var(--ink-2); border-block: 1px solid var(--line); }
+  .stats-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
+  .event-stat { display: flex; flex-direction: column-reverse; align-items: flex-start; justify-content: flex-end; gap: var(--sp-3); padding-inline: var(--sp-6); border-right: 1px solid var(--line-2); }
+  .event-stat:first-child { padding-left: 0; }
+  .event-stat:last-child { border: 0; }
+  .event-stat dd { font-family: Tanker, 'Tanker Fallback', sans-serif; font-size: clamp(3.5rem, 6vw, 5.75rem); line-height: 1; margin: 0; color: var(--peach); }
+  .event-stat dt { font-size: 1rem; line-height: 1.5; max-width: 27ch; color: var(--fg-2); }
+  @media (max-width: 600px) {
+    .stats-strip { grid-template-columns: 1fr; gap: var(--sp-5); }
+    .event-stat, .event-stat:first-child { padding: 0 0 var(--sp-5); border-right: 0; border-bottom: 1px solid var(--line); }
+    .event-stat:last-child { padding-bottom: 0; }
+  }
+</style>

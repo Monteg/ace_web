@@ -65,10 +65,10 @@ const { name, src, poster } = Astro.props;
   }
   .disc {
     width: 74px; height: 74px; border-radius: var(--radius-pill); background: var(--brand);
-    display: grid; place-items: center; color: var(--on-brand);
+    display: grid; place-items: center; color: var(--on-brand-button);
     transition: transform 0.2s var(--ease);
   }
-  .disc svg { width: 30px; height: 30px; }
+  .disc svg { width: 30px; height: 30px; stroke: currentColor; stroke-width: var(--button-icon-stroke); stroke-linejoin: round; }
   .demo-play:hover .disc { transform: scale(1.07); }
   @media (prefers-reduced-motion: reduce) { .demo-play:hover .disc { transform: none; } }
 
@@ -76,6 +76,7 @@ const { name, src, poster } = Astro.props;
     font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-size: 1.35rem;
     text-shadow: 0 2px 12px rgb(17 17 17 / 0.9);
   }
+  .demo-play .lab { color: var(--on-brand-button); font-weight: var(--button-label-weight); letter-spacing: var(--button-label-spacing); }
   .sub {
     font-size: 13px; color: var(--fg-2); max-width: 38ch; text-align: center; line-height: 1.5;
     text-shadow: 0 1px 10px rgb(17 17 17 / 0.95);

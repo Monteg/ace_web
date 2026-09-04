@@ -47,16 +47,20 @@ const bands = ['low', 'medium', 'high', 'very_high'] as const;
   </div>
 
   <div class="gt-bar">
-    <h3 class="gt-name">{d.name}</h3>
+    <h3 class="sr-only">{d.name}</h3>
     <dl class="gt-meta">
-      <div><dt>RTP</dt><dd class="tnum">{rtp(d.specs.rtp)}</dd></div>
-      <div>
-        <dt>Volatility</dt>
-        <dd>
-          <span class="vmeter" title={volatility(d.specs.volatility)}>
+      <div class="gt-stat">
+        <dt>RTP</dt>
+        <dd class:list={['gt-rtp', 'tnum', { 'gt-rtp-configurable': d.specs.rtp === 'configurable' }]}>{rtp(d.specs.rtp)}</dd>
+      </div>
+      <div class="gt-stat">
+        <dt class="gt-volatility-heading">
+          Volatility
+          <span class="vmeter" aria-hidden="true">
             {bands.map((b) => <i class:list={{ on: d.specs.volatility.includes(b) }}></i>)}
           </span>
-        </dd>
+        </dt>
+        <dd class="gt-volatility">{volatility(d.specs.volatility)}</dd>
       </div>
     </dl>
   </div>
@@ -65,6 +69,7 @@ const bands = ['low', 'medium', 'high', 'very_high'] as const;
 <style>
   .gt {
     position: relative; display: flex; flex-direction: column;
+    min-width: 0; container-type: inline-size;
     border-radius: var(--radius-l); overflow: hidden;
     background: var(--ink-2); box-shadow: var(--shadow-1);
     transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
@@ -84,8 +89,8 @@ const bands = ['low', 'medium', 'high', 'very_high'] as const;
 
   .gt-type {
     position: absolute; left: 12px; top: 12px; z-index: 1;
-    font-family: 'JetBrains Mono Variable', monospace; font-size: 10.5px; font-weight: 500;
-    letter-spacing: 0.09em; text-transform: uppercase;
+    font-family: 'JetBrains Mono Variable', monospace; font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.04em; text-transform: uppercase;
     padding: 5px 9px; border-radius: var(--radius-pill); color: var(--tint-ink);
   }
   .gt-type-slot { background: var(--tint-ice); }
@@ -97,27 +102,51 @@ const bands = ['low', 'medium', 'high', 'very_high'] as const;
     position: absolute; right: 12px; bottom: 12px; z-index: 1;
     display: inline-flex; align-items: center; gap: 8px;
     padding: 9px 14px 9px 10px; border-radius: var(--radius-pill);
-    background: var(--brand); color: var(--on-brand);
+    background: var(--brand); color: var(--on-brand-button);
     font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-size: 0.95rem;
+    font-weight: var(--button-label-weight); letter-spacing: var(--button-label-spacing);
     opacity: 0; transform: translateY(8px);
     transition: opacity var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
   }
-  .gt-play svg { width: 16px; height: 16px; }
+  .gt-play svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: var(--button-icon-stroke); stroke-linejoin: round; }
   .gt:hover .gt-play, .gt:has(.gt-link:focus-visible) .gt-play { opacity: 1; transform: none; }
   @media (hover: none) { .gt-play { opacity: 1; transform: none; } }
 
-  .gt-bar { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 10px; }
-  .gt-name {
-    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-weight: 400;
-    font-size: 1.25rem; line-height: 1.05; margin: 0; color: var(--fg);
+  .gt-bar {
+    padding: var(--sp-5); display: flex; flex: 1; align-items: flex-end;
+    border-top: 1px solid var(--line);
   }
-  .gt-featured .gt-name { font-size: var(--step-2); }
   .gt-meta {
-    display: flex; gap: var(--sp-5); margin: 0;
-    font-family: 'JetBrains Mono Variable', monospace; font-size: 11.5px;
+    display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: var(--sp-4); width: 100%; margin: 0;
   }
-  .gt-meta dt { color: var(--fg-3); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
-  .gt-meta dd { margin: 0; color: var(--fg); display: flex; align-items: center; min-height: 14px; }
+  .gt-stat { min-width: 0; }
+  .gt-meta dt {
+    color: var(--fg-2); font-size: 0.8125rem; font-weight: 500;
+    line-height: 1.4; margin-bottom: var(--sp-2);
+  }
+  .gt-meta dd { margin: 0; color: var(--fg); }
+  .gt-rtp {
+    font-family: 'JetBrains Mono Variable', monospace; font-size: 1.375rem;
+    font-weight: 600; line-height: 1.25; letter-spacing: -0.04em;
+  }
+  .gt-rtp.gt-rtp-configurable {
+    font-family: inherit; font-size: 0.875rem; line-height: 1.5;
+    letter-spacing: normal; overflow-wrap: anywhere;
+  }
+  .gt-volatility {
+    display: flex; align-items: center; min-height: 1.71875rem;
+    font-size: 0.875rem; line-height: 1.4; font-weight: 500;
+  }
+  .gt-volatility-heading { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-2); }
+  .gt-volatility-heading .vmeter { flex-shrink: 0; }
+
+  @container (max-width: 260px) {
+    .gt-bar { padding: var(--sp-4); }
+    .gt-meta { grid-template-columns: minmax(0, 1fr); gap: var(--sp-3); }
+    .gt-stat { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-2); }
+    .gt-meta dt { margin-bottom: 0; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .gt, .gt-art :global(img), .gt-play { transition: none; }

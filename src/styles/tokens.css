@@ -23,6 +23,10 @@
   --brand-hover: #ff6b22;
   --brand-deep: #c43f00;
   --on-brand: #15130e;
+  --on-brand-button: #ffffff;
+  --button-label-weight: 400;
+  --button-label-spacing: 0.04em;
+  --button-icon-stroke: 8;
   --peach: #f6cb95;
 
   /* the single inverted block */

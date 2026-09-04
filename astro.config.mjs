@@ -9,4 +9,16 @@ export default defineConfig({
   integrations: [icon({ include: { ph: ['*'] } }), sitemap()],
   image: { responsiveStyles: true },
   devToolbar: { enabled: false },
+  server: {
+    watch: {
+      // Windows locks these files at the drive root. Ignoring them prevents
+      // Chokidar from terminating the local dev server while scanning.
+      ignored: [
+        '**/hiberfil.sys',
+        '**/pagefile.sys',
+        '**/swapfile.sys',
+        '**/DumpStack.log.tmp',
+      ],
+    },
+  },
 });

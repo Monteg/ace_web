@@ -5,23 +5,28 @@ import '../styles/fonts.css';
 import '../styles/base.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import AgeGate from '../components/AgeGate.astro';
 import { company } from '../data/site';
+import { currentEvent } from '../data/events';
+import { isCampaignActive } from '../lib/event';
 
 interface Props {
   title: string;
   description: string;
   /** Absolute or root-relative path to the share image. */
   image?: string;
+  /** Public clean URL when the static output filename differs from the route. */
+  canonicalPath?: string;
   /** Extra JSON-LD to merge in, e.g. the Product graph on a game page. */
   schema?: Record<string, unknown> | Record<string, unknown>[];
   noindex?: boolean;
 }
 
-const { title, description, image = '/og-default.png', schema, noindex = false } = Astro.props;
+const { title, description, image = '/og-default.png', canonicalPath, schema, noindex = false } = Astro.props;
 
 // Self-referencing canonical on every page. The old site had none, and three
 // URLs served a byte-identical home page.
-const canonical = new URL(Astro.url.pathname, Astro.site ?? company.origin).href.replace(/\/$/, '') || company.origin;
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, Astro.site ?? company.origin).href.replace(/\/$/, '') || company.origin;
 const ogImage = new URL(image, Astro.site ?? company.origin).href;
 
 const organisation = {
@@ -46,10 +51,58 @@ const graphs = [organisation, ...(schema ? (Array.isArray(schema) ? schema : [sc
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class:list={{ 'event-campaign-active': isCampaignActive(currentEvent) }}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script is:inline define:vars={{ eventCampaignWindow: [Date.parse(currentEvent.campaignStart), Date.parse(currentEvent.eventEnd)], eventAnnouncementKey: `ace-announcement-dismissed:${currentEvent.id}` }}>
+      (() => {
+        let timer;
+        let dismissed = false;
+        const update = () => {
+          clearTimeout(timer);
+          try {
+            dismissed = dismissed || sessionStorage.getItem(eventAnnouncementKey) === 'true';
+          } catch {
+            // Closing still works on this page when browser storage is unavailable.
+          }
+          const now = Date.now();
+          document.documentElement.classList.toggle('event-campaign-active', !dismissed && now >= eventCampaignWindow[0] && now < eventCampaignWindow[1]);
+          const next = eventCampaignWindow.find(boundary => boundary > now);
+          if (next) timer = setTimeout(update, Math.min(next - now + 50, 2147483647));
+        };
+        update();
+        document.addEventListener('DOMContentLoaded', () => {
+          const close = document.querySelector('[data-dismiss-event-announcement]');
+          if (!close) return;
+          close.hidden = false;
+          close.addEventListener('click', () => {
+            dismissed = true;
+            try {
+              sessionStorage.setItem(eventAnnouncementKey, 'true');
+            } catch {
+              // Do not fall back to permanent storage for a temporary dismissal.
+            }
+            update();
+            document.querySelector('.site-header .brand')?.focus({ preventScroll: true });
+          });
+        });
+        window.addEventListener('pageshow', update);
+        document.addEventListener('visibilitychange', update);
+      })();
+    </script>
+
+    <script is:inline>
+      (() => {
+        try {
+          const verified = localStorage.getItem('age_verified_18') === 'true';
+          document.documentElement.classList.add(verified ? 'age-verified' : 'age-gate-required');
+        } catch {
+          document.documentElement.classList.add('age-gate-required');
+        }
+      })();
+    </script>
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -86,38 +139,41 @@ const graphs = [organisation, ...(schema ? (Array.isArray(schema) ? schema : [sc
   </head>
 
   <body>
-    <a class="skip" href="#main">Skip to content</a>
-    <Header />
-    <main id="main" tabindex="-1">
-      <slot />
-    </main>
-    <Footer />
+    <AgeGate />
+    <div id="siteShell">
+      <a class="skip" href="#main">Skip to content</a>
+      <Header />
+      <main id="main" tabindex="-1">
+        <slot />
+      </main>
+      <Footer />
 
-    <script>
-      // Reveal on scroll. The page ships visible; this adds the hidden start
-      // state, so if the script never runs the content is still readable.
-      (() => {
-        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const targets = document.querySelectorAll<HTMLElement>('.rv');
-        if (reduce || !('IntersectionObserver' in window) || !targets.length) return;
+      <script>
+        // Reveal on scroll. The page ships visible; this adds the hidden start
+        // state, so if the script never runs the content is still readable.
+        (() => {
+          const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          const targets = document.querySelectorAll<HTMLElement>('.rv');
+          if (reduce || !('IntersectionObserver' in window) || !targets.length) return;
 
-        document.documentElement.classList.add('rv-on');
-        const io = new IntersectionObserver(
-          (entries) => {
-            for (const e of entries) {
-              if (e.isIntersecting) {
-                e.target.classList.add('in');
-                io.unobserve(e.target);
+          document.documentElement.classList.add('rv-on');
+          const io = new IntersectionObserver(
+            (entries) => {
+              for (const e of entries) {
+                if (e.isIntersecting) {
+                  e.target.classList.add('in');
+                  io.unobserve(e.target);
+                }
               }
-            }
-          },
-          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
-        );
-        for (const el of targets) {
-          if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in');
-          else io.observe(el);
-        }
-      })();
-    </script>
+            },
+            { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+          );
+          for (const el of targets) {
+            if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in');
+            else io.observe(el);
+          }
+        })();
+      </script>
+    </div>
   </body>
 </html>

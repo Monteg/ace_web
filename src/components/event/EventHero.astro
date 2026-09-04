@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import type { CollectionEntry } from 'astro:content';
+import type { EventData } from '../../data/events';
+import { eventDateRange } from '../../lib/event';
+
+interface Props { event: EventData; games: CollectionEntry<'games'>[] }
+const { event, games } = Astro.props;
+const art = ['ace-city', 'zeus-run', 'chicken-doom'].map(id => games.find(game => game.id === id)!);
+---
+
+<section class="event-hero" aria-labelledby="event-title">
+  <div class="wrap event-hero-grid">
+    <div class="hero-copy">
+      <p class="event-date"><Icon name="ph:calendar-blank" aria-hidden="true" />{eventDateRange(event)}<span>· {event.eventLocation}</span></p>
+      <h1 class="d0" id="event-title">Meet Ace Games<br />at <em>{event.eventName}</em></h1>
+      <p class="hero-tagline">{event.tagline}</p>
+      <p class="body hero-intro">{event.introduction}</p>
+      <a class="btn btn-primary" href={event.bookingAnchor} data-event-track="book_meeting_hero">
+        {event.bookingLabel}<span class="disc" aria-hidden="true"><Icon name="ph:arrow-down-right" /></span>
+      </a>
+    </div>
+    <div class="hero-art" aria-label="Ace Games titles coming to Lisbon">
+      {art.map((game, index) => (
+        <div class:list={['hero-art-tile', { 'hero-art-main': index === 0 }]}>
+          <Image src={game.data.card} alt={`${game.data.name} game artwork`} widths={[320, 460, 640]} sizes={index === 0 ? '(max-width: 768px) 55vw, 340px' : '(max-width: 768px) 35vw, 220px'} loading={index === 0 ? 'eager' : 'lazy'} fetchpriority={index === 0 ? 'high' : 'auto'} />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .event-hero { padding-block: clamp(40px, 5vw, 76px) var(--sp-8); }
+  .event-hero-grid { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+  .hero-copy { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-5); }
+  .event-date { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-2); font-size: 0.875rem; font-weight: 500; color: var(--fg-2); }
+  .event-date svg { width: 18px; height: 18px; color: var(--brand); }
+  .hero-copy .d0 { font-size: clamp(3rem, 5.8vw, 5.5rem); line-height: 0.98; text-wrap: initial; }
+  .hero-copy em { color: var(--peach); font-style: normal; }
+  .hero-tagline { font-size: var(--step-1); font-weight: 500; line-height: 1.45; max-width: 40ch; }
+  .hero-intro { font-size: 1rem; line-height: 1.65; }
+  .hero-art { display: grid; grid-template-columns: 1.15fr 0.85fr; grid-template-rows: 1fr 1fr; gap: var(--sp-3); aspect-ratio: 1.1; }
+  .hero-art-tile { overflow: hidden; border-radius: var(--radius-l); background: var(--ink-2); min-height: 0; box-shadow: var(--shadow-1); }
+  .hero-art-main { grid-row: 1 / -1; margin-block: var(--sp-5); }
+  .hero-art-tile :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  @media (max-width: 768px) {
+    .event-hero-grid { grid-template-columns: 1fr; gap: var(--sp-6); }
+    .hero-copy { gap: var(--sp-4); }
+    .hero-copy .d0 { font-size: clamp(2.8rem, 10vw, 4.5rem); }
+    .hero-art { aspect-ratio: 1.8; }
+    .hero-art-main { margin-block: 0; }
+    .hero-art-tile { border-radius: var(--radius); }
+    .event-hero { padding-bottom: var(--sp-7); }
+  }
+</style>
