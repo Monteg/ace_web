@@ -3,13 +3,15 @@
 #
 #   build    astro check, then `npm run ship`: the 14 parity gates
 #   package  the gated dist/ into an nginx image
-#   deploy   helm upgrade against gamma through the GitLab agent
+#   deploy   helm upgrade against gamma with a namespace-scoped service account
 #   purge    Cloudflare cache, after the rollout is actually live
 #
-# The deploy job talks to the cluster through the agent in money.energy/devops/
-# infra (.gitlab/agents/gamma-k8s-agent/config.yaml). This project has to be
-# listed in that agent's ci_access, or `kubectl config use-context` finds
-# nothing. Nothing else here needs cluster credentials.
+# The deploy job runs inside gamma and authenticates with a dedicated Kubernetes
+# service account whose token is the protected, hidden, production-scoped
+# ACEGAMES_KUBE_TOKEN project variable. The account is bound only inside
+# acegames-www. GitLab's
+# ci_job agent impersonation would provide the same boundary, but it is not
+# available on the group's Free plan.
 
 stages:
   - build
@@ -18,9 +20,9 @@ stages:
   - purge
 
 variables:
-  KUBE_CONTEXT: money.energy/devops/infra:gamma-k8s-agent
   NAMESPACE: acegames-www
   RELEASE: www
+  KUBE_API_SERVER: https://kubernetes.default.svc
   # kubectl + helm + curl in one image, kubectl matching the cluster's 1.35.
   DEPLOY_IMAGE: alpine/k8s:1.35.8
 
@@ -97,8 +99,16 @@ deploy:production:
     url: https://acegames.io
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  before_script:
+    - test -n "$ACEGAMES_KUBE_TOKEN"
+    - test -r /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    - export KUBECONFIG="$CI_PROJECT_DIR/.kubeconfig"
+    - umask 077
+    - kubectl config set-cluster gamma --server="$KUBE_API_SERVER" --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt --embed-certs=true
+    - kubectl config set-credentials acegames-www-ci --token="$ACEGAMES_KUBE_TOKEN"
+    - kubectl config set-context acegames-www --cluster=gamma --user=acegames-www-ci --namespace="$NAMESPACE"
+    - kubectl config use-context acegames-www
   script:
-    - kubectl config use-context "$KUBE_CONTEXT"
     - kubectl config current-context
     - >
       helm upgrade --install "$RELEASE" ./helm/chart
@@ -108,6 +118,8 @@ deploy:production:
       --set image.tag="$CI_COMMIT_SHORT_SHA"
       --wait --timeout 5m
     - kubectl -n "$NAMESPACE" rollout status "deploy/$RELEASE" --timeout=5m
+  after_script:
+    - rm -f "$CI_PROJECT_DIR/.kubeconfig"
 
 purge:cloudflare:
   stage: purge

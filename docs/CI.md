@@ -40,10 +40,12 @@ and a cert-manager certificate from the cluster's `letsencrypt` issuer. The
 image tag is never written into a file: CI passes the commit it just built.
 
 **The cluster.** gamma (`hetzner-fsn1-gamma-k8s`), namespace `acegames-www`.
-The deploy job reaches it through the GitLab agent in
-`money.energy/devops/infra`, authenticating as the CI job itself rather than as
-the agent, so it can act inside `acegames-www` and nowhere else. See
-`deploy/bootstrap/`.
+The deploy job runs on the in-cluster runner and authenticates as a dedicated
+Kubernetes service account. Its token is the protected, hidden
+`ACEGAMES_KUBE_TOKEN` project variable scoped to the `production` environment,
+and its Role can act inside
+`acegames-www` and nowhere else. The shared runner service account is not bound
+to that Role. See `deploy/bootstrap/`.
 
 ## Rolling back
 

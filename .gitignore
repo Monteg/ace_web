@@ -6,6 +6,7 @@ dist/
 .astro/
 
 # local env and tooling
+.npm/
 .env
 .env.*
 !.env.example
