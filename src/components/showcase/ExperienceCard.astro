@@ -1,0 +1,251 @@
+---
+import { Image } from 'astro:assets';
+import trustBackground from '../../assets/site/excellence-trust-bg-v2.png';
+import trustArtwork from '../../assets/site/excellence-trust-art-v2.png';
+import innovationBackground from '../../assets/site/excellence-innovation-bg-v2.png';
+import innovationArtwork from '../../assets/site/excellence-innovation-art-v2.png';
+import retentionBackground from '../../assets/site/excellence-retention-bg-v2.png';
+import retentionArtwork from '../../assets/site/excellence-retention-art-v2.png';
+import { experienceCardDefaults } from '../../data/experience-card-settings';
+import ScalableCardFrame from './ScalableCardFrame.astro';
+
+interface Props {
+  item: {
+    title: string;
+    body: string;
+    image: string;
+  };
+  index: number;
+  eager?: boolean;
+}
+
+const { item, index, eager = false } = Astro.props;
+const themes = {
+  trust: { background: trustBackground, artwork: trustArtwork, className: 'blue' },
+  innovation: { background: innovationBackground, artwork: innovationArtwork, className: 'gold' },
+  retention: { background: retentionBackground, artwork: retentionArtwork, className: 'purple' },
+} as const;
+const theme = themes[item.image as keyof typeof themes] ?? themes.trust;
+const number = String(index + 1).padStart(2, '0');
+const settings = experienceCardDefaults;
+const stageStyle = `--card-perspective: ${settings.perspective}px; --art-depth: ${settings.artDepth}px; --copy-depth: ${settings.copyDepth}px; --glare-opacity: ${settings.glareOpacity};`;
+---
+
+<div
+  class="experience-card-stage"
+  data-experience-card-stage
+  style={stageStyle}
+>
+  <article
+    class={`experience-card experience-card--${theme.className}`}
+    data-experience-card
+    data-tilt-max={settings.tiltMax}
+    data-hover-scale={settings.hoverScale}
+    data-motion-duration={settings.response}
+    data-glare-travel={settings.glareTravel}
+  >
+    <div class="experience-card-body" aria-hidden="true">
+      <ScalableCardFrame src={theme.background} />
+    </div>
+
+    <div class="experience-card-art" aria-hidden="true" data-experience-art>
+      <Image
+        src={theme.artwork}
+        alt=""
+        widths={[360, 540, 720, 900]}
+        sizes="(max-width: 640px) 100vw, (max-width: 980px) 52vw, 31vw"
+        loading={eager ? 'eager' : 'lazy'}
+      />
+    </div>
+
+    <span class="experience-card-glare" aria-hidden="true" data-experience-glare></span>
+
+    <div class="experience-card-copy" data-experience-copy>
+      <span class="experience-card-number" aria-hidden="true">{number}</span>
+      <h3>{item.title}</h3>
+      <p>{item.body}</p>
+    </div>
+  </article>
+</div>
+
+<style>
+  .experience-card-stage {
+    min-width: 0;
+    width: 100%;
+    perspective: var(--card-perspective, 2200px);
+    perspective-origin: 50% 45%;
+  }
+  .experience-card {
+    --glare-x: 50%;
+    --glare-y: 50%;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1484 / 2409.803;
+    transform-style: preserve-3d;
+    transform-origin: center;
+    will-change: transform;
+  }
+  .experience-card-body,
+  .experience-card-art,
+  .experience-card-copy,
+  .experience-card-glare {
+    position: absolute;
+    pointer-events: none;
+    backface-visibility: hidden;
+  }
+  .experience-card-body {
+    inset: 0 5% 0 9%;
+    z-index: 1;
+    transform: translateZ(0);
+    filter: drop-shadow(0 24px 30px rgb(0 0 0 / 0.3));
+  }
+  .experience-card-art :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+  }
+  .experience-card-art {
+    top: 3.2%;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    aspect-ratio: 1360 / 1160;
+    transform: translateZ(var(--art-depth, 96px));
+    filter: drop-shadow(0 22px 20px rgb(0 0 0 / 0.18));
+  }
+  .experience-card-copy {
+    top: 55.5%;
+    right: 10%;
+    bottom: 4%;
+    left: 17%;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transform: translateZ(var(--copy-depth, 120px));
+    color: #fff;
+    text-shadow: 0 2px 12px rgb(0 0 0 / 0.62);
+  }
+  .experience-card-number {
+    margin-bottom: clamp(8px, 1vw, 14px);
+    font-family: Tanker, 'Tanker Fallback', 'Arial Narrow', Impact, sans-serif;
+    font-size: clamp(3.1rem, 4.6vw, 4.5rem);
+    line-height: 0.86;
+  }
+  .experience-card h3 {
+    max-width: 14ch;
+    margin: 0;
+    font-family: Tanker, 'Tanker Fallback', 'Arial Narrow', Impact, sans-serif;
+    font-size: clamp(1.4rem, 1.8vw, 1.9rem);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
+  }
+  .experience-card p {
+    margin-top: clamp(10px, 1.1vw, 16px);
+    color: rgb(255 255 255 / 0.86);
+    font-size: clamp(0.78rem, 0.82vw, 0.9rem);
+    line-height: 1.38;
+  }
+  .experience-card--blue .experience-card-number { color: #bfefff; }
+  .experience-card--gold .experience-card-number { color: #ffe394; }
+  .experience-card--purple .experience-card-number { color: #e3bdff; }
+
+  .experience-card-glare {
+    inset: 0 5% 0 9%;
+    z-index: 6;
+    overflow: hidden;
+    border-radius: clamp(18px, 2.2vw, 34px);
+    opacity: 0;
+    transform: translateZ(calc(var(--copy-depth, 120px) + 12px));
+    background:
+      radial-gradient(
+        circle at var(--glare-x) var(--glare-y),
+        rgb(255 255 245 / 0.92) 0,
+        rgb(246 203 149 / 0.36) 9%,
+        rgb(255 86 0 / 0.12) 20%,
+        transparent 42%
+      ),
+      linear-gradient(
+        108deg,
+        transparent 32%,
+        rgb(255 255 245 / 0.06) 41%,
+        rgb(255 234 199 / 0.58) 48%,
+        rgb(255 255 255 / 0.78) 50%,
+        rgb(255 86 0 / 0.16) 54%,
+        transparent 63%
+      );
+    background-size: 100% 100%, 230% 230%;
+    background-position: center, var(--glare-x) var(--glare-y);
+    background-repeat: no-repeat;
+    mix-blend-mode: color-dodge;
+    filter: saturate(1.08) contrast(1.04);
+    transition: opacity 260ms var(--ease);
+    will-change: opacity, background-position;
+  }
+  .experience-card[data-pointer-active='true'] .experience-card-glare {
+    opacity: var(--glare-opacity, 0.28);
+  }
+
+  @media (min-width: 561px) and (max-width: 992px) {
+    .experience-card {
+      aspect-ratio: 2411 / 1058;
+    }
+    .experience-card-body {
+      inset: auto;
+      top: 50%;
+      left: 50%;
+      width: 43.88%;
+      height: 227.88%;
+      transform: translate(-50%, -50%) rotate(-90deg) translateZ(0);
+    }
+    .experience-card-art {
+      top: -15%;
+      right: 43.8%;
+      left: -5.35%;
+    }
+    .experience-card-copy {
+      top: 10.3%;
+      right: 7.67%;
+      bottom: 8%;
+      left: 56.16%;
+    }
+    .experience-card-number {
+      margin-bottom: clamp(6px, 1vw, 10px);
+      font-size: clamp(3rem, 7vw, 4.4rem);
+    }
+    .experience-card h3 {
+      max-width: 14ch;
+      font-size: clamp(1.5rem, 3.2vw, 2rem);
+    }
+    .experience-card p {
+      margin-top: clamp(8px, 1.4vw, 14px);
+      font-size: clamp(0.84rem, 1.7vw, 1rem);
+      line-height: 1.34;
+    }
+    .experience-card-glare {
+      inset: 0;
+      border-radius: clamp(18px, 3vw, 34px);
+    }
+  }
+  @media (max-width: 640px) {
+    .experience-card-number { font-size: clamp(3.4rem, 16vw, 4.5rem); }
+    .experience-card h3 { font-size: clamp(1.5rem, 6.8vw, 2rem); }
+    .experience-card p { font-size: clamp(0.82rem, 3.45vw, 0.94rem); }
+  }
+  @media (hover: none), (pointer: coarse) {
+    .experience-card { transform: none !important; }
+    .experience-card-glare { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .experience-card { transform: none !important; }
+    .experience-card-glare { display: none; }
+  }
+</style>
+
+<script>
+  import { mountExperienceCardMotion } from '../../lib/experience-card-motion';
+  mountExperienceCardMotion();
+</script>

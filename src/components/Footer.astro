@@ -1,7 +1,8 @@
 ---
 import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
 import logo from '../assets/brand/logo.webp';
-import { company, nav, social } from '../data/site';
+import { company, nav, social, socialIntro } from '../data/site';
 ---
 
 <footer class="site-footer">
@@ -34,13 +35,34 @@ import { company, nav, social } from '../data/site';
           <li><a href="/terms-conditions">Terms and conditions</a></li>
           <li><a href={`mailto:${company.legalEmail}`}>{company.legalEmail}</a></li>
         </ul>
-        {social.length > 0 && (
-          <ul class="social">
-            {social.map((s) => (
-              <li><a href={s.href} rel="noopener me">{s.label}</a></li>
-            ))}
-          </ul>
-        )}
+      </div>
+
+      <div class="foot-col social-col">
+        <h2>Follow Us</h2>
+        <p class="social-copy">{socialIntro}</p>
+        <div class="social-controls">
+          {social.map((item) => item.href ? (
+            <a
+              class="social-control"
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={item.label}
+            >
+              <Icon name={item.icon} aria-hidden="true" />
+            </a>
+          ) : (
+            <button
+              type="button"
+              class="social-control is-pending"
+              aria-label={item.label}
+              title="Profile URL pending"
+              disabled
+            >
+              <Icon name={item.icon} aria-hidden="true" />
+            </button>
+          ))}
+        </div>
       </div>
     </div>
 
@@ -57,12 +79,12 @@ import { company, nav, social } from '../data/site';
 </footer>
 
 <style>
-  .site-footer { border-top: 1px solid var(--line); background: var(--ink-2); padding: var(--sp-8) 0 var(--sp-6); }
+  .site-footer { border-top: 1px solid var(--line); background: var(--ink-2); padding: var(--section-space-compact) 0 var(--sp-6); }
   .foot-grid {
-    display: grid; grid-template-columns: minmax(0, 1.2fr) repeat(2, minmax(0, 1fr));
+    display: grid; grid-template-columns: minmax(0, 1.2fr) repeat(3, minmax(0, 1fr));
     gap: var(--sp-7); padding-bottom: var(--sp-7); border-bottom: 1px solid var(--line);
   }
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     .foot-grid { grid-template-columns: 1fr 1fr; gap: var(--sp-6); }
     .foot-grid > :first-child { grid-column: 1 / -1; }
   }
@@ -81,7 +103,19 @@ import { company, nav, social } from '../data/site';
     font-size: 14px; color: var(--fg-2); text-decoration: none;
   }
   .foot-col li a:hover { color: var(--fg); }
-  .social { margin-top: var(--sp-3); }
+  .social-copy { max-width: 30ch; color: var(--fg-2); font-size: 14px; line-height: 1.55; }
+  .social-controls { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-4); }
+  .social-control {
+    width: 46px; height: 46px; display: grid; place-items: center;
+    padding: 0; font: inherit;
+    color: var(--fg); background: var(--ink-3); border: 1px solid var(--line-2);
+    border-radius: var(--radius-pill); text-decoration: none;
+    transition: transform var(--dur-1) var(--ease), border-color var(--dur-1), background var(--dur-1);
+  }
+  .social-control :global(svg) { width: 21px; height: 21px; }
+  a.social-control:hover { transform: translateY(-2px); border-color: var(--brand); background: var(--ink-4); }
+  a.social-control:active { transform: translateY(0) scale(0.97); }
+  .social-control.is-pending { color: var(--fg-3); cursor: not-allowed; opacity: 0.72; }
 
   .foot-bottom {
     padding-top: var(--sp-5); display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-6);
@@ -93,5 +127,14 @@ import { company, nav, social } from '../data/site';
     font-family: 'JetBrains Mono Variable', monospace; font-size: 11px;
     border: 1px solid var(--line-2); border-radius: var(--radius-pill);
     padding: 4px 10px; color: var(--fg-2);
+  }
+  @media (max-width: 520px) {
+    .foot-grid { grid-template-columns: 1fr; }
+    .foot-grid > :first-child { grid-column: auto; }
+    .copy { margin-left: 0; width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .social-control { transition: none; }
+    a.social-control:hover, a.social-control:active { transform: none; }
   }
 </style>

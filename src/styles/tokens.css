@@ -58,7 +58,10 @@
   /* spacing */
   --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
   --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
-  --sp-9: clamp(72px, 9vw, 140px);
+  --section-space: clamp(72px, 7.5vw, 112px);
+  --section-space-compact: clamp(48px, 5vw, 72px);
+  --section-heading-gap: clamp(36px, 3.75vw, 48px);
+  --sp-9: var(--section-space);
 
   --radius-s: 8px;
   --radius: 14px;

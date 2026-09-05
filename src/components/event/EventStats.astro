@@ -4,7 +4,7 @@ interface Props { event: EventData }
 const { event } = Astro.props;
 ---
 
-<section class="event-stats" aria-label="Ace Games in numbers">
+<section class="event-stats section-compact" aria-label="Ace Games in numbers">
   <div class="wrap">
     <dl class="stats-strip">
       {event.stats.map(stat => (
@@ -18,7 +18,7 @@ const { event } = Astro.props;
 </section>
 
 <style>
-  .event-stats { padding-block: var(--sp-7); background: var(--ink-2); border-block: 1px solid var(--line); }
+  .event-stats { background: var(--ink-2); border-block: 1px solid var(--line); }
   .stats-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
   .event-stat { display: flex; flex-direction: column-reverse; align-items: flex-start; justify-content: flex-end; gap: var(--sp-3); padding-inline: var(--sp-6); border-right: 1px solid var(--line-2); }
   .event-stat:first-child { padding-left: 0; }

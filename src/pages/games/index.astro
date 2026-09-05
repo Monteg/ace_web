@@ -3,8 +3,9 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import CatalogueHero from '../../components/showcase/CatalogueHero.astro';
 import GameTile from '../../components/showcase/GameTile.astro';
+import ContactModal from '../../components/ContactModal.astro';
 import { CTA, company } from '../../data/site';
-import { TYPE_PLURAL } from '../../lib/format';
+import { CATALOGUE_CATEGORIES } from '../../lib/game-categories';
 
 // /portfolio returned a 404 on the old site: the catalogue existed only as a
 // section of the home page and a dropdown listing 17 of 24 titles.
@@ -15,8 +16,7 @@ const games = (await getCollection('games')).sort(
     a.data.name.localeCompare(b.data.name),
 );
 
-const types = ['slot', 'instant', 'table'] as const;
-const present = types.filter((t) => games.some((g) => g.data.type === t));
+const present = CATALOGUE_CATEGORIES.filter((category) => games.some((game) => game.data.type === category.type));
 
 const heroIds = ['way-to-olympus', 'cyber-star', 'pirates-rush', 'ace-city'];
 const heroGames = heroIds.flatMap((id) => {
@@ -39,27 +39,27 @@ const listSchema = {
 ---
 
 <Base
-  title="Casino game catalogue: slots, crash and instant games | Ace Games"
-  description={`All ${games.length} Ace Games titles with published RTP, volatility and a playable demo on every page. Slot, instant and table games for licensed operators.`}
+  title="Casino games: slots, crash and instant games | Ace Games"
+  description={`Explore all ${games.length} Ace Games titles with published RTP, volatility and playable demos where available. Slot, instant and table games for licensed operators.`}
   schema={listSchema}
 >
   <CatalogueHero games={heroGames} />
 
   <section class="catalogue-list">
     <div class="wrap">
-      <div class="chips filters" role="group" aria-label="Filter games by type">
+      <div class="chips filters" id="games" role="group" aria-label="Filter games by type">
         <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
-        {present.map((t) => (
-          <button class="chip" type="button" data-filter={t} aria-pressed="false">
-            {TYPE_PLURAL[t]}
+        {present.map(({ type, label }) => (
+          <button class="chip" type="button" data-filter={type} aria-pressed="false">
+            {label}
           </button>
         ))}
       </div>
+      <p class="filter-note" data-filter-note aria-live="polite"></p>
 
       <div class="grid-games" id="gameGrid">
         {games.map((g, i) => <GameTile game={g} eager={i < 4} />)}
       </div>
-      <p class="filter-note" data-filter-note aria-live="polite"></p>
 
       <div class="tail rv">
         <h2 class="d3">Missing a mechanic?</h2>
@@ -67,31 +67,39 @@ const listSchema = {
           Tell us what your lobby is short of and we will design the maths around it rather than
           reskinning something we already made.
         </p>
-        <a class="btn btn-primary" href={CTA.href}>{CTA.label}</a>
+        <button class="btn btn-primary" type="button" data-contact-open aria-haspopup="dialog" aria-controls="contact-dialog" hidden>{CTA.label}</button>
+        <noscript><a class="btn btn-primary" href={CTA.href}>{CTA.label}</a></noscript>
       </div>
     </div>
   </section>
+  <ContactModal />
 </Base>
 
 <style>
-  .catalogue-list { padding-top: var(--sp-8); }
-  .filters { margin-bottom: var(--sp-5); }
+  .filters { scroll-margin-top: calc(var(--site-header-height, 120px) + var(--sp-4)); }
 
   .grid-games { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-4); }
   @media (max-width: 1040px) { .grid-games { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   @media (max-width: 780px) { .grid-games { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); } }
   @media (max-width: 440px) { .grid-games { grid-template-columns: 1fr; } }
-  .filter-note { margin-top: var(--sp-4); font-size: 13px; color: var(--fg-3); min-height: 1.4em; }
+  .filter-note { margin-top: var(--sp-3); margin-bottom: var(--sp-5); font-size: 13px; color: var(--fg-3); }
+  .filter-note:empty { margin-top: 0; }
   .grid-games :global(.is-dim) { opacity: 0.38; filter: grayscale(0.7); }
   .grid-games :global(.is-dim:hover) { opacity: 1; filter: none; }
 
   .tail {
-    margin-top: var(--sp-8); padding-top: var(--sp-7); border-top: 1px solid var(--line);
+    margin-top: var(--section-space-compact); padding-top: var(--section-space-compact); border-top: 1px solid var(--line);
     display: flex; flex-direction: column; gap: var(--sp-4); align-items: flex-start;
   }
+  .tail [hidden] { display: none; }
 </style>
 
 <script>
   import { mountCatalogueFilter } from '../../lib/catalogue-filter';
   mountCatalogueFilter('gameGrid', '.filters .chip[data-filter]');
+  if (location.hash === '#games') {
+    document.fonts.ready.then(() => requestAnimationFrame(() => {
+      document.getElementById('games')?.scrollIntoView({ block: 'start', behavior: 'instant' });
+    }));
+  }
 </script>

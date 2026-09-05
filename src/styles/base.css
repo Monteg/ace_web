@@ -51,8 +51,20 @@ ul, ol { margin: 0; padding: 0; }
 .lead { font-size: var(--step-1); color: var(--fg-2); line-height: 1.5; max-width: 52ch; }
 .body { color: var(--fg-2); max-width: 60ch; }
 
-section { padding-block: var(--sp-9); }
-.sec-top { display: flex; flex-direction: column; gap: var(--sp-3); margin-bottom: var(--sp-7); max-width: 60ch; }
+section { padding-block: var(--section-space); }
+.section-continuation { padding-top: 0; }
+.section-compact { padding-block: var(--section-space-compact); }
+.sec-top { display: flex; flex-direction: column; gap: var(--sp-3); margin-bottom: var(--section-heading-gap); max-width: 60ch; }
+
+/* Opt-in homepage section hierarchy; cards and other pages keep their layout. */
+.sec-top.home-section-heading { width: 100%; max-width: none; text-align: center; }
+.home-section-heading > h2 { width: 100%; text-transform: uppercase; }
+.home-section-heading > .lead,
+.home-section-heading > .body {
+  width: 100%;
+  max-width: calc(var(--maxw) - 4 * var(--gutter));
+  margin-inline: auto;
+}
 
 /* reveal on scroll: content ships visible, the script adds the hidden start
    state, so a JS failure leaves the page readable instead of blank */

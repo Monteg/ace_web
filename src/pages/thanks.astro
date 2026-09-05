@@ -22,7 +22,7 @@ const REASONS: Record<string, string> = {
   description="Your message has reached the Ace Games team. We answer in one working day."
   noindex={true}
 >
-  <section>
+  <section class="utility-page">
     <div class="wrap">
       <div class="panel" data-state="ok">
         <p class="eyebrow" data-eyebrow>Message sent</p>
@@ -34,7 +34,7 @@ const REASONS: Record<string, string> = {
 
         <div class="row">
           <a class="btn btn-primary" href={`mailto:${company.email}`}>{company.email}</a>
-          <a class="btn btn-ghost" data-second href="/games">See the games</a>
+          <a class="btn btn-ghost" data-second href="/games">View Game</a>
         </div>
       </div>
     </div>
@@ -65,7 +65,7 @@ const REASONS: Record<string, string> = {
 <style>
   .panel {
     display: flex; flex-direction: column; gap: var(--sp-4);
-    align-items: flex-start; padding-block: var(--sp-8); max-width: 60ch;
+    align-items: flex-start; max-width: 60ch;
   }
   .row { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-3); }
 </style>

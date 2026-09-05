@@ -34,7 +34,7 @@ export function bet(b?: { min: number; max: number }): string | null {
 }
 
 export const TYPE_LABEL = { slot: 'Slot', instant: 'Instant', table: 'Table' } as const;
-export const TYPE_PLURAL = { slot: 'Slots', instant: 'Instant & crash', table: 'Table' } as const;
+export const TYPE_PLURAL = { slot: 'Slots', instant: 'Instant', table: 'Table' } as const;
 
 /**
  * The demo URL is built here from structured data, never stored as a string.

@@ -1,0 +1,440 @@
+---
+import Base from '../layouts/Base.astro';
+import ExperienceCard from '../components/showcase/ExperienceCard.astro';
+import OrbitBorder from '../components/showcase/OrbitBorder.astro';
+import { why } from '../data/site';
+import { experienceCardDefaults } from '../data/experience-card-settings';
+import { borderTrailDefaults } from '../data/border-trail-settings';
+
+const previewCard = why[1];
+const motionSettings = experienceCardDefaults;
+const borderSettings = borderTrailDefaults;
+const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; --orbit-length: ${borderSettings.orbitLength}%; --orbit-width: ${borderSettings.orbitWidth}px; --orbit-opacity: ${borderSettings.orbitOpacity}; --orbit-blur: ${borderSettings.orbitBlur}px;`;
+---
+
+<Base
+  title="Effects Lab | Ace Games"
+  description="Local controls for tuning the Ace Games card motion and navigation border trail."
+  canonicalPath="/effects-lab"
+  noindex
+  showSiteChrome={false}
+>
+  <section class="effects-lab" aria-labelledby="effects-lab-title">
+    <div class="wrap">
+      <header class="lab-heading">
+        <h1 class="d1" id="effects-lab-title">Effects Lab</h1>
+        <p class="lead">Tune each site effect independently, preview it live, then apply only that effect to the site.</p>
+        <p class="lab-note">This technical page is excluded from navigation and search indexing. CMS access control can be added with the future admin area.</p>
+      </header>
+
+      <section class="lab-tool" aria-labelledby="motion-settings-title">
+        <div class="lab-layout">
+          <div class="preview-shell card-preview" id="motionPreview">
+            <ExperienceCard item={previewCard} index={1} eager />
+          </div>
+
+          <form class="effect-controls" id="motionControls">
+            <div class="control-heading">
+              <p class="eyebrow">Effect 01</p>
+              <h2 class="d3" id="motion-settings-title">Motion settings</h2>
+              <p>Move the pointer over the card while adjusting tilt, depth and glare.</p>
+            </div>
+
+            <label class="control-row">
+              <span>Maximum tilt</span>
+              <output for="tiltMax" id="tiltMaxValue">{motionSettings.tiltMax.toFixed(1)}°</output>
+              <input id="tiltMax" name="tiltMax" type="range" min="0" max="18" step="0.5" value={motionSettings.tiltMax} />
+            </label>
+
+            <label class="control-row">
+              <span>Hover scale</span>
+              <output for="hoverScale" id="hoverScaleValue">{motionSettings.hoverScale.toFixed(3)}×</output>
+              <input id="hoverScale" name="hoverScale" type="range" min="1" max="1.08" step="0.005" value={motionSettings.hoverScale} />
+            </label>
+
+            <label class="control-row">
+              <span>Perspective</span>
+              <output for="perspective" id="perspectiveValue">{motionSettings.perspective}px</output>
+              <input id="perspective" name="perspective" type="range" min="600" max="2200" step="50" value={motionSettings.perspective} />
+            </label>
+
+            <label class="control-row">
+              <span>Response time</span>
+              <output for="response" id="responseValue">{motionSettings.response.toFixed(2)}s</output>
+              <input id="response" name="response" type="range" min="0.12" max="0.9" step="0.02" value={motionSettings.response} />
+            </label>
+
+            <label class="control-row">
+              <span>Artwork depth</span>
+              <output for="artDepth" id="artDepthValue">{motionSettings.artDepth}px</output>
+              <input id="artDepth" name="artDepth" type="range" min="0" max="100" step="2" value={motionSettings.artDepth} />
+            </label>
+
+            <label class="control-row">
+              <span>Text depth</span>
+              <output for="copyDepth" id="copyDepthValue">{motionSettings.copyDepth}px</output>
+              <input id="copyDepth" name="copyDepth" type="range" min="0" max="120" step="2" value={motionSettings.copyDepth} />
+            </label>
+
+            <label class="control-row">
+              <span>Glare strength</span>
+              <output for="glareOpacity" id="glareOpacityValue">{Math.round(motionSettings.glareOpacity * 100)}%</output>
+              <input id="glareOpacity" name="glareOpacity" type="range" min="0" max="1" step="0.02" value={motionSettings.glareOpacity} />
+            </label>
+
+            <label class="control-row">
+              <span>Glare travel</span>
+              <output for="glareTravel" id="glareTravelValue">{motionSettings.glareTravel}%</output>
+              <input id="glareTravel" name="glareTravel" type="range" min="0" max="48" step="2" value={motionSettings.glareTravel} />
+            </label>
+
+            <div class="control-actions">
+              <button class="btn btn-primary" type="button" id="applyMotionSettings">Apply to site</button>
+              <button class="btn btn-ghost" type="button" id="copyMotionSettings">Copy settings</button>
+              <button class="btn btn-ghost" type="reset">Reset</button>
+            </div>
+
+            <pre class="settings-output" id="motionSettingsOutput" aria-label="Current motion settings"></pre>
+            <p class="copy-status" id="motionStatus" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="lab-tool lab-tool--border" aria-labelledby="border-trail-title">
+        <div class="lab-layout">
+          <div class="preview-shell border-preview-shell">
+            <div
+              class="border-preview"
+              id="borderPreview"
+              data-border-trail-host
+              style={borderPreviewStyle}
+            >
+              <span>Navigation border preview</span>
+              <OrbitBorder />
+            </div>
+          </div>
+
+          <form class="effect-controls" id="borderControls">
+            <div class="control-heading">
+              <p class="eyebrow">Effect 02</p>
+              <h2 class="d3" id="border-trail-title">Border trail</h2>
+              <p>Configure the illuminated trail used around the top navigation menu.</p>
+            </div>
+
+            <label class="control-row">
+              <span>Orbit duration</span>
+              <output for="orbitDuration" id="orbitDurationValue">{borderSettings.orbitDuration.toFixed(1)}s</output>
+              <input id="orbitDuration" name="orbitDuration" type="range" min="1.5" max="20" step="0.1" value={borderSettings.orbitDuration} />
+            </label>
+
+            <label class="control-row">
+              <span>Trail length</span>
+              <output for="orbitLength" id="orbitLengthValue">{borderSettings.orbitLength}%</output>
+              <input id="orbitLength" name="orbitLength" type="range" min="6" max="60" step="1" value={borderSettings.orbitLength} />
+            </label>
+
+            <label class="control-row">
+              <span>Line thickness</span>
+              <output for="orbitWidth" id="orbitWidthValue">{borderSettings.orbitWidth.toFixed(1)}px</output>
+              <input id="orbitWidth" name="orbitWidth" type="range" min="0.5" max="4" step="0.1" value={borderSettings.orbitWidth} />
+            </label>
+
+            <label class="control-row">
+              <span>Trail intensity</span>
+              <output for="orbitOpacity" id="orbitOpacityValue">{Math.round(borderSettings.orbitOpacity * 100)}%</output>
+              <input id="orbitOpacity" name="orbitOpacity" type="range" min="0" max="1" step="0.02" value={borderSettings.orbitOpacity} />
+            </label>
+
+            <label class="control-row">
+              <span>Glow blur</span>
+              <output for="orbitBlur" id="orbitBlurValue">{borderSettings.orbitBlur}px</output>
+              <input id="orbitBlur" name="orbitBlur" type="range" min="0" max="16" step="1" value={borderSettings.orbitBlur} />
+            </label>
+
+            <div class="control-actions">
+              <button class="btn btn-primary" type="button" id="applyBorderSettings">Apply to site</button>
+              <button class="btn btn-ghost" type="button" id="copyBorderSettings">Copy settings</button>
+              <button class="btn btn-ghost" type="reset">Reset</button>
+            </div>
+
+            <pre class="settings-output settings-output--border" id="borderSettingsOutput" aria-label="Current border trail settings"></pre>
+            <p class="copy-status" id="borderStatus" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <footer class="lab-footer">
+        Motion and Border Trail presets are stored separately in this browser and apply only to their matching site effect.
+      </footer>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .effects-lab { min-height: 100vh; padding-block: clamp(28px, 4vw, 60px); }
+  .lab-heading {
+    max-width: 920px;
+    margin-bottom: clamp(40px, 6vw, 80px);
+  }
+  .lab-heading .lead { max-width: 760px; margin-top: var(--sp-4); }
+  .lab-note {
+    max-width: 760px;
+    margin-top: var(--sp-4);
+    color: var(--fg-3);
+    font-size: var(--step--1);
+    line-height: 1.6;
+  }
+  .lab-tool { scroll-margin-top: var(--sp-6); }
+  .lab-tool--border {
+    margin-top: clamp(96px, 12vw, 180px);
+    padding-top: clamp(72px, 9vw, 128px);
+    border-top: 1px solid var(--line);
+  }
+  .lab-layout {
+    display: grid;
+    grid-template-columns: minmax(320px, 0.8fr) minmax(440px, 1.2fr);
+    gap: clamp(40px, 7vw, 104px);
+    align-items: start;
+  }
+  .preview-shell {
+    position: sticky;
+    top: var(--sp-5);
+    display: grid;
+    place-items: center;
+    min-width: 0;
+    min-height: 420px;
+    padding: var(--sp-5);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    background: var(--ink-2);
+    box-shadow: var(--shadow-1);
+  }
+  .card-preview :global([data-experience-card-stage]) { width: min(100%, 420px); }
+  .border-preview-shell {
+    min-height: 320px;
+    background:
+      radial-gradient(circle at 50% 0%, rgb(255 86 0 / 0.08), transparent 58%),
+      var(--ink-2);
+  }
+  .border-preview {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-height: 92px;
+    border: 1px solid rgb(255 86 0 / 0.42);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--ink-0) 76%, transparent);
+    box-shadow: 0 16px 38px -22px rgb(0 0 0 / 0.9);
+  }
+  .border-preview > span {
+    position: relative;
+    z-index: 1;
+    color: var(--fg-2);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .effect-controls {
+    display: grid;
+    gap: var(--sp-5);
+    padding: clamp(24px, 3.5vw, 44px);
+    border: 1px solid var(--line-2);
+    border-radius: var(--radius-l);
+    background: var(--ink-2);
+    box-shadow: var(--shadow-1);
+  }
+  .control-heading .eyebrow {
+    margin: 0 0 var(--sp-2);
+    color: var(--brand);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .control-heading > p:last-child { margin-top: var(--sp-2); color: var(--fg-2); }
+  .control-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px 16px;
+    color: var(--fg);
+    font-size: 0.95rem;
+  }
+  .control-row output {
+    color: var(--peach);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.78rem;
+  }
+  .control-row input {
+    grid-column: 1 / -1;
+    width: 100%;
+    accent-color: var(--brand);
+    cursor: pointer;
+  }
+  .control-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+  .settings-output {
+    min-height: 220px;
+    overflow: auto;
+    padding: var(--sp-4);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--ink-0);
+    color: var(--fg-2);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.76rem;
+    line-height: 1.65;
+  }
+  .settings-output--border { min-height: 154px; }
+  .copy-status { min-height: 1.4em; color: var(--peach); font-size: var(--step--1); }
+  .lab-footer {
+    margin-top: clamp(72px, 9vw, 128px);
+    padding-top: var(--sp-4);
+    border-top: 1px solid var(--line);
+    color: var(--fg-3);
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 900px) {
+    .lab-layout { grid-template-columns: 1fr; }
+    .preview-shell { position: static; min-height: 0; }
+    .card-preview :global([data-experience-card-stage]) { width: min(100%, 390px); }
+    .border-preview-shell { min-height: 240px; }
+  }
+  @media (max-width: 520px) {
+    .preview-shell { padding: var(--sp-3); }
+    .effect-controls { padding: var(--sp-5); }
+    .control-actions .btn { width: 100%; }
+    .border-preview { min-height: 76px; }
+  }
+</style>
+
+<script>
+  import {
+    applyExperienceCardSettings,
+    normalizeExperienceCardSettings,
+    readExperienceCardSettings,
+    saveExperienceCardSettings,
+  } from '../lib/experience-card-motion';
+  import {
+    applyBorderTrailSettings,
+    normalizeBorderTrailSettings,
+    readBorderTrailSettings,
+    saveBorderTrailSettings,
+  } from '../lib/border-trail';
+
+  const motionPreview = document.getElementById('motionPreview');
+  const motionForm = document.getElementById('motionControls') as HTMLFormElement | null;
+  const motionOutput = document.getElementById('motionSettingsOutput');
+  const motionStatus = document.getElementById('motionStatus');
+  const motionInputs = motionForm
+    ? Array.from(motionForm.querySelectorAll<HTMLInputElement>('input[type="range"]'))
+    : [];
+
+  const borderForm = document.getElementById('borderControls') as HTMLFormElement | null;
+  const borderOutput = document.getElementById('borderSettingsOutput');
+  const borderStatus = document.getElementById('borderStatus');
+  const borderInputs = borderForm
+    ? Array.from(borderForm.querySelectorAll<HTMLInputElement>('input[type="range"]'))
+    : [];
+
+  const valuesFrom = (inputs: HTMLInputElement[]) =>
+    Object.fromEntries(inputs.map((input) => [input.name, Number(input.value)]));
+
+  const formatMotionValue = (name: string, value: number) => {
+    if (name === 'tiltMax') return `${value.toFixed(1)}°`;
+    if (name === 'hoverScale') return `${value.toFixed(3)}×`;
+    if (name === 'response') return `${value.toFixed(2)}s`;
+    if (name === 'glareOpacity') return `${Math.round(value * 100)}%`;
+    if (name === 'glareTravel') return `${value}%`;
+    return `${value}px`;
+  };
+
+  const formatBorderValue = (name: string, value: number) => {
+    if (name === 'orbitDuration') return `${value.toFixed(1)}s`;
+    if (name === 'orbitLength') return `${value}%`;
+    if (name === 'orbitWidth') return `${value.toFixed(1)}px`;
+    if (name === 'orbitOpacity') return `${Math.round(value * 100)}%`;
+    return `${value}px`;
+  };
+
+  const setInputValues = (inputs: HTMLInputElement[], settings: Record<string, number>) => {
+    inputs.forEach((input) => {
+      const value = settings[input.name];
+      if (typeof value === 'number') input.value = String(value);
+    });
+  };
+
+  const updateInputOutputs = (
+    inputs: HTMLInputElement[],
+    formatter: (name: string, value: number) => string,
+  ) => {
+    inputs.forEach((input) => {
+      const output = document.getElementById(`${input.name}Value`);
+      if (output) output.textContent = formatter(input.name, Number(input.value));
+    });
+  };
+
+  const syncMotionPreview = () => {
+    const settings = normalizeExperienceCardSettings(valuesFrom(motionInputs));
+    applyExperienceCardSettings(settings, motionPreview ?? document);
+    updateInputOutputs(motionInputs, formatMotionValue);
+    if (motionOutput) motionOutput.textContent = JSON.stringify(settings, null, 2);
+    return settings;
+  };
+
+  const syncBorderPreview = () => {
+    const settings = normalizeBorderTrailSettings(valuesFrom(borderInputs));
+    applyBorderTrailSettings(settings);
+    updateInputOutputs(borderInputs, formatBorderValue);
+    if (borderOutput) borderOutput.textContent = JSON.stringify(settings, null, 2);
+    return settings;
+  };
+
+  const savedMotion = readExperienceCardSettings();
+  if (savedMotion) setInputValues(motionInputs, savedMotion as unknown as Record<string, number>);
+  const savedBorder = readBorderTrailSettings();
+  if (savedBorder) setInputValues(borderInputs, savedBorder as unknown as Record<string, number>);
+
+  motionInputs.forEach((input) => input.addEventListener('input', syncMotionPreview));
+  borderInputs.forEach((input) => input.addEventListener('input', syncBorderPreview));
+  syncMotionPreview();
+  syncBorderPreview();
+
+  motionForm?.addEventListener('reset', () => requestAnimationFrame(() => {
+    syncMotionPreview();
+    if (motionStatus) motionStatus.textContent = 'Motion preview reset. Apply to save it.';
+  }));
+  borderForm?.addEventListener('reset', () => requestAnimationFrame(() => {
+    syncBorderPreview();
+    if (borderStatus) borderStatus.textContent = 'Border preview reset. Apply to save it.';
+  }));
+
+  document.getElementById('applyMotionSettings')?.addEventListener('click', () => {
+    const settings = saveExperienceCardSettings(syncMotionPreview());
+    applyExperienceCardSettings(settings);
+    if (motionStatus) motionStatus.textContent = 'Motion applied. Open site tabs update instantly.';
+  });
+  document.getElementById('applyBorderSettings')?.addEventListener('click', () => {
+    const settings = saveBorderTrailSettings(syncBorderPreview());
+    applyBorderTrailSettings(settings);
+    if (borderStatus) borderStatus.textContent = 'Border Trail applied to the site navigation.';
+  });
+
+  const copySettings = async (output: HTMLElement | null, status: HTMLElement | null) => {
+    try {
+      await navigator.clipboard.writeText(output?.textContent ?? '');
+      if (status) status.textContent = 'Settings copied.';
+    } catch {
+      if (status) status.textContent = 'Copy is unavailable in this browser.';
+    }
+  };
+
+  document.getElementById('copyMotionSettings')?.addEventListener('click', () => {
+    void copySettings(motionOutput, motionStatus);
+  });
+  document.getElementById('copyBorderSettings')?.addEventListener('click', () => {
+    void copySettings(borderOutput, borderStatus);
+  });
+</script>

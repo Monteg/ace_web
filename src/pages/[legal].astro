@@ -30,9 +30,9 @@ const { Content } = await render(doc);
 </Base>
 
 <style>
-  .legal-page { padding-block: clamp(60px, 6vw, 80px) var(--sp-9); }
+  .legal-page { padding-block: var(--section-space-compact) var(--section-space); }
   .legal-content { width: 100%; max-width: 980px; margin-inline: auto; }
-  .legal-head { margin-bottom: var(--sp-7); }
+  .legal-head { margin-bottom: var(--section-heading-gap); }
   .legal-head .d1 {
     font-size: clamp(2.8rem, 5vw, 4rem); line-height: 1;
     text-align: center; text-transform: uppercase;
@@ -70,8 +70,6 @@ const { Content } = await render(doc);
   }
 
   @media (max-width: 480px) {
-    .legal-page { padding-block: var(--sp-8); }
-    .legal-head { margin-bottom: var(--sp-6); }
     .legal-head .d1 { font-size: clamp(2.5rem, 13vw, 3.25rem); }
     .legal-updated { margin-top: var(--sp-4); text-align: left; font-size: 11px; }
   }

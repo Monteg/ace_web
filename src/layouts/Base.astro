@@ -20,9 +20,19 @@ interface Props {
   /** Extra JSON-LD to merge in, e.g. the Product graph on a game page. */
   schema?: Record<string, unknown> | Record<string, unknown>[];
   noindex?: boolean;
+  /** Hide the public navigation and company footer on internal utility pages. */
+  showSiteChrome?: boolean;
 }
 
-const { title, description, image = '/og-default.png', canonicalPath, schema, noindex = false } = Astro.props;
+const {
+  title,
+  description,
+  image = '/og-default.png',
+  canonicalPath,
+  schema,
+  noindex = false,
+  showSiteChrome = true,
+} = Astro.props;
 
 // Self-referencing canonical on every page. The old site had none, and three
 // URLs served a byte-identical home page.
@@ -142,11 +152,11 @@ const graphs = [organisation, ...(schema ? (Array.isArray(schema) ? schema : [sc
     <AgeGate />
     <div id="siteShell">
       <a class="skip" href="#main">Skip to content</a>
-      <Header />
+      {showSiteChrome && <Header />}
       <main id="main" tabindex="-1">
         <slot />
       </main>
-      <Footer />
+      {showSiteChrome && <Footer />}
 
       <script>
         // Reveal on scroll. The page ships visible; this adds the hidden start

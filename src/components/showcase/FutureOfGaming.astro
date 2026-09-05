@@ -1,0 +1,103 @@
+---
+import { Image } from 'astro:assets';
+import processEngineering from '../../assets/site/process-engineering.webp';
+import processStrategy from '../../assets/site/process-strategy.webp';
+import processIntegration from '../../assets/site/process-integration.webp';
+import processOptimization from '../../assets/site/process-optimization.webp';
+import { process, sectionCopy } from '../../data/site';
+
+const artwork = {
+  engineering: processEngineering,
+  strategy: processStrategy,
+  integration: processIntegration,
+  optimization: processOptimization,
+};
+---
+
+<section class="future" aria-labelledby="future-title">
+  <div class="wrap">
+    <div class="sec-top home-section-heading rv">
+      <h2 class="d1" id="future-title">{sectionCopy.futureTitle}</h2>
+    </div>
+
+    <div class="future-grid">
+      {process.map((item) => (
+        <article class="future-card rv">
+          <div class="future-art" aria-hidden="true">
+            <Image
+              src={artwork[item.image as keyof typeof artwork]}
+              alt=""
+              widths={[128, 190]}
+              sizes="(max-width: 640px) 48vw, 190px"
+              loading="lazy"
+            />
+          </div>
+          <div class="future-copy">
+            <h3 class="d3">{item.title}</h3>
+            <p>{item.body}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .future { border-bottom: 1px solid var(--line); }
+  .future-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-4);
+  }
+  .future-card {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(170px, 0.72fr) minmax(0, 1.28fr);
+    min-height: 260px;
+    overflow: hidden;
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-1);
+  }
+  .future-art {
+    display: grid;
+    place-items: center;
+    min-height: 260px;
+    padding: var(--sp-4);
+    background: var(--ink-3);
+    border-right: 1px solid var(--line);
+  }
+  .future-art :global(img) {
+    width: min(100%, 190px);
+    height: auto;
+    transition: transform var(--dur-2) var(--ease);
+  }
+  .future-card:hover .future-art :global(img) { transform: scale(1.045); }
+  .future-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--sp-3);
+    padding: clamp(var(--sp-5), 3vw, var(--sp-6));
+    border-top: 2px solid var(--brand-deep);
+  }
+  .future-copy p { color: var(--fg-2); line-height: 1.6; }
+
+  @media (max-width: 1024px) {
+    .future-card { grid-template-columns: 1fr; }
+    .future-art { min-height: 210px; border-right: 0; border-bottom: 1px solid var(--line); }
+    .future-copy { justify-content: flex-start; }
+  }
+
+  @media (max-width: 640px) {
+    .future-grid { grid-template-columns: 1fr; }
+    .future-card { min-height: 0; }
+    .future-art { min-height: 190px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .future-art :global(img) { transition: none; }
+    .future-card:hover .future-art :global(img) { transform: none; }
+  }
+</style>

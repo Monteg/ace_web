@@ -109,6 +109,7 @@ const bands = ['low', 'medium', 'high', 'very_high'] as const;
     transition: opacity var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
   }
   .gt-play svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: var(--button-icon-stroke); stroke-linejoin: round; }
+  .gt-play b { font-weight: 400; }
   .gt:hover .gt-play, .gt:has(.gt-link:focus-visible) .gt-play { opacity: 1; transform: none; }
   @media (hover: none) { .gt-play { opacity: 1; transform: none; } }
 

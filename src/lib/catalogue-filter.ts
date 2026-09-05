@@ -37,7 +37,7 @@ export function mountCatalogueFilter(gridId: string, chipSelector: string) {
     if (note) {
       const n = original.filter((el) => el.dataset.type === type).length;
       const label = chips.find((c) => c.dataset.filter === type)?.textContent?.trim().toLowerCase() ?? type;
-      note.textContent = type === 'all' ? '' : `${n} ${label} first, the rest of the catalogue below.`;
+      note.textContent = type === 'all' ? '' : `${n} ${label} first, the rest of the games below.`;
     }
 
     if (push) {

@@ -1,16 +1,20 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
+import ContactForm from '../components/ContactForm.astro';
 import Base from '../layouts/Base.astro';
 import Wall from '../components/showcase/Wall.astro';
 import GameTile from '../components/showcase/GameTile.astro';
 import StatTile from '../components/StatTile.astro';
-import DemoEmbed from '../components/DemoEmbed.astro';
+import Excellence from '../components/showcase/Excellence.astro';
 import Craft from '../components/showcase/Craft.astro';
+import FutureOfGaming from '../components/showcase/FutureOfGaming.astro';
 import PartnerWall from '../components/showcase/PartnerWall.astro';
 import MathsExplorer from '../components/showcase/MathsExplorer.astro';
-import { CTA, company, faq, heroStats, integration, partners } from '../data/site';
-import { demoUrl, TYPE_PLURAL } from '../lib/format';
+import contactPigeon from '../assets/site/contact-pigeon-v3.png';
+import { faq, heroStats, homepageSections, integration, partners, proofIntro, sectionCopy } from '../data/site';
+import { CATALOGUE_CATEGORIES } from '../lib/game-categories';
 
 const games = (await getCollection('games')).sort(
   (a, b) =>
@@ -18,15 +22,14 @@ const games = (await getCollection('games')).sort(
     a.data.order - b.data.order ||
     a.data.name.localeCompare(b.data.name),
 );
-const live = games.filter((g) => g.data.status === 'live');
+const gridGames = games.slice(0, 12);
 
-// the spotlight: one live title with a demo, shown large with click-to-play
-const spotlight = live.find((g) => g.id === 'gold-of-ra' && g.data.demo) ?? live.find((g) => g.data.demo)!;
-const spotlightDemo = spotlight.data.demo ? demoUrl(spotlight.data.demo, spotlight.id, company.origin) : null;
-const gridGames = games.filter((g) => g.id !== spotlight.id).slice(0, 11);
+const present = CATALOGUE_CATEGORIES.filter((category) => games.some((game) => game.data.type === category.type));
 
-const types = ['slot', 'instant', 'table'] as const;
-const present = types.filter((t) => games.some((g) => g.data.type === t));
+const contactTitleWords = sectionCopy.contactTitle.trim().split(/\s+/);
+const contactTitleLead = contactTitleWords.shift() ?? '';
+const contactTitleAccent = contactTitleWords.pop() ?? '';
+const contactTitleMiddle = contactTitleWords.join(' ');
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -45,62 +48,52 @@ const faqSchema = {
   <Wall games={games} />
 
   <!-- ============ proof ============ -->
-  <div class="proof">
+  <section class="proof cream" aria-labelledby="proof-title">
     <div class="wrap">
-      <div class="proof-in">
+      <h2 id="proof-title" class="proof-intro rv">{proofIntro}</h2>
+      <div class="proof-in rv">
         {heroStats.map((s) => <StatTile {...s} />)}
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- ============ catalogue ============ -->
+  <Excellence />
+
+  <!-- ============ portfolio ============ -->
   <section id="games">
     <div class="wrap">
-      <div class="sec-top rv">
-        <h2 class="d1">The catalogue</h2>
-        <p class="lead">
-          Published RTP and volatility on every title, and a demo one click away. Configuration is per
-          operator, per market.
-        </p>
+      <div class="sec-top home-section-heading rv">
+        <h2 class="d1">{sectionCopy.portfolioTitle}</h2>
       </div>
 
-      <div class="chips rv" role="group" aria-label="Filter games by type">
-        <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
-        {present.map((t) => (
-          <button class="chip" type="button" data-filter={t} aria-pressed="false">{TYPE_PLURAL[t]}</button>
-        ))}
-      </div>
-
-      <div class="cat rv" id="gameGrid">
-        <div class="cat-spot" data-type={spotlight.data.type}>
-          {spotlightDemo ? (
-            <DemoEmbed name={spotlight.data.name} src={spotlightDemo} poster={spotlight.data.hero} />
-          ) : (
-            <GameTile game={spotlight} eager featured />
-          )}
-          <div class="cat-spot-cap">
-            <p class="eyebrow">Spotlight</p>
-            <a class="cat-spot-name" href={`/portfolio/${spotlight.id}`}>{spotlight.data.name}</a>
-          </div>
+      <div class="portfolio-controls rv">
+        <div class="chips" role="group" aria-label="Filter games by type">
+          <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+          {present.map(({ type, label }) => (
+            <button class="chip" type="button" data-filter={type} aria-pressed="false">{label}</button>
+          ))}
         </div>
-        {gridGames.map((g, i) => <GameTile game={g} eager={i < 3} />)}
+        <a class="btn btn-ghost see-all" href="/games">
+          View Game
+          <span class="disc" aria-hidden="true"><Icon name="ph:arrow-right" /></span>
+        </a>
       </div>
-      <p class="filter-note" data-filter-note aria-live="polite"></p>
 
-      <a class="btn btn-ghost see-all rv" href="/games">
-        All {games.length} games
-        <span class="disc" aria-hidden="true"><Icon name="ph:arrow-right" /></span>
-      </a>
+      <p class="filter-note" data-filter-note aria-live="polite"></p>
+      <div class="cat rv" id="gameGrid">
+        {gridGames.map((g, i) => <GameTile game={g} eager={i < 4} />)}
+      </div>
+
     </div>
   </section>
 
   <!-- ============ maths explorer ============ -->
-  <section id="maths" class="pt-0">
+  <section id="maths" class="section-continuation">
     <div class="wrap">
-      <div class="sec-top rv">
+      <div class="sec-top home-section-heading rv">
         <h2 class="d1">Every game, by the numbers</h2>
         <p class="lead">
-          The whole catalogue on one board: each lane is a volatility level, each game sits at its published RTP. Hover a game for the figures, click to open it.
+          All our games on one board: each lane is a volatility level, each game sits at its published RTP. Hover a game for the figures, click to open it.
         </p>
       </div>
       <div class="rv">
@@ -111,11 +104,14 @@ const faqSchema = {
     </div>
   </section>
 
-  <Craft />
+  {homepageSections.craft && <Craft />}
+
+  <FutureOfGaming />
 
   <PartnerWall logos={partners} />
 
   <!-- ============ integration and compliance ============ -->
+  {homepageSections.integration && (
   <section id="integration">
     <div class="wrap">
       <div class="sec-top rv">
@@ -142,11 +138,12 @@ const faqSchema = {
       </div>
     </div>
   </section>
+  )}
 
   <!-- ============ faq ============ -->
-  <section id="faq" class="pt-0">
+  <section id="faq">
     <div class="wrap">
-      <div class="sec-top rv"><h2 class="d1">Frequently asked questions</h2></div>
+      <div class="sec-top home-section-heading rv"><h2 class="d1">Frequently asked questions</h2></div>
       <div class="faq rv">
         {faq.map((f) => (
           <details class="faq-item">
@@ -167,81 +164,104 @@ const faqSchema = {
   </section>
 
   <!-- ============ contact ============ -->
-  <section id="contact" class="pt-0">
-    <div class="wrap">
+  <section id="contact" class="contact-section">
+    <Image
+      class="contact-backdrop"
+      src={contactPigeon}
+      alt=""
+      widths={[640, 960, 1440, 1920]}
+      sizes="100vw"
+      loading="lazy"
+      quality={84}
+    />
+    <div class="wrap contact-shell">
       <div class="contact-grid">
-        <div class="rv">
-          <h2 class="d1">{CTA.label}</h2>
-          <p class="lead mt">
-            Tell us the market, the mechanic your lobby is missing, or just ask for the integration pack.
-            We answer in one working day.
-          </p>
-          <div class="direct">
-            <a href={`mailto:${company.email}`}>{company.email}</a>
-            <p class="pending"><span class="need">Booking link: add a calendar URL</span></p>
-            <p class="pending"><span class="need">Game sheet: add the PDF</span></p>
-          </div>
+        <div class="contact-copy rv">
+          <h2 class="contact-title">
+            <span>{contactTitleLead}</span>
+            <span>{contactTitleMiddle}</span>
+            <strong>{contactTitleAccent}</strong>
+          </h2>
         </div>
 
-        <form class="form rv" method="post" action="/api/contact">
-          <div class="pair">
-            <p class="field">
-              <label for="f-name">Your name</label>
-              <input id="f-name" name="name" type="text" autocomplete="name" required />
-            </p>
-            <p class="field">
-              <label for="f-company">Company</label>
-              <input id="f-company" name="company" type="text" autocomplete="organization" required />
-            </p>
-          </div>
-          <p class="field">
-            <label for="f-email">Work email</label>
-            <input id="f-email" name="email" type="email" autocomplete="email" placeholder="you@operator.com" required />
-          </p>
-          <p class="field">
-            <label for="f-msg">What are you looking for?</label>
-            <textarea id="f-msg" name="message" rows="4"></textarea>
-          </p>
-          <input type="text" name="website" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true" />
-          <button class="btn btn-primary submit" type="submit">{CTA.label}</button>
-          <p class="consent">
-            We use what you send here only to answer you. See the <a href="/privacy-policy">privacy policy</a>.
-          </p>
-        </form>
+        <div class="contact-form-placement rv"><ContactForm /></div>
       </div>
     </div>
   </section>
 </Base>
 
 <style>
-  .pt-0 { padding-top: 0; }
-
-  .proof { border-bottom: 1px solid var(--line); background: var(--ink-2); }
-  .proof-in { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  @media (max-width: 900px) { .proof-in { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 520px) { .proof-in { grid-template-columns: 1fr; } }
-
-  /* catalogue: spotlight spans 2x2, the rest flow in threes */
-  .chips { margin-bottom: var(--sp-5); }
-  .cat { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-4); }
-  .cat-spot { grid-column: span 2; grid-row: span 2; display: flex; flex-direction: column; gap: var(--sp-3); min-width: 0; }
-  .cat-spot :global(.demo) { max-height: none; aspect-ratio: 16 / 10; }
-  .cat-spot-cap { display: flex; align-items: baseline; gap: var(--sp-4); }
-  .cat-spot-name {
-    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-size: var(--step-2);
-    color: var(--fg); text-decoration: none;
+  .proof {
+    padding-block: var(--section-space-compact);
+    background: var(--cream);
+    color: var(--cream-ink);
+    border-block: 1px solid var(--cream-line);
   }
-  .cat-spot-name:hover { color: var(--peach); }
+  .proof-intro {
+    max-width: 1040px;
+    margin-inline: auto;
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
+    font-size: clamp(1.55rem, 1.75vw, 1.85rem);
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--cream-ink);
+  }
+  .proof-in {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    gap: clamp(28px, 4vw, 72px);
+    margin-top: var(--section-space-compact);
+  }
+  @media (max-width: 900px) {
+    .proof-intro { max-width: 720px; }
+    .proof-in {
+      max-width: 720px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: clamp(52px, 8vw, 72px);
+      margin-inline: auto;
+    }
+  }
+  @media (max-width: 420px) {
+    .proof-intro { font-size: clamp(1.4rem, 6.4vw, 1.6rem); }
+    .proof-in { column-gap: var(--sp-5); }
+  }
+
+  /* portfolio preview */
+  .portfolio-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-4) var(--sp-5);
+    margin-bottom: var(--sp-5);
+  }
+  .portfolio-controls .chips { min-width: 0; }
+  .portfolio-controls .chip { flex-shrink: 0; }
+  .see-all {
+    flex-shrink: 0; margin-left: auto;
+    min-height: 44px; padding: 11px 18px; border-width: 1px;
+    font-family: inherit; font-size: 13.5px; font-weight: 500;
+    line-height: 1.6; letter-spacing: var(--button-label-spacing);
+  }
+  .see-all .disc { width: 20px; height: 20px; margin-right: 0; }
+  .see-all .disc svg { width: 12px; height: 12px; }
+  .cat { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-4); }
   @media (max-width: 1100px) { .cat { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   @media (max-width: 768px) {
     .cat { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); }
-    .cat-spot { grid-column: 1 / -1; grid-row: auto; }
+    .portfolio-controls .chips { flex-basis: 100%; }
   }
-  @media (max-width: 440px) { .cat { grid-template-columns: 1fr; } }
-  .filter-note { margin-top: var(--sp-4); font-size: 13px; color: var(--fg-3); min-height: 1.4em; }
+  @media (max-width: 440px) {
+    .cat { grid-template-columns: 1fr; }
+    .see-all { width: 100%; }
+  }
+  .filter-note { margin-bottom: var(--sp-5); font-size: 13px; color: var(--fg-3); }
+  .filter-note:empty { display: none; }
   .cat :global(.is-dim) { opacity: 0.38; filter: grayscale(0.7); }
   .cat :global(.is-dim:hover) { opacity: 1; filter: none; }
-  .see-all { margin-top: var(--sp-6); }
 
   /* integration */
   .groups {
@@ -258,7 +278,7 @@ const faqSchema = {
   .row dd { margin: 0; font-size: 14.5px; color: var(--fg); line-height: 1.45; }
 
   /* faq */
-  #faq { scroll-margin-top: 88px; }
+  #faq { scroll-margin-top: calc(var(--site-header-height, 120px) + var(--sp-4)); }
   .faq {
     --faq-duration: 300ms;
     display: grid;
@@ -336,34 +356,122 @@ const faqSchema = {
   }
 
   /* contact */
-  .contact-grid { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
-  @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
-  .mt { margin-top: var(--sp-3); }
-  .direct { display: flex; flex-direction: column; gap: var(--sp-2); margin-top: var(--sp-6); padding-top: var(--sp-5); border-top: 1px solid var(--line); }
-  .direct a {
-    font-family: 'JetBrains Mono Variable', monospace; font-size: 14px; color: var(--peach);
-    text-decoration: none; align-self: flex-start; padding: 8px 0; min-height: 40px; display: inline-flex; align-items: center;
+  .contact-section {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-items: center;
+    min-height: clamp(470px, 32.5vw, 580px);
+    padding-block: var(--section-space-compact);
+    overflow: hidden;
+    background: #100d0c;
+    border-block: 1px solid var(--line);
+    scroll-margin-top: 124px;
   }
-  .direct a:hover { text-decoration: underline; text-underline-offset: 4px; }
-  .pending { font-family: 'JetBrains Mono Variable', monospace; font-size: 13px; padding: 8px 0; }
+  .contact-section::before,
+  .contact-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .contact-section::before {
+    z-index: -2;
+    background:
+      linear-gradient(90deg, rgb(8 8 7 / 0.24) 0%, transparent 34%, transparent 68%, rgb(8 8 7 / 0.34) 100%),
+      linear-gradient(180deg, rgb(8 8 7 / 0.06), rgb(8 8 7 / 0.28));
+  }
+  .contact-section::after {
+    z-index: -1;
+    box-shadow: inset 0 80px 100px -90px rgb(0 0 0 / 0.85), inset 0 -80px 100px -90px rgb(0 0 0 / 0.9);
+  }
+  .contact-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  .contact-shell { width: 100%; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(440px, 0.92fr);
+    grid-auto-flow: dense;
+    gap: clamp(36px, 4vw, 64px);
+    align-items: center;
+  }
+  .contact-copy { min-width: 0; }
+  .contact-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 7.4ch;
+    margin: 0;
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
+    font-size: clamp(4.6rem, 5.4vw, 6rem);
+    font-weight: 400;
+    line-height: 0.82;
+    letter-spacing: -0.018em;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-shadow: 0 4px 28px rgb(0 0 0 / 0.42);
+  }
+  .contact-title span,
+  .contact-title strong {
+    display: block;
+    font: inherit;
+    color: transparent;
+    transform: rotate(-9deg) skewX(-2deg);
+    transform-origin: left center;
+    background: linear-gradient(180deg, #fffdf7 5%, #fbf4e7 54%, #e9dbc0 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .contact-title span:nth-child(2) { margin-top: -0.05em; margin-left: 0.03em; }
+  .contact-title strong {
+    margin-top: -0.04em;
+    margin-left: 0.06em;
+    background-image: linear-gradient(165deg, #ffbc32 2%, #ff871c 42%, #ff5600 78%, #dc3c00 100%);
+  }
+  .contact-form-placement { width: min(100%, 500px); justify-self: end; }
 
-  .form { display: grid; gap: var(--sp-4); background: var(--ink-2); padding: var(--sp-6); border-radius: var(--radius-l); box-shadow: var(--shadow-1); }
-  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); margin: 0; }
-  @media (max-width: 560px) { .pair { grid-template-columns: 1fr; } }
-  .field { display: flex; flex-direction: column; gap: 7px; margin: 0; }
-  .field label { font-size: 13px; font-weight: 500; color: var(--fg-2); }
-  .field input, .field textarea {
-    font: inherit; font-size: 15px; width: 100%;
-    background: var(--ink); border: 1px solid var(--line-2); color: var(--fg);
-    border-radius: var(--radius); padding: 13px 15px; min-height: 48px;
-    transition: border-color var(--dur-1);
+  @media (max-width: 980px) {
+    .contact-section {
+      min-height: auto;
+      background-position: 36% center;
+    }
+    .contact-section::before {
+      background:
+        linear-gradient(180deg, rgb(8 8 7 / 0.14) 0%, rgb(8 8 7 / 0.2) 46%, rgb(8 8 7 / 0.7) 68%, rgb(8 8 7 / 0.82) 100%),
+        linear-gradient(90deg, rgb(8 8 7 / 0.16), transparent 72%);
+    }
+    .contact-backdrop {
+      inset: 0 0 auto;
+      height: clamp(390px, 58vw, 560px);
+      object-fit: cover;
+      object-position: center;
+    }
+    .contact-grid { grid-template-columns: 1fr; gap: var(--sp-7); }
+    .contact-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: clamp(330px, 58vw, 510px);
+    }
+    .contact-title { font-size: clamp(4.5rem, 12vw, 7rem); }
+    .contact-form-placement { width: min(100%, 720px); justify-self: center; }
   }
-  .field input::placeholder, .field textarea::placeholder { color: var(--fg-3); }
-  .field input:focus, .field textarea:focus { border-color: var(--brand); outline: none; }
-  .field textarea { min-height: 120px; resize: vertical; }
-  .submit { justify-self: start; }
-  .consent { font-size: 12.5px; color: var(--fg-3); line-height: 1.5; }
-  .consent a { color: var(--fg-2); }
+  @media (max-width: 560px) {
+    .contact-backdrop { height: 410px; object-position: center; }
+    .contact-copy { min-height: 340px; justify-content: flex-start; }
+    .contact-title { max-width: 7.2ch; font-size: clamp(3.75rem, 17vw, 5.2rem); line-height: 0.8; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .contact-backdrop, .contact-title > * { opacity: 1 !important; }
+  }
 </style>
 
 <script>
@@ -411,4 +519,35 @@ const faqSchema = {
       });
     });
   });
+
+  const contactSection = document.querySelector<HTMLElement>('.contact-section');
+  const contactBackdrop = document.querySelector<HTMLElement>('.contact-backdrop');
+  const contactTitleLines = document.querySelectorAll<HTMLElement>('.contact-title > *');
+
+  if (contactSection && contactBackdrop && contactTitleLines.length && !reduceMotion.matches) {
+    Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(([{ gsap }, { ScrollTrigger }]) => {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.fromTo(
+        contactBackdrop,
+        { scale: 1.035, opacity: 0.78 },
+        {
+          scale: 1,
+          opacity: 1,
+          ease: 'none',
+          scrollTrigger: { trigger: contactSection, start: 'top bottom', end: 'bottom top', scrub: 0.7 },
+        },
+      );
+      gsap.fromTo(
+        contactTitleLines,
+        { y: 22, opacity: 0.2 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.12,
+          ease: 'none',
+          scrollTrigger: { trigger: contactSection, start: 'top 88%', end: 'top 48%', scrub: 0.55 },
+        },
+      );
+    });
+  }
 </script>

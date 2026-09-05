@@ -57,7 +57,7 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
       </p>
       <div class="wall-btns">
         <a class="btn btn-primary" href="#games">
-          See the games
+          View Game
           <span class="disc" aria-hidden="true"><Icon name="ph:arrow-down" /></span>
         </a>
         <a class="btn btn-ghost" href={CTA.href}>{CTA.label}</a>
@@ -69,6 +69,7 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
 <style>
   .wall {
     position: relative; overflow: hidden; padding: 0;
+    margin-top: calc(-1 * var(--site-header-height, 120px));
     min-height: min(100dvh, 920px);
     display: flex; align-items: flex-end;
     background: var(--ink-0);
@@ -159,7 +160,8 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
       gsap.registerPlugin(ScrollTrigger);
       gsap
         .timeline({
-          scrollTrigger: { trigger: root, start: 'top top', end: 'bottom top', scrub: 0.6 },
+          // Hold both layers for another 180 CSS px, without a spacer or wheel counting.
+          scrollTrigger: { trigger: root, start: 'top+=180 top', end: 'bottom top', scrub: 0.6 },
         })
         .to(tilt, { rotateX: 4, rotateZ: -2, yPercent: 18, scale: 1.12, opacity: 0.18, ease: 'none' }, 0)
         .to(copy, { yPercent: -18, opacity: 0.35, ease: 'none' }, 0);

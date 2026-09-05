@@ -1,26 +1,49 @@
 ---
 import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
 import logo from '../assets/brand/logo.webp';
 import { nav, CTA, company } from '../data/site';
 import EventAnnouncementBar from './event/EventAnnouncementBar.astro';
 import { currentEvent } from '../data/events';
+import { CATALOGUE_CATEGORIES } from '../lib/game-categories';
+import OrbitBorder from './showcase/OrbitBorder.astro';
+import { borderTrailDefaults } from '../data/border-trail-settings';
 
 const isEvent = Astro.url.pathname.replace(/\/$/, '').replace(/\.html$/, '') === currentEvent.eventUrl;
 const headerCTA = isEvent ? { label: currentEvent.bookingLabel, href: currentEvent.bookingAnchor } : CTA;
-const navigation = [...nav, { label: 'Event', href: currentEvent.eventUrl }];
+const navigation = [...nav.filter((item) => item.href === '/games' || item.href === '/#faq'), { label: 'Event', href: currentEvent.eventUrl }];
+const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}s; --orbit-length: ${borderTrailDefaults.orbitLength}%; --orbit-width: ${borderTrailDefaults.orbitWidth}px; --orbit-opacity: ${borderTrailDefaults.orbitOpacity}; --orbit-blur: ${borderTrailDefaults.orbitBlur}px;`;
 ---
 
 <header class="site-header" id="siteHeader">
   <EventAnnouncementBar />
   <div class="wrap">
     <nav class="nav" aria-label="Main">
+      <span class="nav-glow-fx" data-border-trail-host aria-hidden="true" style={borderTrailStyle}>
+        <OrbitBorder />
+      </span>
+
       <a class="brand" href="/">
         <Image src={logo} alt={company.name} widths={[140, 280]} sizes="140px" loading="eager" />
       </a>
 
       <ul class="nav-links" id="navLinks">
         {navigation.map((item) => (
-          <li><a href={item.href} aria-current={isEvent && item.href === currentEvent.eventUrl ? 'page' : undefined} data-event-track={item.href === currentEvent.eventUrl ? 'event_nav_click' : undefined}>{item.label}</a></li>
+          item.href === '/games' ? (
+            <li class="games-item" data-games-dropdown>
+              <div class="games-control">
+                <a class="nav-link" href="/games" data-games-link aria-current={Astro.url.pathname.replace(/\/$/, '') === '/games' ? 'page' : undefined}>Games</a>
+                <button class="submenu-toggle" type="button" aria-label="Toggle game categories" aria-expanded="false" aria-controls="navGamesMenu" data-games-toggle hidden>
+                  <Icon name="ph:caret-down" aria-hidden="true" />
+                </button>
+              </div>
+              <ul class="games-submenu" id="navGamesMenu" aria-label="Game categories">
+                {CATALOGUE_CATEGORIES.map((category) => <li><a href={`/games?type=${category.type}#games`}>{category.label}</a></li>)}
+              </ul>
+            </li>
+          ) : (
+            <li><a class="nav-link" href={item.href} aria-current={isEvent && item.href === currentEvent.eventUrl ? 'page' : undefined} data-event-track={item.href === currentEvent.eventUrl ? 'event_nav_click' : undefined}>{item.label}</a></li>
+          )
         ))}
         <li class="nav-links-cta"><a class="btn btn-primary btn-sm" href={headerCTA.href} data-event-track={isEvent ? 'book_meeting_header' : undefined}>{headerCTA.label}</a></li>
       </ul>
@@ -36,6 +59,9 @@ const navigation = [...nav, { label: 'Event', href: currentEvent.eventUrl }];
 </header>
 
 <style>
+  :global(html) { --site-header-height: 120px; }
+  :global(html:not(.event-campaign-active)) { --site-header-height: 76px; }
+
   .site-header {
     position: sticky;
     top: 0;
@@ -44,24 +70,73 @@ const navigation = [...nav, { label: 'Event', href: currentEvent.eventUrl }];
   }
   .site-header .wrap { pointer-events: auto; padding-top: 12px; }
   .nav {
-    display: flex; align-items: center; gap: var(--sp-6); height: 64px;
-    padding: 0 12px 0 20px;
+    position: relative; isolation: isolate;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: var(--sp-5); height: 64px;
+    padding: 0 12px;
     background: color-mix(in srgb, var(--ink-0) 74%, transparent);
     backdrop-filter: blur(16px) saturate(140%);
-    border: 1px solid rgb(255 240 200 / 0.08);
+    border: 1px solid rgb(255 86 0 / 0.52);
     border-radius: var(--radius-pill);
     box-shadow: 0 10px 30px -18px rgb(5 4 2 / 0.8);
   }
-  .brand { display: flex; align-items: center; flex: none; min-height: 44px; text-decoration: none; }
+  .nav-glow-fx {
+    position: absolute;
+    inset: -1px;
+    z-index: 2;
+    overflow: visible;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+  .nav:is(:hover, :focus-within) .nav-glow-fx {
+    --orbit-halo-opacity: 0.68;
+  }
+  .brand { display: flex; align-items: center; justify-self: start; margin-left: 8px; min-height: 44px; text-decoration: none; }
   .brand :global(img) { height: 30px; width: auto; }
 
-  .nav-links { display: flex; gap: var(--sp-6); list-style: none; margin-left: var(--sp-2); }
-  .nav-links a { font-size: 14px; font-weight: 500; color: var(--fg-2); text-decoration: none; white-space: nowrap; transition: color var(--dur-1); }
+  .nav-links { display: flex; align-items: center; gap: var(--sp-6); list-style: none; }
+  .nav-links a,
+  .nav-desktop-cta {
+    font-family: Tanker, 'Tanker Fallback', 'Arial Narrow', Impact, sans-serif;
+    font-weight: 400;
+    line-height: 0.92;
+    letter-spacing: 0.004em;
+    text-transform: uppercase;
+  }
+  .nav-links a { color: var(--fg-2); text-decoration: none; white-space: nowrap; transition: color var(--dur-1); }
+  .nav-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 1.1875rem; }
   .nav-links a:hover { color: var(--fg); }
   .nav-links a[aria-current='page'] { color: var(--peach); }
   .nav-links-cta { display: none; }
 
-  .nav-end { margin-left: auto; display: flex; align-items: center; gap: var(--sp-3); }
+  .nav-end { justify-self: end; display: flex; align-items: center; gap: var(--sp-3); }
+  .games-item { position: relative; }
+  .games-control { display: flex; align-items: center; }
+  .submenu-toggle {
+    display: grid; place-items: center; width: 44px; height: 44px;
+    padding: 0; border: 0; border-radius: var(--radius-pill);
+    background: transparent; color: var(--fg-2); cursor: pointer;
+  }
+  .submenu-toggle[hidden] { display: none; }
+  .submenu-toggle:hover { color: var(--fg); background: var(--ink-3); }
+  .submenu-toggle svg { width: 16px; height: 16px; transition: transform var(--dur-1) var(--ease); }
+  .submenu-toggle[aria-expanded='true'] svg { transform: rotate(180deg); }
+  .games-submenu {
+    display: none; position: absolute; top: calc(100% + 8px); left: -16px;
+    min-width: 200px; padding: var(--sp-2); list-style: none;
+    background: var(--ink-2); border: 1px solid var(--line-2);
+    border-radius: var(--radius); box-shadow: var(--shadow-2);
+  }
+  .games-submenu::before { content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: 8px; }
+  .games-item[data-open='true'] .games-submenu { display: grid; animation: submenu-in var(--dur-1) var(--ease); }
+  .games-submenu a {
+    display: flex; align-items: center; min-height: 44px; padding: 10px 14px;
+    border-radius: var(--radius-s); font-size: 1rem;
+  }
+  .games-submenu a:hover, .games-submenu a:focus-visible { color: var(--fg); background: var(--ink-3); }
+  @keyframes submenu-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+  @media (min-width: 993px) {
+    .games-item:not([data-ready]):is(:hover, :focus-within) .games-submenu { display: grid; }
+  }
   .burger {
     display: none; background: var(--brand); border: 0; border-radius: var(--radius-pill);
     width: 46px; height: 46px; cursor: pointer; align-items: center; justify-content: center;
@@ -72,45 +147,115 @@ const navigation = [...nav, { label: 'Event', href: currentEvent.eventUrl }];
   }
 
   @media (max-width: 992px) {
+    .nav { grid-template-columns: minmax(0, 1fr) auto; }
     .nav-links { display: none; }
     .nav-desktop-cta { display: none; }
     .burger { display: flex; }
 
     :global(.menu-open) .nav-links {
-      display: flex; flex-direction: column; gap: 0;
+      display: flex; flex-direction: column; align-items: stretch; gap: 0;
       position: absolute; left: var(--gutter); right: var(--gutter); top: calc(100% + 8px);
       background: var(--ink-2); border: 1px solid var(--line); border-radius: var(--radius-l);
       padding: var(--sp-2) var(--sp-5) var(--sp-5); box-shadow: var(--shadow-2);
+      max-height: calc(100dvh - var(--site-header-height, 120px) - 24px); overflow-y: auto;
     }
-    :global(.menu-open) .nav-links li { border-bottom: 1px solid var(--line); }
-    :global(.menu-open) .nav-links a { display: block; padding: 14px 0; font-size: 16px; }
+    :global(.menu-open) .nav-links > li { border-bottom: 1px solid var(--line); }
+    :global(.menu-open) .nav-link { display: flex; padding: 14px 0; font-size: 18px; }
+    .games-control .nav-link { flex: 1; }
+    .games-submenu { position: static; min-width: 0; padding: 0 0 var(--sp-3); border: 0; box-shadow: none; }
+    .games-submenu::before { display: none; }
+    .games-submenu a { padding-left: var(--sp-4); }
     :global(.menu-open) .nav-links-cta { display: block; border-bottom: 0; }
-    :global(.menu-open) .nav-links-cta a { margin-top: var(--sp-4); justify-content: center; display: flex; color: var(--on-brand-button); font-weight: 500; }
+    :global(.menu-open) .nav-links-cta a { margin-top: var(--sp-4); justify-content: center; display: flex; color: var(--on-brand-button); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-glow-fx { display: none; }
+    .games-item[data-open='true'] .games-submenu { animation: none; }
+    .submenu-toggle svg { transition: none; }
   }
 </style>
 
 <script>
+  import { mountBorderTrailSettings } from '../lib/border-trail';
+
+  mountBorderTrailSettings();
+
   const header = document.getElementById('siteHeader');
   const burger = document.getElementById('burger');
   if (header && burger) {
+    const dropdown = header.querySelector<HTMLElement>('[data-games-dropdown]');
+    const toggle = header.querySelector<HTMLButtonElement>('[data-games-toggle]');
+    const gamesLink = header.querySelector<HTMLAnchorElement>('[data-games-link]');
+    const desktop = window.matchMedia('(min-width: 993px)');
+    const hover = window.matchMedia('(hover: hover)');
+    let closeTimer: ReturnType<typeof setTimeout>;
+    let suppressFocusOpen = false;
+    function setDropdown(open: boolean) {
+      clearTimeout(closeTimer);
+      if (dropdown && toggle) {
+        dropdown.dataset.open = String(open);
+        toggle.setAttribute('aria-expanded', String(open));
+      }
+    }
+    function closeMenu(returnFocus = false) {
+      header!.classList.remove('menu-open');
+      burger!.setAttribute('aria-expanded', 'false');
+      burger!.setAttribute('aria-label', 'Open menu');
+      setDropdown(false);
+      if (returnFocus) burger!.focus();
+    }
+    function scheduleClose() {
+      clearTimeout(closeTimer);
+      closeTimer = setTimeout(() => {
+        if (!dropdown?.contains(document.activeElement) && !(desktop.matches && hover.matches && dropdown?.matches(':hover'))) setDropdown(false);
+      }, 180);
+    }
+    if (dropdown && toggle && gamesLink) {
+      dropdown.dataset.ready = 'true';
+      toggle.hidden = false;
+      dropdown.addEventListener('mouseenter', () => { if (desktop.matches && hover.matches) setDropdown(true); });
+      dropdown.addEventListener('mouseleave', scheduleClose);
+      dropdown.addEventListener('focusin', () => { if (desktop.matches && !suppressFocusOpen) setDropdown(true); });
+      dropdown.addEventListener('focusout', scheduleClose);
+      toggle.addEventListener('click', () => setDropdown(dropdown.dataset.open !== 'true'));
+      dropdown.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown' && (event.target === gamesLink || event.target === toggle)) {
+          event.preventDefault();
+          setDropdown(true);
+          dropdown.querySelector<HTMLAnchorElement>('.games-submenu a')?.focus();
+        }
+        if (event.key === 'Escape' && dropdown.dataset.open === 'true') {
+          event.preventDefault();
+          event.stopPropagation();
+          setDropdown(false);
+          suppressFocusOpen = true;
+          (desktop.matches ? gamesLink : toggle).focus();
+          suppressFocusOpen = false;
+        }
+      });
+    }
+    // The actual sticky height includes the existing campaign bar, if visible.
+    const measureHeader = () => document.documentElement.style.setProperty('--site-header-height', `${header.offsetHeight}px`);
+    new ResizeObserver(measureHeader).observe(header);
+    measureHeader();
+    desktop.addEventListener('change', () => closeMenu());
     burger.addEventListener('click', () => {
       const open = header.classList.toggle('menu-open');
       burger.setAttribute('aria-expanded', String(open));
       burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      if (!open) setDropdown(false);
     });
     header.addEventListener('click', (e) => {
       if ((e.target as HTMLElement).closest('.nav-links a')) {
-        header.classList.remove('menu-open');
-        burger.setAttribute('aria-expanded', 'false');
-        burger.setAttribute('aria-label', 'Open menu');
+        closeMenu();
       }
     });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && header.classList.contains('menu-open')) {
-        header.classList.remove('menu-open');
-        burger.setAttribute('aria-expanded', 'false');
-        burger.focus();
+        closeMenu(true);
       }
     });
+    document.addEventListener('click', (event) => { if (!header.contains(event.target as Node)) closeMenu(); });
+
   }
 </script>

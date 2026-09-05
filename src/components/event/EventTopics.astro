@@ -4,7 +4,7 @@ interface Props { event: EventData }
 const { event } = Astro.props;
 ---
 
-<section class="event-topics" aria-labelledby="event-topics-title">
+<section class="event-topics section-continuation" aria-labelledby="event-topics-title">
   <div class="wrap topics-layout">
     <h2 class="d1 rv" id="event-topics-title">{event.topicsTitle}</h2>
     <div class="topics-list">
@@ -19,7 +19,6 @@ const { event } = Astro.props;
 </section>
 
 <style>
-  .event-topics { padding-top: 0; }
   .topics-layout { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: var(--sp-8); }
   .topics-layout .d1 { font-size: var(--step-3); max-width: 14ch; line-height: 1.05; }
   .topics-list { display: grid; gap: var(--sp-5); }

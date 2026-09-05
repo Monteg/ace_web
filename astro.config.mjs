@@ -6,7 +6,10 @@ export default defineConfig({
   site: 'https://acegames.io',
   trailingSlash: 'never',
   build: { format: 'file' },
-  integrations: [icon({ include: { ph: ['*'] } }), sitemap()],
+  integrations: [
+    icon({ include: { ph: ['*'] } }),
+    sitemap({ filter: (page) => page !== 'https://acegames.io/effects-lab' }),
+  ],
   image: { responsiveStyles: true },
   devToolbar: { enabled: false },
   server: {

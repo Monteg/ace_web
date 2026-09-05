@@ -1,11 +1,11 @@
 # Ace Games: полный контекст проекта для AI-планировщика
 
-Версия документа: 1.0  
-Дата среза: 4 сентября 2026 года  
-Репозиторий: C:\Users\Gener\Documents\ChatGPT\ACE_web\acegames-showcase  
-Публичный домен, заложенный в коде: https://acegames.io  
-Текущий режим работы команды: локальная разработка  
-Язык интерфейса сайта: английский  
+Версия документа: 1.1
+Дата среза: 5 сентября 2026 года
+Репозиторий: C:\Users\Gener\Documents\ChatGPT\ACE_web\acegames-showcase
+Публичный домен, заложенный в коде: https://acegames.io
+Текущий режим работы команды: локальная разработка
+Язык интерфейса сайта: английский
 Язык этого документа: русский
 
 ## 1. Назначение документа
@@ -102,13 +102,14 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
 ### 4.1. Что работает
 
 - Astro-сайт собирается статически.
-- Существует 31 статическая HTML-страница.
+- Существует 32 статические HTML-страницы, включая технический Effects Lab.
 - Существуют все 27 URL, которые защищает parity-проверка старого сайта.
 - В каталоге 24 игры.
 - 21 игра имеет статус live.
 - 3 игры имеют статус coming soon.
 - 20 игр имеют demo-конфигурацию.
-- Домашняя страница содержит hero wall, proof, каталог, maths explorer, craft, integration, FAQ и contact.
+- Домашняя страница содержит hero wall, proof, Excellence cards, каталог, maths explorer, Future of Gaming, FAQ и contact.
+- Craft и Integration сохранены в коде, но отключены флагами homepageSections.
 - Отдельная страница Games содержит видеогерой, фильтр и полный каталог.
 - Каждая игра имеет отдельную страницу.
 - Есть Terms of Use и Privacy & Cookie Policy.
@@ -116,6 +117,10 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
 - Есть глобальный Age Verification Gate.
 - Есть временный event announcement bar с возможностью закрытия.
 - FAQ работает как анимированный accordion.
+- Header содержит Games dropdown с категориями Slots, Instant и Table, FAQ и Event.
+- У Header есть настраиваемый animated Border Trail.
+- На техническом маршруте /effects-lab отдельно настраиваются motion карточек и Border Trail.
+- Excellence cards используют масштабируемую рамку и отдельный horizontal tablet layout.
 - Каталожные фильтры переставляют игры и приглушают остальные.
 - Демо загружается только после клика Play.
 - SEO-метаданные и JSON-LD генерируются на уровне layout и страниц.
@@ -126,15 +131,16 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
 
 ### 4.2. Проверенное качество сборки
 
-На 4 сентября 2026 года выполнены:
+На 5 сентября 2026 года выполнены:
 
-- npm run check: 0 errors, 0 warnings, 0 hints для 44 файлов;
+- npm run check: 0 errors, 0 warnings, 0 hints для 57 файлов;
 - npm run ship: успешно;
 - 14 из 14 parity gates: успешно;
-- 31 страница собрана;
-- home first-load weight по внутренней проверке: 829 KB;
-- страница Gold of Ra до запуска demo: 293 KB;
-- у 311 сгенерированных img есть width, height и alt;
+- 32 страницы собраны;
+- home first-load weight по внутренней проверке: 970 KB;
+- representative game page до запуска demo: 302 KB;
+- build создаёт 363 optimized image variants;
+- у всех 318 отрендеренных img elements есть width, height и alt;
 - внутренних битых ссылок по текущей проверке нет;
 - пустых iframe src нет;
 - на каждой странице ровно один h1;
@@ -145,12 +151,12 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
 ### 4.3. Состояние Git
 
 - текущая ветка: main;
-- последний commit: 4783490 Configure static Sites deployment;
-- remote: внутренний git.chatgpt-team.site;
-- рабочее дерево содержит много изменённых и новых файлов;
-- последние функции Age Gate, event page, Catalogue Hero и часть UI-правок ещё не зафиксированы отдельным commit.
+- основной GitHub remote для передачи проекта: github, https://github.com/Monteg/ace_web.git;
+- дополнительный внутренний remote: origin, git.chatgpt-team.site;
+- стабильный срез, описанный версией документа 1.1, фиксируется тем же commit, что и это обновление документации;
+- рабочая ветка и целевая ветка GitHub: main.
 
-Любой AI-исполнитель обязан считать текущие незакоммиченные изменения пользовательскими. Нельзя выполнять reset, checkout или массово отменять изменения.
+Любой AI-исполнитель обязан считать будущие незакоммиченные изменения пользовательскими. Нельзя выполнять reset, checkout или массово отменять изменения без прямого разрешения владельца.
 
 ## 5. Технологический стек
 
@@ -279,10 +285,13 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
           brand/
           games/
           heroes/
+          site/
         components/
           event/
           showcase/
           AgeGate.astro
+          ContactForm.astro
+          ContactModal.astro
           DemoEmbed.astro
           Footer.astro
           Header.astro
@@ -291,20 +300,26 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
           games/
           legal/
         data/
+          border-trail-settings.ts
           events.ts
+          experience-card-settings.ts
           site.ts
         layouts/
           Base.astro
         lib/
+          border-trail.ts
           catalogue-filter.ts
           event-booking.ts
           event.ts
+          experience-card-motion.ts
           format.ts
+          game-categories.ts
         pages/
           games/
           portfolio/
           404.astro
           [legal].astro
+          effects-lab.astro
           event.astro
           index.astro
           thanks.astro
@@ -344,9 +359,16 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
 | Redirects | public/_redirects |
 | Security и cache headers | public/_headers |
 | Contact email handler | functions/api/contact.ts |
+| Категории каталога и Games dropdown | src/lib/game-categories.ts |
+| Контент Excellence cards | why в src/data/site.ts |
+| Defaults motion карточек | src/data/experience-card-settings.ts |
+| Runtime motion карточек | src/lib/experience-card-motion.ts |
+| Defaults Border Trail | src/data/border-trail-settings.ts |
+| Runtime Border Trail | src/lib/border-trail.ts |
+| Техническая настройка эффектов | src/pages/effects-lab.astro |
 | Release gates | scripts/verify.mjs |
 
-Массивы process и why в src/data/site.ts сейчас не импортируются страницей и не отображаются. Их наличие в данных не означает, что соответствующие секции существуют в текущем UI.
+Массив why является source of truth для Excellence cards, а process для Future of Gaming. Флаги homepageSections являются source of truth для включения Craft и Integration: в текущем стабильном срезе оба значения false.
 
 ## 8. Маршруты и информационная архитектура
 
@@ -356,6 +378,7 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
 | /games | Полный каталог | src/pages/games/index.astro |
 | /portfolio/{slug} | Детальная страница игры | src/pages/portfolio/[slug].astro |
 | /event | SBC Lisbon 2026 campaign page | src/pages/event.astro |
+| /effects-lab | Техническая настройка двух независимых визуальных эффектов, noindex, без public chrome | src/pages/effects-lab.astro |
 | /terms-conditions | Terms of Use | src/pages/[legal].astro |
 | /privacy-policy | Privacy & Cookie Policy | src/pages/[legal].astro |
 | /thanks | Результат контактной формы | src/pages/thanks.astro |
@@ -418,6 +441,7 @@ Props Base:
 | canonicalPath | string, optional | чистый публичный путь |
 | schema | object или array, optional | дополнительные JSON-LD graphs |
 | noindex | boolean, optional | robots noindex, follow |
+| showSiteChrome | boolean, optional, default true | управляет рендером public Header и Footer на служебных страницах |
 
 Если image не передан, Base использует /og-default.png. Такого файла сейчас нет ни в public, ни в dist. Это известный дефект для страниц, которым не передан индивидуальный share image.
 
@@ -428,8 +452,12 @@ Header:
 - sticky;
 - визуально оформлен как тёмная полупрозрачная pill-панель;
 - содержит logo;
-- содержит Games, Maths, Studio, Integration, FAQ;
-- всегда добавляет Event;
+- содержит Games, FAQ и Event;
+- все labels используют uppercase Tanker;
+- Games имеет dropdown с категориями Slots, Instant и Table из CATALOGUE_CATEGORIES;
+- dropdown работает через hover, focus, click, ArrowDown и Escape;
+- содержит orange stroke и независимый animated Border Trail;
+- Border Trail читает сохранённые настройки из browser storage;
 - содержит primary CTA;
 - на /event меняет CTA на Book a meeting и ведёт к #book-meeting;
 - на desktop показывает nav и CTA;
@@ -536,13 +564,15 @@ Event link в Footer сейчас отсутствует, потому что Fo
 
 1. Wall hero.
 2. Proof stats.
-3. Catalogue preview.
-4. Maths Explorer.
-5. Craft.
-6. Partner Wall, только при наличии логотипов.
-7. Integration and compliance.
-8. FAQ.
-9. Contact.
+3. Redefining iGaming Excellence.
+4. Catalogue preview.
+5. Maths Explorer.
+6. Craft, только если homepageSections.craft=true; сейчас отключён.
+7. Future of Gaming.
+8. Partner Wall, только при наличии логотипов.
+9. Integration and compliance, только если homepageSections.integration=true; сейчас отключён.
+10. FAQ.
+11. Contact.
 
 ### 12.1. Wall hero
 
@@ -569,26 +599,46 @@ UI: src/components/StatTile.astro.
 
 Текущее состояние:
 
-- Published RTP range: 94.0-97.4%;
-- Operators running content: неизвестно;
-- Markets supplied today: неизвестно;
-- Weeks from signed spec to certified build: неизвестно.
+- Prototypes: 30+;
+- Game Releases: 21;
+- Players Reached: 1M+;
+- Operator Ecosystem: Private.
 
-Null не заменяется выдуманным числом. StatTile показывает TBC и visible need-state.
+Stats используют три локальных proof icons и Phosphor briefcase icon. Значения редактируются в heroStats.
 
-### 12.3. Catalogue preview
+### 12.3. Redefining iGaming Excellence
+
+Компоненты:
+
+- src/components/showcase/Excellence.astro;
+- src/components/showcase/ExperienceCard.astro;
+- src/components/showcase/ScalableCardFrame.astro.
+
+Контент: why и sectionCopy.excellenceTitle в src/data/site.ts.
+
+Текущий UI:
+
+- три тематические карты Trust, Innovation и Retention;
+- фон карты реализован масштабируемой CSS nine-slice рамкой через Astro getImage и border-image;
+- artwork и editable HTML copy являются отдельными слоями;
+- на pointer devices карточка реагирует tilt, scale, 3D depth и glare;
+- параметры нормализуются и могут быть применены из Effects Lab;
+- на desktop три вертикальные карты в ряд;
+- на tablet 561-992 px три горизонтальные карты в одну колонку;
+- на phone до 560 px вертикальная карта;
+- coarse pointer и prefers-reduced-motion отключают tilt и glare.
+
+### 12.4. Catalogue preview
 
 Логика:
 
 - все игры сортируются: live первыми, coming soon после них, затем order, затем name;
-- spotlight предпочитает Gold of Ra при наличии demo;
-- spotlight использует DemoEmbed;
-- остальные 11 позиций выводятся как GameTile;
-- фильтры: All, Slots, Instant & crash, Table;
+- первые 12 позиций выводятся как GameTile;
+- фильтры: All, Slots, Instant, Table;
 - filter не скрывает игры, а переставляет совпадающие первыми и приглушает остальные;
-- ссылка показывает фактическое количество игр: All 24 games.
+- CTA ведёт на полный /games.
 
-### 12.4. Maths Explorer
+### 12.5. Maths Explorer
 
 Компонент: src/components/showcase/MathsExplorer.astro.
 
@@ -603,7 +653,7 @@ Null не заменяется выдуманным числом. StatTile по�
 - фильтрация приглушает, но не удаляет;
 - положение и ticks рассчитываются из данных каталога.
 
-### 12.5. Craft
+### 12.6. Craft
 
 Компонент: src/components/showcase/Craft.astro.
 
@@ -613,9 +663,22 @@ Null не заменяется выдуманным числом. StatTile по�
 - Art;
 - Engine.
 
-Блок использует реальные изображения игр, а не stock assets.
+Блок использует реальные изображения игр, а не stock assets. В текущем стабильном срезе он сохранён в коде, но не рендерится, потому что homepageSections.craft=false.
 
-### 12.6. Partner Wall
+### 12.7. Future of Gaming
+
+Компонент: src/components/showcase/FutureOfGaming.astro.
+
+Четыре карточки строятся из массива process в src/data/site.ts:
+
+- Expert Engineering Team;
+- Game Strategy & Product Design;
+- Build & Integrate;
+- Monitor & Optimize.
+
+На desktop используется сетка 2x2 с artwork слева и copy справа; на узких viewport карточки и затем вся grid переходят в одну колонку.
+
+### 12.8. Partner Wall
 
 Компонент: src/components/showcase/PartnerWall.astro.
 
@@ -630,7 +693,7 @@ Null не заменяется выдуманным числом. StatTile по�
 - hover ставит движение на pause;
 - reduced motion переключает wall в статическую grid.
 
-### 12.7. Integration and compliance
+### 12.9. Integration and compliance
 
 Три группы:
 
@@ -645,18 +708,19 @@ Null не заменяется выдуманным числом. StatTile по�
 
 Остальные десять значений неизвестны и показываются как dashed need-state. AI не должен превращать подсказки в утверждения. Например, текст GLI, iTech Labs, BMM, whichever is true является вопросом владельцу, а не фактом.
 
-### 12.8. FAQ
+В текущем стабильном срезе блок не рендерится, потому что homepageSections.integration=false. Данные сохранены для будущего включения.
+
+### 12.10. FAQ
 
 Текущие вопросы:
 
-1. How do we integrate your games?
-2. Who certifies the maths and the RNG?
-3. Which jurisdictions can we run these in?
-4. Can RTP and volatility be configured per market?
-5. Can you build a custom title for our brand?
-6. What happens after launch?
+1. What types of casino games do you develop?
+2. How long does it take to develop a casino game?
+3. Can I order a fully customized casino game?
+4. How do you ensure game quality and fairness?
+5. Do you provide post-launch support?
 
-Первые три ответа пока не подтверждены и показывают need-state. Последние три заполнены.
+Все пять ответов заполнены в src/data/site.ts.
 
 Текущий UI:
 
@@ -672,7 +736,17 @@ Null не заменяется выдуманным числом. StatTile по�
 - reduced motion отключает сложное движение;
 - FAQPage JSON-LD включает только вопросы с реальным ответом.
 
-### 12.9. Contact
+### 12.11. Contact
+
+Компоненты: src/components/ContactForm.astro и домашняя placement-секция в src/pages/index.astro.
+
+Визуальная композиция:
+
+- широкое локальное изображение contact-pigeon-v3.png заполняет фон секции;
+- слева остаётся editable HTML heading Contact our team today;
+- справа расположена компактная dark form card;
+- рядом с CTA находится handwritten Drop us a message и анимированная vector arrow;
+- reduced motion сохраняет статичную стрелку и читабельный layout.
 
 Форма:
 
@@ -681,8 +755,7 @@ Null не заменяется выдуманным числом. StatTile по�
 - message необязателен;
 - поле website является скрытым honeypot;
 - рядом есть privacy disclosure;
-- direct email: info@acegames.io;
-- Booking link и Game sheet пока показываются как незаполненные элементы.
+- direct email: info@acegames.io.
 
 Локальный Astro dev server не исполняет Cloudflare Pages Functions. Поэтому production contact flow нельзя считать проверенным только по localhost.
 
@@ -700,7 +773,10 @@ Hero: src/components/showcase/CatalogueHero.astro.
 - grid на 4 колонки desktop, 3 на medium, 2 на tablet, 1 на узком mobile;
 - все 24 GameTile;
 - tail CTA Missing a mechanic?;
+- tail CTA открывает reusable ContactModal, а без JavaScript ведёт на домашнюю contact section;
 - первые четыре GameTile получают eager loading.
+
+ContactModal использует native dialog, reusable ContactForm, focus return, keyboard focus wrapping, Escape и backdrop close, scroll lock и reduced-motion fallback.
 
 ### 13.1. Текущий video hero
 
@@ -755,6 +831,21 @@ mountCatalogueFilter:
 - reduced motion переставляет элементы без анимации.
 
 Фильтр специально никогда не скрывает элементы.
+
+### 13.3. Технический Effects Lab
+
+Маршрут: /effects-lab.
+Файл: src/pages/effects-lab.astro.
+
+Страница предназначена для локальной настройки эффектов перед будущим переносом в CMS/admin:
+
+- не показывается в public navigation;
+- исключена из sitemap;
+- имеет noindex;
+- использует Base с showSiteChrome=false, поэтому public Header и Footer отсутствуют;
+- Age Gate и глобальные базовые стили сохраняются.
+
+Tool 01 Motion Settings показывает отдельный live preview ExperienceCard и восемь sliders. Tool 02 Border Trail расположен ниже отдельным блоком, имеет собственный live preview и пять sliders. Оба инструмента имеют независимые Apply to site, Copy settings и Reset. Не объединять их preview, storage или apply flow.
 
 ## 14. GameTile
 
@@ -1285,6 +1376,48 @@ URL строится через cdn.rstars.cc.
 - back: 303 redirect на /thanks с query params;
 - onRequestPost: основной POST handler.
 
+### 20.14. Experience card motion
+
+Файлы:
+
+- src/data/experience-card-settings.ts;
+- src/lib/experience-card-motion.ts.
+
+Defaults:
+
+    {
+      "tiltMax": 12,
+      "hoverScale": 1.015,
+      "perspective": 2200,
+      "response": 0.9,
+      "artDepth": 96,
+      "copyDepth": 120,
+      "glareOpacity": 0.28,
+      "glareTravel": 48
+    }
+
+Runtime валидирует диапазоны, читает и сохраняет localStorage key ace_experience_card_effects_v1, применяет CSS custom properties и data attributes, синхронизирует вкладки через storage event и текущую вкладку через ace:experience-card-settings. GSAP подключается только для fine pointer без reduced motion.
+
+### 20.15. Border Trail
+
+Файлы:
+
+- src/components/showcase/OrbitBorder.astro;
+- src/data/border-trail-settings.ts;
+- src/lib/border-trail.ts.
+
+Defaults:
+
+    {
+      "orbitDuration": 5.6,
+      "orbitLength": 32,
+      "orbitWidth": 1.5,
+      "orbitOpacity": 0.62,
+      "orbitBlur": 7
+    }
+
+Runtime валидирует диапазоны, сохраняет localStorage key ace_border_trail_effects_v1 и применяет CSS custom properties только к data-border-trail-host. Настройки синхронизируются через storage event и ace:border-trail-settings. Эффект Header и card motion не имеют общего settings object.
+
 ## 21. Contact backend и внешняя отправка email
 
 Endpoint: POST /api/contact.
@@ -1507,6 +1640,9 @@ Tokens:
 - FAQ height, opacity, translate и icon rotation;
 - catalogue FLIP;
 - GameHeader scroll parallax;
+- ExperienceCard pointer tilt, depth и glare;
+- animated Border Trail вокруг Header;
+- handwritten contact arrow loop;
 - button micro-movement;
 - image hover scale;
 - AgeGate enter/exit;
@@ -1548,6 +1684,8 @@ Tokens:
 
 - Header переходит в burger до 992 px;
 - Games grid: 4 → 3 → 2 → 1;
+- Excellence: три vertical cards на desktop, три horizontal cards в колонку на 561-992 px, vertical cards на phone;
+- Effects Lab: preview и controls становятся одной колонкой до 900 px;
 - Event grids сворачиваются в одну колонку;
 - Event stats становятся vertical;
 - booking form pairs становятся single column;
@@ -1593,7 +1731,7 @@ Tokens:
 - reduced motion;
 - content без JavaScript, где это заявлено как progressive enhancement.
 
-Особое замечание: белый текст на #ff5600 может не проходить WCAG AA для обычного мелкого текста. Это текущее осознанное визуальное решение владельца, которое расходится со старым AGENTS.md. При планировании новых кнопок следует либо сохранить согласованность текущего UI, либо отдельно предложить контрастный variant и получить решение владельца.
+Особое замечание: белый текст на #ff5600 может не проходить WCAG AA для обычного мелкого текста. Это текущее осознанное визуальное решение владельца и оно синхронизировано с AGENTS.md. При планировании новых кнопок следует сохранять согласованность CTA, не переносить это сочетание на мелкий body text и отдельно проверять contrast.
 
 ## 27. Performance
 
@@ -1618,6 +1756,8 @@ Source assets:
 - общий объём card art: 2,709,600 bytes;
 - 24 hero WebP;
 - общий объём hero art: 3,288,184 bytes;
+- 16 site-level art assets для Excellence, Future, Contact и proof;
+- крупные source PNG Excellence оптимизируются Astro при build;
 - build генерирует responsive variants.
 
 ### 27.3. Главный риск
@@ -1640,6 +1780,8 @@ Games hero MP4 весит 116,440,314 bytes. preload=metadata не гарант�
 
 - home до 1.5 MB;
 - representative game page до 1.5 MB до Play.
+
+Результат стабильного среза: home около 970 KB, representative game page около 302 KB, 363 optimized image variants и 318 rendered img elements без пропущенных dimensions или alt.
 
 Games page video в эти gates не входит. Будущее ТЗ на hero video обязано иметь отдельный video budget.
 
@@ -1764,16 +1906,13 @@ Forbidden legacy strings включают Webflow-related template leaks, ста
 
 | Тема | Старый документ | Текущий код |
 | --- | --- | --- |
-| Primary button text | AGENTS.md требует near-black | tokens.css и компоненты используют white |
-| Primary button icon | старое правило near-black | white, усиленный stroke |
-| GameTile title | README и AGENTS описывают visible name | visible title удалён, screen-reader name сохранён |
 | Games hero | старые планы исключали S3 video | внешний S3 MP4 снова подключён |
 | AWS cleanup | DEPLOY.md предлагает удалить bucket | текущий Games hero зависит от этого bucket |
 | Event tests | docs/EVENT.md требует Node 24+ | проект закреплён на Node 20 |
 | Hosting | DEPLOY.md описывает Cloudflare | .openai/hosting.json описывает Sites static |
 | Privacy provider list | Webflow и Hetzner | код также использует Resend, rstars и S3; target hosting не определён |
 
-Новый AI должен ссылаться на фактический код и последнее решение владельца, а затем предлагать синхронизировать документацию отдельной задачей.
+README.md, AGENTS.md и AI-HANDOVER.md синхронизированы с текущими кнопками, GameTile, Effects Lab и Excellence cards в стабильном срезе 5 сентября 2026 года. Для оставшихся строк таблицы AI должен ссылаться на фактический код и последнее решение владельца.
 
 ## 33. Известные незавершённые места
 
@@ -1846,7 +1985,7 @@ AI-планировщик должен проверять TODO.md перед Т�
 
 ### P2
 
-1. Синхронизировать README, AGENTS, AI-HANDOVER, PLAN и DEPLOY с текущим кодом.
+1. Синхронизировать исторические PLAN и DEPLOY с окончательно выбранной production architecture.
 2. Добавить team portraits и positions.
 3. Добавить real social и partner logos после подтверждения.
 4. Разобрать content duplication и trademark issues в game records.
@@ -1865,7 +2004,7 @@ AI-планировщик должен проверять TODO.md перед Т�
 7. Demo URL не хранится готовой строкой.
 8. Нет demo config — нет iframe.
 9. External demo загружается только после явного Play.
-10. Images из src/assets идут через Astro Image и имеют sizes.
+10. Raster images из src/assets идут через Astro asset pipeline: Image с sizes либо getImage для CSS nine-slice.
 11. Filters reorder and dim, но не hide.
 12. Неизвестный факт показывается как need-state или не показывается.
 13. Нельзя выдумывать business, compliance, legal или performance claims.
@@ -1884,6 +2023,10 @@ AI-планировщик должен проверять TODO.md перед Т�
 | Изменить company data | src/data/site.ts | Footer, JSON-LD, contact, legal consistency |
 | Изменить CTA | src/data/site.ts, возможно Header | home, header, mobile menu, event override |
 | Изменить button style | tokens.css, base.css | все orange buttons, focus, contrast |
+| Изменить Header или Games dropdown | Header.astro, game-categories.ts | desktop hover/focus, keyboard, mobile, Event CTA |
+| Изменить Border Trail | OrbitBorder, border settings/lib, Effects Lab | live preview, Apply, storage sync, reduced motion |
+| Изменить Excellence cards | Excellence, ExperienceCard, ScalableCardFrame, why | desktop/tablet/mobile, fine/coarse pointer, reduced motion |
+| Изменить motion presets | data settings, matching lib, Effects Lab | normalization, separate storage keys, cross-tab sync |
 | Добавить игру | content record, card, hero | schema, all catalogs, detail, sitemap, performance |
 | Изменить RTP | game record | tile, spec strip, maths explorer, SEO copy |
 | Добавить demo | game record | demoUrl, CSP frame-src, lazy iframe |
@@ -2337,7 +2480,7 @@ Integration and compliance section содержит десять незапол�
 Если нужно быстро понять проект:
 
 - это Astro static B2B iGaming showcase;
-- 24 игры и 31 page;
+- 24 игры и 32 pages;
 - source data разделён на site.ts, events.ts и Markdown collections;
 - главная hero использует moving game wall;
 - Games hero использует тяжёлое внешнее видео;
@@ -2346,6 +2489,8 @@ Integration and compliance section содержит десять незапол�
 - Age Gate хранит подтверждение в localStorage;
 - event banner закрывается на sessionStorage;
 - FAQ semantic и animated;
+- Excellence cards имеют scalable frame, pointer motion и отдельный tablet layout;
+- /effects-lab независимо настраивает card motion и Header Border Trail;
 - form backend зависит от Cloudflare Pages и Resend;
 - production hosting ещё нужно окончательно согласовать;
 - CSP и S3 video сейчас конфликтуют;
@@ -2372,6 +2517,9 @@ Integration and compliance section содержит десять незапол�
 - age verification logic;
 - event configuration;
 - button system;
+- experience-card presets и storage contract;
+- Border Trail presets и storage contract;
+- adaptive component layout;
 - catalogue behavior;
 - performance budget;
 - legal provider list;

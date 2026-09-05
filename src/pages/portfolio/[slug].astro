@@ -52,7 +52,7 @@ const breadcrumbSchema = {
   </div>
 
   {demo ? (
-    <section id="demo" class="pt-0">
+    <section id="demo" class="section-continuation">
       <div class="wrap">
         <div class="sec-top rv">
           <h2 class="d1">Play the demo</h2>
@@ -62,7 +62,7 @@ const breadcrumbSchema = {
       </div>
     </section>
   ) : (
-    <section id="demo" class="pt-0">
+    <section id="demo" class="section-continuation">
       <div class="wrap">
         <div class="no-demo rv">
           <h2 class="d2">{soon ? 'In development' : 'Demo on request'}</h2>
@@ -77,7 +77,7 @@ const breadcrumbSchema = {
     </section>
   )}
 
-  <section class="pt-0">
+  <section class="section-continuation">
     <div class="wrap">
       <div class="over">
         <div class="over-copy">
@@ -107,7 +107,7 @@ const breadcrumbSchema = {
   </section>
 
   {related.length > 0 && (
-    <section class="pt-0">
+    <section class="section-continuation">
       <div class="wrap">
         <div class="sec-top rv"><h2 class="d1">More {TYPE_LABEL[d.type].toLowerCase()} games</h2></div>
         <div class="related rv">
@@ -119,8 +119,7 @@ const breadcrumbSchema = {
 </Base>
 
 <style>
-  .pt-0 { padding-top: 0; }
-  .strip-wrap { margin-top: calc(-1 * var(--sp-7)); position: relative; z-index: 2; margin-bottom: var(--sp-9); }
+  .strip-wrap { margin-top: calc(-1 * var(--sp-7)); position: relative; z-index: 2; margin-bottom: var(--section-space); }
   @media (max-width: 992px) { .strip-wrap { margin-top: var(--sp-6); } }
 
   .no-demo {

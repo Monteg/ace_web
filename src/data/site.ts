@@ -20,40 +20,41 @@ export const company = {
   origin: 'https://acegames.io',
 };
 
+/** Keep disabled homepage sections and their navigation in sync. */
+export const homepageSections = { integration: false, craft: false };
+
 export const nav = [
   { href: '/games', label: 'Games' },
   { href: '/#maths', label: 'Maths' },
   { href: '/#craft', label: 'Studio' },
   { href: '/#integration', label: 'Integration' },
   { href: '/#faq', label: 'FAQ' },
-];
+].filter((item) =>
+  (homepageSections.integration || item.href !== '/#integration') &&
+  (homepageSections.craft || item.href !== '/#craft'),
+);
 
 /** One label per intent, used in the nav, the hero and the footer. */
 export const CTA = { label: "Let's talk", href: '/#contact' };
 
-export const social: { label: string; href: string }[] = [
-  // The old site linked four accounts belonging to another company.
-  // Add the real Ace Games profiles here; an empty list renders nothing.
+export const socialIntro = 'Stay updated with our latest games, news, and partnerships.';
+
+export const social: { label: string; icon: string; href: string | null }[] = [
+  { label: 'Instagram', icon: 'ph:instagram-logo', href: null },
+  { label: 'LinkedIn', icon: 'ph:linkedin-logo', href: null },
 ];
 
 /** Operator and aggregator logos, SVG files in public/partners/. Empty renders nothing. */
 export const partners: { name: string; src: string }[] = [];
 
+export const proofIntro =
+  'Ace Games builds casino games worldwide, combining design, audio, and technology to create high-performance slots and crash games';
+
 export const heroStats = [
-  {
-    icon: 'ph:percent',
-    tint: 'mint',
-    value: '94.0-97.4%',
-    label: 'Published RTP range, configurable per market',
-  },
-  { icon: 'ph:buildings', tint: 'ice', value: null, label: 'Operators running Ace Games content' },
-  {
-    icon: 'ph:globe-hemisphere-west',
-    tint: 'lemon',
-    value: null,
-    label: 'Markets we can supply today',
-  },
-  { icon: 'ph:timer', tint: 'peach', value: null, label: 'Weeks from signed spec to certified build' },
+  { icon: 'proof-slot-777', value: '30+', label: 'Prototypes' },
+  { icon: 'proof-dice', value: '21', label: 'Game Releases' },
+  { icon: 'proof-users', value: '1M+', label: 'Players Reached' },
+  { icon: 'ph:briefcase-fill', value: 'PRIVATE', label: 'Operator Ecosystem' },
 ];
 
 export const integration = [
@@ -94,70 +95,73 @@ export const integration = [
 
 export const process = [
   {
-    title: 'Scope',
-    body: 'We agree the mechanic, the RTP band, the volatility curve and the target market before a single asset is drawn.',
+    title: 'Expert Engineering Team',
+    body: 'Developers, mathematicians, and designers building high-performance casino games for scale and stability.',
+    image: 'engineering',
   },
   {
-    title: 'Build',
-    body: 'Maths, art, client and server run in parallel. You get a playable build early and every sprint after that.',
+    title: 'Game Strategy & Product Design',
+    body: 'We align RTP models, volatility curves, and engagement mechanics with your business goals before development begins.',
+    image: 'strategy',
   },
   {
-    title: 'Certify',
-    body: 'RNG and maths go to the lab, the build goes through functional and load QA, and the certificate comes back attached to a version.',
+    title: 'Build & Integrate',
+    body: 'We develop, test, and integrate games into your platform with fast deployment and stable performance.',
+    image: 'integration',
   },
   {
-    title: 'Launch and tune',
-    body: 'We watch session length, bet distribution and retention after launch, and adjust configuration rather than guessing.',
+    title: 'Monitor & Optimize',
+    body: 'Post-launch analytics and player behavior tracking help improve retention and operator profitability.',
+    image: 'optimization',
   },
 ];
 
 export const why = [
   {
-    title: 'One integration, the whole catalogue',
-    body: 'Connect once to our RGS and every title here, plus everything we ship next, is available to switch on. No second integration, no per-game engineering on your side.',
-    feature: true,
+    title: 'Trust at the Core',
+    body: 'Built on certified RNG standards and secure architecture, Ace Games delivers fair gameplay, stability, and regulatory readiness.',
+    image: 'trust',
   },
   {
-    title: 'Maths you can reconfigure',
-    body: 'RTP bands, volatility modes and bet ranges are set per operator and per market, not baked into the build. The same title can run at a different RTP in two jurisdictions.',
-    feature: false,
+    title: 'Innovation That Drives Performance',
+    body: 'We create mechanics designed to increase retention, session length, and player lifetime value.',
+    image: 'innovation',
   },
   {
-    title: 'Built entirely in-house',
-    body: 'Maths, art, client, server and RGS are all ours. No licensed third-party engine sits under our games, so nothing in the catalogue carries anyone else’s IP or release schedule.',
-    feature: false,
+    title: 'Retention Engineered for Scale',
+    body: 'Our games are built to keep players returning, with mechanics optimized for session time, repeat play, and operator revenue.',
+    image: 'retention',
   },
 ];
 
-/** The six questions that actually decide a B2B games deal. */
+export const sectionCopy = {
+  portfolioTitle: 'DISCOVER ACE GAMES',
+  excellenceTitle: 'Redefining iGaming Excellence',
+  futureTitle: 'The Future of Gaming with Ace Games',
+  contactTitle: 'Contact our team today',
+  contactBody: 'Drop us a message!',
+};
+
+/** Questions and answers carried over from the published Ace Games site. */
 export const faq: { q: string; a: string | null; hint?: string; extra?: string }[] = [
   {
-    q: 'How do we integrate your games?',
-    a: null,
-    hint: 'Describe the integration route: direct API and seamless wallet, plus the aggregators you are already live on, and link the documentation.',
+    q: 'What types of casino games do you develop?',
+    a: 'We develop a wide range of casino products including slot games, crash games, and custom mechanics tailored to operator needs. Each game is designed to maximize engagement, retention, and revenue performance.',
   },
   {
-    q: 'Who certifies the maths and the RNG?',
-    a: null,
-    hint: 'Name the laboratory and the standard, and say that certificates are available per title on request.',
-    extra:
-      'Every build is also put through functional QA, load testing and RNG validation in-house before it leaves us.',
+    q: 'How long does it take to develop a casino game?',
+    a: 'Development timelines depend on complexity. Standard slot projects typically take 3–6 months, while advanced mechanics or custom game concepts may require 6–12 months.',
   },
   {
-    q: 'Which jurisdictions can we run these in?',
-    a: null,
-    hint: 'List the markets you are approved for today, and the ones certification is in progress for.',
+    q: 'Can I order a fully customized casino game?',
+    a: 'Yes. We design fully customized games aligned with your brand, audience, and platform requirements, from theme and visuals to mechanics and reward systems.',
   },
   {
-    q: 'Can RTP and volatility be configured per market?',
-    a: 'Yes. RTP bands, volatility modes and bet ranges are configuration, not build constants, so the same title can run at different settings in different jurisdictions. The current published range across the catalogue is 94.0% to 97.4%.',
+    q: 'How do you ensure game quality and fairness?',
+    a: 'Every game undergoes extensive testing including functional QA, performance testing, and RNG validation to ensure fair gameplay and stable performance.',
   },
   {
-    q: 'Can you build a custom title for our brand?',
-    a: 'Yes. We take the theme, the audience and the commercial target and design the mechanic and the maths around them. Standard slot projects run 3 to 6 months; custom mechanics run 6 to 12.',
-  },
-  {
-    q: 'What happens after launch?',
-    a: 'We keep the title updated, watch performance in your lobby and adjust configuration. Support and optimisation are part of the deal, not a separate contract.',
+    q: 'Do you provide post-launch support?',
+    a: 'Yes. We provide ongoing support, updates, and performance optimization to ensure games remain competitive and profitable over time.',
   },
 ];

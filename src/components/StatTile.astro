@@ -1,42 +1,70 @@
 ---
+import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
+import proofUsers from '../assets/site/proof-users.png';
 
 interface Props {
   icon: string;
-  tint: string;
   value: string | null;
   label: string;
   /** Shown in place of the value when the owner has not supplied it yet. */
   placeholder?: string;
 }
 
-const { icon, tint, value, label, placeholder = 'TBC' } = Astro.props;
+const { icon, value, label, placeholder = 'TBC' } = Astro.props;
+const isUsersIcon = icon === 'proof-users';
 ---
 
 <div class="stat">
-  <span class={`tile tile--${tint}`} aria-hidden="true"><Icon name={icon} /></span>
-  <div class="stat-body">
-    <p class="stat-value tnum">
-      {value ? value : <span class="need">{placeholder}</span>}
-    </p>
-    <p class="stat-label">{label}</p>
-  </div>
+  <span class="stat-icon" aria-hidden="true">
+    {isUsersIcon ? (
+      <Image src={proofUsers} alt="" widths={[82, 164]} sizes="(max-width: 420px) 64px, 82px" loading="lazy" />
+    ) : (
+      <Icon name={icon} />
+    )}
+  </span>
+  <p class="stat-value tnum">
+    {value ? value : <span class="need">{placeholder}</span>}
+  </p>
+  <p class="stat-label">{label}</p>
 </div>
 
 <style>
   .stat {
-    display: flex; gap: var(--sp-4); align-items: flex-start;
-    padding: var(--sp-5); border-right: 1px solid var(--line);
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
-  .stat:last-child { border-right: 0; }
+  .stat-icon {
+    display: grid;
+    place-items: center;
+    width: clamp(4rem, 5.4vw, 5.125rem);
+    height: clamp(4rem, 5.4vw, 5.125rem);
+    color: var(--brand);
+    margin-bottom: var(--sp-3);
+  }
+  .stat-icon :global(svg),
+  .stat-icon :global(img) { width: 100%; height: 100%; object-fit: contain; }
   .stat-value {
     font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
-    font-size: clamp(1.6rem, 2.6vw, 2.1rem); line-height: 1; color: var(--fg);
+    max-width: 100%;
+    font-size: clamp(4.2rem, 5.25vw, 5.25rem);
+    line-height: 0.82;
+    color: var(--brand);
+    text-transform: uppercase;
+    white-space: nowrap;
   }
-  .stat-label { font-size: 13px; color: var(--fg-2); margin-top: var(--sp-2); line-height: 1.4; }
+  .stat-label {
+    margin-top: var(--sp-2);
+    font-size: clamp(0.9rem, 1.2vw, 1rem);
+    line-height: 1.35;
+    font-weight: 400;
+    color: var(--cream-ink-2);
+  }
 
-  @media (max-width: 900px) {
-    .stat { border-right: 0; border-bottom: 1px solid var(--line); }
-    .stat:nth-child(2n) { border-right: 0; }
+  @media (max-width: 420px) {
+    .stat-value { font-size: 3.5rem; }
   }
 </style>
