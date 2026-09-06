@@ -8,4 +8,5 @@ dist/
 .env.*.local
 cms/.env
 cms/data/
+cms/migration-output/
 src/generated/cms/
