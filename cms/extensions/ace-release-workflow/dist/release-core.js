@@ -7,7 +7,7 @@ const GAME_FIELDS = [
   'card_background_image', 'card_logo_image',
 ];
 const GAME_TRANSLATION_FIELDS = ['locale', 'display_name', 'short_description', 'overview', 'main_feature', 'layout_display', 'seo_title', 'seo_description', 'card_alt', 'hero_alt', 'translation_status'];
-const SECTION_FIELDS = ['id', 'section_type', 'sort_order', 'enabled', 'media_file', 'style_preset'];
+const SECTION_FIELDS = ['id', 'section_type', 'detail_slot', 'sort_order', 'enabled', 'media_file', 'style_preset'];
 const SECTION_TRANSLATION_FIELDS = ['locale', 'heading', 'body_markdown', 'translation_status'];
 const ITEM_FIELDS = ['id', 'sort_order', 'enabled', 'icon_file', 'image_file'];
 const ITEM_TRANSLATION_FIELDS = ['locale', 'title', 'text', 'translation_status'];

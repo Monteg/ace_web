@@ -47,11 +47,11 @@ const {
   enableLocaleAlternates = true,
 } = Astro.props;
 
-const allLocales = getActiveLocales();
+const allLocales = await getActiveLocales();
 const locales = enableLocaleAlternates ? allLocales : allLocales.filter((item) => item.code === defaultLocale);
 const localeConfig = locales.find((item) => item.code === locale);
 if (!localeConfig) throw new Error(`Cannot render inactive locale: ${locale}`);
-const t = getTranslations(locale);
+const t = await getTranslations(locale);
 
 // Self-referencing canonical on every page. The old site had none, and three
 // URLs served a byte-identical home page.

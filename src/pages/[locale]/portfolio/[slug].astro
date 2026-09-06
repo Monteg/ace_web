@@ -2,10 +2,13 @@
 import GamePage from '../../portfolio/[slug].astro';
 import { getActiveLocales, defaultLocale } from '../../../i18n/config';
 import { getGames } from '../../../lib/content-source';
+import { isCmsLiveMode } from '../../../lib/cms-mode';
+
+export const prerender = !isCmsLiveMode();
 
 export async function getStaticPaths() {
   const paths = [];
-  for (const locale of getActiveLocales().filter((item) => item.code !== defaultLocale)) {
+  for (const locale of (await getActiveLocales()).filter((item) => item.code !== defaultLocale)) {
     const games = await getGames(locale.code);
     paths.push(...games.map((game) => ({
       params: { locale: locale.code, slug: game.id },
@@ -15,6 +18,8 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { locale, game, all } = Astro.props;
+const locale = Astro.props.locale ?? Astro.params.locale;
+const { game, all } = Astro.props;
+const slug = Astro.params.slug;
 ---
-<GamePage locale={locale} game={game} all={all} />
+<GamePage locale={locale} game={game} all={all} slug={slug} />

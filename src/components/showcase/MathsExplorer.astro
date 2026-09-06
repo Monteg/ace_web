@@ -9,7 +9,7 @@
  * never hides anything, it dims what does not match, so the buyer finds what
  * they asked for without losing sight of the rest.
  */
-import { Image } from 'astro:assets';
+import ContentImage from '../ContentImage.astro';
 import { maxWin, rtp as fmtRtp, volatility as fmtVol } from '../../lib/format';
 import type { GameRecord } from '../../lib/content-source';
 import { getActiveLocales } from '../../i18n/config';
@@ -21,8 +21,8 @@ interface Props {
   locale?: string;
 }
 const { games, locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
-const locales = getActiveLocales();
+const t = await getTranslations(locale);
+const locales = await getActiveLocales();
 
 const BANDS = ['low', 'medium', 'high', 'very_high'] as const;
 const LANE_LABEL = Object.fromEntries(BANDS.map((band) => [band, t(`game.volatility.${band}`)])) as Record<(typeof BANDS)[number], string>;
@@ -130,7 +130,7 @@ const present = types.filter((t) => numeric.some((g) => g.data.type === t));
                 data-max={maxWin(p.game.data.specs.maxWin) ?? t('game.spec.on_request')}
                 aria-label={t('maths.point_aria', { name: p.game.data.name, rtp: fmtRtp(p.game.data.specs.rtp), volatility: locale === 'en' ? fmtVol(p.game.data.specs.volatility) : p.game.data.specs.volatility.map((value) => t(`game.volatility.${value}`)).join(' / ') })}
               >
-                <Image src={p.game.data.card} alt="" width={96} height={96} loading="lazy" />
+                <ContentImage src={p.game.data.card} alt="" width={96} height={96} loading="lazy" />
               </a>
             </li>
           ))}

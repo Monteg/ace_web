@@ -1,10 +1,17 @@
 import { defineConfig } from 'astro/config';
 import icon from 'astro-icon';
 import sitemap from '@astrojs/sitemap';
+import node from '@astrojs/node';
+
+const liveCms = process.env.CONTENT_SOURCE === 'cms' && (
+  process.env.CMS_CONTENT_MODE === 'live' || process.env.CMS_LIVE_MODE === 'true'
+);
 
 export default defineConfig({
   site: 'https://acegames.io',
   trailingSlash: 'never',
+  output: liveCms ? 'server' : 'static',
+  adapter: liveCms ? node({ mode: 'standalone' }) : undefined,
   build: { format: 'file' },
   integrations: [
     icon({ include: { ph: ['*'] } }),

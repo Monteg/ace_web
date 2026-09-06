@@ -77,12 +77,21 @@ Public build использует requested translation только со ста
 | `id` | UUID блока |
 | `game_id` | Parent game |
 | `section_type` | `rich_text`, `feature_grid`, `bullet_list`, `media_text` |
+| `detail_slot` | Явная зона detail page: `sidebar_features`, `gameplay`, `main_feature`, `bonus`, `multiplier`, `additional` |
 | `sort_order` | Порядок на detail page |
 | `enabled` | Включён ли блок в snapshot |
 | `media_file` | Optional image для media-aware layouts |
 | `style_preset` | `default`, `wide`, `compact`, `media_left`, `media_right` |
 
 `game_section_translations` содержит `heading`, `body_markdown`, `locale`, `translation_status`. Markdown допускает headings, paragraphs, lists и links; arbitrary HTML/scripts не являются canonical content.
+
+`detail_slot` определяет renderer без эвристик по заголовку:
+
+- `sidebar_features` — список **Features** справа от demo;
+- `gameplay`, `main_feature`, `bonus`, `multiplier` — соответствующие tabs под Overview;
+- `additional` — обычный дополнительный блок ниже tabs.
+
+Новые и legacy sections по умолчанию получают `additional`. Bootstrap безопасно заполняет только существующие записи с `NULL`, не перезаписывая ручной выбор. Импортёр переводит legacy `feature_grid` и `bullet_list` в `sidebar_features`.
 
 ## `game_section_items`
 

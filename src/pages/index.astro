@@ -23,8 +23,8 @@ import { renderMarkdown } from '../lib/markdown';
 
 interface Props { locale?: string; }
 const { locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
-const locales = getActiveLocales();
+const t = await getTranslations(locale);
+const locales = await getActiveLocales();
 const games = sortGames(await getGames(locale));
 const mathsGames = games.filter(
   (game) => game.data.status === 'live' && typeof game.data.specs.rtp === 'number',
@@ -40,10 +40,10 @@ const contactTitleMiddle = contactTitleWords.join(' ');
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: getFaqItems(locale)
+  mainEntity: (await getFaqItems(locale))
     .map((f) => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answerMarkdown } })),
 };
-const faqItems = getFaqItems(locale);
+const faqItems = await getFaqItems(locale);
 const statLabelKeys = ['home.proof.prototypes', 'home.proof.releases', 'home.proof.players', 'home.proof.ecosystem'];
 ---
 

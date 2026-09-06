@@ -20,6 +20,8 @@
         "faq_items": ["create", "read", "update", "delete"],
         "faq_item_translations": ["create", "read", "update", "delete"],
         "content_releases": ["read"],
+        "directus_versions": ["create", "read", "update", "delete"],
+        "directus_revisions": ["read"],
         "directus_files": ["create", "read", "update"],
         "directus_folders": ["create", "read", "update"]
       }
@@ -43,6 +45,8 @@
         "game_gallery_translations": ["create", "read", "update"],
         "site_string_translations": ["create", "read", "update"],
         "faq_item_translations": ["create", "read", "update"],
+        "directus_versions": ["create", "read", "update"],
+        "directus_revisions": ["read"],
         "directus_files": ["read"]
       }
     },
@@ -51,7 +55,11 @@
       "icon": "visibility",
       "description": "Read-only editorial access",
       "app_access": true,
-      "read_all_content": true
+      "read_all_content": true,
+      "collections": {
+        "directus_versions": ["read"],
+        "directus_revisions": ["read"]
+      }
     },
     {
       "name": "Sheet Integration",
@@ -83,6 +91,16 @@
       "app_access": false,
       "collections": {
         "content_releases": ["read"]
+      }
+    },
+    {
+      "name": "Live Reader",
+      "icon": "language",
+      "description": "Server-only read access for Astro live CMS rendering",
+      "app_access": false,
+      "read_all_content": true,
+      "collections": {
+        "directus_files": ["read"]
       }
     }
   ]

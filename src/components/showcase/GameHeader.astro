@@ -1,260 +1,184 @@
 ---
-import { Image } from 'astro:assets';
+import ContentImage from '../ContentImage.astro';
 import type { GameRecord } from '../../lib/content-source';
 import { getActiveLocales } from '../../i18n/config';
 import { getTranslations } from '../../i18n/get-translations';
 import { localePath } from '../../i18n/routes';
 
-/**
- * Game page header: the wide banner as a full-bleed ground, the key art as a
- * tilted tile floating over it, and a compact title and action group. The old
- * page was a flat banner with the name on top.
- */
 interface Props {
   game: GameRecord;
-  /** Only true when the page below actually renders a demo block (`#demo`). */
-  demoAvailable: boolean;
+  demoAvailable?: boolean;
   locale?: string;
 }
 
-const { game, demoAvailable, locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
-const locales = getActiveLocales();
+const { game, locale = 'en' } = Astro.props;
+const t = await getTranslations(locale);
+const locales = await getActiveLocales();
 const d = game.data;
-const soon = d.status === 'coming_soon';
-
-// The title sits at poster size. A long name at that size runs to three or
-// four lines and pushes the figures and the CTAs below the fold, so the size
-// is capped per name: Tanker sets at roughly half an em per glyph, and the cap
-// is the smaller of "longest word on one line" and "every glyph across two
-// lines", as a share of the copy column. Short names never hit the cap.
-const words = d.name.trim().split(/\s+/);
-const longestWord = Math.max(...words.map((w) => w.length));
-const fit = Math.min(2 / longestWord, 3.4 / d.name.length).toFixed(3);
 const typeLabel = t(`game.type.${d.type}`);
-const contactHref = `${localePath('/', locale, locales)}#contact`;
+const titleWords = d.name.trim().split(/\s+/);
+const titleAccent = titleWords.length > 1 ? titleWords.pop() : null;
+const titleLead = titleWords.join(' ');
 ---
 
-<section class="gh" id="top" style={`--gh-fit:${fit}`}>
-  <div class="gh-bg" aria-hidden="true">
-    <Image
+<section class="game-detail-hero" id="top" aria-labelledby="game-detail-title">
+  <div class="game-detail-hero__art" aria-hidden="true">
+    <ContentImage
       src={d.hero}
       alt=""
-      widths={[1200, 1800, 2400]}
+      widths={[960, 1440, 1920, 2400]}
       sizes="100vw"
       loading="eager"
       fetchpriority="high"
     />
   </div>
 
-  <div class="wrap gh-wrap">
-    <div class="gh-copy">
-      <nav class="gh-crumbs" aria-label={t('global.breadcrumb')}>
+  <div class="wrap game-detail-hero__inner">
+    <div class="game-detail-hero__copy">
+      <nav class="game-detail-hero__crumbs" aria-label={t('global.breadcrumb')}>
         <a href={localePath('/games', locale, locales)}>{t('header.games')}</a>
         <span aria-hidden="true">/</span>
-        <a href={`${localePath('/games', locale, locales)}?type=${d.type}`}>{typeLabel}</a>
+        <a href={`${localePath('/games', locale, locales)}?type=${d.type}#games`}>{typeLabel}</a>
         <span aria-hidden="true">/</span>
         <span aria-current="page">{d.name}</span>
       </nav>
 
-      <h1 class="gh-title">{d.name}</h1>
+      <h1 class="game-detail-hero__title" id="game-detail-title">
+        {titleAccent ? <><span>{titleLead}</span> <em>{titleAccent}</em></> : d.name}
+      </h1>
 
-      <ul class="gh-pills" aria-label="Game classification">
-        <li class={`gh-pill gh-pill--type gh-pill--${d.type}`}>{typeLabel}</li>
-        {soon && <li class="gh-pill gh-pill--soon">{t('game.status.in_development')}</li>}
-      </ul>
-
-      <div class="gh-cta">
-        {demoAvailable ? (
-          <>
-            <a class="btn btn-primary" href="#demo">{t('game.play_demo')}</a>
-            <a class="btn btn-ghost" href={contactHref}>{t('header.lets_talk')}</a>
-          </>
-        ) : (
-          <a class="btn btn-primary" href={contactHref}>{t('header.lets_talk')}</a>
-        )}
-      </div>
-    </div>
-
-    <div class="gh-art" data-gh-art>
-      <div class="gh-tile">
-        <Image
-          src={d.card}
-          alt={t('game.key_art_alt', { name: d.name })}
-          widths={[420, 640]}
-          sizes="(max-width: 992px) 60vw, 380px"
-          loading="eager"
-        />
+      <div class="game-detail-hero__summary">
+        <span class:list={['game-detail-hero__type', `game-detail-hero__type--${d.type}`]}>{typeLabel}</span>
+        {d.status === 'coming_soon' && <span class="game-detail-hero__status">{t('game.status.coming_soon')}</span>}
+        <p>{d.shortDescription}</p>
       </div>
     </div>
   </div>
 </section>
 
 <style>
-  .gh {
-    --gh-col: 0.58;
-    position: relative; overflow: hidden; padding: 0;
+  .game-detail-hero {
+    position: relative;
+    min-height: clamp(286px, 28vw, 360px);
+    overflow: hidden;
+    padding: 0;
     background: var(--ink-0);
     border-bottom: 1px solid var(--line);
   }
-
-  /* ground: the banner at reduced opacity, then a scrim that is darkest on
-     the left where the type sits and fades into the page at the bottom */
-  .gh-bg { position: absolute; inset: 0; }
-  .gh-bg :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: 0.55; }
-  .gh-bg::after {
-    content: ''; position: absolute; inset: 0;
+  .game-detail-hero__art { position: absolute; inset: 0; }
+  .game-detail-hero__art :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 48%;
+    opacity: 0.78;
+    transform: scale(1.01);
+  }
+  .game-detail-hero__art::after {
+    content: '';
+    position: absolute;
+    inset: 0;
     background:
-      linear-gradient(180deg, color-mix(in srgb, var(--ink) 30%, transparent) 0%, transparent 28%, transparent 62%, var(--ink) 100%),
-      linear-gradient(90deg, var(--ink) 0%, color-mix(in srgb, var(--ink) 86%, transparent) 34%, color-mix(in srgb, var(--ink) 40%, transparent) 66%, color-mix(in srgb, var(--ink) 18%, transparent) 100%);
+      linear-gradient(90deg, rgb(12 12 11 / 0.98) 0%, rgb(12 12 11 / 0.91) 28%, rgb(12 12 11 / 0.38) 61%, rgb(12 12 11 / 0.15) 100%),
+      linear-gradient(180deg, rgb(12 12 11 / 0.24), transparent 45%, rgb(12 12 11 / 0.82));
   }
-
-  .gh-wrap {
-    position: relative; z-index: 1; width: 100%;
-    display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    align-items: center; gap: var(--sp-6);
-    min-height: min(66vh, 620px);
-    padding-block: var(--sp-6) var(--sp-7);
+  .game-detail-hero__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-height: inherit;
+    align-items: center;
+    padding-block: var(--sp-5) var(--sp-6);
   }
-
-  .gh-copy { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-3); }
-
-  .gh-crumbs {
-    display: flex; flex-wrap: wrap; gap: var(--sp-2);
+  .game-detail-hero__copy {
+    display: grid;
+    width: min(760px, 65%);
+    gap: var(--sp-4);
+  }
+  .game-detail-hero__crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    color: var(--fg-2);
     font-family: 'JetBrains Mono Variable', ui-monospace, monospace;
-    font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
   }
-  .gh-crumbs a { text-decoration: none; transition: color var(--dur-1); }
-  .gh-crumbs a:hover { color: var(--fg); }
-  .gh-crumbs [aria-current] { color: var(--fg); }
-
-  .gh-title {
-    margin: 0; color: var(--fg);
-    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-weight: 400;
-    font-size: min(var(--step-5), calc((min(100vw, var(--maxw)) - 2 * var(--gutter)) * var(--gh-col) * var(--gh-fit)));
-    line-height: 0.9; letter-spacing: 0.005em; text-wrap: balance;
+  .game-detail-hero__crumbs a { text-decoration: none; transition: color var(--dur-1); }
+  .game-detail-hero__crumbs a:hover { color: var(--fg); }
+  .game-detail-hero__crumbs [aria-current='page'] { color: var(--fg); }
+  .game-detail-hero__title {
+    max-width: 11ch;
+    margin: 0;
+    color: var(--fg);
+    font-family: Tanker, 'Tanker Fallback', 'Arial Narrow', sans-serif;
+    font-size: clamp(3.4rem, 6.25vw, 6rem);
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 0.86;
+    text-wrap: balance;
+    text-transform: uppercase;
   }
-  .gh-pills { list-style: none; display: flex; flex-wrap: wrap; gap: var(--sp-2); }
-  .gh-pill {
+  .game-detail-hero__title em { color: var(--brand); font-style: normal; }
+  .game-detail-hero__summary {
+    display: flex;
+    max-width: 720px;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-3);
+  }
+  .game-detail-hero__summary p {
+    max-width: 52ch;
+    color: var(--fg-2);
+    font-size: var(--step--1);
+    line-height: 1.5;
+  }
+  .game-detail-hero__type,
+  .game-detail-hero__status {
+    display: inline-flex;
+    min-height: 30px;
+    align-items: center;
+    padding: 5px 12px;
+    border-radius: var(--radius-pill);
+    color: var(--tint-ink);
     font-family: 'JetBrains Mono Variable', ui-monospace, monospace;
-    font-size: 11.5px; letter-spacing: 0.06em; line-height: 1.3;
-    padding: 7px 12px; border-radius: var(--radius-pill);
-    border: 1px solid var(--line-2); color: var(--fg-2);
-    background: color-mix(in srgb, var(--ink) 55%, transparent);
-    backdrop-filter: blur(8px);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    text-transform: uppercase;
   }
-  .gh-pill b { color: var(--fg); font-weight: 500; }
-  .gh-pill--type { border-color: transparent; color: var(--tint-ink); font-weight: 500; backdrop-filter: none; }
-  .gh-pill--slot { background: var(--tint-ice); }
-  .gh-pill--instant { background: var(--tint-mint); }
-  .gh-pill--crash { background: var(--tint-pink); }
-  .gh-pill--table { background: var(--tint-lemon); }
-  .gh-pill--soon { background: var(--peach); color: var(--on-brand); border-color: transparent; backdrop-filter: none; }
-
-  .gh-cta { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-2); }
-
-  /* the key art: a tilted portrait tile, lifted off the banner by a warm
-     shadow and a faint brand glow behind it; on desktop the script drifts it
-     up to 40px as the header scrolls out (see --gh-shift) */
-  .gh-art { position: relative; justify-self: end; width: min(340px, 100%); }
-  .gh-art::before {
-    content: ''; position: absolute; inset: -10% -22% -22%; pointer-events: none;
-    background: radial-gradient(closest-side, color-mix(in srgb, var(--brand) 24%, transparent), transparent 74%);
-  }
-  .gh-tile {
-    position: relative; aspect-ratio: 4 / 5;
-    border-radius: var(--radius-l); overflow: hidden;
-    background: var(--ink-3); box-shadow: var(--shadow-2);
-    transform: rotate(-3deg) translateY(var(--gh-shift, 0px));
-    will-change: transform;
-  }
-  .gh-tile :global(img) { width: 100%; height: 100%; object-fit: cover; }
-  .gh-tile::after {
-    content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-    box-shadow:
-      inset 0 0 0 1px color-mix(in srgb, var(--fg) 14%, transparent),
-      inset 0 1px 0 color-mix(in srgb, var(--peach) 35%, transparent);
-  }
+  .game-detail-hero__type--slot { background: var(--tint-ice); }
+  .game-detail-hero__type--instant { background: var(--tint-mint); }
+  .game-detail-hero__type--crash { background: var(--tint-pink); }
+  .game-detail-hero__type--table { background: var(--tint-lemon); }
+  .game-detail-hero__status { background: var(--peach); }
 
   @media (prefers-reduced-motion: no-preference) {
-    .gh-tile { animation: gh-rise var(--dur-3) var(--ease-out) backwards; }
-    @keyframes gh-rise {
-      from { opacity: 0; transform: translateY(28px); }
-    }
+    .game-detail-hero__art :global(img) { animation: game-hero-settle 900ms var(--ease-out) both; }
+    .game-detail-hero__copy { animation: game-copy-settle 650ms 90ms var(--ease-out) both; }
+    @keyframes game-hero-settle { from { opacity: 0.58; transform: scale(1.045); } }
+    @keyframes game-copy-settle { from { opacity: 0; transform: translateY(14px); } }
   }
 
-  @media (max-width: 992px) {
-    .gh { --gh-col: 1; }
-    .gh-wrap {
-      grid-template-columns: minmax(0, 1fr); align-items: start;
-      min-height: 0; gap: var(--sp-4);
-      padding-block: var(--sp-5) var(--sp-6);
+  @media (max-width: 768px) {
+    .game-detail-hero { min-height: 330px; }
+    .game-detail-hero__copy { width: min(100%, 620px); }
+    .game-detail-hero__art :global(img) { object-position: 64% center; opacity: 0.66; }
+    .game-detail-hero__art::after {
+      background:
+        linear-gradient(90deg, rgb(12 12 11 / 0.97), rgb(12 12 11 / 0.72) 68%, rgb(12 12 11 / 0.35)),
+        linear-gradient(180deg, rgb(12 12 11 / 0.18), transparent 35%, rgb(12 12 11 / 0.9));
     }
-    .gh-art { justify-self: start; width: min(52vw, 320px); }
-    .gh-art::before { display: none; }
-    .gh-tile { transform: none; will-change: auto; }
   }
-  @media (max-width: 560px) {
-    .gh-art { width: min(68vw, 280px); }
+  @media (max-width: 480px) {
+    .game-detail-hero { min-height: 350px; }
+    .game-detail-hero__inner { align-items: flex-end; }
+    .game-detail-hero__title { max-width: 9ch; font-size: clamp(3.1rem, 16vw, 4.2rem); }
+    .game-detail-hero__summary { align-items: flex-start; }
+    .game-detail-hero__summary p { flex-basis: 100%; }
   }
 </style>
-
-<script>
-  // Parallax on the key art. There is no scroll listener: an
-  // IntersectionObserver switches a requestAnimationFrame loop on only while
-  // the header is on screen, and the loop touches nothing on frames where the
-  // scroll position did not change. Off entirely under reduced motion and on
-  // narrow screens, where the tile sits in the flow below the text.
-  (() => {
-    const section = document.querySelector<HTMLElement>('.gh');
-    const art = section?.querySelector<HTMLElement>('[data-gh-art]');
-    if (!section || !art || !('IntersectionObserver' in window)) return;
-
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const desktop = window.matchMedia('(min-width: 993px)');
-    const MAX_SHIFT = 40;
-
-    let raf = 0;
-    let lastY = -1;
-    let visible = false;
-
-    const frame = () => {
-      raf = 0;
-      const y = window.scrollY;
-      if (y !== lastY) {
-        lastY = y;
-        const progress = Math.min(1, Math.max(0, y / (section.offsetHeight || 1)));
-        art.style.setProperty('--gh-shift', `${(-MAX_SHIFT * progress).toFixed(1)}px`);
-      }
-      raf = requestAnimationFrame(frame);
-    };
-
-    const allowed = () => !reduce.matches && desktop.matches;
-    const start = () => {
-      if (raf || !allowed()) return;
-      lastY = -1;
-      raf = requestAnimationFrame(frame);
-    };
-    const stop = () => {
-      if (raf) cancelAnimationFrame(raf);
-      raf = 0;
-    };
-    const sync = () => {
-      if (!allowed()) {
-        stop();
-        art.style.removeProperty('--gh-shift');
-      } else if (visible) {
-        start();
-      }
-    };
-
-    const io = new IntersectionObserver(([entry]) => {
-      visible = !!entry?.isIntersecting;
-      visible ? start() : stop();
-    });
-    io.observe(section);
-
-    reduce.addEventListener('change', sync);
-    desktop.addEventListener('change', sync);
-  })();
-</script>

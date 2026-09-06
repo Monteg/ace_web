@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { createTokenClient } from './lib/directus.mjs';
+import { createAdminClient, createTokenClient } from './lib/directus.mjs';
 
 const args = process.argv.slice(2);
 const option = (name, fallback) => {
@@ -18,8 +18,10 @@ if (!apply) {
   process.exit(0);
 }
 
-const client = await createTokenClient('CMS_MIGRATION_TOKEN');
+const client = args.includes('--admin') ? await createAdminClient() : await createTokenClient('CMS_MIGRATION_TOKEN');
 const uploadedBySource = new Map();
+const gamesFolder = (await client.get(`/folders?${new URLSearchParams({ 'filter[name][_eq]': 'Games', 'filter[parent][_null]': 'true', limit: '1' })}`))[0];
+if (!gamesFolder) throw new Error('CMS Games media folder is missing. Run npm run cms:bootstrap first.');
 
 async function loadAsset(source) {
   if (/^https?:\/\//i.test(source)) {
@@ -29,7 +31,16 @@ async function loadAsset(source) {
   }
   const absolute = path.resolve(process.cwd(), source);
   if (!fs.existsSync(absolute)) throw new Error(`Local asset does not exist: ${absolute}`);
-  return { bytes: fs.readFileSync(absolute), type: 'application/octet-stream', name: path.basename(absolute) };
+  const mime = {
+    '.avif': 'image/avif',
+    '.gif': 'image/gif',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.png': 'image/png',
+    '.svg': 'image/svg+xml',
+    '.webp': 'image/webp',
+  }[path.extname(absolute).toLowerCase()] ?? 'application/octet-stream';
+  return { bytes: fs.readFileSync(absolute), type: mime, name: path.basename(absolute) };
 }
 
 for (const asset of manifest) {
@@ -43,6 +54,7 @@ for (const asset of manifest) {
     const source = await loadAsset(asset.source);
     const form = new FormData();
     form.set('title', `${asset.game_slug} ${asset.role}`);
+    form.set('folder', gamesFolder.id);
     form.set('metadata', JSON.stringify({ migration_source: asset.source, migration_key: asset.key }));
     form.set('file', new Blob([source.bytes], { type: source.type }), source.name);
     const response = await fetch(`${client.url}/files`, { method: 'POST', headers: { Authorization: `Bearer ${client.token}` }, body: form });

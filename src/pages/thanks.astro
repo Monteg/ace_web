@@ -2,7 +2,8 @@
 import Base from '../layouts/Base.astro';
 import { company, CTA } from '../data/site';
 import { getTranslations } from '../i18n/get-translations';
-const t = getTranslations('en');
+export const prerender = true;
+const t = await getTranslations('en');
 
 // The form redirects here. A real page, not a hidden div swap, so a submission
 // is a URL you can count as a conversion.

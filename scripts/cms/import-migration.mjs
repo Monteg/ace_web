@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { createTokenClient } from './lib/directus.mjs';
+import { createAdminClient, createTokenClient } from './lib/directus.mjs';
 
 const args = process.argv.slice(2);
 const option = (name, fallback) => {
@@ -18,7 +18,7 @@ if (!apply) {
   process.exit(0);
 }
 
-const client = await createTokenClient('CMS_MIGRATION_TOKEN');
+const client = args.includes('--admin') ? await createAdminClient() : await createTokenClient('CMS_MIGRATION_TOKEN');
 for (const collection of order) {
   const rows = input[collection] ?? [];
   for (const row of rows) {

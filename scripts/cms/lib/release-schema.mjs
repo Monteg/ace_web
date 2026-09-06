@@ -15,6 +15,7 @@ const releaseGameSchema = cmsGameSchema.and(z.object({
   sections: z.array(z.object({
     id: z.string().uuid(),
     section_type: z.enum(['rich_text', 'feature_grid', 'bullet_list', 'media_text']),
+    detail_slot: z.enum(['sidebar_features', 'gameplay', 'main_feature', 'bonus', 'multiplier', 'additional']).default('additional'),
     sort_order: z.coerce.number().int(),
     enabled: z.coerce.boolean(),
     media_file: assetId.nullable().optional(),

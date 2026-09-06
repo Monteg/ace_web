@@ -13,8 +13,8 @@ import { localePath } from '../../i18n/routes';
 // section of the home page and a dropdown listing 17 of 24 titles.
 interface Props { locale?: string; }
 const { locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
-const locales = getActiveLocales();
+const t = await getTranslations(locale);
+const locales = await getActiveLocales();
 const games = sortGames(await getGames(locale));
 
 const present = CATALOGUE_CATEGORIES.filter((category) => games.some((game) => game.data.type === category.type));

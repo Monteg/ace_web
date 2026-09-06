@@ -6,7 +6,7 @@ const ACE = Object.freeze({
   gameHeaders: ['Game ID', 'Name', 'Slug', 'Release Status', 'Order', 'Game Type', 'RTP Mode', 'RTP', 'Volatility', 'Max Win', 'Max Win Unit', 'Approx', 'Bet Min', 'Bet Max', 'Demo Enabled', 'Demo Mode', 'Adapter Game ID', 'Direct Build', 'Direct Version', 'API Host', 'Hero Image', 'Game Cover', 'Card Background', 'Card Logo', 'Changed', 'Publish', 'Status', 'Revision'],
   translationBaseHeaders: ['Key', 'Scope', 'Entity', 'Page', 'Section', 'Context', 'Type'],
   translationSystemHeaders: ['Changed', 'Publish', 'Status', 'Revision', '__collection', '__parent_field', '__parent_id', '__field'],
-  contentHeaders: ['Block ID', 'Game', 'Parent Block ID', 'Block Type', 'Item Kind', 'Order', 'Enabled', 'Image', 'Changed', 'Publish', 'Status', 'Revision'],
+  contentHeaders: ['Block ID', 'Game', 'Parent Block ID', 'Block Type', 'Display Area', 'Item Kind', 'Order', 'Enabled', 'Image', 'Changed', 'Publish', 'Status', 'Revision'],
   mediaHeaders: ['Media ID', 'Game', 'Role', 'Parent ID', 'Order', 'Drive URL / File ID / CMS Asset', 'Enabled', 'Changed', 'Publish', 'Status', 'Revision'],
   statuses: { draft: 'Draft', changed: 'Local changes', saved: 'Saved to CMS', incomplete: 'Translation incomplete', ready: 'Ready to publish', publishing: 'Publishing…', conflict: 'Conflict', failed: 'Build failed' },
   maxUploadBytes: 25 * 1024 * 1024,
@@ -85,10 +85,10 @@ function acePullContent() {
     const sections = aceList_('game_sections', '*');
     const items = aceList_('game_section_items', '*');
     const rows = sections.map(section => aceArrayRow_(ACE.contentHeaders, {
-      'Block ID': section.id, Game: gameNames[aceId_(section.game_id)] || aceId_(section.game_id), 'Parent Block ID': '', 'Block Type': section.section_type,
+      'Block ID': section.id, Game: gameNames[aceId_(section.game_id)] || aceId_(section.game_id), 'Parent Block ID': '', 'Block Type': section.section_type, 'Display Area': section.detail_slot || 'additional',
       'Item Kind': 'section', Order: section.sort_order, Enabled: section.enabled, Image: aceAssetRef_(section.media_file), Changed: false, Publish: false, Status: ACE.statuses.draft, Revision: section.updated_at || '',
     })).concat(items.map(item => aceArrayRow_(ACE.contentHeaders, {
-      'Block ID': item.id, Game: '', 'Parent Block ID': aceId_(item.section_id), 'Block Type': '', 'Item Kind': 'item', Order: item.sort_order, Enabled: item.enabled,
+      'Block ID': item.id, Game: '', 'Parent Block ID': aceId_(item.section_id), 'Block Type': '', 'Display Area': '', 'Item Kind': 'item', Order: item.sort_order, Enabled: item.enabled,
       Image: aceAssetRef_(item.image_file || item.icon_file), Changed: false, Publish: false, Status: ACE.statuses.draft, Revision: item.updated_at || '',
     })));
     const sheet = aceReplacePreservingDirty_(ACE.sheets.content, ACE.contentHeaders, rows, 'Block ID', 'Revision');
@@ -243,8 +243,10 @@ function aceSaveContent_() {
         collection = 'game_sections';
         const gameId = aceResolveGame_(object.Game, gameMap);
         const type = String(object['Block Type'] || '').trim();
+        const detailSlot = String(object['Display Area'] || 'additional').trim();
         if (!['rich_text', 'feature_grid', 'bullet_list', 'media_text'].includes(type)) throw new Error('Block Type must be rich_text, feature_grid, bullet_list, or media_text.');
-        payload = { game_id: gameId, section_type: type, sort_order: Number(object.Order || 100), enabled: aceBool_(object.Enabled), media_file: asset || null, style_preset: 'default' };
+        if (!['sidebar_features', 'gameplay', 'main_feature', 'bonus', 'multiplier', 'additional'].includes(detailSlot)) throw new Error('Display Area must be sidebar_features, gameplay, main_feature, bonus, multiplier, or additional.');
+        payload = { game_id: gameId, section_type: type, detail_slot: detailSlot, sort_order: Number(object.Order || 100), enabled: aceBool_(object.Enabled), media_file: asset || null, style_preset: 'default' };
       } else if (kind === 'item') {
         collection = 'game_section_items';
         const parent = String(object['Parent Block ID'] || '').trim();
@@ -521,6 +523,7 @@ function aceApplyGameValidation_(sheet) {
 function aceApplyContentValidation_(sheet) {
   const headers = aceHeaders_(sheet);
   aceSetListValidation_(sheet, headers, 'Block Type', ['', 'rich_text', 'feature_grid', 'bullet_list', 'media_text']);
+  aceSetListValidation_(sheet, headers, 'Display Area', ['', 'sidebar_features', 'gameplay', 'main_feature', 'bonus', 'multiplier', 'additional']);
   aceSetListValidation_(sheet, headers, 'Item Kind', ['section', 'item']);
 }
 

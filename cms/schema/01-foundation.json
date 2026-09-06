@@ -57,7 +57,10 @@
   ],
   "seeds": {
     "locales": [
-      { "code": "en", "name": "English", "native_name": "English", "is_default": true, "is_active": true, "sort_order": 1, "fallback_locale": null, "direction": "ltr", "hreflang": "en" }
+      { "code": "en", "name": "English", "native_name": "English", "is_default": true, "is_active": true, "sort_order": 1, "fallback_locale": null, "direction": "ltr", "hreflang": "en" },
+      { "code": "it", "name": "Italian", "native_name": "Italiano", "is_default": false, "is_active": true, "sort_order": 2, "fallback_locale": "en", "direction": "ltr", "hreflang": "it" },
+      { "code": "de", "name": "German", "native_name": "Deutsch", "is_default": false, "is_active": true, "sort_order": 3, "fallback_locale": "en", "direction": "ltr", "hreflang": "de" },
+      { "code": "es", "name": "Spanish", "native_name": "Español", "is_default": false, "is_active": true, "sort_order": 4, "fallback_locale": "en", "direction": "ltr", "hreflang": "es" }
     ]
   },
   "folders": ["Games", "Site", "Brand", "Legacy"]

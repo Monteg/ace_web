@@ -1,6 +1,6 @@
 ---
 /** Catalogue tile based on the shared Ace Games Figma component. */
-import { Image } from 'astro:assets';
+import ContentImage from '../ContentImage.astro';
 import playIcon from '../../assets/ui/game-card-play.svg';
 import { company } from '../../data/site';
 import type { GameRecord } from '../../lib/content-source';
@@ -18,8 +18,8 @@ interface Props {
 }
 
 const { game, eager = false, featured = false, locale = 'en' } = Astro.props;
-const locales = getActiveLocales();
-const t = getTranslations(locale);
+const locales = await getActiveLocales();
+const t = await getTranslations(locale);
 const d = game.data;
 const soon = d.status === 'coming_soon';
 const href = localePath(`/portfolio/${game.id}`, locale, locales);
@@ -38,8 +38,8 @@ const translatedVolatility = d.specs.volatility.map((value) => t(`game.volatilit
     </a>
 
     <div class="gt-art">
-      <Image
-        class:list={['gt-background', { 'gt-background-single': !layeredArt }]}
+      <ContentImage
+        class={['gt-background', !layeredArt && 'gt-background-single'].filter(Boolean).join(' ')}
         src={layeredArt?.background ?? d.card}
         alt=""
         widths={featured ? [640, 900, 1200] : [320, 460, 640]}
@@ -51,7 +51,7 @@ const translatedVolatility = d.specs.volatility.map((value) => t(`game.volatilit
       />
       <span class="gt-shade" aria-hidden="true"></span>
       {layeredArt && (
-        <Image
+        <ContentImage
           class="gt-logo"
           src={layeredArt.logo}
           alt=""

@@ -58,7 +58,7 @@ Key examples:
 
 ### Game Content
 
-Одна строка — section или section item. Для section задайте Game, Block Type, Order, Enabled и optional Image. Для item задайте Parent Block ID, `Item Kind = item`, Order, Enabled и optional Image. Тексты редактируются в Translations, не в structural row.
+Одна строка — section или section item. Для section задайте Game, Block Type, **Display Area**, Order, Enabled и optional Image. Допустимые Display Area: `sidebar_features`, `gameplay`, `main_feature`, `bonus`, `multiplier`, `additional`; пустое значение сохраняется как `additional`. Зона задаётся явно и не определяется по тексту заголовка. Для item задайте Parent Block ID, `Item Kind = item`, Order, Enabled и optional Image. Тексты редактируются в Translations, не в structural row.
 
 ### Media
 

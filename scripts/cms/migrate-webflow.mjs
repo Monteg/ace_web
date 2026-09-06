@@ -24,15 +24,17 @@ const argument = (name, fallback = null) => {
   return index >= 0 ? args[index + 1] : fallback;
 };
 const csvPath = argument('--csv');
-if (!csvPath) {
-  console.error('Usage: npm run cms:migrate -- --csv <webflow.csv> [--out cms/migration-output]');
+const localOnly = args.includes('--local-only');
+if (!csvPath && !localOnly) {
+  console.error('Usage: npm run cms:migrate -- --csv <webflow.csv> [--out cms/migration-output]\n   or: npm run cms:migrate -- --local-only [--out cms/migration-output]');
   process.exit(1);
 }
 
 const root = process.cwd();
 const outputDirectory = path.resolve(root, argument('--out', 'cms/migration-output'));
-const rows = parse(fs.readFileSync(path.resolve(root, csvPath)), { columns: true, skip_empty_lines: true, bom: true, relax_column_count: true, trim: true });
+const rows = localOnly ? [] : parse(fs.readFileSync(path.resolve(root, csvPath)), { columns: true, skip_empty_lines: true, bom: true, relax_column_count: true, trim: true });
 const markdownDirectory = path.join(root, 'src', 'content', 'games');
+const normalizeAstroAsset = (source) => path.relative(root, path.resolve(markdownDirectory, source)).split(path.sep).join('/');
 const currentRecords = new Map(
   fs.readdirSync(markdownDirectory).filter((name) => name.endsWith('.md')).map((name) => {
     const slug = path.basename(name, '.md');
@@ -167,7 +169,7 @@ for (const slug of allSlugs) {
     : [1, 2].map((number) => ({ heading: valueFrom(legacy?.row ?? {}, `Description ${String(number).padStart(2, '0')} Title`, `Description ${number} Title`), body: valueFrom(legacy?.row ?? {}, `Description ${String(number).padStart(2, '0')}`, `Description ${number}`) })).filter((section) => section.body);
   for (const [index, section] of richSections.entries()) {
     const richId = deterministicUuid(`section:${slug}:rich:${index}`);
-    output.game_sections.push({ id: richId, game_id: id, section_type: 'rich_text', sort_order: (index + 1) * 10, enabled: true, media_file: null, style_preset: 'default' });
+    output.game_sections.push({ id: richId, game_id: id, section_type: 'rich_text', detail_slot: 'additional', sort_order: (index + 1) * 10, enabled: true, media_file: null, style_preset: 'default' });
     output.game_section_translations.push({ id: deterministicUuid(`section-translation:${slug}:rich:${index}:en`), section_id: richId, locale: 'en', heading: section.heading ?? null, body_markdown: section.body, translation_status: 'draft' });
   }
 
@@ -175,7 +177,7 @@ for (const slug of allSlugs) {
   for (const [index, feature] of features.entries()) {
     const featureSectionId = deterministicUuid(`section:${slug}:features`);
     if (!output.game_sections.some((section) => section.id === featureSectionId)) {
-      output.game_sections.push({ id: featureSectionId, game_id: id, section_type: 'feature_grid', sort_order: 20, enabled: true, media_file: null, style_preset: 'default' });
+      output.game_sections.push({ id: featureSectionId, game_id: id, section_type: 'feature_grid', detail_slot: 'sidebar_features', sort_order: 20, enabled: true, media_file: null, style_preset: 'default' });
       output.game_section_translations.push({ id: deterministicUuid(`section-translation:${slug}:features:en`), section_id: featureSectionId, locale: 'en', heading: 'Features', body_markdown: null, translation_status: 'draft' });
     }
     const itemId = deterministicUuid(`section-item:${slug}:feature:${index}`);
@@ -187,7 +189,7 @@ for (const slug of allSlugs) {
   for (const [index, bullet] of bullets.entries()) {
     const bulletSectionId = deterministicUuid(`section:${slug}:highlights`);
     if (!output.game_sections.some((section) => section.id === bulletSectionId)) {
-      output.game_sections.push({ id: bulletSectionId, game_id: id, section_type: 'bullet_list', sort_order: 30, enabled: true, media_file: null, style_preset: 'default' });
+      output.game_sections.push({ id: bulletSectionId, game_id: id, section_type: 'bullet_list', detail_slot: 'sidebar_features', sort_order: 30, enabled: true, media_file: null, style_preset: 'default' });
       output.game_section_translations.push({ id: deterministicUuid(`section-translation:${slug}:highlights:en`), section_id: bulletSectionId, locale: 'en', heading: 'Highlights', body_markdown: null, translation_status: 'draft' });
     }
     const itemId = deterministicUuid(`section-item:${slug}:highlight:${index}`);
@@ -198,13 +200,13 @@ for (const slug of allSlugs) {
   for (const role of ['card', 'hero']) {
     const currentSource = current?.[role] ?? null;
     const legacySource = legacy?.[`${role}_image`] ?? null;
-    if (currentSource) assets.push({ key: `${slug}:${role}`, game_slug: slug, role, source: currentSource, source_type: 'astro', preferred: true, cms_asset_id: null, status: 'pending' });
+    if (currentSource) assets.push({ key: `${slug}:${role}`, game_slug: slug, role, source: normalizeAstroAsset(currentSource), source_type: 'astro', preferred: true, cms_asset_id: null, status: 'pending' });
     else if (legacySource) assets.push({ key: `${slug}:${role}`, game_slug: slug, role, source: legacySource, source_type: 'legacy_url', preferred: true, cms_asset_id: null, status: 'pending' });
     else unresolved.push({ slug, field: `${role}_image`, value: null });
   }
 
-  if (current?.cardLayers?.background) assets.push({ key: `${slug}:card-background`, game_slug: slug, role: 'card_background', source: current.cardLayers.background, source_type: 'astro', preferred: true, cms_asset_id: null, status: 'pending' });
-  if (current?.cardLayers?.logo) assets.push({ key: `${slug}:card-logo`, game_slug: slug, role: 'card_logo', source: current.cardLayers.logo, source_type: 'astro', preferred: true, cms_asset_id: null, status: 'pending' });
+  if (current?.cardLayers?.background) assets.push({ key: `${slug}:card-background`, game_slug: slug, role: 'card_background', source: normalizeAstroAsset(current.cardLayers.background), source_type: 'astro', preferred: true, cms_asset_id: null, status: 'pending' });
+  if (current?.cardLayers?.logo) assets.push({ key: `${slug}:card-logo`, game_slug: slug, role: 'card_logo', source: normalizeAstroAsset(current.cardLayers.logo), source_type: 'astro', preferred: true, cms_asset_id: null, status: 'pending' });
 
   const gallerySources = current?.gallery?.map((item) => ({ source: item.image, alt: item.alt })) ?? [];
   for (let index = 1; index <= 20; index += 1) {
@@ -215,7 +217,8 @@ for (const slug of allSlugs) {
     const galleryId = deterministicUuid(`gallery:${slug}:${index}`);
     output.game_gallery.push({ id: galleryId, game_id: id, file: null, sort_order: (index + 1) * 10, enabled: true });
     output.game_gallery_translations.push({ id: deterministicUuid(`gallery-translation:${slug}:${index}:en`), gallery_id: galleryId, locale: 'en', alt: item.alt, caption: null, translation_status: 'draft' });
-    assets.push({ key: `${slug}:gallery:${index}`, game_slug: slug, role: 'gallery', source: item.source, source_type: /^https?:/i.test(item.source) ? 'legacy_url' : 'astro', preferred: true, cms_asset_id: null, status: 'pending', target_id: galleryId });
+    const remote = /^https?:/i.test(item.source);
+    assets.push({ key: `${slug}:gallery:${index}`, game_slug: slug, role: 'gallery', source: remote ? item.source : normalizeAstroAsset(item.source), source_type: remote ? 'legacy_url' : 'astro', preferred: true, cms_asset_id: null, status: 'pending', target_id: galleryId });
   }
 }
 

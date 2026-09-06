@@ -2,12 +2,13 @@
 import { getEntry } from 'astro:content';
 import LegalPage from '../../components/pages/LegalPage.astro';
 import { getActiveLocales, defaultLocale } from '../../i18n/config';
+export const prerender = true;
 
-export function getStaticPaths() {
-  return getActiveLocales().filter((item) => item.code !== defaultLocale).map((item) => ({ params: { locale: item.code }, props: { locale: item.code } }));
+export async function getStaticPaths() {
+  return (await getActiveLocales()).filter((item) => item.code !== defaultLocale).map((item) => ({ params: { locale: item.code }, props: { locale: item.code } }));
 }
 const doc = await getEntry('legal', 'privacy-policy');
 if (!doc) throw new Error('Privacy policy content is missing.');
-const { locale } = Astro.props;
+const locale = Astro.props.locale ?? Astro.params.locale;
 ---
 <LegalPage doc={doc} locale={locale} />

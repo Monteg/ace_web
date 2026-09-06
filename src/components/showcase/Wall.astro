@@ -9,7 +9,7 @@
  *   - JS: the rows drift (CSS keyframes) and, on scroll, the wall flattens and
  *     falls away while the headline holds (GSAP ScrollTrigger, loaded lazily)
  */
-import { Image } from 'astro:assets';
+import ContentImage from '../ContentImage.astro';
 import { Icon } from 'astro-icon/components';
 import type { GameRecord } from '../../lib/content-source';
 import { getActiveLocales } from '../../i18n/config';
@@ -22,8 +22,8 @@ interface Props {
 }
 
 const { games, locale = 'en' } = Astro.props;
-const locales = getActiveLocales();
-const t = getTranslations(locale);
+const locales = await getActiveLocales();
+const t = await getTranslations(locale);
 const live = games.filter((g) => g.data.status === 'live');
 const pool = live.length >= 12 ? live : games;
 
@@ -38,7 +38,7 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
         <div class={`wall-row wall-row-${r}`} data-row={r}>
           {[...row, ...row].map((g) => (
             <div class="wall-tile">
-              <Image
+              <ContentImage
                 src={g.data.card}
                 alt=""
                 widths={[240, 360]}

@@ -62,5 +62,20 @@ for (const definition of definitions) {
   }
 }
 
-console.log('Directus schema is up to date.');
+// Existing rows predate the additive detail-page placement field. Directus
+// applies the database default to new rows only, so normalize legacy nulls
+// without changing any other editorial content.
+if (currentCollections.has('game_sections')) {
+  const query = new URLSearchParams({
+    'filter[detail_slot][_null]': 'true',
+    fields: 'id',
+    limit: '-1',
+  });
+  const sectionsWithoutSlot = await client.get(`/items/game_sections?${query}`);
+  for (const section of sectionsWithoutSlot) {
+    await client.patch(`/items/game_sections/${encodeURIComponent(section.id)}`, { detail_slot: 'additional' });
+  }
+  if (sectionsWithoutSlot.length) console.log(`Backfilled detail_slot on ${sectionsWithoutSlot.length} game sections.`);
+}
 
+console.log('Directus schema is up to date.');

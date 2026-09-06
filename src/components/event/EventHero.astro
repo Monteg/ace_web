@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import ContentImage from '../ContentImage.astro';
 import { Icon } from 'astro-icon/components';
 import type { CollectionEntry } from 'astro:content';
 import type { EventData } from '../../data/events';
@@ -24,7 +24,7 @@ const art = ['ace-city', 'zeus-run', 'chicken-doom'].map(id => games.find(game =
     <div class="hero-art" aria-label="Ace Games titles coming to Lisbon">
       {art.map((game, index) => (
         <div class:list={['hero-art-tile', { 'hero-art-main': index === 0 }]}>
-          <Image src={game.data.card} alt={`${game.data.name} game artwork`} widths={[320, 460, 640]} sizes={index === 0 ? '(max-width: 768px) 55vw, 340px' : '(max-width: 768px) 35vw, 220px'} loading={index === 0 ? 'eager' : 'lazy'} fetchpriority={index === 0 ? 'high' : 'auto'} />
+          <ContentImage src={game.data.card} alt={`${game.data.name} game artwork`} widths={[320, 460, 640]} sizes={index === 0 ? '(max-width: 768px) 55vw, 340px' : '(max-width: 768px) 35vw, 220px'} loading={index === 0 ? 'eager' : 'lazy'} fetchpriority={index === 0 ? 'high' : 'auto'} />
         </div>
       ))}
     </div>

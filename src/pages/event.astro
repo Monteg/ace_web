@@ -12,6 +12,8 @@ import EventBooking from '../components/event/EventBooking.astro';
 import { currentEvent as event } from '../data/events';
 import { eventDateRange } from '../lib/event';
 
+export const prerender = true;
+
 const games = await getCollection('games');
 const primaryGame = games.find(game => game.id === 'ace-city')!;
 const shareImage = await getImage({ src: primaryGame.data.hero, width: 1200, format: 'jpg' });

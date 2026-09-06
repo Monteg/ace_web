@@ -25,6 +25,14 @@ test('CMS schema files form a consistent model', () => {
       assert.ok(names.includes(relation.related_collection) || relation.related_collection.startsWith('directus_'), `${collection.collection}.${relation.field} targets an unknown collection.`);
     }
   }
+
+  const gameSections = collections.find((collection) => collection.collection === 'game_sections');
+  const detailSlot = gameSections.fields.find((field) => field.field === 'detail_slot');
+  assert.equal(detailSlot.schema.default_value, 'additional');
+  assert.deepEqual(
+    detailSlot.meta.options.choices.map((choice) => choice.value),
+    ['sidebar_features', 'gameplay', 'main_feature', 'bonus', 'multiplier', 'additional'],
+  );
 });
 
 test('Directus extension entry points are committed', () => {
@@ -44,7 +52,7 @@ test('editorial table presets cover games, translations and releases', () => {
   const gamePreset = presets.find((preset) => preset.role === 'Content Manager' && preset.collection === 'games');
   assert.ok(gamePreset, 'Content Manager games preset is missing.');
   assert.equal(gamePreset.layout, 'tabular');
-  for (const field of ['sort_order', 'internal_name', 'release_status', 'game_type', 'rtp', 'demo_enabled', 'card_image', 'hero_image', 'translations']) {
+  for (const field of ['sort_order', 'internal_name', 'release_status', 'game_type', 'rtp', 'volatility', 'demo_enabled', 'card_image', 'hero_image', 'translations', 'updated_at']) {
     assert.ok(gamePreset.layout_query.tabular.fields.includes(field), `Games preset is missing ${field}.`);
   }
   assert.ok(presets.some((preset) => preset.role === 'Translator' && preset.collection === 'game_translations'));

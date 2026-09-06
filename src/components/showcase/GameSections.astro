@@ -1,28 +1,28 @@
 ---
-import { Image } from 'astro:assets';
+import ContentImage from '../ContentImage.astro';
 import type { GameSection } from '../../lib/content-source';
 import { renderMarkdown } from '../../lib/markdown';
 
-interface Props { sections: GameSection[] }
-const { sections } = Astro.props;
+interface Props { sections: GameSection[]; variant?: 'default' | 'tab'; }
+const { sections, variant = 'default' } = Astro.props;
 const prepared = sections.map((section) => ({ ...section, html: renderMarkdown(section.bodyMarkdown) }));
 ---
 
 {prepared.map((section) => (
-  <section class:list={['cms-section', `cms-section--${section.type}`, `cms-section--${section.stylePreset}`, 'rv']}>
+  <section class:list={['cms-section', `cms-section--${section.type}`, `cms-section--${section.stylePreset}`, `cms-section--${variant}`, 'rv']}>
     {(section.heading || section.html) && (
       <div class="cms-section-copy">
         {section.heading && <h2 class="d2">{section.heading}</h2>}
         {section.html && <div class="cms-markdown" set:html={section.html} />}
       </div>
     )}
-    {section.media && <Image class="cms-section-media" src={section.media} alt="" widths={[480, 760, 1100]} sizes="(max-width: 760px) 100vw, 50vw" loading="lazy" />}
+    {section.media && <ContentImage class="cms-section-media" src={section.media} alt="" widths={[480, 760, 1100]} sizes="(max-width: 760px) 100vw, 50vw" loading="lazy" />}
     {section.type === 'feature_grid' && section.items.length > 0 && (
       <div class="cms-feature-grid">
         {section.items.map((item) => (
           <article>
-            {item.icon && <Image src={item.icon} alt="" width={48} height={48} loading="lazy" />}
-            {item.image && <Image src={item.image} alt="" widths={[320, 480]} sizes="(max-width: 760px) 100vw, 33vw" loading="lazy" />}
+            {item.icon && <ContentImage src={item.icon} alt="" width={48} height={48} loading="lazy" />}
+            {item.image && <ContentImage src={item.image} alt="" widths={[320, 480]} sizes="(max-width: 760px) 100vw, 33vw" loading="lazy" />}
             {item.title && <h3 class="d4">{item.title}</h3>}
             {item.text && <p>{item.text}</p>}
           </article>
@@ -54,6 +54,10 @@ const prepared = sections.map((section) => ({ ...section, html: renderMarkdown(s
   .cms-bullets { display: grid; gap: var(--sp-3); padding-left: var(--sp-5); }
   .cms-bullets li::marker { color: var(--brand); }
   .cms-bullets strong { display: block; color: var(--fg); }
+  .cms-section--tab { margin-top: 0; }
+  .cms-section--tab + .cms-section--tab { margin-top: var(--sp-5); padding-top: var(--sp-5); border-top: 1px solid var(--line); }
+  .cms-section--tab .cms-section-copy { max-width: 78ch; }
+  .cms-section--tab .cms-section-copy > .d2 { font-size: var(--step-2); }
   @media (max-width: 760px) {
     .cms-section--media_text { grid-template-columns: 1fr; }
     .cms-section--media_left .cms-section-copy,

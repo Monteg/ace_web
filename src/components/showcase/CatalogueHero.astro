@@ -8,7 +8,7 @@ interface Props {
 
 import { getTranslations } from '../../i18n/get-translations';
 const { games, locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
+const t = await getTranslations(locale);
 const poster = games[0]?.data.hero.src;
 const videoUrl =
   'https://ace-games.s3.eu-north-1.amazonaws.com/ace_games_hero_banner.mp4';

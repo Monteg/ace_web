@@ -1,0 +1,49 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { GameImage } from '../lib/content-source';
+
+interface Props {
+  src: GameImage;
+  alt: string;
+  class?: string;
+  widths?: number[];
+  sizes?: string;
+  width?: number;
+  height?: number;
+  loading?: 'eager' | 'lazy';
+  decoding?: 'async' | 'sync' | 'auto';
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const { src, alt, class: className, widths, sizes, width, height, loading = 'lazy', decoding = 'async', fetchpriority } = Astro.props;
+const live = 'cmsLive' in src && src.cmsLive;
+const optimizedSrc = live ? null : src as ImageMetadata;
+---
+
+{live ? (
+  <img
+    class={className}
+    src={src.src}
+    alt={alt}
+    width={width ?? src.width}
+    height={height ?? src.height}
+    sizes={sizes}
+    loading={loading}
+    decoding={decoding}
+    fetchpriority={fetchpriority}
+  />
+) : (
+  <Image
+    class={className}
+    src={optimizedSrc!}
+    alt={alt}
+    widths={widths}
+    sizes={sizes}
+    width={width}
+    height={height}
+    loading={loading}
+    decoding={decoding}
+    fetchpriority={fetchpriority}
+  />
+)}

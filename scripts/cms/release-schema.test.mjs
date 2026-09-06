@@ -30,3 +30,18 @@ test('requires English values for required site string slots', () => {
   invalid.site = { en: {} };
   assert.throws(() => validateReleasePayload(invalid), /Required English site string/);
 });
+
+test('defaults legacy release sections to additional detail content', () => {
+  const section = {
+    id: id(5),
+    section_type: 'rich_text',
+    sort_order: 10,
+    enabled: true,
+    media_file: null,
+    style_preset: 'default',
+    translations: [{ locale: 'en', translation_status: 'approved', heading: 'Details', body_markdown: 'Body.' }],
+    items: [],
+  };
+  const result = validateReleasePayload({ ...payload, games: [{ ...game, sections: [section] }] });
+  assert.equal(result.payload.games[0].sections[0].detail_slot, 'additional');
+});

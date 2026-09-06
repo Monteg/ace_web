@@ -7,11 +7,12 @@ export class DirectusClient {
   }
 
   async request(pathname, options = {}) {
+    const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
     const response = await fetch(`${this.url}${pathname}`, {
       ...options,
       headers: {
         Accept: 'application/json',
-        ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+        ...(options.body && !isFormData ? { 'Content-Type': 'application/json' } : {}),
         ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
         ...options.headers,
       },
@@ -52,4 +53,3 @@ export async function createTokenClient(tokenName = 'CMS_BUILD_TOKEN') {
   loadCmsEnv();
   return new DirectusClient({ url: requiredEnv('CMS_URL'), token: requiredEnv(tokenName) });
 }
-

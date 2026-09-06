@@ -3,6 +3,8 @@ import path from 'node:path';
 import { englishMessages, type TranslationKey, type TranslationMessages } from './en';
 import { defaultLocale, getActiveLocales } from './config';
 import { resolveTranslation } from '../../scripts/cms/lib/i18n.mjs';
+import { getLiveCmsSnapshot, liveSiteMessages } from '../lib/cms-live';
+import { cmsContentMode, contentSource } from '../lib/cms-mode';
 
 export type Translate = (key: TranslationKey | string, variables?: Record<string, string | number>) => string;
 const warned = new Set<string>();
@@ -13,12 +15,16 @@ function cmsMessages(locale: string): TranslationMessages {
   return JSON.parse(fs.readFileSync(target, 'utf8')) as TranslationMessages;
 }
 
-export function getTranslations(locale = defaultLocale): Translate {
-  const active = getActiveLocales();
+export async function getTranslations(locale = defaultLocale): Promise<Translate> {
+  const active = await getActiveLocales();
   if (!active.some((item) => item.code === locale)) throw new Error(`Inactive or unknown locale: ${locale}`);
-  const fromCms = (import.meta.env.CONTENT_SOURCE ?? 'local') === 'cms';
-  const requested = fromCms ? cmsMessages(locale) : {};
-  const master = fromCms ? { ...englishMessages, ...cmsMessages(defaultLocale) } : englishMessages;
+  const fromCms = contentSource() === 'cms';
+  const live = fromCms && cmsContentMode() === 'live';
+  const snapshot = live ? await getLiveCmsSnapshot() : null;
+  const requested = !fromCms ? {} : live ? liveSiteMessages(snapshot!, locale) : cmsMessages(locale);
+  const master = !fromCms
+    ? englishMessages
+    : { ...englishMessages, ...(live ? liveSiteMessages(snapshot!, defaultLocale) : cmsMessages(defaultLocale)) };
 
   return (key, variables = {}) => {
     return resolveTranslation({

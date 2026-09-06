@@ -1234,6 +1234,14 @@ URL строится через cdn.rstars.cc.
 
 Эта часть рендерится через Astro Content render.
 
+### 18.7. Game detail renderer
+
+Базовый и локализованный маршруты используют один renderer и один `GameDetailViewModel`. Источник выбирается через `CONTENT_SOURCE`: local Markdown fallback, Directus Main в live mode или immutable release snapshot в release mode.
+
+Порядок страницы фиксирован: compact hero, шесть характеристик, demo/media с Features sidebar, Overview, контентные tabs, дополнительные sections, карусель игр того же типа и feedback CTA, открывающий существующую contact modal.
+
+CMS-поле `game_sections.detail_slot` явно маршрутизирует блок: `sidebar_features` в правую колонку; `gameplay`, `main_feature`, `bonus`, `multiplier` в tabs; `additional` ниже tabs. Заголовок не используется как layout-сигнал. Legacy/local content нормализуется тем же view-model builder. Related rail включает все остальные игры того же типа, а не произвольный короткий список.
+
 ## 19. Текущий каталог игр
 
 Все записи имеют effective order 100, потому что явный order не задан. Сортировка внутри status выполняется по name.

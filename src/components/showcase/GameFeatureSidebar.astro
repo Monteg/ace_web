@@ -1,0 +1,96 @@
+---
+import ContentImage from '../ContentImage.astro';
+import type { GameDetailViewModel } from '../../lib/content-source';
+import { getTranslations } from '../../i18n/get-translations';
+import { renderMarkdown } from '../../lib/markdown';
+
+interface Props {
+  groups: GameDetailViewModel['featureGroups'];
+  locale?: string;
+}
+
+const { groups, locale = 'en' } = Astro.props;
+const t = await getTranslations(locale);
+const prepared = groups.map((group) => ({ ...group, bodyHtml: renderMarkdown(group.bodyMarkdown) }));
+---
+
+<aside class="feature-sidebar" aria-labelledby="feature-sidebar-title">
+  <h2 class="d3" id="feature-sidebar-title">{t('game.features')}</h2>
+  {prepared.map((group) => (
+    <div class="feature-group">
+      {group.heading && group.heading.toLowerCase() !== t('game.features').toLowerCase() && <h3 class="feature-group__title">{group.heading}</h3>}
+      {group.bodyHtml && <div class="feature-group__body" set:html={group.bodyHtml} />}
+      {group.items.length > 0 && (
+        <ol class="feature-list">
+          {group.items.map((item) => (
+            <li>
+              {(item.icon || item.image) && (
+                <ContentImage
+                  class="feature-list__media"
+                  src={item.icon ?? item.image!}
+                  alt=""
+                  width={44}
+                  height={44}
+                  loading="lazy"
+                />
+              )}
+              <div>
+                {item.title && <h3 class="d4">{item.title}</h3>}
+                {item.text && <p>{item.text}</p>}
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
+    </div>
+  ))}
+</aside>
+
+<style>
+  .feature-sidebar {
+    display: grid;
+    gap: var(--sp-4);
+    padding: var(--sp-5);
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-1);
+  }
+  .feature-sidebar > .d3 { padding-bottom: var(--sp-4); border-bottom: 1px solid var(--line); }
+  .feature-group { display: grid; gap: var(--sp-3); }
+  .feature-group + .feature-group { padding-top: var(--sp-4); border-top: 1px solid var(--line); }
+  .feature-group__title {
+    margin: 0;
+    color: var(--fg-2);
+    font-family: 'JetBrains Mono Variable', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .feature-group__body { color: var(--fg-2); font-size: 13px; }
+  .feature-group__body :global(p + p) { margin-top: var(--sp-2); }
+  .feature-list { list-style: none; display: grid; }
+  .feature-list li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--sp-3);
+    padding-block: var(--sp-4);
+    border-top: 1px solid var(--line);
+  }
+  .feature-list li:first-child { border-top: 0; padding-top: 0; }
+  .feature-list li:last-child { padding-bottom: 0; }
+  .feature-list li > div { display: grid; gap: 7px; }
+  .feature-list p { color: var(--fg-2); font-size: 13.5px; line-height: 1.5; }
+  .feature-list__media { width: 44px; height: 44px; object-fit: contain; border-radius: var(--radius-s); }
+
+  @media (max-width: 992px) {
+    .feature-sidebar { padding: var(--sp-5); }
+    .feature-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--sp-5); }
+    .feature-list li:nth-child(2) { border-top: 0; padding-top: 0; }
+  }
+  @media (max-width: 600px) {
+    .feature-sidebar { padding: var(--sp-4); }
+    .feature-list { grid-template-columns: minmax(0, 1fr); }
+    .feature-list li:nth-child(2) { border-top: 1px solid var(--line); padding-top: var(--sp-4); }
+  }
+</style>

@@ -5,7 +5,7 @@ import { getTranslations } from '../i18n/get-translations';
 
 interface Props { locale?: string; }
 const { locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
+const t = await getTranslations(locale);
 ---
 
 <dialog class="contact-dialog" id="contact-dialog" aria-labelledby="contact-dialog-title">

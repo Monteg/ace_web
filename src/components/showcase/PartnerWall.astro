@@ -12,7 +12,7 @@ interface Props {
 
 import { getTranslations } from '../../i18n/get-translations';
 const { logos, locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
+const t = await getTranslations(locale);
 const show = logos.length > 0;
 // Speed stays constant however many logos there are: about 5s per logo,
 // with a floor so a short list does not whip past.

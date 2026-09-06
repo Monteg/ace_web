@@ -6,9 +6,11 @@ import Base from '../layouts/Base.astro';
 import logo from '../assets/brand/logo.webp';
 import { getTranslations } from '../i18n/get-translations';
 
+export const prerender = true;
+
 interface Props { locale?: string; }
 const { locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
+const t = await getTranslations(locale);
 
 const youtubeVideoId = 'oHg5SJYRHA0';
 const exactVideoUrl = 'https://youtu.be/oHg5SJYRHA0?list=RDoHg5SJYRHA0';

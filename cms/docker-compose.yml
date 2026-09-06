@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-ace_cms}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in cms/.env}
     volumes:
-      - ./data/database:/var/lib/postgresql/data
+      - ace_cms_db:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ace_cms} -d ${POSTGRES_DB:-ace_cms}"]
       interval: 10s
@@ -27,7 +27,7 @@ services:
     ports:
       - "8055:8055"
     volumes:
-      - ./data/uploads:/directus/uploads
+      - ace_cms_uploads:/directus/uploads
       - ./extensions:/directus/extensions
     environment:
       KEY: ${DIRECTUS_KEY:?Set DIRECTUS_KEY in cms/.env}
@@ -58,3 +58,9 @@ services:
       DEPLOY_WEBHOOK_URL: ${DEPLOY_WEBHOOK_URL:-}
       DEPLOY_WEBHOOK_SECRET: ${DEPLOY_WEBHOOK_SECRET:-}
       ACE_TRUSTED_PUBLISHERS: ${ACE_TRUSTED_PUBLISHERS:-}
+
+volumes:
+  ace_cms_db:
+    name: ace_cms_db
+  ace_cms_uploads:
+    name: ace_cms_uploads

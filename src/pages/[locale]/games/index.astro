@@ -1,13 +1,16 @@
 ---
 import GamesPage from '../../games/index.astro';
 import { getActiveLocales, defaultLocale } from '../../../i18n/config';
+import { isCmsLiveMode } from '../../../lib/cms-mode';
 
-export function getStaticPaths() {
-  return getActiveLocales()
+export const prerender = !isCmsLiveMode();
+
+export async function getStaticPaths() {
+  return (await getActiveLocales())
     .filter((locale) => locale.code !== defaultLocale)
     .map((locale) => ({ params: { locale: locale.code }, props: { locale: locale.code } }));
 }
 
-const { locale } = Astro.props;
+const locale = Astro.props.locale ?? Astro.params.locale;
 ---
 <GamesPage locale={locale} />

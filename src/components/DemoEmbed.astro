@@ -1,18 +1,18 @@
 ---
-import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
-import type { ImageMetadata } from 'astro';
+import ContentImage from './ContentImage.astro';
 import { getTranslations } from '../i18n/get-translations';
+import type { GameImage } from '../lib/content-source';
 
 interface Props {
   name: string;
   src: string;
-  poster: ImageMetadata;
+  poster: GameImage;
   locale?: string;
 }
 
 const { name, src, poster, locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
+const t = await getTranslations(locale);
 ---
 
 <!--
@@ -22,7 +22,7 @@ const t = getTranslations(locale);
 -->
 <div class="demo" data-src={src}>
   <div class="demo-poster">
-    <Image src={poster} alt="" widths={[900, 1400, 1920]} sizes="100vw" loading="lazy" />
+    <ContentImage src={poster} alt="" widths={[900, 1400, 1920]} sizes="100vw" loading="lazy" />
   </div>
 
   <button class="demo-play" type="button" data-play>

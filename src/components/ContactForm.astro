@@ -10,8 +10,8 @@ interface Props {
   locale?: string;
 }
 const { idPrefix = 'f', variant = 'panel', locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
-const locales = getActiveLocales();
+const t = await getTranslations(locale);
+const locales = await getActiveLocales();
 ---
 
 <form class:list={['form', 'contact-form', { 'contact-form--modal': variant === 'modal' }]} method="post" action="/api/contact">

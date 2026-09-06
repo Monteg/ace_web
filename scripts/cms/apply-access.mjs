@@ -38,7 +38,10 @@ for (const definition of config.roles) {
   }
 
   const requested = definition.read_all_content
-    ? Object.fromEntries([...collections].filter((name) => !name.startsWith('directus_')).map((name) => [name, ['read']]))
+    ? {
+        ...Object.fromEntries([...collections].filter((name) => !name.startsWith('directus_')).map((name) => [name, ['read']])),
+        ...(definition.collections ?? {}),
+      }
     : definition.collections ?? {};
 
   for (const [collection, actions] of Object.entries(requested)) {
@@ -69,5 +72,32 @@ for (const definition of config.roles) {
   }
 }
 
-console.log('Directus roles and policies are up to date.');
+// Live pages render content server-side, while image bytes are delivered by
+// Directus' asset endpoint. Only the dedicated Games folder is public; CMS
+// exports, private uploads and all content collections stay authenticated.
+const publicPolicy = await findOne('policies', 'Public');
+const publicFolder = (await client.get(`/folders?${new URLSearchParams({ 'filter[name][_eq]': 'Games', 'filter[parent][_null]': 'true', limit: '1' })}`))[0];
+if (publicPolicy && publicFolder) {
+  const query = new URLSearchParams({
+    'filter[policy][_eq]': publicPolicy.id,
+    'filter[collection][_eq]': 'directus_files',
+    'filter[action][_eq]': 'read',
+    limit: '1',
+  });
+  const existing = (await client.get(`/permissions?${query}`))[0];
+  const payload = {
+    policy: publicPolicy.id,
+    collection: 'directus_files',
+    action: 'read',
+    permissions: { folder: { _eq: publicFolder.id } },
+    validation: {},
+    presets: null,
+    fields: ['id', 'storage', 'filename_disk', 'filename_download', 'title', 'type', 'width', 'height', 'filesize', 'folder', 'modified_on'],
+  };
+  if (existing) await client.patch(`/permissions/${existing.id}`, payload);
+  else await client.post('/permissions', payload);
+} else {
+  console.warn('Public Games media permission was not applied because the built-in Public policy or Games folder was not found.');
+}
 
+console.log('Directus roles and policies are up to date.');

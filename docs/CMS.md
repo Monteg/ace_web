@@ -2,14 +2,24 @@
 
 ## Что это за система
 
-Ace Games CMS — закрытая редакторская система на Directus. Она управляет играми, изображениями, текстами сайта, FAQ и переводами. Публичный сайт не обращается к CMS из браузера: после публикации Astro собирает обычные статические HTML-страницы.
+Ace Games CMS — закрытая редакторская система на Directus. Она управляет играми, изображениями, текстами сайта, FAQ и переводами. Браузер посетителя не обращается к CMS за контентом: Astro либо собирает статические HTML-страницы, либо получает Directus content на сервере и отдаёт готовый HTML.
 
-Это даёт два независимых состояния:
+Production release workflow сохраняет два независимых состояния:
 
 - **Working content** — сохранённые в CMS черновики;
 - **Active release** — последняя версия, которая успешно прошла сборку и сейчас показана посетителям.
 
-Кнопка **Save** меняет только working content. Кнопка **Publish** создаёт новый release и запускает сборку. Не путайте эти действия.
+Для первого CMS UX-теста используется live mode. В нём редактор создаёт стандартную Directus Content Version, нажимает **Save**, а затем **Promote Version** — это Publish в Main. Сайт читает только Main и видит изменение обычно не позднее чем через пять секунд. Сложный release snapshot остаётся отдельным production mode.
+
+## Live и release mode
+
+| Режим | Переменные | Что читает сайт | Нужен rebuild |
+| --- | --- | --- | --- |
+| Local fallback | `CONTENT_SOURCE=local` | существующие Astro Markdown records | Да |
+| CMS Preview / staging | `CONTENT_SOURCE=cms`, `CMS_CONTENT_MODE=live` | текущий Directus Main через Astro server | Нет для контента |
+| Static release | `CONTENT_SOURCE=cms`, `CMS_CONTENT_MODE=release` | immutable active release | Да |
+
+`CMS_LIVE_MODE=true` поддерживается как совместимый alias live mode. Cache по умолчанию пять секунд и при кратком отказе Directus отдаёт последнюю успешную server-side копию. Client-side замены текста нет.
 
 ## Вход и роли
 
@@ -25,6 +35,7 @@ Production-адрес задаётся переменной `CMS_URL`; план�
 | Viewer | Только чтение |
 | Sheet Integration | Ограниченная техническая учётная запись Google Sheets |
 | Build Reader | Только чтение конкретных release snapshots во время сборки |
+| Live Reader | Server-only чтение текущего Main для Astro live staging |
 
 Никогда не передавайте admin token в Google Sheet, frontend или build logs.
 
@@ -124,11 +135,20 @@ Production storage задаётся через `STORAGE_*` и может быт�
 - `bullet_list` — repeatable bullets из Section Items;
 - `media_text` — media и локализованный текст.
 
+Поле **Display Area** задаёт место блока на game detail page: Features sidebar, один из четырёх Overview tabs или Additional content. Это структурное shared-поле; оно не переводится и не выводится из текста заголовка. Для обычного блока используйте `additional`.
+
 Можно добавлять, выключать и переставлять любое число блоков. Новый произвольный layout всё ещё требует frontend component; CMS не является arbitrary page builder.
 
 ## Save и Publish
 
-### Save
+### Save в live CMS sandbox
+
+- сохранение внутри named Content Version остаётся черновиком;
+- Main и сайт не меняются;
+- **Promote Version** публикует выбранные изменения в Main;
+- server-side cache обновляется максимум через несколько секунд.
+
+### Save в production release workflow
 
 - сохраняет working data;
 - создаёт revision history Directus;
@@ -194,12 +214,15 @@ Approved. Для Site Strings возвращается locale summary.
 
 Rollback не удаляет и не перезаписывает working drafts.
 
-## Локальный запуск для разработчика
+## Локальный запуск
 
-1. Установить Docker Desktop.
-2. Скопировать `.env.example` в `cms/.env` и заменить все небезопасные значения.
-3. Выполнить `docker compose up -d` из `cms/`.
-4. Выполнить `npm run cms:bootstrap` из корня проекта.
-5. Открыть `http://localhost:8055`.
+1. Установить и запустить Docker Desktop.
+2. Выполнить `npm run cms:setup` из корня проекта.
+3. Открыть `http://localhost:8055` и `http://localhost:4321`.
+4. Посмотреть локальный пароль через `npm run cms:credentials`.
 
-На машине, где была подготовлена эта версия, Docker отсутствовал. Поэтому schema, scripts и тесты проверены статически, но реальный Directus stack и production webhook требуют интеграционного прогона после выдачи инфраструктуры и credentials.
+Полный сценарий без ручной настройки PostgreSQL описан в `docs/CMS-QUICKSTART-RU.md`.
+
+## Hosting для live content
+
+Текущий production build ориентирован на статический Cloudflare Pages и не переключён. Для live staging Astro конфиг автоматически включает standalone Node adapter, когда `CONTENT_SOURCE=cms` и `CMS_CONTENT_MODE=live`. На runtime-capable Node host задаются `CMS_URL`, scoped server-only `CMS_LIVE_TOKEN` роли **Live Reader** и cache TTL. Это позволяет проверить staging provider URL до любого изменения `acegames.io` или production DNS.

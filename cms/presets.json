@@ -5,7 +5,7 @@
     "layout": "tabular",
     "layout_query": {
       "tabular": {
-        "fields": ["sort_order", "internal_name", "release_status", "game_type", "rtp", "demo_enabled", "card_image", "hero_image", "translations"],
+        "fields": ["sort_order", "internal_name", "release_status", "game_type", "rtp", "volatility", "demo_enabled", "card_image", "hero_image", "translations", "updated_at"],
         "sort": ["sort_order", "internal_name"]
       }
     }
@@ -16,8 +16,30 @@
     "layout": "tabular",
     "layout_query": {
       "tabular": {
-        "fields": ["sort_order", "internal_name", "release_status", "game_type", "rtp", "demo_enabled", "card_image", "hero_image", "translations"],
+        "fields": ["sort_order", "internal_name", "release_status", "game_type", "rtp", "volatility", "demo_enabled", "card_image", "hero_image", "translations", "updated_at"],
         "sort": ["sort_order", "internal_name"]
+      }
+    }
+  },
+  {
+    "role": "Content Manager",
+    "collection": "site_strings",
+    "layout": "tabular",
+    "layout_query": {
+      "tabular": {
+        "fields": ["page", "section", "key", "context", "translations", "updated_at"],
+        "sort": ["page", "section", "sort_order"]
+      }
+    }
+  },
+  {
+    "role": "Translator",
+    "collection": "site_string_translations",
+    "layout": "tabular",
+    "layout_query": {
+      "tabular": {
+        "fields": ["site_string_id", "locale", "translation_status", "value", "updated_at"],
+        "sort": ["locale", "site_string_id"]
       }
     }
   },
