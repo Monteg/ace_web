@@ -11,7 +11,10 @@
     "check": "astro check",
     "verify": "node scripts/verify.mjs",
     "ship": "astro build && node scripts/verify.mjs",
-    "new-game": "node scripts/new-game.mjs"
+    "new-game": "node scripts/new-game.mjs",
+    "cms:bootstrap": "node scripts/cms/bootstrap.mjs",
+    "cms:schema": "node scripts/cms/apply-schema.mjs",
+    "cms:access": "node scripts/cms/apply-access.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
