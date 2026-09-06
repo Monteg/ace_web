@@ -53,6 +53,9 @@ seo:
   description: "TODO one honest sentence about the mechanic, between 60 and 165 characters, no marketing adjectives"
 card: ../../assets/games/${slug}.webp
 hero: ../../assets/heroes/${slug}.webp
+# gallery:
+#   - image: ../../assets/heroes/${slug}.webp
+#     alt: "TODO meaningful screenshot description"
 specs:
   rtp: 0.96              # a number like 0.96, or the word configurable
   # maxWin: { value: 5000, unit: x }          # or { value: 120000, unit: coins, approx: true }; delete if unknown

@@ -6,6 +6,7 @@ import '../styles/base.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import AgeGate from '../components/AgeGate.astro';
+import ContactModal from '../components/ContactModal.astro';
 import { company } from '../data/site';
 import { currentEvent } from '../data/events';
 import { isCampaignActive } from '../lib/event';
@@ -22,6 +23,8 @@ interface Props {
   noindex?: boolean;
   /** Hide the public navigation and company footer on internal utility pages. */
   showSiteChrome?: boolean;
+  /** Skip the global verification dialog on special routes such as /under-18. */
+  showAgeGate?: boolean;
 }
 
 const {
@@ -32,6 +35,7 @@ const {
   schema,
   noindex = false,
   showSiteChrome = true,
+  showAgeGate = true,
 } = Astro.props;
 
 // Self-referencing canonical on every page. The old site had none, and three
@@ -103,8 +107,9 @@ const graphs = [organisation, ...(schema ? (Array.isArray(schema) ? schema : [sc
       })();
     </script>
 
-    <script is:inline>
+    <script is:inline define:vars={{ showAgeGate }}>
       (() => {
+        if (!showAgeGate) return;
         try {
           const verified = localStorage.getItem('age_verified_18') === 'true';
           document.documentElement.classList.add(verified ? 'age-verified' : 'age-gate-required');
@@ -149,7 +154,7 @@ const graphs = [organisation, ...(schema ? (Array.isArray(schema) ? schema : [sc
   </head>
 
   <body>
-    <AgeGate />
+    {showAgeGate && <AgeGate />}
     <div id="siteShell">
       <a class="skip" href="#main">Skip to content</a>
       {showSiteChrome && <Header />}
@@ -157,6 +162,7 @@ const graphs = [organisation, ...(schema ? (Array.isArray(schema) ? schema : [sc
         <slot />
       </main>
       {showSiteChrome && <Footer />}
+      {showSiteChrome && <ContactModal />}
 
       <script>
         // Reveal on scroll. The page ships visible; this adds the hidden start

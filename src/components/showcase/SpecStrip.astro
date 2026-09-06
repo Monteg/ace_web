@@ -9,9 +9,10 @@ import { bet, maxWin, rtp, volatility, type Volatility } from '../../lib/format'
  */
 interface Props {
   game: CollectionEntry<'games'>;
+  variant?: 'strip' | 'sidebar';
 }
 
-const { game } = Astro.props;
+const { game, variant = 'strip' } = Astro.props;
 const s = game.data.specs;
 
 type Cell = {
@@ -39,7 +40,7 @@ const BANDS: Volatility[] = ['low', 'medium', 'high', 'very_high'];
 const lit = new Set<Volatility>(s.volatility);
 ---
 
-<dl class="ss">
+<dl class={`ss ss--${variant}`}>
   {cells.map((c) => (
     <div class="ss-cell">
       <dt class="ss-head">
@@ -90,11 +91,34 @@ const lit = new Set<Volatility>(s.volatility);
   .ss-bar:nth-child(4) { height: 14px; }
   .ss-bar.is-on { background: var(--brand); }
 
+  .ss.ss--sidebar { grid-template-columns: minmax(0, 1fr); }
+  .ss.ss--sidebar .ss-cell {
+    display: grid;
+    grid-template-columns: minmax(112px, 0.8fr) minmax(0, 1.2fr);
+    align-items: center;
+    gap: var(--sp-4);
+    padding: var(--sp-4) var(--sp-5);
+  }
+  .ss.ss--sidebar .ss-value {
+    margin: 0;
+    align-items: flex-start;
+    font-size: var(--step-1);
+  }
+  .ss.ss--sidebar .ss-meter { height: 11px; }
+  .ss.ss--sidebar .ss-bar { width: 14px; }
+
   @media (max-width: 992px) {
     .ss { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .ss.ss--sidebar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .ss.ss--sidebar .ss-cell {
+      display: flex;
+      align-items: flex-start;
+      padding: var(--sp-4);
+    }
   }
   @media (max-width: 560px) {
     .ss { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ss.ss--sidebar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .ss-cell { padding: var(--sp-4); }
   }
 </style>

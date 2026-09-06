@@ -54,6 +54,7 @@
   --step-3: clamp(1.9rem, 1.35rem + 2.2vw, 3.2rem);
   --step-4: clamp(2.6rem, 1.6rem + 4.2vw, 5rem);
   --step-5: clamp(3.4rem, 1.8rem + 7vw, 8.5rem); /* poster size, hero only */
+  --home-section-title-size: clamp(2.35rem, 2rem + 3.2vw, 4.25rem);
 
   /* spacing */
   --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;

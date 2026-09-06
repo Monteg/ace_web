@@ -137,9 +137,9 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
 - npm run ship: успешно;
 - 14 из 14 parity gates: успешно;
 - 32 страницы собраны;
-- home first-load weight по внутренней проверке: 970 KB;
+- home first-load weight по внутренней проверке: 1031 KB;
 - representative game page до запуска demo: 302 KB;
-- build создаёт 363 optimized image variants;
+- build создаёт 375 optimized image variants;
 - у всех 318 отрендеренных img elements есть width, height и alt;
 - внутренних битых ссылок по текущей проверке нет;
 - пустых iframe src нет;
@@ -676,7 +676,11 @@ Stats используют три локальных proof icons и Phosphor bri
 - Build & Integrate;
 - Monitor & Optimize.
 
-На desktop используется сетка 2x2 с artwork слева и copy справа; на узких viewport карточки и затем вся grid переходят в одну колонку.
+Визуальная композиция основана на концепте Figma node 4:256, но использует реальные тексты проекта. Финальные transparent artwork экспортированы из Figma и подключены через Astro Image как четыре отдельных responsive asset.
+
+На desktop используется асимметричная 20-колоночная сетка: верхний ряд 7/13, нижний 8/12. Карточки имеют последовательные метки 01-04. Artwork размещён отдельными слоями с контролируемыми вылетами за рамку, небольшими углами наклона и явным z-index; первая карточка перекрывает вторую только своим декоративным слоем. На tablet карточки становятся горизонтальными и занимают по одному полному ряду; на phone переходят в вертикальную композицию с artwork сверху и copy снизу.
+
+При прокрутке карточки мягко сходятся к центру секции через GSAP ScrollTrigger. На мобильных устройствах используется более короткое по амплитуде чередующееся появление. При prefers-reduced-motion анимация отключается.
 
 ### 12.8. Partner Wall
 
@@ -1756,8 +1760,8 @@ Source assets:
 - общий объём card art: 2,709,600 bytes;
 - 24 hero WebP;
 - общий объём hero art: 3,288,184 bytes;
-- 16 site-level art assets для Excellence, Future, Contact и proof;
-- крупные source PNG Excellence оптимизируются Astro при build;
+- 20 site-level art assets для Excellence, Future, Contact и proof;
+- крупные source PNG Excellence и Future оптимизируются Astro при build;
 - build генерирует responsive variants.
 
 ### 27.3. Главный риск
@@ -1781,7 +1785,7 @@ Games hero MP4 весит 116,440,314 bytes. preload=metadata не гарант�
 - home до 1.5 MB;
 - representative game page до 1.5 MB до Play.
 
-Результат стабильного среза: home около 970 KB, representative game page около 302 KB, 363 optimized image variants и 318 rendered img elements без пропущенных dimensions или alt.
+Результат текущего среза: home около 1031 KB, representative game page около 302 KB, 375 optimized image variants и 318 rendered img elements без пропущенных dimensions или alt.
 
 Games page video в эти gates не входит. Будущее ТЗ на hero video обязано иметь отдельный video budget.
 

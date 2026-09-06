@@ -22,7 +22,9 @@ const games = (await getCollection('games')).sort(
     a.data.order - b.data.order ||
     a.data.name.localeCompare(b.data.name),
 );
-const gridGames = games.slice(0, 12);
+const mathsGames = games.filter(
+  (game) => game.data.status === 'live' && typeof game.data.specs.rtp === 'number',
+);
 
 const present = CATALOGUE_CATEGORIES.filter((category) => games.some((game) => game.data.type === category.type));
 
@@ -48,7 +50,7 @@ const faqSchema = {
   <Wall games={games} />
 
   <!-- ============ proof ============ -->
-  <section class="proof cream" aria-labelledby="proof-title">
+  <section class="proof cream" id="about-us" aria-labelledby="proof-title">
     <div class="wrap">
       <h2 id="proof-title" class="proof-intro rv">{proofIntro}</h2>
       <div class="proof-in rv">
@@ -81,9 +83,17 @@ const faqSchema = {
 
       <p class="filter-note" data-filter-note aria-live="polite"></p>
       <div class="cat rv" id="gameGrid">
-        {gridGames.map((g, i) => <GameTile game={g} eager={i < 4} />)}
+        {games.map((g, i) => <GameTile game={g} eager={i < 4} />)}
       </div>
-
+      <script is:inline>
+        document.getElementById('gameGrid')?.setAttribute('data-progressive-ready', '');
+      </script>
+      <div class="load-games-row" data-load-games-row hidden>
+        <button class="btn btn-ghost see-all load-games" type="button" data-load-games>
+          Load Game
+          <span class="disc" aria-hidden="true"><Icon name="ph:arrow-down" /></span>
+        </button>
+      </div>
     </div>
   </section>
 
@@ -97,7 +107,7 @@ const faqSchema = {
         </p>
       </div>
       <div class="rv">
-        <MathsExplorer games={games}>
+        <MathsExplorer games={mathsGames}>
           <Fragment slot="caption">Published RTP and volatility for every title. RTP bands and volatility modes are configuration, set per operator and per market.</Fragment>
         </MathsExplorer>
       </div>
@@ -249,14 +259,29 @@ const faqSchema = {
   .see-all .disc { width: 20px; height: 20px; margin-right: 0; }
   .see-all .disc svg { width: 12px; height: 12px; }
   .cat { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-4); }
+  .cat[data-progressive-ready]:not([data-progressive-managed]) > :nth-child(n + 13),
+  .cat[data-progressive-managed] > :global(.is-progressive-hidden) { display: none; }
+  .load-games-row {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--sp-6);
+  }
+  .load-games-row[hidden] { display: none; }
+  .load-games { margin-inline: auto; }
   @media (max-width: 1100px) { .cat { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 1100px) {
+    .cat[data-progressive-ready]:not([data-progressive-managed]) > :nth-child(n + 10) { display: none; }
+  }
   @media (max-width: 768px) {
     .cat { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); }
+    .cat[data-progressive-ready]:not([data-progressive-managed]) > :nth-child(n + 7) { display: none; }
     .portfolio-controls .chips { flex-basis: 100%; }
   }
   @media (max-width: 440px) {
     .cat { grid-template-columns: 1fr; }
+    .cat[data-progressive-ready]:not([data-progressive-managed]) > :nth-child(n + 4) { display: none; }
     .see-all { width: 100%; }
+    .load-games { width: auto; }
   }
   .filter-note { margin-bottom: var(--sp-5); font-size: 13px; color: var(--fg-3); }
   .filter-note:empty { display: none; }
@@ -278,7 +303,6 @@ const faqSchema = {
   .row dd { margin: 0; font-size: 14.5px; color: var(--fg); line-height: 1.45; }
 
   /* faq */
-  #faq { scroll-margin-top: calc(var(--site-header-height, 120px) + var(--sp-4)); }
   .faq {
     --faq-duration: 300ms;
     display: grid;
@@ -366,7 +390,6 @@ const faqSchema = {
     overflow: hidden;
     background: #100d0c;
     border-block: 1px solid var(--line);
-    scroll-margin-top: 124px;
   }
   .contact-section::before,
   .contact-section::after {
@@ -477,6 +500,98 @@ const faqSchema = {
 <script>
   import { mountCatalogueFilter } from '../lib/catalogue-filter';
   mountCatalogueFilter('gameGrid', '#games .chip[data-filter]');
+
+  const gameGrid = document.querySelector<HTMLElement>('#gameGrid');
+  const loadGamesButton = document.querySelector<HTMLButtonElement>('[data-load-games]');
+  const loadGamesRow = document.querySelector<HTMLElement>('[data-load-games-row]');
+
+  if (gameGrid && loadGamesButton && loadGamesRow) {
+    const reduceCatalogueMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const cards = Array.from(gameGrid.querySelectorAll<HTMLElement>(':scope > [data-game-card]'));
+    const revealed = new Set<HTMLElement>();
+    let revealedRows = 3;
+    let columns = 1;
+
+    const getColumns = () => {
+      const tracks = getComputedStyle(gameGrid).gridTemplateColumns.split(' ').filter(Boolean);
+      return Math.max(1, tracks.length);
+    };
+
+    const orderedCards = () => Array.from(gameGrid.querySelectorAll<HTMLElement>(':scope > [data-game-card]'));
+
+    const reveal = (items: HTMLElement[], animate = false) => {
+      const fresh = items.filter((card) => !revealed.has(card));
+      for (const card of fresh) {
+        revealed.add(card);
+        card.classList.remove('is-progressive-hidden');
+      }
+
+      if (animate && !reduceCatalogueMotion.matches) {
+        fresh.forEach((card, index) => {
+          card.animate(
+            [
+              { opacity: 0, transform: 'translateY(12px)' },
+              { opacity: 1, transform: 'translateY(0)' },
+            ],
+            {
+              duration: 280,
+              delay: Math.min(index * 18, 126),
+              easing: 'cubic-bezier(0.32, 0.72, 0, 1)',
+              fill: 'backwards',
+            },
+          );
+        });
+      }
+    };
+
+    const updateButton = () => {
+      const complete = revealed.size >= cards.length;
+      loadGamesButton.hidden = complete;
+      loadGamesRow.hidden = complete;
+    };
+
+    const render = () => {
+      for (const card of cards) card.classList.toggle('is-progressive-hidden', !revealed.has(card));
+      updateButton();
+    };
+
+    const preserveProgressForCurrentOrder = (animate = false) => {
+      columns = getColumns();
+      const target = Math.min(cards.length, columns * revealedRows);
+      reveal(orderedCards().slice(0, target), animate);
+      render();
+    };
+
+    columns = getColumns();
+    reveal(orderedCards().slice(0, columns * revealedRows));
+    gameGrid.dataset.progressiveManaged = '';
+    render();
+
+    loadGamesButton.addEventListener('click', () => {
+      columns = getColumns();
+      revealedRows += 3;
+      const next = orderedCards().filter((card) => !revealed.has(card)).slice(0, columns * 3);
+      reveal(next, true);
+      render();
+    });
+
+    for (const chip of document.querySelectorAll<HTMLButtonElement>('#games .chip[data-filter]')) {
+      chip.addEventListener('click', () => preserveProgressForCurrentOrder(true));
+    }
+
+    const handleCatalogueResize = () => {
+      const nextColumns = getColumns();
+      if (nextColumns === columns) return;
+      preserveProgressForCurrentOrder();
+    };
+    const ResizeObserverCtor = (window as unknown as { ResizeObserver?: typeof ResizeObserver }).ResizeObserver;
+    if (ResizeObserverCtor) {
+      const resizeObserver = new ResizeObserverCtor(handleCatalogueResize);
+      resizeObserver.observe(gameGrid);
+    } else {
+      window.addEventListener('resize', handleCatalogueResize, { passive: true });
+    }
+  }
 
   const faqItems = document.querySelectorAll<HTMLDetailsElement>('#faq .faq-item');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');

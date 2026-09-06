@@ -1,8 +1,8 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import DemoEmbed from '../../components/DemoEmbed.astro';
 import GameHeader from '../../components/showcase/GameHeader.astro';
+import GameMedia from '../../components/showcase/GameMedia.astro';
 import SpecStrip from '../../components/showcase/SpecStrip.astro';
 import GameTile from '../../components/showcase/GameTile.astro';
 import { CTA, company } from '../../data/site';
@@ -46,36 +46,40 @@ const breadcrumbSchema = {
 <Base title={d.seo.title} description={d.seo.description} schema={[productSchema, breadcrumbSchema]}>
   <GameHeader game={game} demoAvailable={demo !== null} />
 
-  <!-- spec strip sits right under the header: the numbers are what a games team reads first -->
-  <div class="wrap strip-wrap rv">
-    <SpecStrip game={game} />
-  </div>
+  <section id="demo" class="game-media-section">
+    <div class="wrap">
+      <div class="media-layout">
+        <div class="media-main rv">
+          <GameMedia
+            id={game.id}
+            name={d.name}
+            demoSrc={demo}
+            poster={d.hero}
+            gallery={d.gallery}
+          />
 
-  {demo ? (
-    <section id="demo" class="section-continuation">
-      <div class="wrap">
-        <div class="sec-top rv">
-          <h2 class="d1">Play the demo</h2>
-          <p class="lead">Loads only when you press play, so the page opens instantly and the game does not use your data unless you asked for it.</p>
+          {!demo && (
+            <div class="demo-request">
+              <div>
+                <h2 class="d3">{soon ? 'In development' : 'Demo on request'}</h2>
+                <p class="body">
+                  {soon
+                    ? `${d.name} is not released yet. Ask us for the current build and the maths sheet, and we will send them over.`
+                    : `A playable build of ${d.name} is available on request.`}
+                </p>
+              </div>
+              <a class="btn btn-primary btn-sm" href={CTA.href}>{CTA.label}</a>
+            </div>
+          )}
         </div>
-        <div class="rv"><DemoEmbed name={d.name} src={demo} poster={d.hero} /></div>
+
+        <aside class="spec-sidebar rv" aria-label={`${d.name} game specifications`}>
+          <h2 class="d3">Game stats & specs</h2>
+          <SpecStrip game={game} variant="sidebar" />
+        </aside>
       </div>
-    </section>
-  ) : (
-    <section id="demo" class="section-continuation">
-      <div class="wrap">
-        <div class="no-demo rv">
-          <h2 class="d2">{soon ? 'In development' : 'Demo on request'}</h2>
-          <p class="body">
-            {soon
-              ? `${d.name} is not released yet. Ask us for the current build and the maths sheet, and we will send them over.`
-              : `A playable build of ${d.name} is available on request.`}
-          </p>
-          <a class="btn btn-primary" href={CTA.href}>{CTA.label}</a>
-        </div>
-      </div>
-    </section>
-  )}
+    </div>
+  </section>
 
   <section class="section-continuation">
     <div class="wrap">
@@ -119,18 +123,49 @@ const breadcrumbSchema = {
 </Base>
 
 <style>
-  .strip-wrap { margin-top: calc(-1 * var(--sp-7)); position: relative; z-index: 2; margin-bottom: var(--section-space); }
-  @media (max-width: 992px) { .strip-wrap { margin-top: var(--sp-6); } }
-
-  .no-demo {
-    border: 1px dashed var(--line-2); border-radius: var(--radius-l);
-    padding: var(--sp-7); display: flex; flex-direction: column; gap: var(--sp-4);
-    align-items: flex-start; background: var(--ink-2);
+  .game-media-section {
+    padding-block: clamp(48px, 6vw, 84px) var(--section-space);
+  }
+  .media-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+    gap: clamp(28px, 4vw, 64px);
+    align-items: start;
+  }
+  .media-main { min-width: 0; }
+  .spec-sidebar {
+    position: sticky;
+    top: calc(var(--site-header-height, 120px) + var(--sp-4));
+    min-width: 0;
+  }
+  .spec-sidebar > .d3 { margin-bottom: var(--sp-4); }
+  .demo-request {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-5);
+    margin-top: var(--sp-4);
+    padding: var(--sp-5);
+    background: var(--ink-2);
+    border: 1px dashed var(--line-2);
+    border-radius: var(--radius-l);
+  }
+  .demo-request > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--sp-2);
   }
 
-  .over { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
-  @media (max-width: 992px) { .over { grid-template-columns: 1fr; } }
-  .prose { max-width: 66ch; display: flex; flex-direction: column; gap: var(--sp-4); }
+  .over {
+    display: grid;
+    grid-template-columns: minmax(0, 800px) minmax(280px, 360px);
+    justify-content: space-between;
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
+  }
+  .over-copy { min-width: 0; max-width: 800px; }
+  .prose { max-width: 72ch; display: flex; flex-direction: column; gap: var(--sp-4); }
   .prose :global(p) { color: var(--fg-2); }
   .prose :global(h2) {
     font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-weight: 400;
@@ -140,12 +175,28 @@ const breadcrumbSchema = {
   .highlights li { position: relative; padding-left: var(--sp-5); font-size: 14.5px; color: var(--fg-2); line-height: 1.5; }
   .highlights li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 8px; height: 8px; border-radius: 2px; background: var(--brand); }
 
-  .over-side { background: var(--ink-2); border-radius: var(--radius-l); padding: var(--sp-6); box-shadow: var(--shadow-1); position: sticky; top: 96px; }
+  .over-side {
+    position: sticky;
+    top: calc(var(--site-header-height, 120px) + var(--sp-4));
+    background: var(--ink-2);
+    border-radius: var(--radius-l);
+    padding: var(--sp-6);
+    box-shadow: var(--shadow-1);
+  }
   .feats { list-style: none; margin-top: var(--sp-5); display: flex; flex-direction: column; }
   .feats li { padding: var(--sp-4) 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
   .feats p { font-size: 14px; color: var(--fg-2); line-height: 1.5; }
 
   .related { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4); }
+  @media (max-width: 992px) {
+    .media-layout,
+    .over { grid-template-columns: minmax(0, 1fr); }
+    .spec-sidebar,
+    .over-side { position: static; }
+  }
+  @media (max-width: 640px) {
+    .demo-request { align-items: flex-start; flex-direction: column; }
+  }
   @media (max-width: 760px) { .related { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 440px) { .related { grid-template-columns: 1fr; } }
 </style>

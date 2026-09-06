@@ -60,7 +60,14 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
           View Game
           <span class="disc" aria-hidden="true"><Icon name="ph:arrow-down" /></span>
         </a>
-        <a class="btn btn-ghost" href={CTA.href}>{CTA.label}</a>
+        <button
+          class="btn btn-ghost"
+          type="button"
+          data-contact-open
+          aria-haspopup="dialog"
+          aria-controls="contact-dialog"
+          hidden
+        >{CTA.label}</button>
       </div>
     </div>
   </div>

@@ -71,6 +71,7 @@ lines) is data; everything below is the overview prose. Field by field:
 | `seo.title` | tab title, up to 70 chars | e.g. `Neon Vault - slot game by Ace Games` |
 | `seo.description` | 60 to 165 chars | one honest sentence about the mechanic |
 | `card` / `hero` | paths to the two images | relative to the record's own folder (`../../assets/...`), as scaffolded |
+| `gallery` | list of `{ image, alt }` screenshots | optional; one image is static, two or more get manual arrows, count, swipe and keyboard navigation |
 | `specs.rtp` | a number, `0.945`, or the word `configurable` | never a string like `"94.5%"`; the template formats it |
 | `specs.maxWin` | `{ value: 5000, unit: x }` or `{ value: 120000, unit: coins, approx: true }` | omit the whole line if unknown; the page then shows "On request" |
 | `specs.volatility` | list from `low`, `medium`, `high`, `very_high` | one band, or several if the game has selectable modes |

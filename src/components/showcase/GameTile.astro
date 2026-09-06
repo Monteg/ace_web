@@ -1,13 +1,10 @@
 ---
-/**
- * Catalogue tile. The art is the object; name, RTP and volatility sit in a
- * bar under it so they are readable on touch, and the hover state adds the
- * Play affordance and a slow push-in on the art.
- */
+/** Catalogue tile based on the shared Ace Games Figma component. */
 import { Image } from 'astro:assets';
-import { Icon } from 'astro-icon/components';
 import type { CollectionEntry } from 'astro:content';
-import { rtp, TYPE_LABEL, volatility } from '../../lib/format';
+import playIcon from '../../assets/ui/game-card-play.svg';
+import { company } from '../../data/site';
+import { demoUrl, rtp, TYPE_LABEL, volatility } from '../../lib/format';
 
 interface Props {
   game: CollectionEntry<'games'>;
@@ -21,77 +18,189 @@ const d = game.data;
 const soon = d.status === 'coming_soon';
 const href = `/portfolio/${game.id}`;
 const bands = ['low', 'medium', 'high', 'very_high'] as const;
+const layeredArt = d.cardLayers;
+const cardVolatility = volatility(d.specs.volatility).replaceAll(' / ', '/');
+const quickPlayUrl = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
 ---
 
-<article class:list={['gt', { 'gt-featured': featured, 'gt-soon': soon }]} data-type={d.type} data-status={d.status}>
-  <a class="gt-link" href={href}>
-    <span class="sr-only">{d.name}, {TYPE_LABEL[d.type]}{soon ? ', coming soon' : ''}</span>
-  </a>
+<article class:list={['gt', { 'gt-featured': featured, 'gt-layered': layeredArt, 'gt-soon': soon }]} data-game-card data-type={d.type} data-status={d.status}>
+  <div class="gt-surface">
+    <a class="gt-link" href={href}>
+      <span class="sr-only">{d.name}, {TYPE_LABEL[d.type]}{soon ? ', coming soon' : ''}</span>
+    </a>
 
-  <div class="gt-art">
-    <Image
-      src={d.card}
-      alt=""
-      widths={featured ? [640, 900, 1200] : [320, 460, 640]}
-      sizes={featured
-        ? '(max-width: 768px) 92vw, (max-width: 1100px) 60vw, 640px'
-        : '(max-width: 480px) 92vw, (max-width: 768px) 46vw, (max-width: 1100px) 31vw, 300px'}
-      loading={eager ? 'eager' : 'lazy'}
-      fetchpriority={eager ? 'high' : 'auto'}
-    />
+    <div class="gt-art">
+      <Image
+        class:list={['gt-background', { 'gt-background-single': !layeredArt }]}
+        src={layeredArt?.background ?? d.card}
+        alt=""
+        widths={featured ? [640, 900, 1200] : [320, 460, 640]}
+        sizes={featured
+          ? '(max-width: 768px) 92vw, (max-width: 1100px) 60vw, 640px'
+          : '(max-width: 480px) 92vw, (max-width: 768px) 46vw, (max-width: 1100px) 31vw, 300px'}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : 'auto'}
+      />
+      <span class="gt-shade" aria-hidden="true"></span>
+      {layeredArt && (
+        <Image
+          class="gt-logo"
+          src={layeredArt.logo}
+          alt=""
+          widths={[254, 306, 424]}
+          sizes="(max-width: 440px) 74vw, 306px"
+          loading={eager ? 'eager' : 'lazy'}
+        />
+      )}
+    </div>
+
     <span class:list={['gt-type', `gt-type-${d.type}`]}>{soon ? 'Coming soon' : TYPE_LABEL[d.type]}</span>
-    <span class="gt-play" aria-hidden="true">
-      <Icon name={soon ? 'ph:eye' : 'ph:play-fill'} />
-      <b>{soon ? 'Preview' : 'Play'}</b>
-    </span>
-  </div>
 
-  <div class="gt-bar">
-    <h3 class="sr-only">{d.name}</h3>
-    <dl class="gt-meta">
-      <div class="gt-stat">
-        <dt>RTP</dt>
-        <dd class:list={['gt-rtp', 'tnum', { 'gt-rtp-configurable': d.specs.rtp === 'configurable' }]}>{rtp(d.specs.rtp)}</dd>
-      </div>
-      <div class="gt-stat">
-        <dt class="gt-volatility-heading">
-          Volatility
-          <span class="vmeter" aria-hidden="true">
-            {bands.map((b) => <i class:list={{ on: d.specs.volatility.includes(b) }}></i>)}
-          </span>
-        </dt>
-        <dd class="gt-volatility">{volatility(d.specs.volatility)}</dd>
-      </div>
-    </dl>
+    {quickPlayUrl && (
+      <a
+        class="gt-play"
+        href={quickPlayUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Play ${d.name} demo in a new tab`}
+      >
+        <img src={playIcon.src} alt="" width="16" height="16" />
+        <b>Play</b>
+      </a>
+    )}
+
+    <div class="gt-bar">
+      <h3>{d.name}</h3>
+      <dl class="gt-meta">
+        <div class="gt-stat">
+          <dt>RTP</dt>
+          <dd class:list={['gt-rtp', 'tnum', { 'gt-rtp-configurable': d.specs.rtp === 'configurable' }]}>{rtp(d.specs.rtp)}</dd>
+        </div>
+        <div class="gt-stat">
+          <dt class="gt-volatility-heading">
+            <span class="vmeter" aria-hidden="true">
+              {bands.map((b) => <i class:list={{ on: d.specs.volatility.includes(b) }}></i>)}
+            </span>
+            <span>Volatility</span>
+          </dt>
+          <dd class="gt-volatility">{cardVolatility}</dd>
+        </div>
+      </dl>
+    </div>
   </div>
 </article>
 
 <style>
   .gt {
-    position: relative; display: flex; flex-direction: column;
-    min-width: 0; container-type: inline-size;
-    border-radius: var(--radius-l); overflow: hidden;
-    background: var(--ink-2); box-shadow: var(--shadow-1);
-    transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+    position: relative;
+    min-width: 0;
+    aspect-ratio: 320 / 393;
+    container-type: inline-size;
+    overflow: visible;
+    border-radius: var(--gc-radius, var(--radius));
+    box-shadow: var(--shadow-1);
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    will-change: transform;
+    transition: transform var(--gc-duration, var(--dur-2)) var(--ease), box-shadow var(--gc-duration, var(--dur-2)) var(--ease);
   }
-  .gt:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); }
-  .gt:has(.gt-link:focus-visible) { outline: 3px solid var(--brand); outline-offset: 3px; }
-  .gt-link { position: absolute; inset: 0; z-index: 3; }
+  .gt-surface {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    overflow: clip;
+    isolation: isolate;
+    contain: paint;
+    border-radius: inherit;
+    background: #111214;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  .gt-surface::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 8;
+    pointer-events: none;
+    border: var(--gc-border-width, 1px) solid transparent;
+    border-radius: inherit;
+    box-shadow: 0 1px 0 rgb(255 240 200 / 0.05) inset;
+    transition: border-color var(--gc-duration, var(--dur-2)) var(--ease), box-shadow var(--gc-duration, var(--dur-2)) var(--ease);
+  }
+  .gt:hover,
+  .gt:has(.gt-link:focus-visible) {
+    z-index: 2;
+    transform: translate3d(0, calc(-1 * var(--gc-hover-lift, 4px)), 0) scale(var(--gc-hover-scale, 1.015));
+    box-shadow: var(--shadow-2);
+  }
+  .gt:hover .gt-surface::after,
+  .gt:has(.gt-link:focus-visible) .gt-surface::after {
+    border-color: rgb(255 86 0 / var(--gc-border-opacity, 1));
+    box-shadow: 0 1px 0 rgb(255 240 200 / 0.06) inset;
+  }
+  .gt-link { position: absolute; inset: 0; z-index: 10; border-radius: inherit; }
   .gt-link:focus-visible { outline: none; }
 
-  .gt-art { position: relative; aspect-ratio: 1200 / 1057; background: var(--ink-3); overflow: hidden; }
-  .gt-art :global(img) {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform 1.4s var(--ease);
+  .gt-art {
+    position: absolute;
+    inset: -1px;
+    z-index: 0;
+    overflow: hidden;
+    border-radius: inherit;
   }
-  .gt:hover .gt-art :global(img) { transform: scale(1.06); }
-  .gt-soon .gt-art :global(img) { filter: saturate(0.75) brightness(0.8); }
+  .gt-background {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+    object-position: center;
+    transform: translate3d(0, 0, 0) scale(1);
+    backface-visibility: hidden;
+    transition: transform var(--gc-duration, var(--dur-3)) var(--ease), opacity var(--gc-duration, var(--dur-2)) var(--ease), filter var(--gc-duration, var(--dur-2)) var(--ease);
+  }
+  .gt-background-single { object-position: center top; }
+  .gt:hover .gt-background,
+  .gt:has(.gt-link:focus-visible) .gt-background {
+    transform: translate3d(0, 0, 0) scale(var(--gc-background-scale, 1.055));
+    opacity: var(--gc-background-opacity, 0.7);
+  }
+  .gt-soon .gt-background { filter: saturate(0.75) brightness(0.8); }
+  .gt-shade {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 1;
+    height: var(--gc-shade-height, 62.1%);
+    border-radius: inherit;
+    background: linear-gradient(180deg, rgb(17 18 20 / 0) 0%, rgb(17 18 20 / var(--gc-shade-opacity, 0.76)) 48%, #111214 78%);
+    backdrop-filter: blur(var(--gc-shade-blur, 15px));
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 32%);
+    mask-image: linear-gradient(to bottom, transparent, black 32%);
+  }
+  .gt-logo {
+    position: absolute;
+    z-index: 3;
+    top: 16.8%;
+    left: 9.7%;
+    width: 79.375%;
+    height: auto;
+    transform-origin: top left;
+    transition: transform var(--gc-duration, var(--dur-2)) var(--ease), filter var(--gc-duration, var(--dur-2)) var(--ease);
+  }
+  .gt:hover .gt-logo,
+  .gt:has(.gt-link:focus-visible) .gt-logo {
+    transform: translate(var(--gc-logo-shift-x, -10.6%), calc(-1 * var(--gc-logo-lift, 37%))) scale(var(--gc-logo-scale, 1.2047));
+    filter: drop-shadow(0 18px 22px rgb(5 4 2 / 0.34));
+  }
 
   .gt-type {
-    position: absolute; left: 12px; top: 12px; z-index: 1;
+    position: absolute; left: 12px; top: 12px; z-index: 7;
     font-family: 'JetBrains Mono Variable', monospace; font-size: 0.75rem; font-weight: 500;
+    line-height: 17px;
     letter-spacing: 0.04em; text-transform: uppercase;
     padding: 5px 9px; border-radius: var(--radius-pill); color: var(--tint-ink);
+    box-shadow: 0 2px 5px rgb(0 0 0 / 0.5) inset, 0 -1px 4px rgb(0 0 0 / 0.5) inset;
   }
   .gt-type-slot { background: var(--tint-ice); }
   .gt-type-instant { background: var(--tint-mint); }
@@ -99,59 +208,175 @@ const bands = ['low', 'medium', 'high', 'very_high'] as const;
   .gt-soon .gt-type { background: var(--peach); }
 
   .gt-play {
-    position: absolute; right: 12px; bottom: 12px; z-index: 1;
+    position: absolute; left: 50%; top: var(--gc-play-position, 54.7%); z-index: 11;
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 9px 14px 9px 10px; border-radius: var(--radius-pill);
+    padding: 9px 14px 9px 10px; border-radius: var(--radius-s);
     background: var(--brand); color: var(--on-brand-button);
-    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-size: 0.95rem;
-    font-weight: var(--button-label-weight); letter-spacing: var(--button-label-spacing);
-    opacity: 0; transform: translateY(8px);
-    transition: opacity var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-size: 15px;
+    line-height: 18px; letter-spacing: 0.04em; text-transform: uppercase;
+    opacity: 0; transform: translate(-50%, var(--gc-play-travel, 14px)) scale(0.96);
+    transition: opacity var(--gc-duration, var(--dur-2)) var(--ease), transform var(--gc-duration, var(--dur-2)) var(--ease);
   }
-  .gt-play svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: var(--button-icon-stroke); stroke-linejoin: round; }
+  .gt[data-quick-play-enabled='false'] .gt-play,
+  [data-game-card-quick-play-enabled='false'] .gt-play { display: none; }
+  .gt-play img { width: 16px; height: 16px; }
   .gt-play b { font-weight: 400; }
-  .gt:hover .gt-play, .gt:has(.gt-link:focus-visible) .gt-play { opacity: 1; transform: none; }
-  @media (hover: none) { .gt-play { opacity: 1; transform: none; } }
+  .gt:hover .gt-play,
+  .gt:has(.gt-link:focus-visible) .gt-play { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  .gt-play:hover,
+  .gt-play:focus-visible {
+    opacity: 1;
+    outline: none;
+    transform: translate(-50%, 0) scale(var(--gc-button-hover-scale, 1.055));
+  }
+  .gt-play:focus-visible { box-shadow: 0 0 0 3px rgb(255 255 255 / 0.2), 0 0 0 5px var(--brand); }
+  .gt-play:active { transform: translate(-50%, 0) scale(0.98); }
+
+  .gt[data-mobile-preview='true'],
+  .gt[data-mobile-preview='true']:hover,
+  .gt[data-mobile-preview='true']:has(.gt-link:focus-visible) {
+    transform: none;
+    box-shadow: var(--shadow-1);
+  }
+  .gt[data-mobile-preview='true']:hover .gt-surface::after,
+  .gt[data-mobile-preview='true']:has(.gt-link:focus-visible) .gt-surface::after { border-color: transparent; }
+  .gt[data-mobile-preview='true'] .gt-background,
+  .gt[data-mobile-preview='true']:hover .gt-background,
+  .gt[data-mobile-preview='true']:has(.gt-link:focus-visible) .gt-background {
+    opacity: var(--gc-mobile-background-opacity, 0.82);
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  .gt[data-mobile-preview='true'] .gt-logo,
+  .gt[data-mobile-preview='true']:hover .gt-logo,
+  .gt[data-mobile-preview='true']:has(.gt-link:focus-visible) .gt-logo {
+    filter: drop-shadow(0 12px 18px rgb(5 4 2 / 0.24));
+    transform: translate(0, calc(-1 * var(--gc-mobile-logo-lift, 20%))) scale(1);
+  }
+  .gt[data-mobile-preview='true'] .gt-play,
+  .gt[data-mobile-preview='true']:hover .gt-play,
+  .gt[data-mobile-preview='true']:has(.gt-link:focus-visible) .gt-play,
+  .gt[data-mobile-preview='true'] .gt-play:hover,
+  .gt[data-mobile-preview='true'] .gt-play:focus-visible {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+  .gt[data-mobile-preview='true'] .gt-play:active { transform: translate(-50%, 0) scale(0.97); }
+
+  @media (hover: none) {
+    .gt,
+    .gt:hover,
+    .gt:has(.gt-link:focus-visible) {
+      transform: none;
+      box-shadow: var(--shadow-1);
+    }
+    .gt:hover .gt-surface::after,
+    .gt:has(.gt-link:focus-visible) .gt-surface::after { border-color: transparent; }
+    .gt .gt-background,
+    .gt:hover .gt-background,
+    .gt:has(.gt-link:focus-visible) .gt-background {
+      opacity: var(--gc-mobile-background-opacity, 0.82);
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    .gt .gt-logo,
+    .gt:hover .gt-logo,
+    .gt:has(.gt-link:focus-visible) .gt-logo {
+      filter: drop-shadow(0 12px 18px rgb(5 4 2 / 0.24));
+      transform: translate(0, calc(-1 * var(--gc-mobile-logo-lift, 20%))) scale(1);
+    }
+    .gt-play,
+    .gt:hover .gt-play,
+    .gt:has(.gt-link:focus-visible) .gt-play,
+    .gt-play:hover,
+    .gt-play:focus-visible {
+      opacity: 1;
+      transform: translate(-50%, 0) scale(1);
+    }
+    .gt-play:active { transform: translate(-50%, 0) scale(0.97); }
+  }
 
   .gt-bar {
-    padding: var(--sp-5); display: flex; flex: 1; align-items: flex-end;
-    border-top: 1px solid var(--line);
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--sp-3);
+    height: 145px;
+    padding: var(--sp-4) var(--sp-5);
+    pointer-events: none;
+    border-radius: inherit;
+  }
+  .gt-bar h3 {
+    overflow: hidden;
+    width: 100%;
+    margin: 0;
+    color: var(--fg);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 27px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .gt-meta {
-    display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-    gap: var(--sp-4); width: 100%; margin: 0;
+    display: grid;
+    grid-template-columns: minmax(86px, 0.75fr) minmax(0, 1.45fr);
+    gap: var(--sp-4);
+    width: 100%;
+    margin: 0;
   }
-  .gt-stat { min-width: 0; }
+  .gt-stat {
+    min-width: 0;
+    overflow: hidden;
+    padding: var(--sp-2) var(--sp-3);
+    border-radius: var(--radius-s);
+    background: #18191b;
+  }
   .gt-meta dt {
-    color: var(--fg-2); font-size: 0.8125rem; font-weight: 500;
-    line-height: 1.4; margin-bottom: var(--sp-2);
+    color: var(--fg-2); font-size: 14px; font-weight: 500;
+    line-height: 20px; margin-bottom: var(--sp-1);
   }
   .gt-meta dd { margin: 0; color: var(--fg); }
   .gt-rtp {
-    font-family: 'JetBrains Mono Variable', monospace; font-size: 1.375rem;
-    font-weight: 600; line-height: 1.25; letter-spacing: -0.04em;
+    font-family: 'JetBrains Mono Variable', monospace; font-size: 22px;
+    font-weight: 700; line-height: 27px; letter-spacing: 0;
   }
   .gt-rtp.gt-rtp-configurable {
-    font-family: inherit; font-size: 0.875rem; line-height: 1.5;
-    letter-spacing: normal; overflow-wrap: anywhere;
+    font-family: inherit; font-size: 12px; line-height: 27px;
+    letter-spacing: normal; overflow-wrap: anywhere; text-transform: uppercase;
   }
   .gt-volatility {
-    display: flex; align-items: center; min-height: 1.71875rem;
-    font-size: 0.875rem; line-height: 1.4; font-weight: 500;
+    display: flex; align-items: center; min-height: 27px;
+    font-size: 20px; line-height: 27px; font-weight: 500;
+    white-space: nowrap;
   }
-  .gt-volatility-heading { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-2); }
+  .gt-volatility-heading { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
   .gt-volatility-heading .vmeter { flex-shrink: 0; }
 
-  @container (max-width: 260px) {
-    .gt-bar { padding: var(--sp-4); }
-    .gt-meta { grid-template-columns: minmax(0, 1fr); gap: var(--sp-3); }
-    .gt-stat { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-2); }
-    .gt-meta dt { margin-bottom: 0; }
+  @container (max-width: 286px) {
+    .gt-bar { height: 140px; padding-inline: var(--sp-4); }
+    .gt-bar h3 { font-size: 19px; line-height: 24px; }
+    .gt-meta { grid-template-columns: minmax(76px, 0.72fr) minmax(0, 1.48fr); gap: var(--sp-2); }
+    .gt-stat { padding-inline: 10px; }
+    .gt-meta dt { font-size: 12px; }
+    .gt-rtp { font-size: 19px; }
+    .gt-volatility { font-size: 16px; }
+    .gt-volatility-heading { gap: 6px; }
+    .gt-volatility-heading .vmeter { transform: scale(0.86); transform-origin: left center; margin-right: -4px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .gt, .gt-art :global(img), .gt-play { transition: none; }
-    .gt:hover { transform: none; }
-    .gt:hover .gt-art :global(img) { transform: none; }
+    .gt, .gt-surface::after, .gt-background, .gt-logo, .gt-play { transition: none; }
+    .gt:hover, .gt:has(.gt-link:focus-visible) { transform: none; }
+    .gt:hover .gt-background, .gt:has(.gt-link:focus-visible) .gt-background { transform: none; }
+    .gt:hover .gt-logo, .gt:has(.gt-link:focus-visible) .gt-logo { transform: none; }
+    .gt-play:hover, .gt-play:focus-visible, .gt-play:active { transform: translate(-50%, 0); }
   }
 </style>
+
+<script>
+  import { mountGameCardSettings } from '../../lib/game-card-settings';
+  mountGameCardSettings();
+</script>

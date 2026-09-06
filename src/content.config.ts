@@ -25,7 +25,21 @@ const games = defineCollection({
       }),
 
       card: image(),
+      cardLayers: z
+        .object({
+          background: image(),
+          logo: image(),
+        })
+        .optional(),
       hero: image(),
+      gallery: z
+        .array(
+          z.object({
+            image: image(),
+            alt: z.string().min(1),
+          }),
+        )
+        .default([]),
 
       specs: z.object({
         // 0.94, never "0.94" and never a stray "Medium/High"

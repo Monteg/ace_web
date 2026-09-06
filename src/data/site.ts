@@ -1,3 +1,5 @@
+import { currentEvent } from './events';
+
 /**
  * Site-level content lives here as data, so a number or a link is changed in
  * one file and never by editing markup. `null` means "the owner has not
@@ -23,6 +25,16 @@ export const company = {
 /** Keep disabled homepage sections and their navigation in sync. */
 export const homepageSections = { integration: false, craft: false };
 
+export const headerNav = [
+  { href: '/games', label: 'Games' },
+  { href: currentEvent.eventUrl, label: 'Event' },
+  { href: '/#about-us', label: 'About Us' },
+  { href: '/#our-benefits', label: 'Our Benefits' },
+  { href: '/#why-ace-games', label: 'Why Ace Games' },
+  { href: '/#faq', label: 'FAQ' },
+];
+
+/** Footer navigation is intentionally unchanged by the Header redesign. */
 export const nav = [
   { href: '/games', label: 'Games' },
   { href: '/#maths', label: 'Maths' },

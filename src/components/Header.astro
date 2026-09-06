@@ -2,16 +2,17 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import logo from '../assets/brand/logo.webp';
-import { nav, CTA, company } from '../data/site';
+import { headerNav, CTA, company } from '../data/site';
 import EventAnnouncementBar from './event/EventAnnouncementBar.astro';
 import { currentEvent } from '../data/events';
 import { CATALOGUE_CATEGORIES } from '../lib/game-categories';
 import OrbitBorder from './showcase/OrbitBorder.astro';
 import { borderTrailDefaults } from '../data/border-trail-settings';
 
-const isEvent = Astro.url.pathname.replace(/\/$/, '').replace(/\.html$/, '') === currentEvent.eventUrl;
+const currentPath = Astro.url.pathname.replace(/\/$/, '').replace(/\.html$/, '') || '/';
+const isEvent = currentPath === currentEvent.eventUrl;
 const headerCTA = isEvent ? { label: currentEvent.bookingLabel, href: currentEvent.bookingAnchor } : CTA;
-const navigation = [...nav.filter((item) => item.href === '/games' || item.href === '/#faq'), { label: 'Event', href: currentEvent.eventUrl }];
+const navigation = headerNav;
 const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}s; --orbit-length: ${borderTrailDefaults.orbitLength}%; --orbit-width: ${borderTrailDefaults.orbitWidth}px; --orbit-opacity: ${borderTrailDefaults.orbitOpacity}; --orbit-blur: ${borderTrailDefaults.orbitBlur}px;`;
 ---
 
@@ -42,14 +43,32 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
               </ul>
             </li>
           ) : (
-            <li><a class="nav-link" href={item.href} aria-current={isEvent && item.href === currentEvent.eventUrl ? 'page' : undefined} data-event-track={item.href === currentEvent.eventUrl ? 'event_nav_click' : undefined}>{item.label}</a></li>
+            <li>
+              <a
+                class="nav-link"
+                href={item.href}
+                aria-current={isEvent && item.href === currentEvent.eventUrl ? 'page' : undefined}
+                data-home-anchor={item.href.startsWith('/#') ? '' : undefined}
+                data-event-track={item.href === currentEvent.eventUrl ? 'event_nav_click' : undefined}
+              >{item.label}</a>
+            </li>
           )
         ))}
-        <li class="nav-links-cta"><a class="btn btn-primary btn-sm" href={headerCTA.href} data-event-track={isEvent ? 'book_meeting_header' : undefined}>{headerCTA.label}</a></li>
+        <li class="nav-links-cta">
+          {isEvent ? (
+            <a class="btn btn-primary btn-sm" href={headerCTA.href} data-event-track="book_meeting_header">{headerCTA.label}</a>
+          ) : (
+            <a class="btn btn-primary btn-sm" href={headerCTA.href} data-smart-contact aria-haspopup="dialog" aria-controls="contact-dialog">{headerCTA.label}</a>
+          )}
+        </li>
       </ul>
 
       <div class="nav-end">
-        <a class="btn btn-primary btn-sm nav-desktop-cta" href={headerCTA.href} data-event-track={isEvent ? 'book_meeting_header' : undefined}>{headerCTA.label}</a>
+        {isEvent ? (
+          <a class="btn btn-primary btn-sm nav-desktop-cta" href={headerCTA.href} data-event-track="book_meeting_header">{headerCTA.label}</a>
+        ) : (
+          <a class="btn btn-primary btn-sm nav-desktop-cta" href={headerCTA.href} data-smart-contact aria-haspopup="dialog" aria-controls="contact-dialog">{headerCTA.label}</a>
+        )}
         <button class="burger" type="button" id="burger" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu">
           <span></span>
         </button>
@@ -66,9 +85,15 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
     position: sticky;
     top: 0;
     z-index: var(--z-sticky);
+    min-height: 76px;
     pointer-events: none;
   }
-  .site-header .wrap { pointer-events: auto; padding-top: 12px; }
+  :global(html.event-campaign-active) .site-header { min-height: 120px; }
+  .site-header .wrap {
+    pointer-events: auto;
+    padding-top: 12px;
+    transition: padding-top 260ms var(--ease);
+  }
   .nav {
     position: relative; isolation: isolate;
     display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: var(--sp-5); height: 64px;
@@ -78,6 +103,12 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
     border: 1px solid rgb(255 86 0 / 0.52);
     border-radius: var(--radius-pill);
     box-shadow: 0 10px 30px -18px rgb(5 4 2 / 0.8);
+    transition:
+      height 260ms var(--ease),
+      padding 260ms var(--ease),
+      gap 260ms var(--ease),
+      background-color 260ms var(--ease),
+      box-shadow 260ms var(--ease);
   }
   .nav-glow-fx {
     position: absolute;
@@ -91,9 +122,15 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
     --orbit-halo-opacity: 0.68;
   }
   .brand { display: flex; align-items: center; justify-self: start; margin-left: 8px; min-height: 44px; text-decoration: none; }
-  .brand :global(img) { height: 30px; width: auto; }
+  .brand :global(img) { height: 30px; width: auto; transition: height 260ms var(--ease); }
 
-  .nav-links { display: flex; align-items: center; gap: var(--sp-6); list-style: none; }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 1.45vw, 22px);
+    list-style: none;
+    transition: gap 260ms var(--ease);
+  }
   .nav-links a,
   .nav-desktop-cta {
     font-family: Tanker, 'Tanker Fallback', 'Arial Narrow', Impact, sans-serif;
@@ -109,6 +146,16 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
   .nav-links-cta { display: none; }
 
   .nav-end { justify-self: end; display: flex; align-items: center; gap: var(--sp-3); }
+  .site-header.is-compact .wrap { padding-top: 8px; }
+  .site-header.is-compact .nav {
+    height: 54px;
+    gap: var(--sp-4);
+    padding-inline: 10px;
+    background: color-mix(in srgb, var(--ink-0) 84%, transparent);
+    box-shadow: 0 12px 32px -20px rgb(5 4 2 / 0.88);
+  }
+  .site-header.is-compact .brand :global(img) { height: 28px; }
+  .site-header.is-compact .nav-links { gap: clamp(12px, 1vw, 18px); }
   .games-item { position: relative; }
   .games-control { display: flex; align-items: center; }
   .submenu-toggle {
@@ -134,7 +181,7 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
   }
   .games-submenu a:hover, .games-submenu a:focus-visible { color: var(--fg); background: var(--ink-3); }
   @keyframes submenu-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
-  @media (min-width: 993px) {
+  @media (min-width: 1121px) {
     .games-item:not([data-ready]):is(:hover, :focus-within) .games-submenu { display: grid; }
   }
   .burger {
@@ -146,11 +193,13 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
     box-shadow: 0 -6px 0 var(--on-brand-button), 0 6px 0 var(--on-brand-button);
   }
 
-  @media (max-width: 992px) {
+  @media (max-width: 1120px) {
     .nav { grid-template-columns: minmax(0, 1fr) auto; }
     .nav-links { display: none; }
     .nav-desktop-cta { display: none; }
     .burger { display: flex; }
+    .site-header.is-compact .nav { height: 58px; }
+    .site-header.is-compact .brand :global(img) { height: 28px; }
 
     :global(.menu-open) .nav-links {
       display: flex; flex-direction: column; align-items: stretch; gap: 0;
@@ -169,6 +218,7 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
     :global(.menu-open) .nav-links-cta a { margin-top: var(--sp-4); justify-content: center; display: flex; color: var(--on-brand-button); }
   }
   @media (prefers-reduced-motion: reduce) {
+    .site-header .wrap, .nav, .brand :global(img), .nav-links { transition: none; }
     .nav-glow-fx { display: none; }
     .games-item[data-open='true'] .games-submenu { animation: none; }
     .submenu-toggle svg { transition: none; }
@@ -186,10 +236,16 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
     const dropdown = header.querySelector<HTMLElement>('[data-games-dropdown]');
     const toggle = header.querySelector<HTMLButtonElement>('[data-games-toggle]');
     const gamesLink = header.querySelector<HTMLAnchorElement>('[data-games-link]');
-    const desktop = window.matchMedia('(min-width: 993px)');
+    const desktop = window.matchMedia('(min-width: 1121px)');
     const hover = window.matchMedia('(hover: hover)');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const homepageHashes = new Set(['#about-us', '#our-benefits', '#why-ace-games', '#faq']);
     let closeTimer: ReturnType<typeof setTimeout>;
     let suppressFocusOpen = false;
+    let openedFromFocus = false;
+    let pointerToggleActive = false;
+    let pointerStartedOpen = false;
+
     function setDropdown(open: boolean) {
       clearTimeout(closeTimer);
       if (dropdown && toggle) {
@@ -197,6 +253,7 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
         toggle.setAttribute('aria-expanded', String(open));
       }
     }
+
     function closeMenu(returnFocus = false) {
       header!.classList.remove('menu-open');
       burger!.setAttribute('aria-expanded', 'false');
@@ -204,6 +261,7 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
       setDropdown(false);
       if (returnFocus) burger!.focus();
     }
+
     function scheduleClose() {
       clearTimeout(closeTimer);
       closeTimer = setTimeout(() => {
@@ -213,11 +271,35 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
     if (dropdown && toggle && gamesLink) {
       dropdown.dataset.ready = 'true';
       toggle.hidden = false;
-      dropdown.addEventListener('mouseenter', () => { if (desktop.matches && hover.matches) setDropdown(true); });
+      dropdown.addEventListener('mouseenter', () => {
+        if (desktop.matches && hover.matches) {
+          openedFromFocus = false;
+          setDropdown(true);
+        }
+      });
       dropdown.addEventListener('mouseleave', scheduleClose);
-      dropdown.addEventListener('focusin', () => { if (desktop.matches && !suppressFocusOpen) setDropdown(true); });
+      dropdown.addEventListener('focusin', () => {
+        if (desktop.matches && !suppressFocusOpen) {
+          openedFromFocus = true;
+          setDropdown(true);
+        }
+      });
       dropdown.addEventListener('focusout', scheduleClose);
-      toggle.addEventListener('click', () => setDropdown(dropdown.dataset.open !== 'true'));
+      toggle.addEventListener('pointerdown', () => {
+        pointerToggleActive = true;
+        pointerStartedOpen = dropdown.dataset.open === 'true' && !openedFromFocus;
+        suppressFocusOpen = true;
+      });
+      toggle.addEventListener('click', () => {
+        setDropdown(pointerToggleActive ? !pointerStartedOpen : dropdown.dataset.open !== 'true');
+        pointerToggleActive = false;
+        openedFromFocus = false;
+        suppressFocusOpen = false;
+      });
+      toggle.addEventListener('blur', () => {
+        pointerToggleActive = false;
+        suppressFocusOpen = false;
+      });
       dropdown.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowDown' && (event.target === gamesLink || event.target === toggle)) {
           event.preventDefault();
@@ -234,16 +316,103 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
         }
       });
     }
+
     // The actual sticky height includes the existing campaign bar, if visible.
     const measureHeader = () => document.documentElement.style.setProperty('--site-header-height', `${header.offsetHeight}px`);
     new ResizeObserver(measureHeader).observe(header);
     measureHeader();
+
+    const normalizePath = (path: string) => path.replace(/index\.html$/, '').replace(/\.html$/, '').replace(/\/$/, '') || '/';
+    const scrollToTarget = (target: HTMLElement, hash: string, updateHistory = true) => {
+      if (updateHistory && window.location.hash !== hash) history.pushState(null, '', hash);
+      target.scrollIntoView({ block: 'start', behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+    };
+
+    for (const link of header.querySelectorAll<HTMLAnchorElement>('[data-home-anchor]')) {
+      link.addEventListener('click', (event) => {
+        const url = new URL(link.href, window.location.href);
+        if (normalizePath(window.location.pathname) !== '/' || normalizePath(url.pathname) !== '/' || !homepageHashes.has(url.hash)) return;
+        const target = document.querySelector<HTMLElement>(url.hash);
+        if (!target) return;
+        event.preventDefault();
+        closeMenu();
+        scrollToTarget(target, url.hash);
+      });
+    }
+
+    for (const trigger of header.querySelectorAll<HTMLAnchorElement>('[data-smart-contact]')) {
+      trigger.addEventListener('click', (event) => {
+        event.preventDefault();
+        closeMenu();
+        const contact = document.getElementById('contact');
+        if (contact) {
+          const distanceBelowViewport = Math.max(0, contact.getBoundingClientRect().top - window.innerHeight);
+          if (distanceBelowViewport <= window.innerHeight * 1.75) {
+            scrollToTarget(contact, '#contact');
+            return;
+          }
+        }
+
+        const dialog = document.getElementById('contact-dialog');
+        if (dialog instanceof HTMLDialogElement && typeof dialog.showModal === 'function') {
+          document.dispatchEvent(new CustomEvent('ace:open-contact', { detail: { opener: trigger } }));
+        } else {
+          window.location.assign(trigger.href);
+        }
+      });
+    }
+
+    if (homepageHashes.has(window.location.hash) && normalizePath(window.location.pathname) === '/') {
+      document.fonts.ready.then(() => requestAnimationFrame(() => {
+        const target = document.querySelector<HTMLElement>(window.location.hash);
+        if (target) scrollToTarget(target, window.location.hash, false);
+      }));
+    }
+
+    const COMPACT_START_Y = 96;
+    const DOWN_DISTANCE = 26;
+    const UP_DISTANCE = 16;
+    const SCROLL_NOISE = 2;
+    let previousY = Math.max(0, window.scrollY);
+    let downwardTravel = 0;
+    let upwardTravel = 0;
+    let scrollFrame = 0;
+
+    const updateHeaderState = () => {
+      scrollFrame = 0;
+      const currentY = Math.max(0, window.scrollY);
+      const delta = currentY - previousY;
+      previousY = currentY;
+
+      if (currentY <= COMPACT_START_Y) {
+        downwardTravel = 0;
+        upwardTravel = 0;
+        header.classList.remove('is-compact');
+        return;
+      }
+      if (Math.abs(delta) < SCROLL_NOISE) return;
+
+      if (delta > 0) {
+        downwardTravel += delta;
+        upwardTravel = 0;
+        if (downwardTravel >= DOWN_DISTANCE && !header.classList.contains('menu-open')) header.classList.add('is-compact');
+      } else {
+        upwardTravel += Math.abs(delta);
+        downwardTravel = 0;
+        if (upwardTravel >= UP_DISTANCE) header.classList.remove('is-compact');
+      }
+    };
+    window.addEventListener('scroll', () => {
+      if (!scrollFrame) scrollFrame = requestAnimationFrame(updateHeaderState);
+    }, { passive: true });
+
     desktop.addEventListener('change', () => closeMenu());
     burger.addEventListener('click', () => {
       const open = header.classList.toggle('menu-open');
       burger.setAttribute('aria-expanded', String(open));
       burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-      if (!open) setDropdown(false);
+      if (open) header.classList.remove('is-compact');
+      else setDropdown(false);
     });
     header.addEventListener('click', (e) => {
       if ((e.target as HTMLElement).closest('.nav-links a')) {
@@ -256,6 +425,5 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
       }
     });
     document.addEventListener('click', (event) => { if (!header.contains(event.target as Node)) closeMenu(); });
-
   }
 </script>

@@ -105,7 +105,9 @@ export function mountExperienceCardMotion(root: ParentNode = document) {
       card.dataset.motionMounted = 'true';
       const stage = card.closest<HTMLElement>('[data-experience-card-stage]');
       const glare = card.querySelector<HTMLElement>('[data-experience-glare]');
+      const hologram = card.querySelector<HTMLElement>('[data-experience-hologram]');
       if (!stage || !glare) return;
+      const surfaceEffects = hologram ? [glare, hologram] : [glare];
 
       gsap.set(card, { transformStyle: 'preserve-3d' });
 
@@ -132,7 +134,7 @@ export function mountExperienceCardMotion(root: ParentNode = document) {
           ease: 'power3.out',
           overwrite: true,
         });
-        gsap.to(glare, {
+        gsap.to(surfaceEffects, {
           '--glare-x': `${50 + x * glareTravel}%`,
           '--glare-y': `${50 + y * glareTravel}%`,
           duration: Math.max(0.18, duration * 0.78),
@@ -155,7 +157,7 @@ export function mountExperienceCardMotion(root: ParentNode = document) {
         card.dataset.pointerActive = 'false';
         const duration = Math.max(0.34, numberFrom(card.dataset.motionDuration, experienceCardDefaults.response));
         gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration, ease: 'power3.out', overwrite: true });
-        gsap.to(glare, {
+        gsap.to(surfaceEffects, {
           '--glare-x': '50%',
           '--glare-y': '50%',
           duration,

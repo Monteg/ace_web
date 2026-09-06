@@ -93,8 +93,8 @@ import { company, nav, social, socialIntro } from '../data/site';
   .blurb { font-size: 14px; color: var(--fg-2); max-width: 38ch; }
 
   .foot-col h2 {
-    font-family: 'JetBrains Mono Variable', monospace; font-size: 10.5px; font-weight: 500;
-    letter-spacing: 0.13em; text-transform: uppercase; color: var(--fg-3);
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-size: 1.1rem; font-weight: 700;
+    letter-spacing: 0.045em; line-height: 1; text-transform: uppercase; color: var(--brand);
     margin: 0 0 var(--sp-3);
   }
   .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 2px; }
@@ -110,10 +110,10 @@ import { company, nav, social, socialIntro } from '../data/site';
     padding: 0; font: inherit;
     color: var(--fg); background: var(--ink-3); border: 1px solid var(--line-2);
     border-radius: var(--radius-pill); text-decoration: none;
-    transition: transform var(--dur-1) var(--ease), border-color var(--dur-1), background var(--dur-1);
+    transition: transform 220ms var(--ease), color 220ms var(--ease), border-color 220ms var(--ease), background 220ms var(--ease);
   }
   .social-control :global(svg) { width: 21px; height: 21px; }
-  a.social-control:hover { transform: translateY(-2px); border-color: var(--brand); background: var(--ink-4); }
+  .social-control:hover { color: var(--brand); transform: translateY(-2px) scale(1.07); border-color: var(--brand); background: var(--ink-4); }
   a.social-control:active { transform: translateY(0) scale(0.97); }
   .social-control.is-pending { color: var(--fg-3); cursor: not-allowed; opacity: 0.72; }
 
@@ -135,6 +135,6 @@ import { company, nav, social, socialIntro } from '../data/site';
   }
   @media (prefers-reduced-motion: reduce) {
     .social-control { transition: none; }
-    a.social-control:hover, a.social-control:active { transform: none; }
+    .social-control:hover, a.social-control:active { transform: none; }
   }
 </style>

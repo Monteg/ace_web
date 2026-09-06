@@ -1,14 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
 import ExperienceCard from '../components/showcase/ExperienceCard.astro';
+import GameTile from '../components/showcase/GameTile.astro';
 import OrbitBorder from '../components/showcase/OrbitBorder.astro';
+import { getEntry } from 'astro:content';
 import { why } from '../data/site';
 import { experienceCardDefaults } from '../data/experience-card-settings';
 import { borderTrailDefaults } from '../data/border-trail-settings';
+import { gameCardDefaults } from '../data/game-card-settings';
 
 const previewCard = why[1];
 const motionSettings = experienceCardDefaults;
 const borderSettings = borderTrailDefaults;
+const gameCardSettings = gameCardDefaults;
+const gameCardPreview = await getEntry('games', 'pirates-rush');
+if (!gameCardPreview) throw new Error('Pirates Rush is required for the Effects Lab game-card preview.');
 const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; --orbit-length: ${borderSettings.orbitLength}%; --orbit-width: ${borderSettings.orbitWidth}px; --orbit-opacity: ${borderSettings.orbitOpacity}; --orbit-blur: ${borderSettings.orbitBlur}px;`;
 ---
 
@@ -163,8 +169,166 @@ const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; 
         </div>
       </section>
 
+      <section class="lab-tool lab-tool--game" aria-labelledby="game-card-settings-title">
+        <div class="lab-layout">
+          <div class="preview-shell game-card-preview" id="gameCardPreview">
+            <div class="preview-mode" role="group" aria-label="Game Card preview mode">
+              <button type="button" data-game-preview-mode="desktop" aria-pressed="true">Desktop</button>
+              <button type="button" data-game-preview-mode="mobile" aria-pressed="false">Mobile</button>
+            </div>
+            <div class="game-card-preview-frame">
+              <GameTile game={gameCardPreview} eager />
+            </div>
+            <p class="preview-hint">Move the pointer over the card to preview its hover state.</p>
+          </div>
+
+          <form class="effect-controls game-card-controls" id="gameCardControls">
+            <div class="control-heading">
+              <p class="eyebrow">Effect 03</p>
+              <h2 class="d3" id="game-card-settings-title">Game card</h2>
+              <p>Fine-tune the shared catalogue card. The saved preset applies to every Game Card on the site.</p>
+            </div>
+
+            <label class="control-toggle">
+              <span>
+                <b>Quick Play in a new tab</b>
+                <small>When disabled, the Play action disappears and the entire card opens the game information page.</small>
+              </span>
+              <input id="gameQuickPlayEnabled" name="quickPlayEnabled" type="checkbox" checked={gameCardSettings.quickPlayEnabled} />
+              <i aria-hidden="true"></i>
+              <output for="gameQuickPlayEnabled" id="gameQuickPlayEnabledValue">Enabled</output>
+            </label>
+
+            <div class="control-grid">
+              <label class="control-row">
+                <span>Card hover scale</span>
+                <output for="gameHoverScale" id="gameHoverScaleValue">{gameCardSettings.hoverScale.toFixed(3)}×</output>
+                <input id="gameHoverScale" name="hoverScale" type="range" min="1" max="1.08" step="0.001" value={gameCardSettings.hoverScale} />
+              </label>
+
+              <label class="control-row">
+                <span>Card lift</span>
+                <output for="gameHoverLift" id="gameHoverLiftValue">{gameCardSettings.hoverLift}px</output>
+                <input id="gameHoverLift" name="hoverLift" type="range" min="0" max="18" step="1" value={gameCardSettings.hoverLift} />
+              </label>
+
+              <label class="control-row">
+                <span>Motion duration</span>
+                <output for="gameMotionDuration" id="gameMotionDurationValue">{gameCardSettings.motionDuration.toFixed(2)}s</output>
+                <input id="gameMotionDuration" name="motionDuration" type="range" min="0.1" max="1.2" step="0.05" value={gameCardSettings.motionDuration} />
+              </label>
+
+              <label class="control-row">
+                <span>Corner radius</span>
+                <output for="gameCornerRadius" id="gameCornerRadiusValue">{gameCardSettings.cornerRadius}px</output>
+                <input id="gameCornerRadius" name="cornerRadius" type="range" min="0" max="32" step="1" value={gameCardSettings.cornerRadius} />
+              </label>
+
+              <label class="control-row">
+                <span>Background scale</span>
+                <output for="gameBackgroundScale" id="gameBackgroundScaleValue">{gameCardSettings.backgroundScale.toFixed(3)}×</output>
+                <input id="gameBackgroundScale" name="backgroundScale" type="range" min="1" max="1.2" step="0.005" value={gameCardSettings.backgroundScale} />
+              </label>
+
+              <label class="control-row">
+                <span>Background opacity</span>
+                <output for="gameBackgroundOpacity" id="gameBackgroundOpacityValue">{Math.round(gameCardSettings.backgroundOpacity * 100)}%</output>
+                <input id="gameBackgroundOpacity" name="backgroundOpacity" type="range" min="0.2" max="1" step="0.02" value={gameCardSettings.backgroundOpacity} />
+              </label>
+
+              <label class="control-row">
+                <span>Logo scale</span>
+                <output for="gameLogoScale" id="gameLogoScaleValue">{gameCardSettings.logoScale.toFixed(3)}×</output>
+                <input id="gameLogoScale" name="logoScale" type="range" min="1" max="1.5" step="0.005" value={gameCardSettings.logoScale} />
+              </label>
+
+              <label class="control-row">
+                <span>Logo horizontal shift</span>
+                <output for="gameLogoShiftX" id="gameLogoShiftXValue">{gameCardSettings.logoShiftX.toFixed(1)}%</output>
+                <input id="gameLogoShiftX" name="logoShiftX" type="range" min="-30" max="20" step="0.1" value={gameCardSettings.logoShiftX} />
+              </label>
+
+              <label class="control-row">
+                <span>Logo lift</span>
+                <output for="gameLogoLift" id="gameLogoLiftValue">{gameCardSettings.logoLift}%</output>
+                <input id="gameLogoLift" name="logoLift" type="range" min="0" max="60" step="1" value={gameCardSettings.logoLift} />
+              </label>
+
+              <label class="control-row">
+                <span>Play button position</span>
+                <output for="gamePlayPosition" id="gamePlayPositionValue">{gameCardSettings.playPosition.toFixed(1)}%</output>
+                <input id="gamePlayPosition" name="playPosition" type="range" min="36" max="68" step="0.1" value={gameCardSettings.playPosition} />
+              </label>
+
+              <label class="control-row">
+                <span>Play reveal travel</span>
+                <output for="gamePlayTravel" id="gamePlayTravelValue">{gameCardSettings.playTravel}px</output>
+                <input id="gamePlayTravel" name="playTravel" type="range" min="0" max="40" step="1" value={gameCardSettings.playTravel} />
+              </label>
+
+              <label class="control-row">
+                <span>Play hover scale</span>
+                <output for="gameButtonHoverScale" id="gameButtonHoverScaleValue">{gameCardSettings.buttonHoverScale.toFixed(3)}×</output>
+                <input id="gameButtonHoverScale" name="buttonHoverScale" type="range" min="1" max="1.12" step="0.005" value={gameCardSettings.buttonHoverScale} />
+              </label>
+
+              <label class="control-row">
+                <span>Mobile background opacity</span>
+                <output for="gameMobileBackgroundOpacity" id="gameMobileBackgroundOpacityValue">{Math.round(gameCardSettings.mobileBackgroundOpacity * 100)}%</output>
+                <input id="gameMobileBackgroundOpacity" name="mobileBackgroundOpacity" type="range" min="0.55" max="1" step="0.01" value={gameCardSettings.mobileBackgroundOpacity} />
+              </label>
+
+              <label class="control-row">
+                <span>Mobile logo lift</span>
+                <output for="gameMobileLogoLift" id="gameMobileLogoLiftValue">{gameCardSettings.mobileLogoLift}%</output>
+                <input id="gameMobileLogoLift" name="mobileLogoLift" type="range" min="0" max="50" step="1" value={gameCardSettings.mobileLogoLift} />
+              </label>
+
+              <label class="control-row">
+                <span>Shade height</span>
+                <output for="gameShadeHeight" id="gameShadeHeightValue">{gameCardSettings.shadeHeight.toFixed(1)}%</output>
+                <input id="gameShadeHeight" name="shadeHeight" type="range" min="35" max="85" step="0.1" value={gameCardSettings.shadeHeight} />
+              </label>
+
+              <label class="control-row">
+                <span>Shade strength</span>
+                <output for="gameShadeOpacity" id="gameShadeOpacityValue">{Math.round(gameCardSettings.shadeOpacity * 100)}%</output>
+                <input id="gameShadeOpacity" name="shadeOpacity" type="range" min="0" max="1" step="0.02" value={gameCardSettings.shadeOpacity} />
+              </label>
+
+              <label class="control-row">
+                <span>Shade blur</span>
+                <output for="gameShadeBlur" id="gameShadeBlurValue">{gameCardSettings.shadeBlur}px</output>
+                <input id="gameShadeBlur" name="shadeBlur" type="range" min="0" max="30" step="1" value={gameCardSettings.shadeBlur} />
+              </label>
+
+              <label class="control-row">
+                <span>Border width</span>
+                <output for="gameBorderWidth" id="gameBorderWidthValue">{gameCardSettings.borderWidth.toFixed(1)}px</output>
+                <input id="gameBorderWidth" name="borderWidth" type="range" min="0" max="4" step="0.1" value={gameCardSettings.borderWidth} />
+              </label>
+
+              <label class="control-row">
+                <span>Border intensity</span>
+                <output for="gameBorderOpacity" id="gameBorderOpacityValue">{Math.round(gameCardSettings.borderOpacity * 100)}%</output>
+                <input id="gameBorderOpacity" name="borderOpacity" type="range" min="0" max="1" step="0.02" value={gameCardSettings.borderOpacity} />
+              </label>
+            </div>
+
+            <div class="control-actions">
+              <button class="btn btn-primary" type="button" id="applyGameCardSettings">Apply to site</button>
+              <button class="btn btn-ghost" type="button" id="copyGameCardSettings">Copy settings</button>
+              <button class="btn btn-ghost" type="reset">Reset</button>
+            </div>
+
+            <pre class="settings-output settings-output--game" id="gameCardSettingsOutput" aria-label="Current game card settings"></pre>
+            <p class="copy-status" id="gameCardStatus" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
       <footer class="lab-footer">
-        Motion and Border Trail presets are stored separately in this browser and apply only to their matching site effect.
+        Motion, Border Trail and Game Card presets are stored separately in this browser and apply only to their matching site effect.
       </footer>
     </div>
   </section>
@@ -185,7 +349,8 @@ const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; 
     line-height: 1.6;
   }
   .lab-tool { scroll-margin-top: var(--sp-6); }
-  .lab-tool--border {
+  .lab-tool--border,
+  .lab-tool--game {
     margin-top: clamp(96px, 12vw, 180px);
     padding-top: clamp(72px, 9vw, 128px);
     border-top: 1px solid var(--line);
@@ -237,6 +402,48 @@ const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; 
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
+  .game-card-preview {
+    align-content: center;
+    grid-template-rows: auto 1fr auto;
+    min-height: 600px;
+    background:
+      radial-gradient(circle at 50% 22%, rgb(255 86 0 / 0.1), transparent 44%),
+      var(--ink-2);
+  }
+  .preview-mode {
+    display: inline-flex;
+    justify-self: end;
+    gap: 3px;
+    margin-bottom: var(--sp-4);
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    background: var(--ink-0);
+  }
+  .preview-mode button {
+    min-height: 32px;
+    padding-inline: 12px;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--fg-3);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .preview-mode button[aria-pressed='true'] { background: var(--brand); color: var(--on-brand-button); }
+  .preview-mode button:focus-visible { outline: 2px solid var(--peach); outline-offset: 2px; }
+  .game-card-preview-frame { width: min(100%, 320px); }
+  .preview-hint {
+    width: min(100%, 320px);
+    margin-top: var(--sp-4);
+    color: var(--fg-3);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    text-align: center;
+  }
   .effect-controls {
     display: grid;
     gap: var(--sp-5);
@@ -273,7 +480,65 @@ const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; 
     accent-color: var(--brand);
     cursor: pointer;
   }
+  .control-toggle {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 48px auto;
+    gap: var(--sp-3);
+    align-items: center;
+    padding: var(--sp-4);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--ink-0);
+    cursor: pointer;
+  }
+  .control-toggle > span { display: grid; gap: 4px; }
+  .control-toggle b { color: var(--fg); font-size: 0.95rem; }
+  .control-toggle small { color: var(--fg-3); font-size: 0.76rem; line-height: 1.45; }
+  .control-toggle input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+  }
+  .control-toggle i {
+    position: relative;
+    width: 48px;
+    height: 28px;
+    border: 1px solid var(--line-2);
+    border-radius: var(--radius-pill);
+    background: var(--ink-3);
+    transition: border-color var(--dur-2) var(--ease), background var(--dur-2) var(--ease);
+  }
+  .control-toggle i::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--fg-2);
+    transition: transform var(--dur-2) var(--ease), background var(--dur-2) var(--ease);
+  }
+  .control-toggle input:checked + i { border-color: var(--brand); background: rgb(255 86 0 / 0.2); }
+  .control-toggle input:checked + i::after { transform: translateX(20px); background: var(--brand); }
+  .control-toggle input:focus-visible + i { outline: 2px solid var(--peach); outline-offset: 3px; }
+  .control-toggle output {
+    min-width: 58px;
+    color: var(--peach);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.72rem;
+    text-align: right;
+    text-transform: uppercase;
+  }
   .control-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+  .control-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-5) var(--sp-6);
+  }
   .settings-output {
     min-height: 220px;
     overflow: auto;
@@ -287,6 +552,7 @@ const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; 
     line-height: 1.65;
   }
   .settings-output--border { min-height: 154px; }
+  .settings-output--game { min-height: 390px; }
   .copy-status { min-height: 1.4em; color: var(--peach); font-size: var(--step--1); }
   .lab-footer {
     margin-top: clamp(72px, 9vw, 128px);
@@ -307,6 +573,10 @@ const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; 
     .effect-controls { padding: var(--sp-5); }
     .control-actions .btn { width: 100%; }
     .border-preview { min-height: 76px; }
+    .control-grid { grid-template-columns: 1fr; }
+    .game-card-preview { min-height: 0; }
+    .control-toggle { grid-template-columns: minmax(0, 1fr) 48px; }
+    .control-toggle output { grid-column: 1 / -1; text-align: left; }
   }
 </style>
 
@@ -323,6 +593,12 @@ const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; 
     readBorderTrailSettings,
     saveBorderTrailSettings,
   } from '../lib/border-trail';
+  import {
+    applyGameCardSettings,
+    normalizeGameCardSettings,
+    readGameCardSettings,
+    saveGameCardSettings,
+  } from '../lib/game-card-settings';
 
   const motionPreview = document.getElementById('motionPreview');
   const motionForm = document.getElementById('motionControls') as HTMLFormElement | null;
@@ -337,6 +613,20 @@ const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; 
   const borderStatus = document.getElementById('borderStatus');
   const borderInputs = borderForm
     ? Array.from(borderForm.querySelectorAll<HTMLInputElement>('input[type="range"]'))
+    : [];
+
+  const gameCardPreview = document.getElementById('gameCardPreview');
+  const gameCardForm = document.getElementById('gameCardControls') as HTMLFormElement | null;
+  const gameCardOutput = document.getElementById('gameCardSettingsOutput');
+  const gameCardStatus = document.getElementById('gameCardStatus');
+  const gameCardQuickPlay = document.getElementById('gameQuickPlayEnabled') as HTMLInputElement | null;
+  const gameCardQuickPlayValue = document.getElementById('gameQuickPlayEnabledValue');
+  const gameCardInputs = gameCardForm
+    ? Array.from(gameCardForm.querySelectorAll<HTMLInputElement>('input[type="range"]'))
+    : [];
+  const gameCardPreviewTarget = gameCardPreview?.querySelector<HTMLElement>('[data-game-card]');
+  const gameCardPreviewModeButtons = gameCardPreview
+    ? Array.from(gameCardPreview.querySelectorAll<HTMLButtonElement>('[data-game-preview-mode]'))
     : [];
 
   const valuesFrom = (inputs: HTMLInputElement[]) =>
@@ -359,6 +649,15 @@ const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; 
     return `${value}px`;
   };
 
+  const formatGameCardValue = (name: string, value: number) => {
+    if (['hoverScale', 'backgroundScale', 'logoScale', 'buttonHoverScale'].includes(name)) return `${value.toFixed(3)}×`;
+    if (name === 'motionDuration') return `${value.toFixed(2)}s`;
+    if (['backgroundOpacity', 'mobileBackgroundOpacity', 'shadeOpacity', 'borderOpacity'].includes(name)) return `${Math.round(value * 100)}%`;
+    if (['logoShiftX', 'logoLift', 'mobileLogoLift', 'playPosition', 'shadeHeight'].includes(name)) return `${value.toFixed(1)}%`;
+    if (name === 'borderWidth') return `${value.toFixed(1)}px`;
+    return `${value}px`;
+  };
+
   const setInputValues = (inputs: HTMLInputElement[], settings: Record<string, number>) => {
     inputs.forEach((input) => {
       const value = settings[input.name];
@@ -373,6 +672,14 @@ const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; 
     inputs.forEach((input) => {
       const output = document.getElementById(`${input.name}Value`);
       if (output) output.textContent = formatter(input.name, Number(input.value));
+    });
+  };
+
+  const updateGameCardOutputs = () => {
+    gameCardInputs.forEach((input) => {
+      const outputId = `game${input.name.charAt(0).toUpperCase()}${input.name.slice(1)}Value`;
+      const output = document.getElementById(outputId);
+      if (output) output.textContent = formatGameCardValue(input.name, Number(input.value));
     });
   };
 
@@ -392,15 +699,44 @@ const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; 
     return settings;
   };
 
+  const syncGameCardPreview = () => {
+    const settings = normalizeGameCardSettings({
+      ...valuesFrom(gameCardInputs),
+      quickPlayEnabled: gameCardQuickPlay?.checked ?? true,
+    });
+    applyGameCardSettings(settings, gameCardPreview ?? document);
+    updateGameCardOutputs();
+    if (gameCardQuickPlayValue) gameCardQuickPlayValue.textContent = settings.quickPlayEnabled ? 'Enabled' : 'Disabled';
+    if (gameCardOutput) gameCardOutput.textContent = JSON.stringify(settings, null, 2);
+    return settings;
+  };
+
   const savedMotion = readExperienceCardSettings();
   if (savedMotion) setInputValues(motionInputs, savedMotion as unknown as Record<string, number>);
   const savedBorder = readBorderTrailSettings();
   if (savedBorder) setInputValues(borderInputs, savedBorder as unknown as Record<string, number>);
+  const savedGameCard = readGameCardSettings();
+  if (savedGameCard) {
+    setInputValues(gameCardInputs, savedGameCard as unknown as Record<string, number>);
+    if (gameCardQuickPlay) gameCardQuickPlay.checked = savedGameCard.quickPlayEnabled;
+  }
 
   motionInputs.forEach((input) => input.addEventListener('input', syncMotionPreview));
   borderInputs.forEach((input) => input.addEventListener('input', syncBorderPreview));
+  gameCardInputs.forEach((input) => input.addEventListener('input', syncGameCardPreview));
+  gameCardQuickPlay?.addEventListener('change', syncGameCardPreview);
+  gameCardPreviewModeButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const mobile = button.dataset.gamePreviewMode === 'mobile';
+      if (gameCardPreviewTarget) gameCardPreviewTarget.dataset.mobilePreview = String(mobile);
+      gameCardPreviewModeButtons.forEach((item) => {
+        item.setAttribute('aria-pressed', String(item === button));
+      });
+    });
+  });
   syncMotionPreview();
   syncBorderPreview();
+  syncGameCardPreview();
 
   motionForm?.addEventListener('reset', () => requestAnimationFrame(() => {
     syncMotionPreview();
@@ -409,6 +745,10 @@ const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; 
   borderForm?.addEventListener('reset', () => requestAnimationFrame(() => {
     syncBorderPreview();
     if (borderStatus) borderStatus.textContent = 'Border preview reset. Apply to save it.';
+  }));
+  gameCardForm?.addEventListener('reset', () => requestAnimationFrame(() => {
+    syncGameCardPreview();
+    if (gameCardStatus) gameCardStatus.textContent = 'Game Card preview reset. Apply to save it.';
   }));
 
   document.getElementById('applyMotionSettings')?.addEventListener('click', () => {
@@ -420,6 +760,11 @@ const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; 
     const settings = saveBorderTrailSettings(syncBorderPreview());
     applyBorderTrailSettings(settings);
     if (borderStatus) borderStatus.textContent = 'Border Trail applied to the site navigation.';
+  });
+  document.getElementById('applyGameCardSettings')?.addEventListener('click', () => {
+    const settings = saveGameCardSettings(syncGameCardPreview());
+    applyGameCardSettings(settings);
+    if (gameCardStatus) gameCardStatus.textContent = 'Game Card preset saved and applied across the site.';
   });
 
   const copySettings = async (output: HTMLElement | null, status: HTMLElement | null) => {
@@ -436,5 +781,8 @@ const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; 
   });
   document.getElementById('copyBorderSettings')?.addEventListener('click', () => {
     void copySettings(borderOutput, borderStatus);
+  });
+  document.getElementById('copyGameCardSettings')?.addEventListener('click', () => {
+    void copySettings(gameCardOutput, gameCardStatus);
   });
 </script>
