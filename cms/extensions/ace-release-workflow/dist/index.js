@@ -2,6 +2,7 @@ import { defineEndpoint } from '@directus/extensions-sdk';
 import crypto from 'node:crypto';
 import {
   assertPublishSelection,
+  buildLocalizationReport,
   checksum,
   mergeSelectedRelease,
   normalizeWorkingContent,
@@ -41,6 +42,21 @@ async function readWorkingContent(ItemsService, schema, accountability) {
     service('faq_items').readByQuery({ fields: ['*', 'translations.*'], limit: -1 }),
   ]);
   return normalizeWorkingContent({ locales, games, siteStrings, faqItems });
+}
+
+function booleanQuery(value) {
+  return ['1', 'true', 'yes'].includes(String(value ?? '').toLowerCase());
+}
+
+function filterLocalizationRows(rows, query) {
+  return rows.filter((row) => {
+    if (query.locale && row.locale !== query.locale) return false;
+    if (query.state && row.state !== query.state) return false;
+    if (query.game && row.slug !== query.game && row.game_id !== query.game) return false;
+    if (booleanQuery(query.seo_missing) && !row.seo_missing) return false;
+    if (booleanQuery(query.without_approved) && row.approved) return false;
+    return true;
+  });
 }
 
 async function createRelease(database, payload, createdBy, sourceRelease = null) {
@@ -104,6 +120,30 @@ export default defineEndpoint({
   id: 'ace-releases',
   handler: (router, { services, getSchema, database, env, logger }) => {
   const { ItemsService } = services;
+
+  router.get('/localization-report', async (req, res, next) => {
+    try {
+      if (!req.accountability?.user) throw httpError(401, 'Authentication is required.');
+      const schema = await getSchema();
+      const service = (collection) => new ItemsService(collection, { schema, accountability: req.accountability });
+      const [locales, games, siteStrings] = await Promise.all([
+        service('locales').readByQuery({ fields: ['*'], filter: { is_active: { _eq: true } }, limit: -1 }),
+        service('games').readByQuery({ fields: ['id', 'internal_name', 'slug', 'sort_order', 'translations.*'], limit: -1 }),
+        service('site_strings').readByQuery({ fields: ['key', 'translations.*'], filter: { active: { _eq: true } }, limit: -1 }),
+      ]);
+      const report = buildLocalizationReport({ locales, games, siteStrings });
+      const scope = String(req.query.scope ?? 'all');
+      const gameRows = scope === 'site' ? [] : filterLocalizationRows(report.games, req.query);
+      const siteRows = scope === 'games' ? [] : filterLocalizationRows(report.site, req.query);
+      res.json({
+        data: { games: gameRows, site: siteRows },
+        meta: { game_rows: gameRows.length, site_rows: siteRows.length },
+      });
+    } catch (error) {
+      logger.error(error);
+      next(error);
+    }
+  });
 
   router.post('/publish', async (req, res, next) => {
     try {

@@ -14,6 +14,10 @@ const ITEM_TRANSLATION_FIELDS = ['locale', 'title', 'text', 'translation_status'
 const GALLERY_FIELDS = ['id', 'file', 'sort_order', 'enabled'];
 const GALLERY_TRANSLATION_FIELDS = ['locale', 'alt', 'caption', 'translation_status'];
 const LOCALE_FIELDS = ['code', 'name', 'native_name', 'is_default', 'is_active', 'sort_order', 'fallback_locale', 'direction', 'hreflang'];
+const GAME_LOCALIZATION_FIELDS = [
+  'display_name', 'short_description', 'overview', 'main_feature', 'layout_display',
+  'seo_title', 'seo_description', 'card_alt', 'hero_alt',
+];
 
 export function relationId(value) {
   if (value && typeof value === 'object') return value.id ?? value.code ?? null;
@@ -89,6 +93,69 @@ export function normalizeWorkingContent({ locales = [], games = [], siteStrings 
     })),
     games: ordered(games).map(normalizeGame),
   };
+}
+
+function completion(fields, source) {
+  const missingFields = fields.filter((field) => !present(source?.[field]));
+  return {
+    completed: fields.length - missingFields.length,
+    total: fields.length,
+    percent: Math.round(((fields.length - missingFields.length) / fields.length) * 100),
+    missing_fields: missingFields,
+  };
+}
+
+/**
+ * Creates the filterable localization report served by the Directus endpoint.
+ * It intentionally reads working content, not a release snapshot, so editors can
+ * find gaps before publishing. A percentage measures filled fields; approval is
+ * reported separately and never inferred from completeness.
+ */
+export function buildLocalizationReport({ locales = [], games = [], siteStrings = [] }) {
+  const activeLocales = ordered(locales.filter((locale) => locale.is_active));
+  const gameRows = [];
+  for (const game of ordered(games)) {
+    for (const locale of activeLocales) {
+      const code = String(relationId(locale.code) ?? '');
+      const entry = (game.translations ?? []).find((item) => String(relationId(item.locale) ?? '') === code);
+      const progress = completion(GAME_LOCALIZATION_FIELDS, entry);
+      gameRows.push({
+        scope: 'game',
+        game_id: game.id,
+        game: game.internal_name,
+        slug: game.slug,
+        locale: code,
+        state: entry?.translation_status ?? 'missing',
+        approved: entry?.translation_status === 'approved',
+        seo_missing: !present(entry?.seo_title) || !present(entry?.seo_description),
+        alt_missing: !present(entry?.card_alt) || !present(entry?.hero_alt),
+        ...progress,
+      });
+    }
+  }
+
+  const siteRows = activeLocales.map((locale) => {
+    const code = String(relationId(locale.code) ?? '');
+    const entries = siteStrings.map((slot) => {
+      const entry = (slot.translations ?? []).find((item) => String(relationId(item.locale) ?? '') === code);
+      return { key: slot.key, entry };
+    });
+    const missingKeys = entries.filter(({ entry }) => !present(entry?.value)).map(({ key }) => key);
+    const approved = entries.filter(({ entry }) => entry?.translation_status === 'approved' && present(entry.value)).length;
+    const total = entries.length;
+    return {
+      scope: 'site',
+      locale: code,
+      state: missingKeys.length ? 'missing' : approved === total ? 'approved' : 'draft',
+      approved,
+      completed: total - missingKeys.length,
+      total,
+      percent: total ? Math.round(((total - missingKeys.length) / total) * 100) : 100,
+      missing_keys: missingKeys,
+    };
+  });
+
+  return { games: gameRows, site: siteRows };
 }
 
 function copy(value) {

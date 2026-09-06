@@ -5,6 +5,13 @@ few days, most of it waiting for DNS.
 
 If you are doing this with an AI assistant, point it at `AGENTS.md` first.
 
+This document describes the current Cloudflare-oriented website host setup.
+CMS-triggered builds are provider-neutral and are documented in
+`docs/CMS-RELEASES.md`. After CMS cutover the host must receive
+`CONTENT_SOURCE=cms`, `CMS_URL`, `CMS_BUILD_TOKEN`, `CMS_RELEASE_ID` and run
+`npm run cms:deploy-release`; plain `npm run build` is only the local/static
+fallback workflow.
+
 ---
 
 ## 0. Run it on your own machine first
@@ -40,8 +47,9 @@ something regressed.
    especially anything to do with mail.
 3. **Keep the plan paid for 30 days after the switch.** It is the rollback.
 
-The images, the fonts and the game data are already in this repo. Nothing else
-has to be rescued.
+Current images, fonts and the migration fallback are in this repo. Export the
+full Webflow collection and run the migration checklist in
+`docs/CMS-MIGRATION.md` before cancelling the legacy account.
 
 ---
 

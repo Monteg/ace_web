@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  buildLocalizationReport,
   checksum,
   mergeSelectedRelease,
   normalizeWorkingContent,
@@ -133,4 +134,34 @@ test('release checksums and webhook signatures are deterministic', () => {
   assert.equal(first, second);
   assert.equal(secureEqual(first, second), true);
   assert.equal(secureEqual(first, `${second}0`), false);
+});
+
+test('localization report separates completeness from approval', () => {
+  const italian = { ...locale, code: 'it', name: 'Italian', native_name: 'Italiano', is_default: false, sort_order: 2, fallback_locale: 'en', hreflang: 'it' };
+  const first = game(1, 'first-game', 'English overview');
+  first.translations.push({
+    locale: 'it',
+    display_name: 'Primo gioco',
+    short_description: 'Descrizione',
+    overview: 'Panoramica',
+    main_feature: 'Bonus',
+    layout_display: '5x3',
+    seo_title: '',
+    seo_description: '',
+    card_alt: 'Carta',
+    hero_alt: 'Hero',
+    translation_status: 'draft',
+  });
+  const report = buildLocalizationReport({
+    locales: [locale, italian],
+    games: [first],
+    siteStrings: [{ key: 'header.games', translations: [{ locale: 'en', value: 'Games', translation_status: 'approved' }] }],
+  });
+  const row = report.games.find((entry) => entry.locale === 'it');
+  assert.equal(row.state, 'draft');
+  assert.equal(row.approved, false);
+  assert.equal(row.seo_missing, true);
+  assert.equal(row.percent, 78);
+  assert.deepEqual(row.missing_fields, ['seo_title', 'seo_description']);
+  assert.equal(report.site.find((entry) => entry.locale === 'it').state, 'missing');
 });

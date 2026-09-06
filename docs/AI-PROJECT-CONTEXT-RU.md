@@ -1,11 +1,11 @@
 # Ace Games: полный контекст проекта для AI-планировщика
 
-Версия документа: 1.1
-Дата среза: 5 сентября 2026 года
+Версия документа: 2.0
+Дата среза: 6 сентября 2026 года
 Репозиторий: C:\Users\Gener\Documents\ChatGPT\ACE_web\acegames-showcase
 Публичный домен, заложенный в коде: https://acegames.io
 Текущий режим работы команды: локальная разработка
-Язык интерфейса сайта: английский
+Язык интерфейса сайта: English default; CMS-ready locale routes и fallback
 Язык этого документа: русский
 
 ## 1. Назначение документа
@@ -127,20 +127,25 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
 - Реализованы responsive images через Astro Image.
 - Реализованы reduced-motion fallbacks.
 - Контактный backend для Cloudflare Pages описан в functions/api/contact.ts.
+- Добавлены Directus/PostgreSQL schema, roles, media model и server validation.
+- Добавлены 24-game migration/parity, build-time release sync и CONTENT_SOURCE switch.
+- Добавлены site/game localization, locale routes, Language Switcher и SEO hreflang.
+- Добавлен Google Sheets bulk editor с dynamic locales, Drive media и conflict protection.
+- Добавлены selective immutable releases, signed deploy callback и rollback.
 - Локальная типизация и production build проходят.
 
 ### 4.2. Проверенное качество сборки
 
-На 5 сентября 2026 года выполнены:
+На 6 сентября 2026 года выполнены:
 
-- npm run check: 0 errors, 0 warnings, 0 hints для 57 файлов;
+- npm run check: 0 errors, 0 warnings, 0 hints для 111 файлов;
 - npm run ship: успешно;
 - 14 из 14 parity gates: успешно;
-- 32 страницы собраны;
-- home first-load weight по внутренней проверке: 1031 KB;
-- representative game page до запуска demo: 302 KB;
-- build создаёт 375 optimized image variants;
-- у всех 318 отрендеренных img elements есть width, height и alt;
+- 33 страницы собраны в default English local mode;
+- home first-load weight по внутренней проверке: 1304 KB;
+- representative game page до запуска demo: 337 KB;
+- build создаёт 389 optimized image variants;
+- у всех 446 отрендеренных img elements есть width, height и alt;
 - внутренних битых ссылок по текущей проверке нет;
 - пустых iframe src нет;
 - на каждой странице ровно один h1;
@@ -153,7 +158,7 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
 - текущая ветка: main;
 - основной GitHub remote для передачи проекта: github, https://github.com/Monteg/ace_web.git;
 - дополнительный внутренний remote: origin, git.chatgpt-team.site;
-- стабильный срез, описанный версией документа 1.1, фиксируется тем же commit, что и это обновление документации;
+- стабильный срез, описанный версией документа 2.0, фиксируется тем же commit, что и это обновление документации;
 - рабочая ветка и целевая ветка GitHub: main.
 
 Любой AI-исполнитель обязан считать будущие незакоммиченные изменения пользовательскими. Нельзя выполнять reset, checkout или массово отменять изменения без прямого разрешения владельца.
@@ -168,10 +173,10 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
 | Рендеринг | Static Site Generation |
 | Язык | Astro, TypeScript, JavaScript, CSS, Markdown |
 | Runtime framework | отсутствует |
-| База данных | отсутствует |
-| CMS | отсутствует |
-| Контент игр | Astro Content Collection, Markdown frontmatter |
-| Валидация контента | Zod через src/content.config.ts |
+| База данных | PostgreSQL для приватной CMS; отсутствует в browser runtime |
+| CMS | Directus 11, build-time only |
+| Контент игр | Directus working data → immutable release; Markdown read-only fallback в transitional mode |
+| Валидация контента | Directus hook + release validation + Zod + Astro schemas |
 | Изображения | astro:assets и Sharp |
 | Иконки | astro-icon, Phosphor через префикс ph: |
 | Анимация hero главной | CSS и GSAP ScrollTrigger |
@@ -211,6 +216,12 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
     npm run verify
     npm run ship
     npm run new-game -- --slug neon-vault --name "Neon Vault" --type slot
+    npm run test:cms-model
+    npm run cms:bootstrap
+    npm run cms:migrate -- --csv path/to/export.csv
+    npm run cms:parity
+    npm run cms:publish -- --all
+    npm run cms:rollback -- --release UUID
 
 Значение команд:
 
@@ -220,19 +231,26 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
 - npm run check выполняет Astro и TypeScript diagnostics;
 - npm run verify проверяет уже существующий dist;
 - npm run ship выполняет build, затем все parity gates;
-- npm run new-game создаёт новый Markdown-record игры.
+- npm run new-game создаёт только legacy/local fallback record до cutover;
+- npm run test:cms-model проверяет schema, migration, localization, selective releases, checksum и Sheets conflicts;
+- cms:bootstrap устанавливает Directus schema/seeds/access;
+- cms:migrate + cms:parity готовят и сравнивают migration package;
+- cms:publish/rollback создают deployable release, не меняя сайт до success callback.
 
 Определение готовности существующего проекта: npm run check без диагностик и npm run ship со всеми PASS. Для event-функций дополнительно нужен совместимый запуск scripts/event.test.mjs.
 
 ## 6. Архитектурная модель
 
-Сайт построен без клиентского framework runtime. Основной поток данных:
+Сайт построен без клиентского framework runtime. Production-поток данных:
 
-    Markdown и TypeScript data
-        → Astro Content Collections и page frontmatter
-        → Astro components
+    Directus working content
+        → validated immutable content_release
+        → build-time sync в src/generated/cms
+        → Astro pages/components
         → статические HTML, CSS, JavaScript и responsive assets
         → CDN или static host
+
+Transitional fallback: `CONTENT_SOURCE=local` читает Markdown и TypeScript data. После cutover эти файлы являются read-only backup и не должны редактироваться параллельно с CMS.
 
 Клиентский JavaScript используется точечно:
 
@@ -341,13 +359,13 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
 
 | Тип информации | Source of truth |
 | --- | --- |
-| Компания, адрес, email, nav, CTA | src/data/site.ts |
-| Hero stats | src/data/site.ts |
-| Integration и compliance rows | src/data/site.ts |
-| FAQ | src/data/site.ts |
+| Компания, адрес, email, nav, CTA | CMS Site Strings после cutover; src/data/site.ts local fallback |
+| Hero stats | CMS Site Strings после cutover; src/data/site.ts local fallback |
+| Integration и compliance rows | CMS Site Strings/known slots; src/data/site.ts local fallback |
+| FAQ | CMS faq_items + faq_item_translations |
 | Partners и social | src/data/site.ts |
-| Игры | src/content/games/*.md |
-| Схема игры | src/content.config.ts |
+| Игры | CMS games/translations/sections/items/gallery; active content_release для production |
+| Схема игры | cms/schema/*.json, Directus validation hook, scripts/cms/lib/*.mjs |
 | Terms и Privacy | src/content/legal/*.md |
 | Event dates, copy, team, games, booking | src/data/events.ts |
 | Форматирование игровых спецификаций | src/lib/format.ts |
@@ -367,6 +385,10 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
 | Runtime Border Trail | src/lib/border-trail.ts |
 | Техническая настройка эффектов | src/pages/effects-lab.astro |
 | Release gates | scripts/verify.mjs |
+| Build-time source adapter | src/lib/content-source.ts |
+| Локализация | src/i18n, CMS locales/site strings/translations |
+| Release lifecycle | content_releases + cms/extensions/ace-release-workflow |
+| Google Sheets bulk editor | integrations/google-sheets |
 
 Массив why является source of truth для Excellence cards, а process для Future of Gaming. Флаги homepageSections являются source of truth для включения Craft и Integration: в текущем стабильном срезе оба значения false.
 
@@ -375,19 +397,23 @@ Ace Games — B2B-студия iGaming-контента. Компания раз
 | URL | Назначение | Источник |
 | --- | --- | --- |
 | / | Главная B2B landing page | src/pages/index.astro |
+| /{locale} | Локализованная главная для active secondary locale | src/pages/[locale]/index.astro |
 | /games | Полный каталог | src/pages/games/index.astro |
+| /{locale}/games | Локализованный каталог | src/pages/[locale]/games/index.astro |
 | /portfolio/{slug} | Детальная страница игры | src/pages/portfolio/[slug].astro |
+| /{locale}/portfolio/{slug} | Локализованная страница с неизменным slug | src/pages/[locale]/portfolio/[slug].astro |
 | /event | SBC Lisbon 2026 campaign page | src/pages/event.astro |
 | /effects-lab | Техническая настройка двух независимых визуальных эффектов, noindex, без public chrome | src/pages/effects-lab.astro |
-| /terms-conditions | Terms of Use | src/pages/[legal].astro |
-| /privacy-policy | Privacy & Cookie Policy | src/pages/[legal].astro |
+| /terms-conditions | Terms of Use | src/pages/terms-conditions.astro |
+| /privacy-policy | Privacy & Cookie Policy | src/pages/privacy-policy.astro |
 | /thanks | Результат контактной формы | src/pages/thanks.astro |
 | /404 | 404 page | src/pages/404.astro |
 
-Маршруты игр генерируются из имён файлов Markdown. Например:
+Маршруты игр генерируются из release slug. English slug не локализуется:
 
-    src/content/games/ace-city.md
+    game.slug = ace-city
         → /portfolio/ace-city
+        → /it/portfolio/ace-city
 
 Slug является частью публичного URL и SEO-истории. Переименование slug без 301 запрещено.
 
@@ -1129,14 +1155,16 @@ Client script меняет heading, text и CTA для error states.
 
 ## 18. Модель данных игры
 
-Каждый record находится в src/content/games/{slug}.md.
+Canonical модель после cutover нормализована в Directus: `games`, `game_translations`, `game_sections`, `game_section_items`, `game_gallery` и translation collections. Полная field reference находится в `docs/CMS-GAMES.md`. `src/content/games/{slug}.md` остаётся только transitional local fallback.
 
-### 18.1. Обязательные поля
+### 18.1. Legacy local fallback fields
+
+Таблица ниже описывает только совместимый Markdown fallback; canonical CMS-названия и shared/localized разделение см. в `docs/CMS-GAMES.md`.
 
 | Поле | Тип | Правило |
 | --- | --- | --- |
 | name | string | минимум 2 символа |
-| type | enum | slot, instant, table |
+| type | enum | slot, instant, crash, table |
 | status | enum | live, coming_soon; default live |
 | order | number | default 100 |
 | seo.title | string | максимум 70 символов |
@@ -1196,7 +1224,7 @@ URL строится через adapter-api-demo.rstars.cc. lobbyUrl вывод�
 
 URL строится через cdn.rstars.cc.
 
-### 18.6. Markdown body
+### 18.6. Markdown body в local fallback
 
 После frontmatter хранится:
 
@@ -1915,8 +1943,9 @@ Forbidden legacy strings включают Webflow-related template leaks, ста
 | Event tests | docs/EVENT.md требует Node 24+ | проект закреплён на Node 20 |
 | Hosting | DEPLOY.md описывает Cloudflare | .openai/hosting.json описывает Sites static |
 | Privacy provider list | Webflow и Hetzner | код также использует Resend, rstars и S3; target hosting не определён |
+| CMS runtime validation | schema и unit tests проверены локально | Docker/Directus/PostgreSQL и deploy webhook требуют staging credentials и интеграционного прогона |
 
-README.md, AGENTS.md и AI-HANDOVER.md синхронизированы с текущими кнопками, GameTile, Effects Lab и Excellence cards в стабильном срезе 5 сентября 2026 года. Для оставшихся строк таблицы AI должен ссылаться на фактический код и последнее решение владельца.
+README.md, AGENTS.md и AI-HANDOVER.md синхронизированы с CMS, localization, releases, текущими кнопками, GameTile, Effects Lab и Excellence cards в стабильном срезе 6 сентября 2026 года. Для оставшихся строк таблицы AI должен ссылаться на фактический код и последнее решение владельца.
 
 ## 33. Известные незавершённые места
 
@@ -2484,8 +2513,8 @@ Integration and compliance section содержит десять незапол�
 Если нужно быстро понять проект:
 
 - это Astro static B2B iGaming showcase;
-- 24 игры и 32 pages;
-- source data разделён на site.ts, events.ts и Markdown collections;
+- 24 игры и 33 pages в default English local build; дополнительные locale routes генерируются из active CMS locales;
+- production content собирается из immutable CMS release; site.ts и Markdown остаются local fallback, events.ts пока вне CMS;
 - главная hero использует moving game wall;
 - Games hero использует тяжёлое внешнее видео;
 - cards не дублируют visible title;

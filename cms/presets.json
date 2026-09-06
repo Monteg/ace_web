@@ -1,0 +1,46 @@
+[
+  {
+    "role": "Content Manager",
+    "collection": "games",
+    "layout": "tabular",
+    "layout_query": {
+      "tabular": {
+        "fields": ["sort_order", "internal_name", "release_status", "game_type", "rtp", "demo_enabled", "card_image", "hero_image", "translations"],
+        "sort": ["sort_order", "internal_name"]
+      }
+    }
+  },
+  {
+    "role": "Viewer",
+    "collection": "games",
+    "layout": "tabular",
+    "layout_query": {
+      "tabular": {
+        "fields": ["sort_order", "internal_name", "release_status", "game_type", "rtp", "demo_enabled", "card_image", "hero_image", "translations"],
+        "sort": ["sort_order", "internal_name"]
+      }
+    }
+  },
+  {
+    "role": "Translator",
+    "collection": "game_translations",
+    "layout": "tabular",
+    "layout_query": {
+      "tabular": {
+        "fields": ["game_id", "locale", "translation_status", "display_name", "seo_title", "updated_at"],
+        "sort": ["game_id", "locale"]
+      }
+    }
+  },
+  {
+    "role": "Content Manager",
+    "collection": "content_releases",
+    "layout": "tabular",
+    "layout_query": {
+      "tabular": {
+        "fields": ["version", "status", "is_active", "created_at", "created_by", "deploy_status", "deploy_url", "source_release"],
+        "sort": ["-version"]
+      }
+    }
+  }
+]
