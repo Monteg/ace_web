@@ -135,7 +135,7 @@ Production storage задаётся через `STORAGE_*` и может быт�
 - `bullet_list` — repeatable bullets из Section Items;
 - `media_text` — media и локализованный текст.
 
-Поле **Display Area** задаёт место блока на game detail page: Features sidebar, один из четырёх Overview tabs или Additional content. Это структурное shared-поле; оно не переводится и не выводится из текста заголовка. Для обычного блока используйте `additional`.
+Поле **Display Area** задаёт семантическое место блока на game detail page: Features sidebar, одна из четырёх Overview-групп или Additional content. Текущий стабильный шаблон выводит Overview-группы последовательно, без tabs, но сохраняет их разметку для будущего renderer. Это структурное shared-поле; оно не переводится и не выводится из текста заголовка. Для обычного блока используйте `additional`.
 
 Можно добавлять, выключать и переставлять любое число блоков. Новый произвольный layout всё ещё требует frontend component; CMS не является arbitrary page builder.
 

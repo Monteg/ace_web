@@ -3,18 +3,15 @@ import Base from '../../layouts/Base.astro';
 import GameHeader from '../../components/showcase/GameHeader.astro';
 import GameMedia from '../../components/showcase/GameMedia.astro';
 import SpecStrip from '../../components/showcase/SpecStrip.astro';
-import GameFeatureSidebar from '../../components/showcase/GameFeatureSidebar.astro';
-import GameOverview from '../../components/showcase/GameOverview.astro';
-import GameContentTabs from '../../components/showcase/GameContentTabs.astro';
+import GameTile from '../../components/showcase/GameTile.astro';
 import GameSections from '../../components/showcase/GameSections.astro';
-import RelatedGamesRail from '../../components/showcase/RelatedGamesRail.astro';
-import GameFeedbackCTA from '../../components/showcase/GameFeedbackCTA.astro';
 import { company } from '../../data/site';
 import { demoUrl } from '../../lib/format';
 import { buildGameDetailViewModel, getGames } from '../../lib/content-source';
 import { getTranslations } from '../../i18n/get-translations';
 import { getActiveLocales } from '../../i18n/config';
 import { localePath } from '../../i18n/routes';
+import { renderMarkdown } from '../../lib/markdown';
 import { isCmsLiveMode } from '../../lib/cms-mode';
 
 interface Props {
@@ -37,11 +34,18 @@ const game = Astro.props.game ?? all.find((entry) => entry.id === (Astro.props.s
 if (!game) return Astro.redirect('/404');
 const t = await getTranslations(locale);
 const locales = await getActiveLocales();
-const detail = buildGameDetailViewModel(game, all);
 const d = game.data;
+const detail = buildGameDetailViewModel(game, all);
 const soon = d.status === 'coming_soon';
 const demo = detail.media.demo ? demoUrl(detail.media.demo, game.id, company.origin) : null;
+const related = detail.relatedGames.slice(0, 3);
 const typeLabel = t(`game.type.${d.type}`);
+const overviewHtml = renderMarkdown(detail.overviewMarkdown);
+const pageSections = [...detail.tabs.flatMap((tab) => tab.sections), ...detail.additionalSections];
+const sidebarFeatures = d.features.length
+  ? d.features
+  : detail.featureGroups.flatMap((group) => group.items.map((item) => ({ title: item.title ?? group.heading ?? t('game.features'), body: item.text ?? '' })));
+const contactHref = `${localePath('/', locale, locales)}#contact`;
 
 const productSchema = {
   '@context': 'https://schema.org',
@@ -65,20 +69,16 @@ const breadcrumbSchema = {
 <Base title={d.seo.title} description={d.seo.description} schema={[productSchema, breadcrumbSchema]} locale={locale}>
   <GameHeader game={game} demoAvailable={demo !== null} locale={locale} />
 
-  <section class="game-detail-stats" aria-label={t('game.specifications_aria', { name: d.name })}>
-    <div class="wrap"><SpecStrip game={game} locale={locale} /></div>
-  </section>
-
-  <div class="game-detail-main" id="demo">
+  <section id="demo" class="game-media-section">
     <div class="wrap">
-      <div class:list={['game-detail-grid', { 'game-detail-grid--wide': detail.featureGroups.length === 0 }]}>
-        <div class="game-detail-media rv">
+      <div class="media-layout">
+        <div class="media-main rv">
           <GameMedia
             id={game.id}
             name={d.name}
             demoSrc={demo}
-            poster={detail.media.fallback}
-            gallery={detail.media.gallery}
+            poster={d.hero}
+            gallery={d.gallery}
             locale={locale}
           />
 
@@ -86,61 +86,84 @@ const breadcrumbSchema = {
             <div class="demo-request">
               <div>
                 <h2 class="d3">{soon ? t('game.status.in_development') : t('game.demo_request')}</h2>
-                <p>
+                <p class="body">
                   {soon
                     ? t('game.demo_request_soon', { name: d.name })
                     : t('game.demo_request_live', { name: d.name })}
                 </p>
               </div>
-              <button class="btn btn-primary btn-sm" type="button" data-contact-open aria-haspopup="dialog" aria-controls="contact-dialog" hidden>{t('header.lets_talk')}</button>
-              <noscript><a class="btn btn-primary btn-sm" href={`${localePath('/', locale, locales)}#contact`}>{t('header.lets_talk')}</a></noscript>
+              <a class="btn btn-primary btn-sm" href={contactHref}>{t('game.feedback.cta')}</a>
             </div>
           )}
         </div>
 
-        {detail.featureGroups.length > 0 && (
-          <div class="game-detail-features rv">
-            <div class="game-detail-features__sticky">
-              <GameFeatureSidebar groups={detail.featureGroups} locale={locale} />
-            </div>
-          </div>
+        <aside class="spec-sidebar rv" aria-label={t('game.specifications_aria', { name: d.name })}>
+          <h2 class="d3">{t('game.stats_title')}</h2>
+          <SpecStrip game={game} variant="sidebar" locale={locale} />
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-continuation">
+    <div class="wrap">
+      <div class="over">
+        <div class="over-copy">
+          <div class="sec-top rv"><h2 class="d1">{t('game.overview')}</h2></div>
+          {overviewHtml && <div class="prose rv" set:html={overviewHtml} />}
+          {pageSections.length > 0 && <GameSections sections={pageSections} />}
+          {d.highlights.length > 0 && (
+            <ul class="highlights rv">
+              {d.highlights.map((h) => <li>{h}</li>)}
+            </ul>
+          )}
+        </div>
+        {sidebarFeatures.length > 0 && (
+          <aside class="over-side rv">
+            <h3 class="d3">{t('game.features')}</h3>
+            <ol class="feats">
+              {sidebarFeatures.map((f) => (
+                <li>
+                  <h4 class="d4">{f.title}</h4>
+                  <p>{f.body}</p>
+                </li>
+              ))}
+            </ol>
+          </aside>
         )}
       </div>
     </div>
-  </div>
+  </section>
 
-  <GameOverview markdown={detail.overviewMarkdown} locale={locale} />
-  <GameContentTabs id={game.id} gameName={d.name} tabs={detail.tabs} locale={locale} />
-
-  {detail.additionalSections.length > 0 && (
-    <section class="game-detail-additional">
-      <div class="wrap"><GameSections sections={detail.additionalSections} /></div>
+  {related.length > 0 && (
+    <section class="section-continuation">
+      <div class="wrap">
+        <div class="sec-top rv"><h2 class="d1">{t('game.related', { type: typeLabel.toLowerCase() })}</h2></div>
+        <div class="related rv">
+          {related.map((g) => <GameTile game={g} locale={locale} />)}
+        </div>
+      </div>
     </section>
   )}
-
-  <RelatedGamesRail games={detail.relatedGames} typeLabel={typeLabel} locale={locale} />
-  <GameFeedbackCTA name={d.name} contactHref={`${localePath('/', locale, locales)}#contact`} locale={locale} />
 </Base>
 
 <style>
-  .game-detail-stats {
-    padding-block: var(--sp-4) var(--sp-6);
-    background: var(--ink-0);
+  .game-media-section {
+    padding-block: clamp(48px, 6vw, 84px) var(--section-space);
   }
-  .game-detail-main { padding-block: 0 var(--section-space-compact); }
-  .game-detail-grid {
+  .media-layout {
     display: grid;
-    grid-template-columns: minmax(0, 2.2fr) minmax(260px, 0.8fr);
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+    gap: clamp(28px, 4vw, 64px);
     align-items: start;
-    gap: clamp(20px, 2.5vw, 36px);
   }
-  .game-detail-grid--wide { grid-template-columns: minmax(0, 1fr); }
-  .game-detail-media,
-  .game-detail-features { min-width: 0; }
-  .game-detail-features__sticky {
+  .media-main { min-width: 0; }
+  .spec-sidebar {
     position: sticky;
     top: calc(var(--site-header-height, 120px) + var(--sp-4));
+    min-width: 0;
   }
+  .spec-sidebar > .d3 { margin-bottom: var(--sp-4); }
   .demo-request {
     display: flex;
     align-items: center;
@@ -152,18 +175,53 @@ const breadcrumbSchema = {
     border: 1px dashed var(--line-2);
     border-radius: var(--radius-l);
   }
-  .demo-request > div { display: grid; min-width: 0; gap: var(--sp-2); }
-  .demo-request p { max-width: 58ch; color: var(--fg-2); font-size: 14px; }
-  .game-detail-additional { padding-block: 0 var(--section-space-compact); }
+  .demo-request > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
 
-  @media (max-width: 900px) {
-    .game-detail-grid { grid-template-columns: minmax(0, 1fr); }
-    .game-detail-features__sticky { position: static; }
+  .over {
+    display: grid;
+    grid-template-columns: minmax(0, 800px) minmax(280px, 360px);
+    justify-content: space-between;
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
   }
-  @media (max-width: 600px) {
-    .game-detail-stats { padding-block: var(--sp-3) var(--sp-5); }
-    .game-detail-main { padding-bottom: var(--sp-7); }
-    .demo-request { align-items: flex-start; flex-direction: column; padding: var(--sp-4); }
-    .demo-request .btn { width: 100%; }
+  .over-copy { min-width: 0; max-width: 800px; }
+  .prose { max-width: 72ch; display: flex; flex-direction: column; gap: var(--sp-4); }
+  .prose :global(p) { color: var(--fg-2); }
+  .prose :global(h2) {
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-weight: 400;
+    font-size: var(--step-2); line-height: 1.05; color: var(--fg); margin: var(--sp-5) 0 0;
   }
+  .highlights { list-style: none; margin-top: var(--sp-6); display: grid; gap: var(--sp-3); }
+  .highlights li { position: relative; padding-left: var(--sp-5); font-size: 14.5px; color: var(--fg-2); line-height: 1.5; }
+  .highlights li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 8px; height: 8px; border-radius: 2px; background: var(--brand); }
+
+  .over-side {
+    position: sticky;
+    top: calc(var(--site-header-height, 120px) + var(--sp-4));
+    background: var(--ink-2);
+    border-radius: var(--radius-l);
+    padding: var(--sp-6);
+    box-shadow: var(--shadow-1);
+  }
+  .feats { list-style: none; margin-top: var(--sp-5); display: flex; flex-direction: column; }
+  .feats li { padding: var(--sp-4) 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+  .feats p { font-size: 14px; color: var(--fg-2); line-height: 1.5; }
+
+  .related { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4); }
+  @media (max-width: 992px) {
+    .media-layout,
+    .over { grid-template-columns: minmax(0, 1fr); }
+    .spec-sidebar,
+    .over-side { position: static; }
+  }
+  @media (max-width: 640px) {
+    .demo-request { align-items: flex-start; flex-direction: column; }
+  }
+  @media (max-width: 760px) { .related { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 440px) { .related { grid-template-columns: 1fr; } }
 </style>

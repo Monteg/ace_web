@@ -67,26 +67,22 @@ const lit = new Set<Volatility>(s.volatility);
     margin: 0;
     display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1px;
     background: var(--line);
-    border: 1px solid var(--line);
-    border-radius: var(--radius); overflow: hidden;
-    box-shadow: var(--shadow-1);
+    border-radius: var(--radius-l); overflow: hidden;
   }
   .ss-cell {
     min-width: 0; background: var(--ink-2);
-    padding: 17px var(--sp-4);
-    display: flex; flex-direction: column; gap: 10px;
+    padding: var(--sp-5);
+    display: flex; flex-direction: column; gap: var(--sp-4);
   }
-  .ss-head { display: flex; align-items: center; gap: 10px; }
-  .ss-head .tile { width: 32px; height: 32px; border-radius: var(--radius-s); }
-  .ss-head .tile :global(svg) { width: 18px; height: 18px; }
+  .ss-head { display: flex; align-items: center; gap: var(--sp-3); }
   .ss-label {
     font-family: 'JetBrains Mono Variable', ui-monospace, monospace;
     font-size: 10.5px; letter-spacing: 0.11em; text-transform: uppercase; color: var(--fg-3);
   }
   .ss-value {
-    margin: auto 0 0; display: flex; flex-direction: column; gap: var(--sp-2);
+    margin: auto 0 0; display: flex; flex-direction: column; gap: var(--sp-3);
     font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-weight: 400;
-    font-size: clamp(1rem, 1.45vw, 1.28rem); line-height: 1.08; color: var(--fg);
+    font-size: var(--step-2); line-height: 1.02; color: var(--fg);
   }
   .ss-figure { display: block; text-wrap: balance; overflow-wrap: anywhere; }
 
@@ -126,7 +122,6 @@ const lit = new Set<Volatility>(s.volatility);
   @media (max-width: 560px) {
     .ss { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .ss.ss--sidebar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .ss-cell { min-height: 112px; padding: var(--sp-4); }
-    .ss-label { font-size: 9.5px; }
+    .ss-cell { padding: var(--sp-4); }
   }
 </style>

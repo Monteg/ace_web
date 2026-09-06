@@ -31,25 +31,21 @@ const galleryPanelId = `${id}-media-gallery`;
 
 <div class="game-media" data-game-media>
   {switchable && (
-    <div class="media-switch" role="tablist" aria-label={t('game.media_aria', { name })} data-media-tablist hidden>
+    <div class="media-switch" role="tablist" aria-label={t('game.media_aria', { name })}>
       <button
-        id={`${id}-media-tab-play`}
         type="button"
         role="tab"
         aria-selected="true"
         aria-controls={playPanelId}
-        tabindex="0"
         data-media-tab="play"
       >
         {t('game.play')}
       </button>
       <button
-        id={`${id}-media-tab-gallery`}
         type="button"
         role="tab"
         aria-selected="false"
         aria-controls={galleryPanelId}
-        tabindex="-1"
         data-media-tab="gallery"
       >
         {t('game.gallery')}
@@ -62,7 +58,6 @@ const galleryPanelId = `${id}-media-gallery`;
       id={playPanelId}
       class="media-panel"
       role={switchable ? 'tabpanel' : undefined}
-      aria-labelledby={switchable ? `${id}-media-tab-play` : undefined}
       data-media-panel="play"
     >
       <DemoEmbed name={name} src={demoSrc!} poster={poster} locale={locale} />
@@ -74,8 +69,8 @@ const galleryPanelId = `${id}-media-gallery`;
       id={galleryPanelId}
       class="media-panel"
       role={switchable ? 'tabpanel' : undefined}
-      aria-labelledby={switchable ? `${id}-media-tab-gallery` : undefined}
       data-media-panel="gallery"
+      hidden={hasDemo}
     >
       <div
         class="game-gallery"
@@ -140,7 +135,6 @@ const galleryPanelId = `${id}-media-gallery`;
     border: 1px solid var(--line);
     border-radius: var(--radius-pill);
   }
-  .media-switch[hidden] { display: none; }
   .media-switch button {
     min-height: 42px;
     padding: 9px 20px;
@@ -160,9 +154,7 @@ const galleryPanelId = `${id}-media-gallery`;
     background: var(--brand);
   }
   .media-switch button:active { transform: scale(0.98); }
-  .game-media.is-media-ready .media-panel[hidden] { display: none; }
-  .media-panel + .media-panel { margin-top: var(--sp-5); }
-  .game-media.is-media-ready .media-panel + .media-panel { margin-top: 0; }
+  .media-panel[hidden] { display: none; }
 
   .game-gallery,
   .media-fallback {
@@ -247,35 +239,20 @@ const galleryPanelId = `${id}-media-gallery`;
 
 <script>
   for (const media of document.querySelectorAll<HTMLElement>('[data-game-media]')) {
-    const list = media.querySelector<HTMLElement>('[data-media-tablist]');
     const tabs = Array.from(media.querySelectorAll<HTMLButtonElement>('[data-media-tab]'));
     const panels = Array.from(media.querySelectorAll<HTMLElement>('[data-media-panel]'));
-    if (!list || tabs.length < 2 || tabs.length !== panels.length) continue;
-    const activate = (index: number, focus = false) => {
-      tabs.forEach((tab, candidate) => {
-        const active = candidate === index;
-        tab.setAttribute('aria-selected', String(active));
-        tab.tabIndex = active ? 0 : -1;
-        panels[candidate].hidden = !active;
+
+    for (const tab of tabs) {
+      tab.addEventListener('click', () => {
+        const mode = tab.dataset.mediaTab;
+        for (const candidate of tabs) {
+          candidate.setAttribute('aria-selected', String(candidate === tab));
+        }
+        for (const panel of panels) {
+          panel.hidden = panel.dataset.mediaPanel !== mode;
+        }
       });
-      if (focus) tabs[index].focus();
-    };
-    media.classList.add('is-media-ready');
-    list.hidden = false;
-    activate(0);
-    tabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => activate(index));
-      tab.addEventListener('keydown', (event) => {
-        let next = index;
-        if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-        else if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
-        else if (event.key === 'Home') next = 0;
-        else if (event.key === 'End') next = tabs.length - 1;
-        else return;
-        event.preventDefault();
-        activate(next, true);
-      });
-    });
+    }
   }
 
   for (const gallery of document.querySelectorAll<HTMLElement>('[data-game-gallery]')) {

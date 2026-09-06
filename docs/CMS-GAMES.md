@@ -88,8 +88,10 @@ Public build использует requested translation только со ста
 `detail_slot` определяет renderer без эвристик по заголовку:
 
 - `sidebar_features` — список **Features** справа от demo;
-- `gameplay`, `main_feature`, `bonus`, `multiplier` — соответствующие tabs под Overview;
-- `additional` — обычный дополнительный блок ниже tabs.
+- `gameplay`, `main_feature`, `bonus`, `multiplier` — семантические группы, которые текущий стабильный шаблон выводит последовательно в Overview;
+- `additional` — обычный дополнительный блок в том же контентном потоке.
+
+Значения групп сохраняются в CMS, поэтому будущий tabbed renderer можно подключить без повторной миграции контента. В этой ветке интерфейс detail page намеренно остаётся таким же, как в стабильной версии `d82682a`.
 
 Новые и legacy sections по умолчанию получают `additional`. Bootstrap безопасно заполняет только существующие записи с `NULL`, не перезаписывая ручной выбор. Импортёр переводит legacy `feature_grid` и `bullet_list` в `sidebar_features`.
 

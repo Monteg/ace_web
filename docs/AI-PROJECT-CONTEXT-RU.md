@@ -1238,9 +1238,9 @@ URL строится через cdn.rstars.cc.
 
 Базовый и локализованный маршруты используют один renderer и один `GameDetailViewModel`. Источник выбирается через `CONTENT_SOURCE`: local Markdown fallback, Directus Main в live mode или immutable release snapshot в release mode.
 
-Порядок страницы фиксирован: compact hero, шесть характеристик, demo/media с Features sidebar, Overview, контентные tabs, дополнительные sections, карусель игр того же типа и feedback CTA, открывающий существующую contact modal.
+В этой ветке внешний вид страницы зафиксирован на стабильном варианте `d82682a`: широкий hero с отдельной key-art карточкой, demo/media и sticky stats sidebar, Overview с Features sidebar и сетка из трёх related games. CMS и локализация подключены под этим интерфейсом без перехода на новый detail-page redesign.
 
-CMS-поле `game_sections.detail_slot` явно маршрутизирует блок: `sidebar_features` в правую колонку; `gameplay`, `main_feature`, `bonus`, `multiplier` в tabs; `additional` ниже tabs. Заголовок не используется как layout-сигнал. Legacy/local content нормализуется тем же view-model builder. Related rail включает все остальные игры того же типа, а не произвольный короткий список.
+CMS-поле `game_sections.detail_slot` явно маршрутизирует блок: `sidebar_features` в правую колонку; `gameplay`, `main_feature`, `bonus`, `multiplier` и `additional` последовательно в Overview. Заголовок не используется как layout-сигнал. Семантические группы сохраняются, чтобы позже включить tabbed renderer без миграции данных. Legacy/local content нормализуется тем же view-model builder; related grid показывает первые три live-игры того же типа.
 
 ## 19. Текущий каталог игр
 
