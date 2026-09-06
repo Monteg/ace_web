@@ -23,7 +23,10 @@
     "cms:import": "node scripts/cms/import-migration.mjs",
     "cms:sync": "node scripts/cms/sync.mjs",
     "cms:validate": "node scripts/cms/validate.mjs",
-    "test:cms-model": "node --test scripts/cms/game-schema.test.mjs scripts/cms/migration.test.mjs scripts/cms/release-schema.test.mjs scripts/cms/localization.test.mjs scripts/cms/conflict.test.mjs src/i18n/routes.test.mjs"
+    "cms:publish": "node scripts/cms/publish.mjs",
+    "cms:rollback": "node scripts/cms/rollback.mjs",
+    "cms:deploy-release": "node scripts/cms/deploy-release.mjs",
+    "test:cms-model": "node --test scripts/cms/game-schema.test.mjs scripts/cms/migration.test.mjs scripts/cms/release-schema.test.mjs scripts/cms/localization.test.mjs scripts/cms/conflict.test.mjs scripts/cms/release-selection.test.mjs src/i18n/routes.test.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

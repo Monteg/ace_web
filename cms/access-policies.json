@@ -19,7 +19,7 @@
         "site_string_translations": ["create", "read", "update", "delete"],
         "faq_items": ["create", "read", "update", "delete"],
         "faq_item_translations": ["create", "read", "update", "delete"],
-        "content_releases": ["create", "read", "update"],
+        "content_releases": ["read"],
         "directus_files": ["create", "read", "update"],
         "directus_folders": ["create", "read", "update"]
       }
@@ -72,6 +72,7 @@
         "faq_items": ["create", "read", "update"],
         "site_string_translations": ["create", "read", "update"],
         "faq_item_translations": ["create", "read", "update"],
+        "content_releases": ["read"],
         "directus_files": ["create", "read"]
       }
     },
