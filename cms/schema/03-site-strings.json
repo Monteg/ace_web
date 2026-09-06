@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "collections": [
+    {
+      "collection": "site_strings",
+      "meta": { "icon": "text_fields", "note": "Stable frontend content slots; creating a key does not create a new layout", "display_template": "{{key}}", "sort_field": "sort_order", "versioning": true },
+      "fields": [
+        { "field": "id", "type": "uuid", "schema": { "is_primary_key": true }, "meta": { "special": ["uuid"], "hidden": true, "readonly": true } },
+        { "field": "key", "type": "string", "schema": { "is_unique": true, "max_length": 255 }, "meta": { "interface": "input", "required": true, "width": "half" } },
+        { "field": "page", "type": "string", "schema": { "max_length": 80 }, "meta": { "interface": "input", "required": true, "width": "half" } },
+        { "field": "section", "type": "string", "schema": { "max_length": 80 }, "meta": { "interface": "input", "required": true, "width": "half" } },
+        { "field": "context", "type": "text", "schema": { "is_nullable": true }, "meta": { "interface": "input-multiline", "width": "half" } },
+        { "field": "type", "type": "string", "schema": { "max_length": 24, "default_value": "plain" }, "meta": { "interface": "select-dropdown", "required": true, "width": "half", "options": { "choices": [{ "text": "Plain", "value": "plain" }, { "text": "Rich", "value": "rich" }, { "text": "Button", "value": "button" }, { "text": "ARIA", "value": "aria" }, { "text": "SEO title", "value": "seo_title" }, { "text": "SEO description", "value": "seo_description" }] } } },
+        { "field": "required", "type": "boolean", "schema": { "default_value": true }, "meta": { "interface": "boolean", "required": true, "width": "half" } },
+        { "field": "max_length", "type": "integer", "schema": { "is_nullable": true }, "meta": { "interface": "input", "width": "half" } },
+        { "field": "sort_order", "type": "integer", "schema": { "default_value": 100 }, "meta": { "interface": "input", "required": true, "width": "half" } },
+        { "field": "active", "type": "boolean", "schema": { "default_value": true }, "meta": { "interface": "boolean", "required": true, "width": "half" } },
+        { "field": "translations", "type": "alias", "meta": { "special": ["o2m"], "interface": "translations", "display": "translations", "options": { "languageField": "locale" } } }
+      ],
+      "relations": [{ "field": "translations", "related_collection": "site_string_translations", "related_field": "site_string_id" }]
+    },
+    {
+      "collection": "site_string_translations",
+      "meta": { "icon": "translate", "note": "Localized values for website UI slots", "versioning": true },
+      "fields": [
+        { "field": "id", "type": "uuid", "schema": { "is_primary_key": true }, "meta": { "special": ["uuid"], "hidden": true, "readonly": true } },
+        { "field": "site_string_id", "type": "uuid", "schema": {}, "meta": { "special": ["m2o"], "interface": "select-dropdown-m2o", "required": true } },
+        { "field": "locale", "type": "string", "schema": { "max_length": 12 }, "meta": { "special": ["m2o"], "interface": "select-dropdown-m2o", "required": true, "width": "half" } },
+        { "field": "value", "type": "text", "schema": { "is_nullable": true }, "meta": { "interface": "input-multiline", "width": "full" } },
+        { "field": "translation_status", "type": "string", "schema": { "default_value": "draft", "max_length": 16 }, "meta": { "interface": "select-dropdown", "required": true, "width": "half", "options": { "choices": [{ "text": "Draft", "value": "draft" }, { "text": "Review", "value": "review" }, { "text": "Approved", "value": "approved" }] } } },
+        { "field": "updated_at", "type": "timestamp", "schema": {}, "meta": { "special": ["date-updated"], "readonly": true, "hidden": true } },
+        { "field": "updated_by", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "special": ["user-updated", "m2o"], "readonly": true, "hidden": true } }
+      ],
+      "relations": [
+        { "field": "site_string_id", "related_collection": "site_strings", "on_delete": "CASCADE" },
+        { "field": "locale", "related_collection": "locales", "on_delete": "CASCADE" },
+        { "field": "updated_by", "related_collection": "directus_users", "on_delete": "SET NULL" }
+      ]
+    },
+    {
+      "collection": "faq_items",
+      "meta": { "icon": "quiz", "note": "Repeatable homepage FAQ entries", "display_template": "FAQ {{sort_order}}", "sort_field": "sort_order", "versioning": true },
+      "fields": [
+        { "field": "id", "type": "uuid", "schema": { "is_primary_key": true }, "meta": { "special": ["uuid"], "hidden": true, "readonly": true } },
+        { "field": "sort_order", "type": "integer", "schema": { "default_value": 100 }, "meta": { "interface": "input", "required": true, "width": "half" } },
+        { "field": "enabled", "type": "boolean", "schema": { "default_value": true }, "meta": { "interface": "boolean", "required": true, "width": "half" } },
+        { "field": "translations", "type": "alias", "meta": { "special": ["o2m"], "interface": "translations", "display": "translations", "options": { "languageField": "locale" } } }
+      ],
+      "relations": [{ "field": "translations", "related_collection": "faq_item_translations", "related_field": "faq_item_id" }]
+    },
+    {
+      "collection": "faq_item_translations",
+      "meta": { "icon": "translate", "note": "Localized FAQ question and Markdown answer", "versioning": true },
+      "fields": [
+        { "field": "id", "type": "uuid", "schema": { "is_primary_key": true }, "meta": { "special": ["uuid"], "hidden": true, "readonly": true } },
+        { "field": "faq_item_id", "type": "uuid", "schema": {}, "meta": { "special": ["m2o"], "interface": "select-dropdown-m2o", "required": true } },
+        { "field": "locale", "type": "string", "schema": { "max_length": 12 }, "meta": { "special": ["m2o"], "interface": "select-dropdown-m2o", "required": true, "width": "half" } },
+        { "field": "question", "type": "string", "schema": { "max_length": 300 }, "meta": { "interface": "input", "required": true, "width": "full" } },
+        { "field": "answer_markdown", "type": "text", "schema": {}, "meta": { "interface": "input-rich-text-md", "required": true, "width": "full" } },
+        { "field": "translation_status", "type": "string", "schema": { "default_value": "draft", "max_length": 16 }, "meta": { "interface": "select-dropdown", "required": true, "width": "half", "options": { "choices": [{ "text": "Draft", "value": "draft" }, { "text": "Review", "value": "review" }, { "text": "Approved", "value": "approved" }] } } },
+        { "field": "updated_at", "type": "timestamp", "schema": {}, "meta": { "special": ["date-updated"], "readonly": true, "hidden": true } },
+        { "field": "updated_by", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "special": ["user-updated", "m2o"], "readonly": true, "hidden": true } }
+      ],
+      "relations": [
+        { "field": "faq_item_id", "related_collection": "faq_items", "on_delete": "CASCADE" },
+        { "field": "locale", "related_collection": "locales", "on_delete": "CASCADE" },
+        { "field": "updated_by", "related_collection": "directus_users", "on_delete": "SET NULL" }
+      ]
+    }
+  ]
+}

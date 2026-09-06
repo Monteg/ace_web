@@ -11,14 +11,19 @@
  */
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
-import { CTA } from '../../data/site';
 import type { GameRecord } from '../../lib/content-source';
+import { getActiveLocales } from '../../i18n/config';
+import { getTranslations } from '../../i18n/get-translations';
+import { localePath } from '../../i18n/routes';
 
 interface Props {
   games: GameRecord[];
+  locale?: string;
 }
 
-const { games } = Astro.props;
+const { games, locale = 'en' } = Astro.props;
+const locales = getActiveLocales();
+const t = getTranslations(locale);
 const live = games.filter((g) => g.data.status === 'live');
 const pool = live.length >= 12 ? live : games;
 
@@ -51,13 +56,13 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
 
   <div class="wrap">
     <div class="wall-copy" data-wall-copy>
-      <h1 class="d0">Slots and crash games, <em>built end to end</em></h1>
+      <h1 class="d0">{t('home.hero.title_lead')} <em>{t('home.hero.title_accent')}</em></h1>
       <p class="lead">
-        {live.length} slot, crash and instant titles, built and certified in-house, playable here before you email us.
+        {t('home.hero.description', { count: live.length })}
       </p>
       <div class="wall-btns">
-        <a class="btn btn-primary" href="#games">
-          View Game
+        <a class="btn btn-primary" href={`${localePath('/', locale, locales)}#games`}>
+          {t('home.hero.view_games')}
           <span class="disc" aria-hidden="true"><Icon name="ph:arrow-down" /></span>
         </a>
         <button
@@ -67,7 +72,7 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
           aria-haspopup="dialog"
           aria-controls="contact-dialog"
           hidden
-        >{CTA.label}</button>
+        >{t('header.lets_talk')}</button>
       </div>
     </div>
   </div>

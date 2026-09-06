@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import { company, CTA } from '../data/site';
+import { getTranslations } from '../i18n/get-translations';
+const t = getTranslations('en');
 
 // The form redirects here. A real page, not a hidden div swap, so a submission
 // is a URL you can count as a conversion.
@@ -18,23 +20,23 @@ const REASONS: Record<string, string> = {
 ---
 
 <Base
-  title="Thank you | Ace Games"
-  description="Your message has reached the Ace Games team. We answer in one working day."
+  title={t('thanks.seo_title')}
+  description={t('thanks.description')}
   noindex={true}
+  enableLocaleAlternates={false}
 >
   <section class="utility-page">
     <div class="wrap">
       <div class="panel" data-state="ok">
-        <p class="eyebrow" data-eyebrow>Message sent</p>
-        <h1 class="d1" data-title>Thank you</h1>
+        <p class="eyebrow" data-eyebrow>{t('thanks.eyebrow')}</p>
+        <h1 class="d1" data-title>{t('thanks.heading')}</h1>
         <p class="lead" data-body>
-          It is with the team now and we answer in one working day. If it is urgent, mail us
-          directly and it lands in the same inbox.
+          {t('thanks.body')}
         </p>
 
         <div class="row">
           <a class="btn btn-primary" href={`mailto:${company.email}`}>{company.email}</a>
-          <a class="btn btn-ghost" data-second href="/games">View Game</a>
+          <a class="btn btn-ghost" data-second href="/games">{t('thanks.games')}</a>
         </div>
       </div>
     </div>

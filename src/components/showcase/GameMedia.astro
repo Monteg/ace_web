@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import type { ImageMetadata } from 'astro';
 import DemoEmbed from '../DemoEmbed.astro';
+import { getTranslations } from '../../i18n/get-translations';
 
 interface GalleryItem {
   image: ImageMetadata;
@@ -15,9 +16,11 @@ interface Props {
   demoSrc?: string | null;
   poster: ImageMetadata;
   gallery?: GalleryItem[];
+  locale?: string;
 }
 
-const { id, name, demoSrc = null, poster, gallery = [] } = Astro.props;
+const { id, name, demoSrc = null, poster, gallery = [], locale = 'en' } = Astro.props;
+const t = getTranslations(locale);
 const hasDemo = Boolean(demoSrc);
 const hasGallery = gallery.length > 0;
 const hasMultipleGalleryImages = gallery.length > 1;
@@ -28,7 +31,7 @@ const galleryPanelId = `${id}-media-gallery`;
 
 <div class="game-media" data-game-media>
   {switchable && (
-    <div class="media-switch" role="tablist" aria-label={`${name} media`}>
+    <div class="media-switch" role="tablist" aria-label={t('game.media_aria', { name })}>
       <button
         type="button"
         role="tab"
@@ -36,7 +39,7 @@ const galleryPanelId = `${id}-media-gallery`;
         aria-controls={playPanelId}
         data-media-tab="play"
       >
-        Play
+        {t('game.play')}
       </button>
       <button
         type="button"
@@ -45,7 +48,7 @@ const galleryPanelId = `${id}-media-gallery`;
         aria-controls={galleryPanelId}
         data-media-tab="gallery"
       >
-        Gallery
+        {t('game.gallery')}
       </button>
     </div>
   )}
@@ -57,7 +60,7 @@ const galleryPanelId = `${id}-media-gallery`;
       role={switchable ? 'tabpanel' : undefined}
       data-media-panel="play"
     >
-      <DemoEmbed name={name} src={demoSrc!} poster={poster} />
+      <DemoEmbed name={name} src={demoSrc!} poster={poster} locale={locale} />
     </div>
   )}
 
@@ -73,7 +76,7 @@ const galleryPanelId = `${id}-media-gallery`;
         class="game-gallery"
         data-game-gallery
         tabindex={hasMultipleGalleryImages ? 0 : undefined}
-        aria-label={`${name} gallery`}
+        aria-label={t('game.gallery_aria', { name })}
       >
         <div class="gallery-viewport">
           {gallery.map((item, index) => (
@@ -91,7 +94,7 @@ const galleryPanelId = `${id}-media-gallery`;
 
         {hasMultipleGalleryImages && (
           <div class="gallery-controls">
-            <button type="button" data-gallery-prev aria-label={`Previous ${name} image`}>
+            <button type="button" data-gallery-prev aria-label={t('game.previous_image', { name })}>
               <Icon name="ph:arrow-left" aria-hidden="true" />
             </button>
             <p class="gallery-count mono" aria-live="polite">
@@ -99,7 +102,7 @@ const galleryPanelId = `${id}-media-gallery`;
               <span aria-hidden="true">/</span>
               <span>{gallery.length}</span>
             </p>
-            <button type="button" data-gallery-next aria-label={`Next ${name} image`}>
+            <button type="button" data-gallery-next aria-label={t('game.next_image', { name })}>
               <Icon name="ph:arrow-right" aria-hidden="true" />
             </button>
           </div>
@@ -112,7 +115,7 @@ const galleryPanelId = `${id}-media-gallery`;
     <figure class="media-fallback">
       <Image
         src={poster}
-        alt={`${name} game artwork`}
+        alt={t('game.artwork_alt', { name })}
         widths={[640, 960, 1400, 1800]}
         sizes="(max-width: 900px) 100vw, 75vw"
         loading="lazy"

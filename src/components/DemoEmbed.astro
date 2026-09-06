@@ -2,14 +2,17 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import type { ImageMetadata } from 'astro';
+import { getTranslations } from '../i18n/get-translations';
 
 interface Props {
   name: string;
   src: string;
   poster: ImageMetadata;
+  locale?: string;
 }
 
-const { name, src, poster } = Astro.props;
+const { name, src, poster, locale = 'en' } = Astro.props;
+const t = getTranslations(locale);
 ---
 
 <!--
@@ -24,23 +27,23 @@ const { name, src, poster } = Astro.props;
 
   <button class="demo-play" type="button" data-play>
     <span class="disc" aria-hidden="true"><Icon name="ph:play-fill" /></span>
-    <span class="lab">Play {name}</span>
-    <span class="sub">Free play only. No real money and no prizes.</span>
+    <span class="lab">{t('game.play')} {name}</span>
+    <span class="sub">{t('game.demo.free_play')}</span>
   </button>
 
   <div class="demo-loading" data-loading hidden>
-    <p class="lab">Loading {name}</p>
-    <div class="skel" role="progressbar" aria-label={`Loading ${name}`}><i></i></div>
+    <p class="lab">{t('game.demo.loading', { name })}</p>
+    <div class="skel" role="progressbar" aria-label={t('game.demo.loading', { name })}><i></i></div>
   </div>
 </div>
 
 <p class="demo-note">
   <span class="age">18+</span>
-  <span>Demo for evaluation only. No real money, no prizes.</span>
-  <span>Ace Games supplies licensed operators and does not offer gambling to consumers.</span>
-  <button class="copy" type="button" data-copy={src}>
+  <span>{t('game.demo.evaluation')}</span>
+  <span>{t('game.demo.operator_notice')}</span>
+  <button class="copy" type="button" data-copy={src} data-copied={t('game.demo.copied')} data-copy-failed={t('game.demo.copy_failed')} data-copy-reset={t('game.demo.copy_link')} data-frame-title={t('game.demo.frame_title')}>
     <Icon name="ph:link-simple" />
-    <span data-copy-label>Copy demo link</span>
+    <span data-copy-label>{t('game.demo.copy_link')}</span>
   </button>
 </p>
 
@@ -121,11 +124,11 @@ const { name, src, poster } = Astro.props;
       const label = btn.querySelector<HTMLElement>('[data-copy-label]')!;
       try {
         await navigator.clipboard.writeText(btn.dataset.copy!);
-        label.textContent = 'Copied';
+        label.textContent = btn.dataset.copied ?? 'Copied';
       } catch {
-        label.textContent = 'Copy failed';
+        label.textContent = btn.dataset.copyFailed ?? 'Copy failed';
       }
-      setTimeout(() => (label.textContent = 'Copy demo link'), 1800);
+      setTimeout(() => (label.textContent = btn.dataset.copyReset ?? 'Copy demo link'), 1800);
     });
   }
 
@@ -142,7 +145,7 @@ const { name, src, poster } = Astro.props;
 
         const frame = document.createElement('iframe');
         frame.src = demo.dataset.src!;
-        frame.title = play.querySelector('.lab')?.textContent?.trim() ?? 'Game demo';
+        frame.title = play.querySelector('.lab')?.textContent?.trim() ?? demo.closest('.game-media')?.querySelector<HTMLElement>('[data-frame-title]')?.dataset.frameTitle ?? 'Game demo';
         frame.allow = 'fullscreen; autoplay; gamepad';
         frame.allowFullscreen = true;
         // The game runs on our own domain, but it is still a separate origin:

@@ -1,24 +1,27 @@
 ---
 import Base from '../layouts/Base.astro';
 import { CTA } from '../data/site';
+import { getTranslations } from '../i18n/get-translations';
+const t = getTranslations('en');
 ---
 
 <Base
-  title="Page not found | Ace Games"
-  description="That page does not exist. Browse our games or get in touch."
+  title={t('not_found.seo_title')}
+  description={t('not_found.description')}
   noindex={true}
+  enableLocaleAlternates={false}
 >
   <section class="utility-page">
     <div class="wrap">
       <div class="not-found">
         <p class="eyebrow">404</p>
-        <h1 class="d1">That page does not exist</h1>
+        <h1 class="d1">{t('not_found.title')}</h1>
         <p class="lead">
-          It may have moved, or the link may be wrong. The Games page is the fastest way back.
+          {t('not_found.body')}
         </p>
         <div class="row">
-          <a class="btn btn-primary" href="/games">View Game</a>
-          <a class="btn btn-ghost" href={CTA.href}>{CTA.label}</a>
+          <a class="btn btn-primary" href="/games">{t('not_found.games')}</a>
+          <a class="btn btn-ghost" href={CTA.href}>{t('header.lets_talk')}</a>
         </div>
       </div>
     </div>

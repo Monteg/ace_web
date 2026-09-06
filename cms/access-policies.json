@@ -17,6 +17,8 @@
         "game_gallery_translations": ["create", "read", "update", "delete"],
         "site_strings": ["create", "read", "update", "delete"],
         "site_string_translations": ["create", "read", "update", "delete"],
+        "faq_items": ["create", "read", "update", "delete"],
+        "faq_item_translations": ["create", "read", "update", "delete"],
         "content_releases": ["create", "read", "update"],
         "directus_files": ["create", "read", "update"],
         "directus_folders": ["create", "read", "update"]
@@ -34,11 +36,13 @@
         "game_section_items": ["read"],
         "game_gallery": ["read"],
         "site_strings": ["read"],
+        "faq_items": ["read"],
         "game_translations": ["create", "read", "update"],
         "game_section_translations": ["create", "read", "update"],
         "game_section_item_translations": ["create", "read", "update"],
         "game_gallery_translations": ["create", "read", "update"],
         "site_string_translations": ["create", "read", "update"],
+        "faq_item_translations": ["create", "read", "update"],
         "directus_files": ["read"]
       }
     },
@@ -65,7 +69,9 @@
         "game_gallery": ["create", "read", "update"],
         "game_gallery_translations": ["create", "read", "update"],
         "site_strings": ["read"],
+        "faq_items": ["create", "read", "update"],
         "site_string_translations": ["create", "read", "update"],
+        "faq_item_translations": ["create", "read", "update"],
         "directus_files": ["create", "read"]
       }
     },

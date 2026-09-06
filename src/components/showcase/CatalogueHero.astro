@@ -3,9 +3,12 @@ import type { GameRecord } from '../../lib/content-source';
 
 interface Props {
   games: GameRecord[];
+  locale?: string;
 }
 
-const { games } = Astro.props;
+import { getTranslations } from '../../i18n/get-translations';
+const { games, locale = 'en' } = Astro.props;
+const t = getTranslations(locale);
 const poster = games[0]?.data.hero.src;
 const videoUrl =
   'https://ace-games.s3.eu-north-1.amazonaws.com/ace_games_hero_banner.mp4';
@@ -31,11 +34,10 @@ const videoUrl =
 
   <div class="wrap hero-content">
     <div class="catalogue-copy">
-      <p class="eyebrow">Games</p>
-      <h1 class="d1" id="catalogue-title">Every game we have <em>built</em></h1>
+      <p class="eyebrow">{t('games.hero.eyebrow')}</p>
+      <h1 class="d1" id="catalogue-title">{t('games.hero.title_lead')} <em>{t('games.hero.title_accent')}</em></h1>
       <p class="lead">
-        Published RTP and volatility on each title, and a demo you can play without talking to
-        anyone first. Configuration is per operator and per market.
+        {t('games.hero.description')}
       </p>
     </div>
   </div>

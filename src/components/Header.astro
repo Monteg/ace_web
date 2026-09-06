@@ -8,23 +8,51 @@ import { currentEvent } from '../data/events';
 import { CATALOGUE_CATEGORIES } from '../lib/game-categories';
 import OrbitBorder from './showcase/OrbitBorder.astro';
 import { borderTrailDefaults } from '../data/border-trail-settings';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import type { SiteLocale } from '../i18n/config';
+import type { Translate } from '../i18n/get-translations';
+import { localePath, stripLocalePrefix } from '../i18n/routes';
+
+interface Props {
+  locale: string;
+  locales: SiteLocale[];
+  t: Translate;
+}
+
+const { locale, locales, t } = Astro.props;
 
 const currentPath = Astro.url.pathname.replace(/\/$/, '').replace(/\.html$/, '') || '/';
 const isEvent = currentPath === currentEvent.eventUrl;
 const headerCTA = isEvent ? { label: currentEvent.bookingLabel, href: currentEvent.bookingAnchor } : CTA;
 const navigation = headerNav;
 const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}s; --orbit-length: ${borderTrailDefaults.orbitLength}%; --orbit-width: ${borderTrailDefaults.orbitWidth}px; --orbit-opacity: ${borderTrailDefaults.orbitOpacity}; --orbit-blur: ${borderTrailDefaults.orbitBlur}px;`;
+const navKeys: Record<string, string> = {
+  '/games': 'header.games',
+  [currentEvent.eventUrl]: 'header.event',
+  '/#about-us': 'header.about_us',
+  '/#our-benefits': 'header.our_benefits',
+  '/#why-ace-games': 'header.why_ace_games',
+  '/#faq': 'header.faq',
+};
+const localizedHref = (href: string) => {
+  if (href === currentEvent.eventUrl || /^(?:https?:|mailto:|tel:)/.test(href)) return href;
+  const url = new URL(href, company.origin);
+  return `${localePath(url.pathname, locale, locales)}${url.search}${url.hash}`;
+};
+const translatedCTA = isEvent ? headerCTA.label : t('header.lets_talk');
+const stripLocale = (pathname: string) => stripLocalePrefix(pathname, locales).replace(/\/$/, '') || '/';
+const switcherLocales = isEvent ? locales.filter((item) => item.code === 'en') : locales;
 ---
 
-<header class="site-header" id="siteHeader">
+<header class="site-header" id="siteHeader" data-home-path={localePath('/', locale, locales)}>
   <EventAnnouncementBar />
   <div class="wrap">
-    <nav class="nav" aria-label="Main">
+    <nav class="nav" aria-label={t('global.main_navigation')}>
       <span class="nav-glow-fx" data-border-trail-host aria-hidden="true" style={borderTrailStyle}>
         <OrbitBorder />
       </span>
 
-      <a class="brand" href="/">
+      <a class="brand" href={localePath('/', locale, locales)}>
         <Image src={logo} alt={company.name} widths={[140, 280]} sizes="140px" loading="eager" />
       </a>
 
@@ -33,24 +61,24 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
           item.href === '/games' ? (
             <li class="games-item" data-games-dropdown>
               <div class="games-control">
-                <a class="nav-link" href="/games" data-games-link aria-current={Astro.url.pathname.replace(/\/$/, '') === '/games' ? 'page' : undefined}>Games</a>
-                <button class="submenu-toggle" type="button" aria-label="Toggle game categories" aria-expanded="false" aria-controls="navGamesMenu" data-games-toggle hidden>
+                <a class="nav-link" href={localePath('/games', locale, locales)} data-games-link aria-current={stripLocale(Astro.url.pathname) === '/games' ? 'page' : undefined}>{t('header.games')}</a>
+                <button class="submenu-toggle" type="button" aria-label={t('global.game_categories')} aria-expanded="false" aria-controls="navGamesMenu" data-games-toggle hidden>
                   <Icon name="ph:caret-down" aria-hidden="true" />
                 </button>
               </div>
-              <ul class="games-submenu" id="navGamesMenu" aria-label="Game categories">
-                {CATALOGUE_CATEGORIES.map((category) => <li><a href={`/games?type=${category.type}#games`}>{category.label}</a></li>)}
+              <ul class="games-submenu" id="navGamesMenu" aria-label={t('global.game_categories')}>
+                {CATALOGUE_CATEGORIES.map((category) => <li><a href={`${localePath('/games', locale, locales)}?type=${category.type}#games`}>{t(`game.type.${category.type}`)}</a></li>)}
               </ul>
             </li>
           ) : (
             <li>
               <a
                 class="nav-link"
-                href={item.href}
+                href={localizedHref(item.href)}
                 aria-current={isEvent && item.href === currentEvent.eventUrl ? 'page' : undefined}
                 data-home-anchor={item.href.startsWith('/#') ? '' : undefined}
                 data-event-track={item.href === currentEvent.eventUrl ? 'event_nav_click' : undefined}
-              >{item.label}</a>
+              >{t(navKeys[item.href] ?? item.label)}</a>
             </li>
           )
         ))}
@@ -58,18 +86,19 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
           {isEvent ? (
             <a class="btn btn-primary btn-sm" href={headerCTA.href} data-event-track="book_meeting_header">{headerCTA.label}</a>
           ) : (
-            <a class="btn btn-primary btn-sm" href={headerCTA.href} data-smart-contact aria-haspopup="dialog" aria-controls="contact-dialog">{headerCTA.label}</a>
+            <a class="btn btn-primary btn-sm" href={localizedHref(headerCTA.href)} data-smart-contact aria-haspopup="dialog" aria-controls="contact-dialog">{translatedCTA}</a>
           )}
         </li>
       </ul>
 
       <div class="nav-end">
+        <LanguageSwitcher locale={locale} locales={switcherLocales} t={t} />
         {isEvent ? (
           <a class="btn btn-primary btn-sm nav-desktop-cta" href={headerCTA.href} data-event-track="book_meeting_header">{headerCTA.label}</a>
         ) : (
-          <a class="btn btn-primary btn-sm nav-desktop-cta" href={headerCTA.href} data-smart-contact aria-haspopup="dialog" aria-controls="contact-dialog">{headerCTA.label}</a>
+          <a class="btn btn-primary btn-sm nav-desktop-cta" href={localizedHref(headerCTA.href)} data-smart-contact aria-haspopup="dialog" aria-controls="contact-dialog">{translatedCTA}</a>
         )}
-        <button class="burger" type="button" id="burger" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu">
+        <button class="burger" type="button" id="burger" aria-expanded="false" aria-controls="navLinks" aria-label={t('global.open_menu')} data-open-label={t('global.open_menu')} data-close-label={t('global.close_menu')}>
           <span></span>
         </button>
       </div>
@@ -240,6 +269,7 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
     const hover = window.matchMedia('(hover: hover)');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const homepageHashes = new Set(['#about-us', '#our-benefits', '#why-ace-games', '#faq']);
+    const localizedHomePath = header.dataset.homePath ?? '/';
     let closeTimer: ReturnType<typeof setTimeout>;
     let suppressFocusOpen = false;
     let openedFromFocus = false;
@@ -257,7 +287,7 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
     function closeMenu(returnFocus = false) {
       header!.classList.remove('menu-open');
       burger!.setAttribute('aria-expanded', 'false');
-      burger!.setAttribute('aria-label', 'Open menu');
+      burger!.setAttribute('aria-label', burger!.dataset.openLabel ?? 'Open menu');
       setDropdown(false);
       if (returnFocus) burger!.focus();
     }
@@ -331,7 +361,7 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
     for (const link of header.querySelectorAll<HTMLAnchorElement>('[data-home-anchor]')) {
       link.addEventListener('click', (event) => {
         const url = new URL(link.href, window.location.href);
-        if (normalizePath(window.location.pathname) !== '/' || normalizePath(url.pathname) !== '/' || !homepageHashes.has(url.hash)) return;
+        if (normalizePath(window.location.pathname) !== normalizePath(localizedHomePath) || normalizePath(url.pathname) !== normalizePath(localizedHomePath) || !homepageHashes.has(url.hash)) return;
         const target = document.querySelector<HTMLElement>(url.hash);
         if (!target) return;
         event.preventDefault();
@@ -362,7 +392,7 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
       });
     }
 
-    if (homepageHashes.has(window.location.hash) && normalizePath(window.location.pathname) === '/') {
+    if (homepageHashes.has(window.location.hash) && normalizePath(window.location.pathname) === normalizePath(localizedHomePath)) {
       document.fonts.ready.then(() => requestAnimationFrame(() => {
         const target = document.querySelector<HTMLElement>(window.location.hash);
         if (target) scrollToTarget(target, window.location.hash, false);
@@ -410,7 +440,7 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
     burger.addEventListener('click', () => {
       const open = header.classList.toggle('menu-open');
       burger.setAttribute('aria-expanded', String(open));
-      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      burger.setAttribute('aria-label', open ? (burger.dataset.closeLabel ?? 'Close menu') : (burger.dataset.openLabel ?? 'Open menu'));
       if (open) header.classList.remove('is-compact');
       else setDropdown(false);
     });

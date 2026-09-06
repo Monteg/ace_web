@@ -2,13 +2,20 @@
 import Base from '../../layouts/Base.astro';
 import CatalogueHero from '../../components/showcase/CatalogueHero.astro';
 import GameTile from '../../components/showcase/GameTile.astro';
-import { CTA, company } from '../../data/site';
+import { company } from '../../data/site';
 import { CATALOGUE_CATEGORIES } from '../../lib/game-categories';
 import { getGames, sortGames } from '../../lib/content-source';
+import { getTranslations } from '../../i18n/get-translations';
+import { getActiveLocales } from '../../i18n/config';
+import { localePath } from '../../i18n/routes';
 
 // /portfolio returned a 404 on the old site: the catalogue existed only as a
 // section of the home page and a dropdown listing 17 of 24 titles.
-const games = sortGames(await getGames());
+interface Props { locale?: string; }
+const { locale = 'en' } = Astro.props;
+const t = getTranslations(locale);
+const locales = getActiveLocales();
+const games = sortGames(await getGames(locale));
 
 const present = CATALOGUE_CATEGORIES.filter((category) => games.some((game) => game.data.type === category.type));
 
@@ -21,48 +28,48 @@ const heroGames = heroIds.flatMap((id) => {
 const listSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  name: 'Ace Games catalogue',
+  name: t('games.catalogue_name'),
   numberOfItems: games.length,
   itemListElement: games.map((g, i) => ({
     '@type': 'ListItem',
     position: i + 1,
     name: g.data.name,
-    url: `${company.origin}/portfolio/${g.id}`,
+    url: new URL(localePath(`/portfolio/${g.id}`, locale, locales), company.origin).href,
   })),
 };
 ---
 
 <Base
-  title="Casino games: slots, crash and instant games | Ace Games"
-  description={`Explore all ${games.length} Ace Games titles with published RTP, volatility and playable demos where available. Slot, instant and table games for licensed operators.`}
+  title={t('games.seo.title')}
+  description={t('games.seo.description', { count: games.length })}
   schema={listSchema}
+  locale={locale}
 >
-  <CatalogueHero games={heroGames} />
+  <CatalogueHero games={heroGames} locale={locale} />
 
   <section class="catalogue-list">
     <div class="wrap">
-      <div class="chips filters" id="games" role="group" aria-label="Filter games by type">
-        <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
-        {present.map(({ type, label }) => (
+      <div class="chips filters" id="games" role="group" aria-label={t('global.filter_games')}>
+        <button class="chip" type="button" data-filter="all" aria-pressed="true">{t('games.filter.all')}</button>
+        {present.map(({ type }) => (
           <button class="chip" type="button" data-filter={type} aria-pressed="false">
-            {label}
+            {t(`game.type.${type}`)}
           </button>
         ))}
       </div>
       <p class="filter-note" data-filter-note aria-live="polite"></p>
 
       <div class="grid-games" id="gameGrid">
-        {games.map((g, i) => <GameTile game={g} eager={i < 4} />)}
+        {games.map((g, i) => <GameTile game={g} eager={i < 4} locale={locale} />)}
       </div>
 
       <div class="tail rv">
-        <h2 class="d3">Missing a mechanic?</h2>
+        <h2 class="d3">{t('games.tail.title')}</h2>
         <p class="body">
-          Tell us what your lobby is short of and we will design the maths around it rather than
-          reskinning something we already made.
+          {t('games.tail.body')}
         </p>
-        <button class="btn btn-primary" type="button" data-contact-open aria-haspopup="dialog" aria-controls="contact-dialog" hidden>{CTA.label}</button>
-        <noscript><a class="btn btn-primary" href={CTA.href}>{CTA.label}</a></noscript>
+        <button class="btn btn-primary" type="button" data-contact-open aria-haspopup="dialog" aria-controls="contact-dialog" hidden>{t('header.lets_talk')}</button>
+        <noscript><a class="btn btn-primary" href={`${localePath('/', locale, locales)}#contact`}>{t('header.lets_talk')}</a></noscript>
       </div>
     </div>
   </section>

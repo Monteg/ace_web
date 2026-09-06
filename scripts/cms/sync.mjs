@@ -57,7 +57,18 @@ const writeJson = (target, value) => fs.writeFileSync(target, `${JSON.stringify(
 writeJson(path.join(output, 'meta.json'), { release_id: release.id, version: release.version, checksum, generated_at: new Date().toISOString(), locales: payload.locales, warnings, assets: assetManifest });
 writeJson(path.join(output, 'games', 'shared.json'), sharedGames);
 for (const locale of payload.locales) {
-  writeJson(path.join(output, 'site', `${locale.code}.json`), payload.site[locale.code] ?? {});
+  const englishFaq = payload.faq
+    .filter((item) => item.enabled)
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((item) => item.translations.find((translation) => translation.locale === 'en'));
+  const localizedFaq = payload.faq
+    .filter((item) => item.enabled)
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((item, index) => ({
+      id: item.id,
+      ...(item.translations.find((translation) => translation.locale === locale.code && translation.translation_status === 'approved') ?? englishFaq[index]),
+    }));
+  writeJson(path.join(output, 'site', `${locale.code}.json`), { ...(payload.site[locale.code] ?? {}), __faq: localizedFaq });
   writeJson(path.join(output, 'games', `${locale.code}.json`), localizedGames[locale.code]);
 }
 console.log(`CMS release v${release.version} synchronized. Games: ${sharedGames.length}. Media: ${Object.keys(assetManifest).length}. Warnings: ${warnings.length}.`);

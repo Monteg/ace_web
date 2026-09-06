@@ -1,0 +1,20 @@
+---
+import GamePage from '../../portfolio/[slug].astro';
+import { getActiveLocales, defaultLocale } from '../../../i18n/config';
+import { getGames } from '../../../lib/content-source';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const locale of getActiveLocales().filter((item) => item.code !== defaultLocale)) {
+    const games = await getGames(locale.code);
+    paths.push(...games.map((game) => ({
+      params: { locale: locale.code, slug: game.id },
+      props: { locale: locale.code, game, all: games },
+    })));
+  }
+  return paths;
+}
+
+const { locale, game, all } = Astro.props;
+---
+<GamePage locale={locale} game={game} all={all} />

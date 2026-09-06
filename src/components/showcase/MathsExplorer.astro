@@ -10,18 +10,22 @@
  * they asked for without losing sight of the rest.
  */
 import { Image } from 'astro:assets';
-import { maxWin, rtp as fmtRtp, volatility as fmtVol, TYPE_LABEL, TYPE_PLURAL } from '../../lib/format';
+import { maxWin, rtp as fmtRtp, volatility as fmtVol } from '../../lib/format';
 import type { GameRecord } from '../../lib/content-source';
+import { getActiveLocales } from '../../i18n/config';
+import { getTranslations } from '../../i18n/get-translations';
+import { localePath } from '../../i18n/routes';
 
 interface Props {
   games: GameRecord[];
+  locale?: string;
 }
-const { games } = Astro.props;
+const { games, locale = 'en' } = Astro.props;
+const t = getTranslations(locale);
+const locales = getActiveLocales();
 
 const BANDS = ['low', 'medium', 'high', 'very_high'] as const;
-const LANE_LABEL: Record<(typeof BANDS)[number], string> = {
-  low: 'Low', medium: 'Medium', high: 'High', very_high: 'Very high',
-};
+const LANE_LABEL = Object.fromEntries(BANDS.map((band) => [band, t(`game.volatility.${band}`)])) as Record<(typeof BANDS)[number], string>;
 // lane 0 is the top row (very high), lane 3 the bottom (low)
 const laneOf = (b: (typeof BANDS)[number]) => 3 - BANDS.indexOf(b);
 
@@ -76,20 +80,20 @@ const present = types.filter((t) => numeric.some((g) => g.data.type === t));
 
 <div class="mx" data-mx>
   <div class="mx-top">
-    <div class="chips" role="group" aria-label="Highlight games by type">
-      <button class="chip" type="button" data-mx-filter="all" aria-pressed="true">All</button>
-      {present.map((t) => (
-        <button class="chip" type="button" data-mx-filter={t} aria-pressed="false">{TYPE_PLURAL[t]}</button>
+    <div class="chips" role="group" aria-label={t('maths.filter_aria')}>
+      <button class="chip" type="button" data-mx-filter="all" aria-pressed="true">{t('games.filter.all')}</button>
+      {present.map((type) => (
+        <button class="chip" type="button" data-mx-filter={type} aria-pressed="false">{t(`game.type.${type}_plural`)}</button>
       ))}
     </div>
-    <p class="mx-hint">Further right, more returned to players. Higher up, bigger swings.</p>
+    <p class="mx-hint">{t('maths.hint')}</p>
   </div>
 
   <div class="mx-scroll">
     <div class="mx-board" style={`--lanes: ${BANDS.length}`}>
       <div class="mx-labels" aria-hidden="true">
         {[...BANDS].reverse().map((b) => <span class="mx-lane-label">{LANE_LABEL[b]}</span>)}
-        <span class="mx-axis-name">Volatility</span>
+        <span class="mx-axis-name">{t('game.volatility')}</span>
       </div>
 
       <div class="mx-track">
@@ -118,13 +122,13 @@ const present = types.filter((t) => numeric.some((g) => g.data.type === t));
             >
               <a
                 class="mx-dot"
-                href={`/portfolio/${p.game.id}`}
+                href={localePath(`/portfolio/${p.game.id}`, locale, locales)}
                 data-name={p.game.data.name}
-                data-type={TYPE_LABEL[p.game.data.type]}
+                data-type={t(`game.type.${p.game.data.type}`)}
                 data-rtp={fmtRtp(p.game.data.specs.rtp)}
-                data-vol={fmtVol(p.game.data.specs.volatility)}
-                data-max={maxWin(p.game.data.specs.maxWin) ?? 'On request'}
-                aria-label={`${p.game.data.name}: RTP ${fmtRtp(p.game.data.specs.rtp)}, volatility ${fmtVol(p.game.data.specs.volatility)}`}
+                data-vol={locale === 'en' ? fmtVol(p.game.data.specs.volatility) : p.game.data.specs.volatility.map((value) => t(`game.volatility.${value}`)).join(' / ')}
+                data-max={maxWin(p.game.data.specs.maxWin) ?? t('game.spec.on_request')}
+                aria-label={t('maths.point_aria', { name: p.game.data.name, rtp: fmtRtp(p.game.data.specs.rtp), volatility: locale === 'en' ? fmtVol(p.game.data.specs.volatility) : p.game.data.specs.volatility.map((value) => t(`game.volatility.${value}`)).join(' / ') })}
               >
                 <Image src={p.game.data.card} alt="" width={96} height={96} loading="lazy" />
               </a>
@@ -136,11 +140,11 @@ const present = types.filter((t) => numeric.some((g) => g.data.type === t));
   </div>
 
   <div class="mx-foot">
-    <ul class="mx-legend" aria-label="Game types">
-      {present.map((t) => (
-        <li data-type={t}><i></i>{TYPE_PLURAL[t]}</li>
+    <ul class="mx-legend" aria-label={t('maths.game_types_aria')}>
+      {present.map((type) => (
+        <li data-type={type}><i></i>{t(`game.type.${type}_plural`)}</li>
       ))}
-      <li class="mx-legend-adj"><i class="adj"></i>Adjustable volatility</li>
+      <li class="mx-legend-adj"><i class="adj"></i>{t('maths.adjustable')}</li>
     </ul>
     <p class="mx-caption"><slot name="caption" /></p>
   </div>
@@ -151,11 +155,11 @@ const present = types.filter((t) => numeric.some((g) => g.data.type === t));
       <b data-tip-name></b>
       <span class="mx-tip-type" data-tip-type></span>
       <dl>
-        <div><dt>RTP</dt><dd class="tnum" data-tip-rtp></dd></div>
-        <div><dt>Volatility</dt><dd data-tip-vol></dd></div>
-        <div><dt>Max win</dt><dd class="tnum" data-tip-max></dd></div>
+        <div><dt>{t('game.rtp')}</dt><dd class="tnum" data-tip-rtp></dd></div>
+        <div><dt>{t('game.volatility')}</dt><dd data-tip-vol></dd></div>
+        <div><dt>{t('game.spec.max_win')}</dt><dd class="tnum" data-tip-max></dd></div>
       </dl>
-      <span class="mx-tip-go">Open the game</span>
+      <span class="mx-tip-go">{t('maths.open_game')}</span>
     </div>
   </div>
 </div>

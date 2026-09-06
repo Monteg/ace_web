@@ -2,44 +2,56 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import logo from '../assets/brand/logo.webp';
-import { company, nav, social, socialIntro } from '../data/site';
+import { company, nav, social } from '../data/site';
+import type { SiteLocale } from '../i18n/config';
+import type { Translate } from '../i18n/get-translations';
+import { localePath } from '../i18n/routes';
+
+interface Props { locale: string; locales: SiteLocale[]; t: Translate; }
+const { locale, locales, t } = Astro.props;
+const footerKeys: Record<string, string> = {
+  '/games': 'header.games', '/#maths': 'home.maths.title', '/#faq': 'header.faq',
+};
+const localizedHref = (href: string) => {
+  const url = new URL(href, company.origin);
+  return `${localePath(url.pathname, locale, locales)}${url.search}${url.hash}`;
+};
 ---
 
 <footer class="site-footer">
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-col">
-        <a class="brand" href="/">
+        <a class="brand" href={localePath('/', locale, locales)}>
           <Image src={logo} alt={company.name} widths={[180]} sizes="90px" loading="lazy" />
         </a>
         <p class="blurb">
-          Custom slot and crash game development for licensed operators. Maths, art and engineering
-          in-house.
+          {t('footer.blurb')}
         </p>
       </div>
 
       <div class="foot-col">
-        <h2>Company</h2>
+        <h2>{t('footer.company')}</h2>
         <ul>
           {nav.map((item) => (
-            <li><a href={item.href}>{item.label}</a></li>
+            <li><a href={localizedHref(item.href)}>{t(footerKeys[item.href] ?? item.label)}</a></li>
           ))}
-          <li><a href="/#contact">Contact</a></li>
+          <li><a href={`${localePath('/', locale, locales)}#contact`}>{t('footer.contact')}</a></li>
         </ul>
       </div>
 
       <div class="foot-col">
-        <h2>Legal</h2>
+        <h2>{t('footer.legal')}</h2>
         <ul>
-          <li><a href="/privacy-policy">Privacy policy</a></li>
-          <li><a href="/terms-conditions">Terms and conditions</a></li>
+          <li><a href={localePath('/privacy-policy', locale, locales)}>{t('footer.privacy')}</a></li>
+          <li><a href={localePath('/terms-conditions', locale, locales)}>{t('footer.terms')}</a></li>
           <li><a href={`mailto:${company.legalEmail}`}>{company.legalEmail}</a></li>
         </ul>
       </div>
 
       <div class="foot-col social-col">
-        <h2>Follow Us</h2>
-        <p class="social-copy">{socialIntro}</p>
+        <h2>{t('footer.follow_us')}</h2>
+        <p class="social-copy">{t('footer.social_intro')}</p>
         <div class="social-controls">
           {social.map((item) => item.href ? (
             <a
@@ -56,7 +68,7 @@ import { company, nav, social, socialIntro } from '../data/site';
               type="button"
               class="social-control is-pending"
               aria-label={item.label}
-              title="Profile URL pending"
+              title={t('footer.pending_profile')}
               disabled
             >
               <Icon name={item.icon} aria-hidden="true" />
@@ -69,9 +81,7 @@ import { company, nav, social, socialIntro } from '../data/site';
     <div class="foot-bottom">
       <span class="age">18+</span>
       <p class="legal">
-        {company.legalName}, {company.address}. Ace Games supplies games to licensed operators and
-        does not offer gambling to consumers. Demo games on this site are free play only, with no
-        prizes of monetary value.
+        {t('footer.disclaimer', { legalName: company.legalName, address: company.address })}
       </p>
       <span class="copy">{new Date().getFullYear()} {company.name}</span>
     </div>

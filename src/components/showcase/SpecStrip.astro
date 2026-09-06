@@ -2,6 +2,7 @@
 import { Icon } from 'astro-icon/components';
 import { bet, maxWin, rtp, volatility, type Volatility } from '../../lib/format';
 import type { GameRecord } from '../../lib/content-source';
+import { getTranslations } from '../../i18n/get-translations';
 
 /**
  * The six figures a buyer scans first, in one strip under the header.
@@ -10,9 +11,11 @@ import type { GameRecord } from '../../lib/content-source';
 interface Props {
   game: GameRecord;
   variant?: 'strip' | 'sidebar';
+  locale?: string;
 }
 
-const { game, variant = 'strip' } = Astro.props;
+const { game, variant = 'strip', locale = 'en' } = Astro.props;
+const t = getTranslations(locale);
 const s = game.data.specs;
 
 type Cell = {
@@ -26,12 +29,12 @@ type Cell = {
 // The labels live here and the values come from the record: on the old CMS
 // both were free text and 14 of 24 games had them swapped.
 const cells: Cell[] = [
-  { icon: 'ph:percent', tint: 'mint', label: 'RTP', value: rtp(s.rtp) },
-  { icon: 'ph:wave-sine', tint: 'ice', label: 'Volatility', value: volatility(s.volatility), meter: true },
-  { icon: 'ph:trend-up', tint: 'lemon', label: 'Max win', value: maxWin(s.maxWin) },
-  { icon: 'ph:coins', tint: 'peach', label: 'Bet range', value: bet(s.bet) },
-  { icon: 'ph:grid-four', tint: 'sky', label: 'Layout', value: s.layout ?? null },
-  { icon: 'ph:sparkle', tint: 'pink', label: 'Main feature', value: s.mainFeature ?? null },
+  { icon: 'ph:percent', tint: 'mint', label: t('game.rtp'), value: rtp(s.rtp) },
+  { icon: 'ph:wave-sine', tint: 'ice', label: t('game.volatility'), value: locale === 'en' ? volatility(s.volatility) : s.volatility.map((value) => t(`game.volatility.${value}`)).join(' / '), meter: true },
+  { icon: 'ph:trend-up', tint: 'lemon', label: t('game.spec.max_win'), value: maxWin(s.maxWin) },
+  { icon: 'ph:coins', tint: 'peach', label: t('game.spec.bet_range'), value: bet(s.bet) },
+  { icon: 'ph:grid-four', tint: 'sky', label: t('game.spec.layout'), value: s.layout ?? null },
+  { icon: 'ph:sparkle', tint: 'pink', label: t('game.spec.main_feature'), value: s.mainFeature ?? null },
 ];
 
 // Volatility as a meter, the way every competitor's catalogue shows it. A bar
@@ -48,7 +51,7 @@ const lit = new Set<Volatility>(s.volatility);
         <span class="ss-label">{c.label}</span>
       </dt>
       <dd class="ss-value">
-        <span class="ss-figure tnum">{c.value ? c.value : <span class="need">On request</span>}</span>
+        <span class="ss-figure tnum">{c.value ? c.value : <span class="need">{t('game.spec.on_request')}</span>}</span>
         {c.meter && (
           <span class="ss-meter" aria-hidden="true">
             {BANDS.map((b) => <i class={`ss-bar${lit.has(b) ? ' is-on' : ''}`} />)}

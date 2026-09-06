@@ -12,18 +12,27 @@ import FutureOfGaming from '../components/showcase/FutureOfGaming.astro';
 import PartnerWall from '../components/showcase/PartnerWall.astro';
 import MathsExplorer from '../components/showcase/MathsExplorer.astro';
 import contactPigeon from '../assets/site/contact-pigeon-v3.png';
-import { faq, heroStats, homepageSections, integration, partners, proofIntro, sectionCopy } from '../data/site';
+import { heroStats, homepageSections, integration, partners } from '../data/site';
 import { CATALOGUE_CATEGORIES } from '../lib/game-categories';
 import { getGames, sortGames } from '../lib/content-source';
+import { getTranslations } from '../i18n/get-translations';
+import { getActiveLocales } from '../i18n/config';
+import { localePath } from '../i18n/routes';
+import { getFaqItems } from '../i18n/site-content';
+import { renderMarkdown } from '../lib/markdown';
 
-const games = sortGames(await getGames());
+interface Props { locale?: string; }
+const { locale = 'en' } = Astro.props;
+const t = getTranslations(locale);
+const locales = getActiveLocales();
+const games = sortGames(await getGames(locale));
 const mathsGames = games.filter(
   (game) => game.data.status === 'live' && typeof game.data.specs.rtp === 'number',
 );
 
 const present = CATALOGUE_CATEGORIES.filter((category) => games.some((game) => game.data.type === category.type));
 
-const contactTitleWords = sectionCopy.contactTitle.trim().split(/\s+/);
+const contactTitleWords = t('home.contact.title').trim().split(/\s+/);
 const contactTitleLead = contactTitleWords.shift() ?? '';
 const contactTitleAccent = contactTitleWords.pop() ?? '';
 const contactTitleMiddle = contactTitleWords.join(' ');
@@ -31,61 +40,63 @@ const contactTitleMiddle = contactTitleWords.join(' ');
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: faq
-    .filter((f) => f.a)
-    .map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  mainEntity: getFaqItems(locale)
+    .map((f) => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answerMarkdown } })),
 };
+const faqItems = getFaqItems(locale);
+const statLabelKeys = ['home.proof.prototypes', 'home.proof.releases', 'home.proof.players', 'home.proof.ecosystem'];
 ---
 
 <Base
-  title="Custom casino game development for operators | Ace Games"
-  description="Ace Games builds slots, crash and instant games for licensed operators. Maths, art, engine and RGS in-house, published RTP on every title, playable demos for all of them."
+  title={t('home.seo.title')}
+  description={t('home.seo.description')}
   schema={faqSchema}
+  locale={locale}
 >
-  <Wall games={games} />
+  <Wall games={games} locale={locale} />
 
   <!-- ============ proof ============ -->
   <section class="proof cream" id="about-us" aria-labelledby="proof-title">
     <div class="wrap">
-      <h2 id="proof-title" class="proof-intro rv">{proofIntro}</h2>
+      <h2 id="proof-title" class="proof-intro rv">{t('home.proof.intro')}</h2>
       <div class="proof-in rv">
-        {heroStats.map((s) => <StatTile {...s} />)}
+        {heroStats.map((s, index) => <StatTile {...s} label={t(statLabelKeys[index])} />)}
       </div>
     </div>
   </section>
 
-  <Excellence />
+  <Excellence locale={locale} />
 
   <!-- ============ portfolio ============ -->
   <section id="games">
     <div class="wrap">
       <div class="sec-top home-section-heading rv">
-        <h2 class="d1">{sectionCopy.portfolioTitle}</h2>
+        <h2 class="d1">{t('home.discover_games.title')}</h2>
       </div>
 
       <div class="portfolio-controls rv">
-        <div class="chips" role="group" aria-label="Filter games by type">
-          <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
-          {present.map(({ type, label }) => (
-            <button class="chip" type="button" data-filter={type} aria-pressed="false">{label}</button>
+        <div class="chips" role="group" aria-label={t('global.filter_games')}>
+          <button class="chip" type="button" data-filter="all" aria-pressed="true">{t('games.filter.all')}</button>
+          {present.map(({ type }) => (
+            <button class="chip" type="button" data-filter={type} aria-pressed="false">{t(`game.type.${type}`)}</button>
           ))}
         </div>
-        <a class="btn btn-ghost see-all" href="/games">
-          View Game
+        <a class="btn btn-ghost see-all" href={localePath('/games', locale, locales)}>
+          {t('home.discover_games.view_all')}
           <span class="disc" aria-hidden="true"><Icon name="ph:arrow-right" /></span>
         </a>
       </div>
 
       <p class="filter-note" data-filter-note aria-live="polite"></p>
       <div class="cat rv" id="gameGrid">
-        {games.map((g, i) => <GameTile game={g} eager={i < 4} />)}
+        {games.map((g, i) => <GameTile game={g} eager={i < 4} locale={locale} />)}
       </div>
       <script is:inline>
         document.getElementById('gameGrid')?.setAttribute('data-progressive-ready', '');
       </script>
       <div class="load-games-row" data-load-games-row hidden>
         <button class="btn btn-ghost see-all load-games" type="button" data-load-games>
-          Load Game
+          {t('home.discover_games.load_more')}
           <span class="disc" aria-hidden="true"><Icon name="ph:arrow-down" /></span>
         </button>
       </div>
@@ -96,14 +107,14 @@ const faqSchema = {
   <section id="maths" class="section-continuation">
     <div class="wrap">
       <div class="sec-top home-section-heading rv">
-        <h2 class="d1">Every game, by the numbers</h2>
+        <h2 class="d1">{t('home.maths.title')}</h2>
         <p class="lead">
-          All our games on one board: each lane is a volatility level, each game sits at its published RTP. Hover a game for the figures, click to open it.
+          {t('home.maths.description')}
         </p>
       </div>
       <div class="rv">
-        <MathsExplorer games={mathsGames}>
-          <Fragment slot="caption">Published RTP and volatility for every title. RTP bands and volatility modes are configuration, set per operator and per market.</Fragment>
+        <MathsExplorer games={mathsGames} locale={locale}>
+          <Fragment slot="caption">{t('home.maths.caption')}</Fragment>
         </MathsExplorer>
       </div>
     </div>
@@ -111,9 +122,9 @@ const faqSchema = {
 
   {homepageSections.craft && <Craft />}
 
-  <FutureOfGaming />
+  <FutureOfGaming locale={locale} />
 
-  <PartnerWall logos={partners} />
+  <PartnerWall logos={partners} locale={locale} />
 
   <!-- ============ integration and compliance ============ -->
   {homepageSections.integration && (
@@ -148,18 +159,17 @@ const faqSchema = {
   <!-- ============ faq ============ -->
   <section id="faq">
     <div class="wrap">
-      <div class="sec-top home-section-heading rv"><h2 class="d1">Frequently asked questions</h2></div>
+      <div class="sec-top home-section-heading rv"><h2 class="d1">{t('home.faq.title')}</h2></div>
       <div class="faq rv">
-        {faq.map((f) => (
+        {faqItems.map((f) => (
           <details class="faq-item">
             <summary>
-              <span class="faq-question">{f.q}</span>
+              <span class="faq-question">{f.question}</span>
               <span class="faq-icon" aria-hidden="true"></span>
             </summary>
             <div class="answer">
               <div class="answer-in">
-                {f.a ? <p>{f.a}</p> : <p><span class="need">{f.hint}</span></p>}
-                {f.extra && <p>{f.extra}</p>}
+                <div set:html={renderMarkdown(f.answerMarkdown)}></div>
               </div>
             </div>
           </details>
@@ -189,7 +199,7 @@ const faqSchema = {
           </h2>
         </div>
 
-        <div class="contact-form-placement rv"><ContactForm /></div>
+        <div class="contact-form-placement rv"><ContactForm locale={locale} /></div>
       </div>
     </div>
   </section>

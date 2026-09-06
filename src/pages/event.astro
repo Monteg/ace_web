@@ -18,7 +18,7 @@ const shareImage = await getImage({ src: primaryGame.data.hero, width: 1200, for
 const description = `Meet the Ace Games team at ${event.eventName}, ${eventDateRange(event)}. Explore our games, custom game development and book a meeting with the team.`;
 ---
 
-<Base title={`${event.headline} | Ace Games`} description={description} image={shareImage.src} canonicalPath={event.eventUrl}>
+<Base title={`${event.headline} | Ace Games`} description={description} image={shareImage.src} canonicalPath={event.eventUrl} enableLocaleAlternates={false}>
   <EventHero event={event} games={games} />
   <WhyAceGames event={event} />
   <EventStats event={event} />

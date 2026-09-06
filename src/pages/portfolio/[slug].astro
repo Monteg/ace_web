@@ -5,17 +5,22 @@ import GameMedia from '../../components/showcase/GameMedia.astro';
 import SpecStrip from '../../components/showcase/SpecStrip.astro';
 import GameTile from '../../components/showcase/GameTile.astro';
 import GameSections from '../../components/showcase/GameSections.astro';
-import { CTA, company } from '../../data/site';
-import { demoUrl, TYPE_LABEL } from '../../lib/format';
+import { company } from '../../data/site';
+import { demoUrl } from '../../lib/format';
 import { getGames } from '../../lib/content-source';
 import { renderMarkdown } from '../../lib/markdown';
+import { getTranslations } from '../../i18n/get-translations';
+import { getActiveLocales } from '../../i18n/config';
+import { localePath } from '../../i18n/routes';
 
 export async function getStaticPaths() {
   const games = await getGames('en');
-  return games.map((game) => ({ params: { slug: game.id }, props: { game, all: games } }));
+  return games.map((game) => ({ params: { slug: game.id }, props: { game, all: games, locale: 'en' } }));
 }
 
-const { game, all } = Astro.props;
+const { game, all, locale = 'en' } = Astro.props;
+const t = getTranslations(locale);
+const locales = getActiveLocales();
 const d = game.data;
 const overviewHtml = renderMarkdown(d.overviewMarkdown);
 
@@ -31,22 +36,22 @@ const productSchema = {
   '@type': 'Product',
   name: d.name,
   brand: { '@type': 'Brand', name: company.name },
-  category: `${TYPE_LABEL[d.type]} game`,
+  category: `${t(`game.type.${d.type}`)} game`,
   description: d.seo.description,
-  url: `${company.origin}/portfolio/${game.id}`,
+  url: new URL(localePath(`/portfolio/${game.id}`, locale, locales), company.origin).href,
 };
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Games', item: `${company.origin}/games` },
-    { '@type': 'ListItem', position: 2, name: d.name, item: `${company.origin}/portfolio/${game.id}` },
+    { '@type': 'ListItem', position: 1, name: t('header.games'), item: new URL(localePath('/games', locale, locales), company.origin).href },
+    { '@type': 'ListItem', position: 2, name: d.name, item: new URL(localePath(`/portfolio/${game.id}`, locale, locales), company.origin).href },
   ],
 };
 ---
 
-<Base title={d.seo.title} description={d.seo.description} schema={[productSchema, breadcrumbSchema]}>
-  <GameHeader game={game} demoAvailable={demo !== null} />
+<Base title={d.seo.title} description={d.seo.description} schema={[productSchema, breadcrumbSchema]} locale={locale}>
+  <GameHeader game={game} demoAvailable={demo !== null} locale={locale} />
 
   <section id="demo" class="game-media-section">
     <div class="wrap">
@@ -58,26 +63,27 @@ const breadcrumbSchema = {
             demoSrc={demo}
             poster={d.hero}
             gallery={d.gallery}
+            locale={locale}
           />
 
           {!demo && (
             <div class="demo-request">
               <div>
-                <h2 class="d3">{soon ? 'In development' : 'Demo on request'}</h2>
+                <h2 class="d3">{soon ? t('game.status.in_development') : t('game.demo_request')}</h2>
                 <p class="body">
                   {soon
-                    ? `${d.name} is not released yet. Ask us for the current build and the maths sheet, and we will send them over.`
-                    : `A playable build of ${d.name} is available on request.`}
+                    ? t('game.demo_request_soon', { name: d.name })
+                    : t('game.demo_request_live', { name: d.name })}
                 </p>
               </div>
-              <a class="btn btn-primary btn-sm" href={CTA.href}>{CTA.label}</a>
+              <a class="btn btn-primary btn-sm" href={`${localePath('/', locale, locales)}#contact`}>{t('header.lets_talk')}</a>
             </div>
           )}
         </div>
 
-        <aside class="spec-sidebar rv" aria-label={`${d.name} game specifications`}>
-          <h2 class="d3">Game stats & specs</h2>
-          <SpecStrip game={game} variant="sidebar" />
+        <aside class="spec-sidebar rv" aria-label={t('game.specifications_aria', { name: d.name })}>
+          <h2 class="d3">{t('game.stats_title')}</h2>
+          <SpecStrip game={game} variant="sidebar" locale={locale} />
         </aside>
       </div>
     </div>
@@ -87,7 +93,7 @@ const breadcrumbSchema = {
     <div class="wrap">
       <div class="over">
         <div class="over-copy">
-          <div class="sec-top rv"><h2 class="d1">Overview</h2></div>
+          <div class="sec-top rv"><h2 class="d1">{t('game.overview')}</h2></div>
           <div class="prose rv" set:html={overviewHtml}></div>
           {d.highlights.length > 0 && (
             <ul class="highlights rv">
@@ -97,7 +103,7 @@ const breadcrumbSchema = {
         </div>
         {d.features.length > 0 && (
           <aside class="over-side rv">
-            <h3 class="d3">Features</h3>
+            <h3 class="d3">{t('game.features')}</h3>
             <ol class="feats">
               {d.features.map((f) => (
                 <li>
@@ -121,9 +127,9 @@ const breadcrumbSchema = {
   {related.length > 0 && (
     <section class="section-continuation">
       <div class="wrap">
-        <div class="sec-top rv"><h2 class="d1">More {TYPE_LABEL[d.type].toLowerCase()} games</h2></div>
+        <div class="sec-top rv"><h2 class="d1">{t('game.related', { type: t(`game.type.${d.type}`).toLowerCase() })}</h2></div>
         <div class="related rv">
-          {related.map((g) => <GameTile game={g} />)}
+          {related.map((g) => <GameTile game={g} locale={locale} />)}
         </div>
       </div>
     </section>

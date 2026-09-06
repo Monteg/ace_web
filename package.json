@@ -16,12 +16,14 @@
     "cms:bootstrap": "node scripts/cms/bootstrap.mjs",
     "cms:schema": "node scripts/cms/apply-schema.mjs",
     "cms:access": "node scripts/cms/apply-access.mjs",
+    "cms:seed-site": "node scripts/cms/seed-site-strings.mjs",
+    "cms:seed-faq": "node scripts/cms/seed-faq.mjs",
     "cms:migrate": "node scripts/cms/migrate-webflow.mjs",
     "cms:migrate-assets": "node scripts/cms/migrate-assets.mjs",
     "cms:import": "node scripts/cms/import-migration.mjs",
     "cms:sync": "node scripts/cms/sync.mjs",
     "cms:validate": "node scripts/cms/validate.mjs",
-    "test:cms-model": "node --test scripts/cms/game-schema.test.mjs scripts/cms/migration.test.mjs scripts/cms/release-schema.test.mjs"
+    "test:cms-model": "node --test scripts/cms/game-schema.test.mjs scripts/cms/migration.test.mjs scripts/cms/release-schema.test.mjs scripts/cms/localization.test.mjs src/i18n/routes.test.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

@@ -23,3 +23,10 @@ test('rejects duplicate slugs', () => {
 test('collects media references once', () => {
   assert.deepEqual(collectAssetIds(payload), [id(2), id(3)]);
 });
+
+test('requires English values for required site string slots', () => {
+  const invalid = structuredClone(payload);
+  invalid.required_site_keys = ['header.games'];
+  invalid.site = { en: {} };
+  assert.throws(() => validateReleasePayload(invalid), /Required English site string/);
+});

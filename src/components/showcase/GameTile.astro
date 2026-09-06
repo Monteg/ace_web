@@ -4,29 +4,37 @@ import { Image } from 'astro:assets';
 import playIcon from '../../assets/ui/game-card-play.svg';
 import { company } from '../../data/site';
 import type { GameRecord } from '../../lib/content-source';
-import { demoUrl, rtp, TYPE_LABEL, volatility } from '../../lib/format';
+import { demoUrl, rtp, volatility } from '../../lib/format';
+import { getActiveLocales } from '../../i18n/config';
+import { getTranslations } from '../../i18n/get-translations';
+import { localePath } from '../../i18n/routes';
 
 interface Props {
   game: GameRecord;
   eager?: boolean;
   /** Renders larger art and copy; used for the first tile of the grid. */
   featured?: boolean;
+  locale?: string;
 }
 
-const { game, eager = false, featured = false } = Astro.props;
+const { game, eager = false, featured = false, locale = 'en' } = Astro.props;
+const locales = getActiveLocales();
+const t = getTranslations(locale);
 const d = game.data;
 const soon = d.status === 'coming_soon';
-const href = `/portfolio/${game.id}`;
+const href = localePath(`/portfolio/${game.id}`, locale, locales);
 const bands = ['low', 'medium', 'high', 'very_high'] as const;
 const layeredArt = d.cardLayers;
 const cardVolatility = volatility(d.specs.volatility).replaceAll(' / ', '/');
 const quickPlayUrl = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
+const typeLabel = t(`game.type.${d.type}`);
+const translatedVolatility = d.specs.volatility.map((value) => t(`game.volatility.${value}`)).join('/');
 ---
 
 <article class:list={['gt', { 'gt-featured': featured, 'gt-layered': layeredArt, 'gt-soon': soon }]} data-game-card data-type={d.type} data-status={d.status}>
   <div class="gt-surface">
     <a class="gt-link" href={href}>
-      <span class="sr-only">{d.name}, {TYPE_LABEL[d.type]}{soon ? ', coming soon' : ''}</span>
+      <span class="sr-only">{t('game.card_aria', { name: d.name, type: typeLabel, status: soon ? `, ${t('game.status.coming_soon')}` : '' })}</span>
     </a>
 
     <div class="gt-art">
@@ -54,7 +62,7 @@ const quickPlayUrl = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
       )}
     </div>
 
-    <span class:list={['gt-type', `gt-type-${d.type}`]}>{soon ? 'Coming soon' : TYPE_LABEL[d.type]}</span>
+    <span class:list={['gt-type', `gt-type-${d.type}`]}>{soon ? t('game.status.coming_soon') : typeLabel}</span>
 
     {quickPlayUrl && (
       <a
@@ -62,10 +70,10 @@ const quickPlayUrl = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
         href={quickPlayUrl}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Play ${d.name} demo in a new tab`}
+        aria-label={t('game.play_aria', { name: d.name })}
       >
         <img src={playIcon.src} alt="" width="16" height="16" />
-        <b>Play</b>
+        <b>{t('game.play')}</b>
       </a>
     )}
 
@@ -73,7 +81,7 @@ const quickPlayUrl = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
       <h3>{d.name}</h3>
       <dl class="gt-meta">
         <div class="gt-stat">
-          <dt>RTP</dt>
+          <dt>{t('game.rtp')}</dt>
           <dd class:list={['gt-rtp', 'tnum', { 'gt-rtp-configurable': d.specs.rtp === 'configurable' }]}>{rtp(d.specs.rtp)}</dd>
         </div>
         <div class="gt-stat">
@@ -81,9 +89,9 @@ const quickPlayUrl = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
             <span class="vmeter" aria-hidden="true">
               {bands.map((b) => <i class:list={{ on: d.specs.volatility.includes(b) }}></i>)}
             </span>
-            <span>Volatility</span>
+            <span>{t('game.volatility')}</span>
           </dt>
-          <dd class="gt-volatility">{cardVolatility}</dd>
+          <dd class="gt-volatility">{locale === 'en' ? cardVolatility : translatedVolatility}</dd>
         </div>
       </dl>
     </div>

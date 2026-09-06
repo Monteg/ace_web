@@ -1,8 +1,9 @@
 ---
 import { Image } from 'astro:assets';
-import { CTA } from '../../data/site';
 import type { GameRecord } from '../../lib/content-source';
-import { TYPE_LABEL } from '../../lib/format';
+import { getActiveLocales } from '../../i18n/config';
+import { getTranslations } from '../../i18n/get-translations';
+import { localePath } from '../../i18n/routes';
 
 /**
  * Game page header: the wide banner as a full-bleed ground, the key art as a
@@ -13,9 +14,12 @@ interface Props {
   game: GameRecord;
   /** Only true when the page below actually renders a demo block (`#demo`). */
   demoAvailable: boolean;
+  locale?: string;
 }
 
-const { game, demoAvailable } = Astro.props;
+const { game, demoAvailable, locale = 'en' } = Astro.props;
+const t = getTranslations(locale);
+const locales = getActiveLocales();
 const d = game.data;
 const soon = d.status === 'coming_soon';
 
@@ -27,6 +31,8 @@ const soon = d.status === 'coming_soon';
 const words = d.name.trim().split(/\s+/);
 const longestWord = Math.max(...words.map((w) => w.length));
 const fit = Math.min(2 / longestWord, 3.4 / d.name.length).toFixed(3);
+const typeLabel = t(`game.type.${d.type}`);
+const contactHref = `${localePath('/', locale, locales)}#contact`;
 ---
 
 <section class="gh" id="top" style={`--gh-fit:${fit}`}>
@@ -43,10 +49,10 @@ const fit = Math.min(2 / longestWord, 3.4 / d.name.length).toFixed(3);
 
   <div class="wrap gh-wrap">
     <div class="gh-copy">
-      <nav class="gh-crumbs" aria-label="Breadcrumb">
-        <a href="/games">Games</a>
+      <nav class="gh-crumbs" aria-label={t('global.breadcrumb')}>
+        <a href={localePath('/games', locale, locales)}>{t('header.games')}</a>
         <span aria-hidden="true">/</span>
-        <a href={`/games?type=${d.type}`}>{TYPE_LABEL[d.type]}</a>
+        <a href={`${localePath('/games', locale, locales)}?type=${d.type}`}>{typeLabel}</a>
         <span aria-hidden="true">/</span>
         <span aria-current="page">{d.name}</span>
       </nav>
@@ -54,18 +60,18 @@ const fit = Math.min(2 / longestWord, 3.4 / d.name.length).toFixed(3);
       <h1 class="gh-title">{d.name}</h1>
 
       <ul class="gh-pills" aria-label="Game classification">
-        <li class={`gh-pill gh-pill--type gh-pill--${d.type}`}>{TYPE_LABEL[d.type]}</li>
-        {soon && <li class="gh-pill gh-pill--soon">In development</li>}
+        <li class={`gh-pill gh-pill--type gh-pill--${d.type}`}>{typeLabel}</li>
+        {soon && <li class="gh-pill gh-pill--soon">{t('game.status.in_development')}</li>}
       </ul>
 
       <div class="gh-cta">
         {demoAvailable ? (
           <>
-            <a class="btn btn-primary" href="#demo">Play the demo</a>
-            <a class="btn btn-ghost" href={CTA.href}>{CTA.label}</a>
+            <a class="btn btn-primary" href="#demo">{t('game.play_demo')}</a>
+            <a class="btn btn-ghost" href={contactHref}>{t('header.lets_talk')}</a>
           </>
         ) : (
-          <a class="btn btn-primary" href={CTA.href}>{CTA.label}</a>
+          <a class="btn btn-primary" href={contactHref}>{t('header.lets_talk')}</a>
         )}
       </div>
     </div>
@@ -74,7 +80,7 @@ const fit = Math.min(2 / longestWord, 3.4 / d.name.length).toFixed(3);
       <div class="gh-tile">
         <Image
           src={d.card}
-          alt={`${d.name} key art`}
+          alt={t('game.key_art_alt', { name: d.name })}
           widths={[420, 640]}
           sizes="(max-width: 992px) 60vw, 380px"
           loading="eager"

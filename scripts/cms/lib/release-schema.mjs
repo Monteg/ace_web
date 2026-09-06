@@ -51,6 +51,18 @@ export const releasePayloadSchema = z.object({
     hreflang: z.string().min(2),
   })).min(1),
   site: z.record(z.record(z.string())).default({ en: {} }),
+  required_site_keys: z.array(z.string().min(1)).default([]),
+  faq: z.array(z.object({
+    id: z.string().uuid(),
+    sort_order: z.coerce.number().int(),
+    enabled: z.coerce.boolean(),
+    translations: z.array(z.object({
+      locale: z.string().min(2),
+      question: z.string().min(1),
+      answer_markdown: z.string().min(1),
+      translation_status: translationStatus,
+    })),
+  })).default([]),
   games: z.array(releaseGameSchema),
 });
 
@@ -77,6 +89,24 @@ export function validateReleasePayload(input) {
   const activeLocales = payload.locales.filter((locale) => locale.is_active).map((locale) => locale.code);
   const slugs = new Set();
   const warnings = [];
+
+  const englishSite = payload.site.en ?? {};
+  for (const key of payload.required_site_keys) {
+    if (!String(englishSite[key] ?? '').trim()) throw new Error(`Required English site string is missing: ${key}`);
+    for (const locale of activeLocales.filter((code) => code !== 'en')) {
+      if (!String(payload.site[locale]?.[key] ?? '').trim()) warnings.push({ code: 'SITE_STRING_FALLBACK', locale, key });
+    }
+  }
+
+  for (const item of payload.faq.filter((entry) => entry.enabled)) {
+    const english = item.translations.find((translation) => translation.locale === 'en');
+    if (!english || english.translation_status !== 'approved') throw new Error(`FAQ ${item.id} has no approved English translation.`);
+    for (const locale of activeLocales.filter((code) => code !== 'en')) {
+      if (!item.translations.some((translation) => translation.locale === locale && translation.translation_status === 'approved')) {
+        warnings.push({ code: 'FAQ_TRANSLATION_FALLBACK', locale, faq: item.id });
+      }
+    }
+  }
 
   for (const game of payload.games) {
     if (slugs.has(game.slug)) throw new Error(`Duplicate game slug: ${game.slug}`);

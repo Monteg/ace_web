@@ -1,3 +1,14 @@
+---
+import { getActiveLocales } from '../i18n/config';
+import { getTranslations } from '../i18n/get-translations';
+import { localePath } from '../i18n/routes';
+
+interface Props { locale?: string; }
+const { locale = 'en' } = Astro.props;
+const t = getTranslations(locale);
+const locales = getActiveLocales();
+---
+
 <div
   class="age-gate"
   id="ageGate"
@@ -6,22 +17,22 @@
   aria-labelledby="ageGateTitle"
   aria-describedby="ageGateDescription"
 >
-  <div class="age-panel">
+  <div class="age-panel" data-reject-url={localePath('/under-18', locale, locales)}>
     <div class="age-mark" aria-hidden="true">
       <span>18</span>
       <small>+</small>
     </div>
 
-    <p class="age-kicker eyebrow">Age verification</p>
-    <p class="age-title d2" id="ageGateTitle">This content is intended for persons 18 years or older.</p>
+    <p class="age-kicker eyebrow">{t('age.kicker')}</p>
+    <p class="age-title d2" id="ageGateTitle">{t('age.title')}</p>
     <p class="age-description" id="ageGateDescription">
-      Please confirm you meet the legal age requirement to continue.
+      {t('age.body')}
     </p>
 
     <div class="age-actions">
-      <button class="btn btn-ghost age-reject" id="ageReject" type="button">No, take me back</button>
+      <button class="btn btn-ghost age-reject" id="ageReject" type="button">{t('age.leave')}</button>
       <button class="btn btn-primary age-confirm" id="ageConfirm" type="button">
-        Yes, I'm 18 years or older
+        {t('age.confirm')}
       </button>
     </div>
   </div>
@@ -172,6 +183,7 @@
   const confirmButton = document.getElementById('ageConfirm') as HTMLButtonElement | null;
   const rejectButton = document.getElementById('ageReject') as HTMLButtonElement | null;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const rejectUrl = gate?.querySelector<HTMLElement>('[data-reject-url]')?.dataset.rejectUrl ?? '/under-18';
 
   if (gate && siteShell && confirmButton && rejectButton) {
     const verified = document.documentElement.classList.contains('age-verified');
@@ -247,7 +259,7 @@
       });
 
       rejectButton.addEventListener('click', () => {
-        window.location.replace('/under-18');
+        window.location.replace(rejectUrl);
       });
     }
   }
