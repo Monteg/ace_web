@@ -70,7 +70,7 @@ for (const game of numeric.sort((a, b) => (a.data.specs.rtp as number) - (b.data
   placed.push(item);
 }
 
-const types = ['slot', 'instant', 'table'] as const;
+const types = ['slot', 'instant', 'crash', 'table'] as const;
 const present = types.filter((t) => numeric.some((g) => g.data.type === t));
 ---
 
@@ -237,6 +237,7 @@ const present = types.filter((t) => numeric.some((g) => g.data.type === t));
   .mx-dot :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
   .mx-mark[data-type='slot'] { --ring: var(--tint-ice); }
   .mx-mark[data-type='instant'] { --ring: var(--tint-mint); }
+  .mx-mark[data-type='crash'] { --ring: var(--tint-pink); }
   .mx-mark[data-type='table'] { --ring: var(--tint-lemon); }
   .mx-dot:hover, .mx-dot:focus-visible { transform: scale(1.22); box-shadow: 0 0 0 3px var(--brand), 0 14px 28px -10px rgb(5 4 2 / 0.95); z-index: 2; }
   .mx-mark:has(.mx-dot:hover), .mx-mark:has(.mx-dot:focus-visible) { z-index: 5; }
@@ -253,6 +254,7 @@ const present = types.filter((t) => numeric.some((g) => g.data.type === t));
   .mx-legend i { width: 14px; height: 14px; border-radius: 50%; background: var(--ink-3); box-shadow: 0 0 0 2px var(--fg-3); }
   .mx-legend li[data-type='slot'] i { box-shadow: 0 0 0 2px var(--tint-ice); }
   .mx-legend li[data-type='instant'] i { box-shadow: 0 0 0 2px var(--tint-mint); }
+  .mx-legend li[data-type='crash'] i { box-shadow: 0 0 0 2px var(--tint-pink); }
   .mx-legend li[data-type='table'] i { box-shadow: 0 0 0 2px var(--tint-lemon); }
   .mx-legend i.adj { width: 2px; height: 16px; border-radius: 1px; background: var(--peach); box-shadow: none; }
   .mx-caption { font-size: 13px; color: var(--fg-3); max-width: 60ch; }

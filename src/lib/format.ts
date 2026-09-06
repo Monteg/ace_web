@@ -33,8 +33,8 @@ export function bet(b?: { min: number; max: number }): string | null {
   return `${f(b.min)} - ${f(b.max)}`;
 }
 
-export const TYPE_LABEL = { slot: 'Slot', instant: 'Instant', table: 'Table' } as const;
-export const TYPE_PLURAL = { slot: 'Slots', instant: 'Instant', table: 'Table' } as const;
+export const TYPE_LABEL = { slot: 'Slot', instant: 'Instant', crash: 'Crash', table: 'Table' } as const;
+export const TYPE_PLURAL = { slot: 'Slots', instant: 'Instant', crash: 'Crash', table: 'Table' } as const;
 
 /**
  * The demo URL is built here from structured data, never stored as a string.

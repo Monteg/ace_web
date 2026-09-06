@@ -14,7 +14,8 @@
     "new-game": "node scripts/new-game.mjs",
     "cms:bootstrap": "node scripts/cms/bootstrap.mjs",
     "cms:schema": "node scripts/cms/apply-schema.mjs",
-    "cms:access": "node scripts/cms/apply-access.mjs"
+    "cms:access": "node scripts/cms/apply-access.mjs",
+    "test:cms-model": "node --test scripts/cms/game-schema.test.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -25,7 +26,8 @@
     "astro": "^5.14.1",
     "astro-icon": "^1.1.5",
     "gsap": "^3.13.0",
-    "sharp": "^0.34.4"
+    "sharp": "^0.34.4",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

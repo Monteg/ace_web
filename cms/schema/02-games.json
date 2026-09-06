@@ -1,0 +1,194 @@
+{
+  "version": 1,
+  "collections": [
+    {
+      "collection": "games",
+      "meta": { "icon": "casino", "note": "Shared, non-localized game data", "display_template": "{{internal_name}}", "sort_field": "sort_order", "archive_field": "release_status", "archive_value": "coming_soon", "unarchive_value": "live", "versioning": true },
+      "fields": [
+        { "field": "id", "type": "uuid", "schema": { "is_primary_key": true }, "meta": { "special": ["uuid"], "hidden": true, "readonly": true } },
+        { "field": "general", "type": "alias", "meta": { "special": ["alias", "no-data", "group"], "interface": "group-detail", "options": { "start": "open" } } },
+        { "field": "internal_name", "type": "string", "schema": { "max_length": 160 }, "meta": { "group": "general", "interface": "input", "required": true, "width": "half" } },
+        { "field": "slug", "type": "string", "schema": { "max_length": 160, "is_unique": true }, "meta": { "group": "general", "interface": "input", "required": true, "width": "half", "note": "Published slugs require Administrator review" } },
+        { "field": "published_slug", "type": "string", "schema": { "is_nullable": true, "max_length": 160 }, "meta": { "hidden": true, "readonly": true } },
+        { "field": "release_status", "type": "string", "schema": { "default_value": "coming_soon", "max_length": 24 }, "meta": { "group": "general", "interface": "select-dropdown", "required": true, "width": "half", "options": { "choices": [{ "text": "Live", "value": "live" }, { "text": "Coming Soon", "value": "coming_soon" }] } } },
+        { "field": "sort_order", "type": "integer", "schema": { "default_value": 100 }, "meta": { "group": "general", "interface": "input", "required": true, "width": "half" } },
+        { "field": "game_type", "type": "string", "schema": { "max_length": 24 }, "meta": { "group": "general", "interface": "select-dropdown", "required": true, "width": "half", "options": { "choices": [{ "text": "Slot", "value": "slot" }, { "text": "Instant", "value": "instant" }, { "text": "Crash", "value": "crash" }, { "text": "Table", "value": "table" }] } } },
+
+        { "field": "game_data", "type": "alias", "meta": { "special": ["alias", "no-data", "group"], "interface": "group-detail", "options": { "start": "open" } } },
+        { "field": "rtp_mode", "type": "string", "schema": { "default_value": "fixed", "max_length": 24 }, "meta": { "group": "game_data", "interface": "select-dropdown", "required": true, "width": "half", "options": { "choices": [{ "text": "Fixed", "value": "fixed" }, { "text": "Configurable", "value": "configurable" }] } } },
+        { "field": "rtp", "type": "decimal", "schema": { "is_nullable": true, "numeric_precision": 6, "numeric_scale": 5 }, "meta": { "group": "game_data", "interface": "input", "width": "half", "note": "Decimal form, for example 0.948" } },
+        { "field": "volatility", "type": "json", "schema": {}, "meta": { "group": "game_data", "interface": "select-multiple-dropdown", "special": ["cast-json"], "required": true, "options": { "choices": [{ "text": "Low", "value": "low" }, { "text": "Medium", "value": "medium" }, { "text": "High", "value": "high" }, { "text": "Very High", "value": "very_high" }] } } },
+        { "field": "max_win_value", "type": "decimal", "schema": { "is_nullable": true, "numeric_precision": 18, "numeric_scale": 4 }, "meta": { "group": "game_data", "interface": "input", "width": "half" } },
+        { "field": "max_win_unit", "type": "string", "schema": { "is_nullable": true, "max_length": 16 }, "meta": { "group": "game_data", "interface": "select-dropdown", "width": "half", "options": { "allowNone": true, "choices": [{ "text": "Multiplier (x)", "value": "x" }, { "text": "Coins", "value": "coins" }] } } },
+        { "field": "max_win_approx", "type": "boolean", "schema": { "default_value": false }, "meta": { "group": "game_data", "interface": "boolean", "width": "half" } },
+        { "field": "bet_min", "type": "decimal", "schema": { "is_nullable": true, "numeric_precision": 18, "numeric_scale": 4 }, "meta": { "group": "game_data", "interface": "input", "width": "half" } },
+        { "field": "bet_max", "type": "decimal", "schema": { "is_nullable": true, "numeric_precision": 18, "numeric_scale": 4 }, "meta": { "group": "game_data", "interface": "input", "width": "half" } },
+
+        { "field": "media", "type": "alias", "meta": { "special": ["alias", "no-data", "group"], "interface": "group-detail", "options": { "start": "open" } } },
+        { "field": "card_image", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "group": "media", "interface": "file-image", "special": ["file", "m2o"], "width": "half" } },
+        { "field": "hero_image", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "group": "media", "interface": "file-image", "special": ["file", "m2o"], "width": "half" } },
+        { "field": "gallery", "type": "alias", "meta": { "group": "media", "interface": "list-o2m", "special": ["o2m"] } },
+
+        { "field": "demo", "type": "alias", "meta": { "special": ["alias", "no-data", "group"], "interface": "group-detail", "options": { "start": "closed" } } },
+        { "field": "demo_enabled", "type": "boolean", "schema": { "default_value": false }, "meta": { "group": "demo", "interface": "boolean", "required": true, "width": "half" } },
+        { "field": "demo_mode", "type": "string", "schema": { "is_nullable": true, "max_length": 24 }, "meta": { "group": "demo", "interface": "select-dropdown", "width": "half", "options": { "allowNone": true, "choices": [{ "text": "Adapter", "value": "adapter" }, { "text": "Direct build", "value": "direct" }] } } },
+        { "field": "demo_game_id", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "group": "demo", "interface": "input", "width": "full", "note": "Adapter game UUID. A complete play URL is never stored." } },
+        { "field": "direct_build", "type": "string", "schema": { "is_nullable": true, "max_length": 255 }, "meta": { "group": "demo", "interface": "input", "width": "half" } },
+        { "field": "direct_version", "type": "integer", "schema": { "is_nullable": true }, "meta": { "group": "demo", "interface": "input", "width": "half" } },
+        { "field": "api_host", "type": "string", "schema": { "is_nullable": true, "max_length": 2048 }, "meta": { "group": "demo", "interface": "input", "width": "full" } },
+
+        { "field": "content", "type": "alias", "meta": { "special": ["alias", "no-data", "group"], "interface": "group-detail", "options": { "start": "open" } } },
+        { "field": "sections", "type": "alias", "meta": { "group": "content", "interface": "list-o2m", "special": ["o2m"] } },
+        { "field": "localization", "type": "alias", "meta": { "special": ["alias", "no-data", "group"], "interface": "group-detail", "options": { "start": "open" } } },
+        { "field": "translations", "type": "alias", "meta": { "group": "localization", "interface": "translations", "special": ["translations", "o2m"] } },
+
+        { "field": "legacy", "type": "alias", "meta": { "special": ["alias", "no-data", "group"], "interface": "group-detail", "options": { "start": "closed" } } },
+        { "field": "legacy_webflow_id", "type": "string", "schema": { "is_nullable": true, "max_length": 255 }, "meta": { "group": "legacy", "interface": "input", "width": "half" } },
+        { "field": "legacy_source_url", "type": "string", "schema": { "is_nullable": true, "max_length": 2048 }, "meta": { "group": "legacy", "interface": "input", "width": "half" } },
+        { "field": "created_at", "type": "timestamp", "schema": {}, "meta": { "special": ["date-created"], "readonly": true, "hidden": true } },
+        { "field": "updated_at", "type": "timestamp", "schema": {}, "meta": { "special": ["date-updated"], "readonly": true, "hidden": true } },
+        { "field": "created_by", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "special": ["user-created", "m2o"], "readonly": true, "hidden": true } },
+        { "field": "updated_by", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "special": ["user-updated", "m2o"], "readonly": true, "hidden": true } }
+      ],
+      "relations": [
+        { "field": "card_image", "related_collection": "directus_files", "on_delete": "SET NULL" },
+        { "field": "hero_image", "related_collection": "directus_files", "on_delete": "SET NULL" },
+        { "field": "created_by", "related_collection": "directus_users", "on_delete": "SET NULL" },
+        { "field": "updated_by", "related_collection": "directus_users", "on_delete": "SET NULL" }
+      ]
+    },
+    {
+      "collection": "game_translations",
+      "meta": { "icon": "translate", "note": "Localized game identity, overview and SEO", "versioning": true },
+      "fields": [
+        { "field": "id", "type": "uuid", "schema": { "is_primary_key": true }, "meta": { "special": ["uuid"], "hidden": true, "readonly": true } },
+        { "field": "game_id", "type": "uuid", "schema": {}, "meta": { "interface": "select-dropdown-m2o", "special": ["m2o"], "required": true, "hidden": true } },
+        { "field": "locale", "type": "string", "schema": { "max_length": 12 }, "meta": { "interface": "select-dropdown-m2o", "special": ["m2o"], "required": true, "width": "half" } },
+        { "field": "translation_status", "type": "string", "schema": { "default_value": "draft", "max_length": 24 }, "meta": { "interface": "select-dropdown", "required": true, "width": "half", "options": { "choices": [{ "text": "Draft", "value": "draft" }, { "text": "Review", "value": "review" }, { "text": "Approved", "value": "approved" }] } } },
+        { "field": "display_name", "type": "string", "schema": { "max_length": 160 }, "meta": { "interface": "input", "required": true, "width": "half" } },
+        { "field": "short_description", "type": "text", "schema": {}, "meta": { "interface": "input-multiline", "required": true } },
+        { "field": "overview", "type": "text", "schema": {}, "meta": { "interface": "input-code", "required": true, "options": { "language": "markdown" } } },
+        { "field": "main_feature", "type": "string", "schema": { "is_nullable": true, "max_length": 255 }, "meta": { "interface": "input", "width": "half" } },
+        { "field": "layout_display", "type": "string", "schema": { "is_nullable": true, "max_length": 255 }, "meta": { "interface": "input", "width": "half" } },
+        { "field": "seo_title", "type": "string", "schema": { "max_length": 70 }, "meta": { "interface": "input", "required": true, "width": "half" } },
+        { "field": "seo_description", "type": "text", "schema": {}, "meta": { "interface": "input-multiline", "required": true, "width": "half" } },
+        { "field": "card_alt", "type": "string", "schema": { "max_length": 255 }, "meta": { "interface": "input", "required": true, "width": "half" } },
+        { "field": "hero_alt", "type": "string", "schema": { "max_length": 255 }, "meta": { "interface": "input", "required": true, "width": "half" } },
+        { "field": "updated_at", "type": "timestamp", "schema": {}, "meta": { "special": ["date-updated"], "readonly": true, "hidden": true } },
+        { "field": "updated_by", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "special": ["user-updated", "m2o"], "readonly": true, "hidden": true } }
+      ],
+      "relations": [
+        { "field": "game_id", "related_collection": "games", "on_delete": "CASCADE", "meta": { "one_field": "translations" } },
+        { "field": "locale", "related_collection": "locales", "on_delete": "RESTRICT" },
+        { "field": "updated_by", "related_collection": "directus_users", "on_delete": "SET NULL" }
+      ]
+    },
+    {
+      "collection": "game_sections",
+      "meta": { "icon": "view_agenda", "note": "Repeatable structural blocks on game detail pages", "sort_field": "sort_order", "versioning": true },
+      "fields": [
+        { "field": "id", "type": "uuid", "schema": { "is_primary_key": true }, "meta": { "special": ["uuid"], "hidden": true, "readonly": true } },
+        { "field": "game_id", "type": "uuid", "schema": {}, "meta": { "interface": "select-dropdown-m2o", "special": ["m2o"], "required": true, "hidden": true } },
+        { "field": "section_type", "type": "string", "schema": { "max_length": 32 }, "meta": { "interface": "select-dropdown", "required": true, "width": "half", "options": { "choices": [{ "text": "Rich text", "value": "rich_text" }, { "text": "Feature grid", "value": "feature_grid" }, { "text": "Bullet list", "value": "bullet_list" }, { "text": "Media + text", "value": "media_text" }] } } },
+        { "field": "sort_order", "type": "integer", "schema": { "default_value": 100 }, "meta": { "interface": "input", "required": true, "width": "half" } },
+        { "field": "enabled", "type": "boolean", "schema": { "default_value": true }, "meta": { "interface": "boolean", "required": true, "width": "half" } },
+        { "field": "style_preset", "type": "string", "schema": { "default_value": "default", "max_length": 32 }, "meta": { "interface": "select-dropdown", "required": true, "width": "half", "options": { "choices": [{ "text": "Default", "value": "default" }, { "text": "Wide", "value": "wide" }, { "text": "Compact", "value": "compact" }, { "text": "Media left", "value": "media_left" }, { "text": "Media right", "value": "media_right" }] } } },
+        { "field": "media_file", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "interface": "file-image", "special": ["file", "m2o"], "width": "full" } },
+        { "field": "translations", "type": "alias", "meta": { "interface": "translations", "special": ["translations", "o2m"] } },
+        { "field": "items", "type": "alias", "meta": { "interface": "list-o2m", "special": ["o2m"] } }
+      ],
+      "relations": [
+        { "field": "game_id", "related_collection": "games", "on_delete": "CASCADE", "meta": { "one_field": "sections" } },
+        { "field": "media_file", "related_collection": "directus_files", "on_delete": "SET NULL" }
+      ]
+    },
+    {
+      "collection": "game_section_translations",
+      "meta": { "icon": "translate", "versioning": true },
+      "fields": [
+        { "field": "id", "type": "uuid", "schema": { "is_primary_key": true }, "meta": { "special": ["uuid"], "hidden": true, "readonly": true } },
+        { "field": "section_id", "type": "uuid", "schema": {}, "meta": { "interface": "select-dropdown-m2o", "special": ["m2o"], "required": true, "hidden": true } },
+        { "field": "locale", "type": "string", "schema": { "max_length": 12 }, "meta": { "interface": "select-dropdown-m2o", "special": ["m2o"], "required": true, "width": "half" } },
+        { "field": "translation_status", "type": "string", "schema": { "default_value": "draft", "max_length": 24 }, "meta": { "interface": "select-dropdown", "required": true, "width": "half", "options": { "choices": [{ "text": "Draft", "value": "draft" }, { "text": "Review", "value": "review" }, { "text": "Approved", "value": "approved" }] } } },
+        { "field": "heading", "type": "string", "schema": { "is_nullable": true, "max_length": 255 }, "meta": { "interface": "input" } },
+        { "field": "body_markdown", "type": "text", "schema": { "is_nullable": true }, "meta": { "interface": "input-code", "options": { "language": "markdown" } } },
+        { "field": "updated_at", "type": "timestamp", "schema": {}, "meta": { "special": ["date-updated"], "readonly": true, "hidden": true } },
+        { "field": "updated_by", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "special": ["user-updated", "m2o"], "readonly": true, "hidden": true } }
+      ],
+      "relations": [
+        { "field": "section_id", "related_collection": "game_sections", "on_delete": "CASCADE", "meta": { "one_field": "translations" } },
+        { "field": "locale", "related_collection": "locales", "on_delete": "RESTRICT" },
+        { "field": "updated_by", "related_collection": "directus_users", "on_delete": "SET NULL" }
+      ]
+    },
+    {
+      "collection": "game_section_items",
+      "meta": { "icon": "dashboard_customize", "sort_field": "sort_order", "versioning": true },
+      "fields": [
+        { "field": "id", "type": "uuid", "schema": { "is_primary_key": true }, "meta": { "special": ["uuid"], "hidden": true, "readonly": true } },
+        { "field": "section_id", "type": "uuid", "schema": {}, "meta": { "interface": "select-dropdown-m2o", "special": ["m2o"], "required": true, "hidden": true } },
+        { "field": "sort_order", "type": "integer", "schema": { "default_value": 100 }, "meta": { "interface": "input", "required": true, "width": "half" } },
+        { "field": "enabled", "type": "boolean", "schema": { "default_value": true }, "meta": { "interface": "boolean", "required": true, "width": "half" } },
+        { "field": "icon_file", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "interface": "file", "special": ["file", "m2o"], "width": "half" } },
+        { "field": "image_file", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "interface": "file-image", "special": ["file", "m2o"], "width": "half" } },
+        { "field": "translations", "type": "alias", "meta": { "interface": "translations", "special": ["translations", "o2m"] } }
+      ],
+      "relations": [
+        { "field": "section_id", "related_collection": "game_sections", "on_delete": "CASCADE", "meta": { "one_field": "items" } },
+        { "field": "icon_file", "related_collection": "directus_files", "on_delete": "SET NULL" },
+        { "field": "image_file", "related_collection": "directus_files", "on_delete": "SET NULL" }
+      ]
+    },
+    {
+      "collection": "game_section_item_translations",
+      "meta": { "icon": "translate", "versioning": true },
+      "fields": [
+        { "field": "id", "type": "uuid", "schema": { "is_primary_key": true }, "meta": { "special": ["uuid"], "hidden": true, "readonly": true } },
+        { "field": "item_id", "type": "uuid", "schema": {}, "meta": { "interface": "select-dropdown-m2o", "special": ["m2o"], "required": true, "hidden": true } },
+        { "field": "locale", "type": "string", "schema": { "max_length": 12 }, "meta": { "interface": "select-dropdown-m2o", "special": ["m2o"], "required": true, "width": "half" } },
+        { "field": "translation_status", "type": "string", "schema": { "default_value": "draft", "max_length": 24 }, "meta": { "interface": "select-dropdown", "required": true, "width": "half", "options": { "choices": [{ "text": "Draft", "value": "draft" }, { "text": "Review", "value": "review" }, { "text": "Approved", "value": "approved" }] } } },
+        { "field": "title", "type": "string", "schema": { "is_nullable": true, "max_length": 255 }, "meta": { "interface": "input" } },
+        { "field": "text", "type": "text", "schema": { "is_nullable": true }, "meta": { "interface": "input-multiline" } },
+        { "field": "updated_at", "type": "timestamp", "schema": {}, "meta": { "special": ["date-updated"], "readonly": true, "hidden": true } },
+        { "field": "updated_by", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "special": ["user-updated", "m2o"], "readonly": true, "hidden": true } }
+      ],
+      "relations": [
+        { "field": "item_id", "related_collection": "game_section_items", "on_delete": "CASCADE", "meta": { "one_field": "translations" } },
+        { "field": "locale", "related_collection": "locales", "on_delete": "RESTRICT" },
+        { "field": "updated_by", "related_collection": "directus_users", "on_delete": "SET NULL" }
+      ]
+    },
+    {
+      "collection": "game_gallery",
+      "meta": { "icon": "photo_library", "sort_field": "sort_order", "versioning": true },
+      "fields": [
+        { "field": "id", "type": "uuid", "schema": { "is_primary_key": true }, "meta": { "special": ["uuid"], "hidden": true, "readonly": true } },
+        { "field": "game_id", "type": "uuid", "schema": {}, "meta": { "interface": "select-dropdown-m2o", "special": ["m2o"], "required": true, "hidden": true } },
+        { "field": "file", "type": "uuid", "schema": {}, "meta": { "interface": "file-image", "special": ["file", "m2o"], "required": true } },
+        { "field": "sort_order", "type": "integer", "schema": { "default_value": 100 }, "meta": { "interface": "input", "required": true, "width": "half" } },
+        { "field": "enabled", "type": "boolean", "schema": { "default_value": true }, "meta": { "interface": "boolean", "required": true, "width": "half" } },
+        { "field": "translations", "type": "alias", "meta": { "interface": "translations", "special": ["translations", "o2m"] } }
+      ],
+      "relations": [
+        { "field": "game_id", "related_collection": "games", "on_delete": "CASCADE", "meta": { "one_field": "gallery" } },
+        { "field": "file", "related_collection": "directus_files", "on_delete": "CASCADE" }
+      ]
+    },
+    {
+      "collection": "game_gallery_translations",
+      "meta": { "icon": "translate", "versioning": true },
+      "fields": [
+        { "field": "id", "type": "uuid", "schema": { "is_primary_key": true }, "meta": { "special": ["uuid"], "hidden": true, "readonly": true } },
+        { "field": "gallery_id", "type": "uuid", "schema": {}, "meta": { "interface": "select-dropdown-m2o", "special": ["m2o"], "required": true, "hidden": true } },
+        { "field": "locale", "type": "string", "schema": { "max_length": 12 }, "meta": { "interface": "select-dropdown-m2o", "special": ["m2o"], "required": true, "width": "half" } },
+        { "field": "translation_status", "type": "string", "schema": { "default_value": "draft", "max_length": 24 }, "meta": { "interface": "select-dropdown", "required": true, "width": "half", "options": { "choices": [{ "text": "Draft", "value": "draft" }, { "text": "Review", "value": "review" }, { "text": "Approved", "value": "approved" }] } } },
+        { "field": "alt", "type": "string", "schema": { "max_length": 255 }, "meta": { "interface": "input", "required": true } },
+        { "field": "caption", "type": "text", "schema": { "is_nullable": true }, "meta": { "interface": "input-multiline" } }
+      ],
+      "relations": [
+        { "field": "gallery_id", "related_collection": "game_gallery", "on_delete": "CASCADE", "meta": { "one_field": "translations" } },
+        { "field": "locale", "related_collection": "locales", "on_delete": "RESTRICT" }
+      ]
+    }
+  ]
+}
