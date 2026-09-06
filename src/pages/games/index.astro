@@ -1,19 +1,14 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import CatalogueHero from '../../components/showcase/CatalogueHero.astro';
 import GameTile from '../../components/showcase/GameTile.astro';
 import { CTA, company } from '../../data/site';
 import { CATALOGUE_CATEGORIES } from '../../lib/game-categories';
+import { getGames, sortGames } from '../../lib/content-source';
 
 // /portfolio returned a 404 on the old site: the catalogue existed only as a
 // section of the home page and a dropdown listing 17 of 24 titles.
-const games = (await getCollection('games')).sort(
-  (a, b) =>
-    Number(a.data.status === 'coming_soon') - Number(b.data.status === 'coming_soon') ||
-    a.data.order - b.data.order ||
-    a.data.name.localeCompare(b.data.name),
-);
+const games = sortGames(await getGames());
 
 const present = CATALOGUE_CATEGORIES.filter((category) => games.some((game) => game.data.type === category.type));
 

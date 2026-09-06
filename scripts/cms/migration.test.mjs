@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { deterministicUuid, findDuplicateValues, migrateStatus, parseBet, parseDemo, parseMaxWin, parseRtp } from './lib/migration.mjs';
+import { deterministicUuid, findDuplicateValues, migrateStatus, parseBet, parseDemo, parseMaxWin, parseRtp, splitMarkdownSections } from './lib/migration.mjs';
 
 test('status migration accepts only the two explicit legacy combinations', () => {
   assert.equal(migrateStatus({ Relised: 'true', Coming: 'false' }).value, 'live');
@@ -27,4 +27,10 @@ test('deterministic IDs remain stable', () => {
 test('duplicate long copy is reported without modifying it', () => {
   const copy = 'A'.repeat(100);
   assert.equal(findDuplicateValues([{ owner: 'one', field: 'overview', value: copy }, { owner: 'two', field: 'overview', value: copy }]).length, 1);
+});
+
+test('Markdown intro and repeatable sections are separated without duplication', () => {
+  const result = splitMarkdownSections('Intro copy.\n\n## Core Gameplay\n\nCore copy.\n\n## Bonus\n\nBonus copy.');
+  assert.equal(result.intro, 'Intro copy.');
+  assert.deepEqual(result.sections, [{ heading: 'Core Gameplay', body: 'Core copy.' }, { heading: 'Bonus', body: 'Bonus copy.' }]);
 });

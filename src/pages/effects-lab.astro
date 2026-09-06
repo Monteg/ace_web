@@ -3,8 +3,8 @@ import Base from '../layouts/Base.astro';
 import ExperienceCard from '../components/showcase/ExperienceCard.astro';
 import GameTile from '../components/showcase/GameTile.astro';
 import OrbitBorder from '../components/showcase/OrbitBorder.astro';
-import { getEntry } from 'astro:content';
 import { why } from '../data/site';
+import { getGames } from '../lib/content-source';
 import { experienceCardDefaults } from '../data/experience-card-settings';
 import { borderTrailDefaults } from '../data/border-trail-settings';
 import { gameCardDefaults } from '../data/game-card-settings';
@@ -13,7 +13,7 @@ const previewCard = why[1];
 const motionSettings = experienceCardDefaults;
 const borderSettings = borderTrailDefaults;
 const gameCardSettings = gameCardDefaults;
-const gameCardPreview = await getEntry('games', 'pirates-rush');
+const gameCardPreview = (await getGames()).find((game) => game.id === 'pirates-rush');
 if (!gameCardPreview) throw new Error('Pirates Rush is required for the Effects Lab game-card preview.');
 const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; --orbit-length: ${borderSettings.orbitLength}%; --orbit-width: ${borderSettings.orbitWidth}px; --orbit-opacity: ${borderSettings.orbitOpacity}; --orbit-blur: ${borderSettings.orbitBlur}px;`;
 ---

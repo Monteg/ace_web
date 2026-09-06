@@ -59,5 +59,20 @@ for (const asset of manifest) {
 }
 
 const failed = manifest.filter((asset) => asset.status === 'failed');
+const importPath = path.join(path.dirname(manifestPath), 'cms-import.json');
+if (fs.existsSync(importPath)) {
+  const migration = JSON.parse(fs.readFileSync(importPath, 'utf8'));
+  const gamesBySlug = new Map(migration.games.map((game) => [game.slug, game]));
+  const galleryById = new Map(migration.game_gallery.map((item) => [item.id, item]));
+  for (const asset of manifest.filter((item) => item.cms_asset_id)) {
+    const game = gamesBySlug.get(asset.game_slug);
+    if (game && asset.role === 'card') game.card_image = asset.cms_asset_id;
+    if (game && asset.role === 'hero') game.hero_image = asset.cms_asset_id;
+    if (game && asset.role === 'card_background') game.card_background_image = asset.cms_asset_id;
+    if (game && asset.role === 'card_logo') game.card_logo_image = asset.cms_asset_id;
+    if (asset.role === 'gallery' && asset.target_id && galleryById.has(asset.target_id)) galleryById.get(asset.target_id).file = asset.cms_asset_id;
+  }
+  fs.writeFileSync(importPath, `${JSON.stringify(migration, null, 2)}\n`);
+}
 console.log(`Asset migration complete. Failed: ${failed.length}.`);
 if (failed.length) process.exitCode = 1;

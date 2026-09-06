@@ -97,6 +97,18 @@ export function firstParagraph(markdown) {
   return String(markdown ?? '').split(/\n\s*\n/).map((part) => part.replace(/^#+\s+/gm, '').trim()).find((part) => part && !part.startsWith('- ')) ?? '';
 }
 
+export function splitMarkdownSections(markdown) {
+  const source = String(markdown ?? '').trim();
+  const matches = [...source.matchAll(/^##\s+(.+)$/gm)];
+  if (!matches.length) return { intro: source, sections: [] };
+  const intro = source.slice(0, matches[0].index).trim();
+  const sections = matches.map((match, index) => ({
+    heading: match[1].trim(),
+    body: source.slice(match.index + match[0].length, matches[index + 1]?.index ?? source.length).trim(),
+  }));
+  return { intro, sections };
+}
+
 export function compareRecords(current, legacy, fields) {
   const differences = [];
   for (const field of fields) {
@@ -121,4 +133,3 @@ export function findDuplicateValues(entries, minimumLength = 80) {
   }
   return duplicates;
 }
-

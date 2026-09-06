@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
 import { CTA } from '../../data/site';
+import type { GameRecord } from '../../lib/content-source';
 import { TYPE_LABEL } from '../../lib/format';
 
 /**
@@ -10,7 +10,7 @@ import { TYPE_LABEL } from '../../lib/format';
  * page was a flat banner with the name on top.
  */
 interface Props {
-  game: CollectionEntry<'games'>;
+  game: GameRecord;
   /** Only true when the page below actually renders a demo block (`#demo`). */
   demoAvailable: boolean;
 }

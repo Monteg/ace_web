@@ -27,6 +27,8 @@
         { "field": "media", "type": "alias", "meta": { "special": ["alias", "no-data", "group"], "interface": "group-detail", "options": { "start": "open" } } },
         { "field": "card_image", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "group": "media", "interface": "file-image", "special": ["file", "m2o"], "width": "half" } },
         { "field": "hero_image", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "group": "media", "interface": "file-image", "special": ["file", "m2o"], "width": "half" } },
+        { "field": "card_background_image", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "group": "media", "interface": "file-image", "special": ["file", "m2o"], "width": "half", "note": "Optional separated card background layer" } },
+        { "field": "card_logo_image", "type": "uuid", "schema": { "is_nullable": true }, "meta": { "group": "media", "interface": "file-image", "special": ["file", "m2o"], "width": "half", "note": "Optional separated card logo layer" } },
         { "field": "gallery", "type": "alias", "meta": { "group": "media", "interface": "list-o2m", "special": ["o2m"] } },
 
         { "field": "demo", "type": "alias", "meta": { "special": ["alias", "no-data", "group"], "interface": "group-detail", "options": { "start": "closed" } } },
@@ -53,6 +55,8 @@
       "relations": [
         { "field": "card_image", "related_collection": "directus_files", "on_delete": "SET NULL" },
         { "field": "hero_image", "related_collection": "directus_files", "on_delete": "SET NULL" },
+        { "field": "card_background_image", "related_collection": "directus_files", "on_delete": "SET NULL" },
+        { "field": "card_logo_image", "related_collection": "directus_files", "on_delete": "SET NULL" },
         { "field": "created_by", "related_collection": "directus_users", "on_delete": "SET NULL" },
         { "field": "updated_by", "related_collection": "directus_users", "on_delete": "SET NULL" }
       ]

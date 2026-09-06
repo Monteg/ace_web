@@ -1,21 +1,23 @@
 ---
-import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import GameHeader from '../../components/showcase/GameHeader.astro';
 import GameMedia from '../../components/showcase/GameMedia.astro';
 import SpecStrip from '../../components/showcase/SpecStrip.astro';
 import GameTile from '../../components/showcase/GameTile.astro';
+import GameSections from '../../components/showcase/GameSections.astro';
 import { CTA, company } from '../../data/site';
 import { demoUrl, TYPE_LABEL } from '../../lib/format';
+import { getGames } from '../../lib/content-source';
+import { renderMarkdown } from '../../lib/markdown';
 
 export async function getStaticPaths() {
-  const games = await getCollection('games');
+  const games = await getGames('en');
   return games.map((game) => ({ params: { slug: game.id }, props: { game, all: games } }));
 }
 
 const { game, all } = Astro.props;
 const d = game.data;
-const { Content } = await render(game);
+const overviewHtml = renderMarkdown(d.overviewMarkdown);
 
 const soon = d.status === 'coming_soon';
 const demo = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
@@ -86,7 +88,7 @@ const breadcrumbSchema = {
       <div class="over">
         <div class="over-copy">
           <div class="sec-top rv"><h2 class="d1">Overview</h2></div>
-          <div class="prose rv"><Content /></div>
+          <div class="prose rv" set:html={overviewHtml}></div>
           {d.highlights.length > 0 && (
             <ul class="highlights rv">
               {d.highlights.map((h) => <li>{h}</li>)}
@@ -109,6 +111,12 @@ const breadcrumbSchema = {
       </div>
     </div>
   </section>
+
+  {d.sections.length > 0 && (
+    <section class="section-continuation">
+      <div class="wrap"><GameSections sections={d.sections} /></div>
+    </section>
+  )}
 
   {related.length > 0 && (
     <section class="section-continuation">

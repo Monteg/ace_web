@@ -10,11 +10,11 @@
  * they asked for without losing sight of the rest.
  */
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
 import { maxWin, rtp as fmtRtp, volatility as fmtVol, TYPE_LABEL, TYPE_PLURAL } from '../../lib/format';
+import type { GameRecord } from '../../lib/content-source';
 
 interface Props {
-  games: CollectionEntry<'games'>[];
+  games: GameRecord[];
 }
 const { games } = Astro.props;
 
@@ -41,7 +41,7 @@ const ticks: number[] = [];
 for (let t = Math.ceil(lo * 100); t <= Math.floor(hi * 100); t++) ticks.push(t / 100);
 
 type Placed = {
-  game: CollectionEntry<'games'>;
+  game: GameRecord;
   x: number;
   lane: number;
   row: 0 | 1;

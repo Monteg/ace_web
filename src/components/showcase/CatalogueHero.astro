@@ -1,8 +1,8 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+import type { GameRecord } from '../../lib/content-source';
 
 interface Props {
-  games: CollectionEntry<'games'>[];
+  games: GameRecord[];
 }
 
 const { games } = Astro.props;

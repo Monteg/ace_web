@@ -11,11 +11,11 @@
  */
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
-import type { CollectionEntry } from 'astro:content';
 import { CTA } from '../../data/site';
+import type { GameRecord } from '../../lib/content-source';
 
 interface Props {
-  games: CollectionEntry<'games'>[];
+  games: GameRecord[];
 }
 
 const { games } = Astro.props;

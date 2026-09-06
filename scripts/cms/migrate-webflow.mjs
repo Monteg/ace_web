@@ -14,6 +14,7 @@ import {
   parseMaxWin,
   parseRtp,
   parseVolatility,
+  splitMarkdownSections,
   valueFrom,
 } from './lib/migration.mjs';
 
@@ -142,14 +143,15 @@ for (const slug of allSlugs) {
     legacy_source_url: legacy?.legacy_source_url ?? null,
   } : legacy;
   if (!source) continue;
-  const game = { id, ...Object.fromEntries(Object.entries(source).filter(([key]) => !['translation', 'row', 'card_image', 'hero_image'].includes(key))), card_image: null, hero_image: null };
+  const game = { id, ...Object.fromEntries(Object.entries(source).filter(([key]) => !['translation', 'row', 'card_image', 'hero_image'].includes(key))), card_image: null, hero_image: null, card_background_image: null, card_logo_image: null };
   output.games.push(game);
 
   const translationId = deterministicUuid(`game-translation:${slug}:en`);
+  const currentContent = current ? splitMarkdownSections(current.overview) : null;
   const translation = current ? {
     display_name: current.name,
     short_description: current.seo?.description ?? firstParagraph(current.overview),
-    overview: current.overview,
+    overview: currentContent.intro,
     main_feature: current.specs?.mainFeature ?? null,
     layout_display: current.specs?.layout ?? null,
     seo_title: current.seo?.title,
@@ -160,11 +162,17 @@ for (const slug of allSlugs) {
   output.game_translations.push({ id: translationId, game_id: id, locale: 'en', translation_status: 'draft', ...translation });
   longCopy.push({ owner: slug, field: 'overview', value: translation.overview });
 
-  const richId = deterministicUuid(`section:${slug}:overview`);
-  output.game_sections.push({ id: richId, game_id: id, section_type: 'rich_text', sort_order: 10, enabled: true, media_file: null, style_preset: 'default' });
-  output.game_section_translations.push({ id: deterministicUuid(`section-translation:${slug}:overview:en`), section_id: richId, locale: 'en', heading: 'Overview', body_markdown: translation.overview, translation_status: 'draft' });
+  const richSections = currentContent
+    ? currentContent.sections
+    : [1, 2].map((number) => ({ heading: valueFrom(legacy?.row ?? {}, `Description ${String(number).padStart(2, '0')} Title`, `Description ${number} Title`), body: valueFrom(legacy?.row ?? {}, `Description ${String(number).padStart(2, '0')}`, `Description ${number}`) })).filter((section) => section.body);
+  for (const [index, section] of richSections.entries()) {
+    const richId = deterministicUuid(`section:${slug}:rich:${index}`);
+    output.game_sections.push({ id: richId, game_id: id, section_type: 'rich_text', sort_order: (index + 1) * 10, enabled: true, media_file: null, style_preset: 'default' });
+    output.game_section_translations.push({ id: deterministicUuid(`section-translation:${slug}:rich:${index}:en`), section_id: richId, locale: 'en', heading: section.heading ?? null, body_markdown: section.body, translation_status: 'draft' });
+  }
 
-  for (const [index, feature] of (current?.features ?? []).entries()) {
+  const features = current?.features ?? [1, 2, 3].map((number) => ({ title: valueFrom(legacy?.row ?? {}, `Card ${String(number).padStart(2, '0')} Title`, `Card ${number} Title`), body: valueFrom(legacy?.row ?? {}, `Card ${String(number).padStart(2, '0')} Text`, `Card ${number} Text`) })).filter((feature) => feature.title || feature.body);
+  for (const [index, feature] of features.entries()) {
     const featureSectionId = deterministicUuid(`section:${slug}:features`);
     if (!output.game_sections.some((section) => section.id === featureSectionId)) {
       output.game_sections.push({ id: featureSectionId, game_id: id, section_type: 'feature_grid', sort_order: 20, enabled: true, media_file: null, style_preset: 'default' });
@@ -172,10 +180,11 @@ for (const slug of allSlugs) {
     }
     const itemId = deterministicUuid(`section-item:${slug}:feature:${index}`);
     output.game_section_items.push({ id: itemId, section_id: featureSectionId, sort_order: (index + 1) * 10, enabled: true, icon_file: null, image_file: null });
-    output.game_section_item_translations.push({ id: deterministicUuid(`section-item-translation:${slug}:feature:${index}:en`), item_id: itemId, locale: 'en', title: feature.title, text: feature.body, translation_status: 'draft' });
+    output.game_section_item_translations.push({ id: deterministicUuid(`section-item-translation:${slug}:feature:${index}:en`), item_id: itemId, locale: 'en', title: feature.title ?? null, text: feature.body ?? null, translation_status: 'draft' });
   }
 
-  for (const [index, bullet] of (current?.highlights ?? []).entries()) {
+  const bullets = current?.highlights ?? [1, 2, 3, 4].map((number) => valueFrom(legacy?.row ?? {}, `List Item ${String(number).padStart(2, '0')}`, `List Item ${number}`)).filter(Boolean);
+  for (const [index, bullet] of bullets.entries()) {
     const bulletSectionId = deterministicUuid(`section:${slug}:highlights`);
     if (!output.game_sections.some((section) => section.id === bulletSectionId)) {
       output.game_sections.push({ id: bulletSectionId, game_id: id, section_type: 'bullet_list', sort_order: 30, enabled: true, media_file: null, style_preset: 'default' });
@@ -193,6 +202,9 @@ for (const slug of allSlugs) {
     else if (legacySource) assets.push({ key: `${slug}:${role}`, game_slug: slug, role, source: legacySource, source_type: 'legacy_url', preferred: true, cms_asset_id: null, status: 'pending' });
     else unresolved.push({ slug, field: `${role}_image`, value: null });
   }
+
+  if (current?.cardLayers?.background) assets.push({ key: `${slug}:card-background`, game_slug: slug, role: 'card_background', source: current.cardLayers.background, source_type: 'astro', preferred: true, cms_asset_id: null, status: 'pending' });
+  if (current?.cardLayers?.logo) assets.push({ key: `${slug}:card-logo`, game_slug: slug, role: 'card_logo', source: current.cardLayers.logo, source_type: 'astro', preferred: true, cms_asset_id: null, status: 'pending' });
 
   const gallerySources = current?.gallery?.map((item) => ({ source: item.image, alt: item.alt })) ?? [];
   for (let index = 1; index <= 20; index += 1) {

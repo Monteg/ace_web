@@ -1,14 +1,14 @@
 ---
 import { Icon } from 'astro-icon/components';
-import type { CollectionEntry } from 'astro:content';
 import { bet, maxWin, rtp, volatility, type Volatility } from '../../lib/format';
+import type { GameRecord } from '../../lib/content-source';
 
 /**
  * The six figures a buyer scans first, in one strip under the header.
  * Replaces the 3x2 spec cards: no boxes, hairlines only, one row on desktop.
  */
 interface Props {
-  game: CollectionEntry<'games'>;
+  game: GameRecord;
   variant?: 'strip' | 'sidebar';
 }
 

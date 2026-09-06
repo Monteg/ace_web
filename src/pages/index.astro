@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import ContactForm from '../components/ContactForm.astro';
@@ -15,13 +14,9 @@ import MathsExplorer from '../components/showcase/MathsExplorer.astro';
 import contactPigeon from '../assets/site/contact-pigeon-v3.png';
 import { faq, heroStats, homepageSections, integration, partners, proofIntro, sectionCopy } from '../data/site';
 import { CATALOGUE_CATEGORIES } from '../lib/game-categories';
+import { getGames, sortGames } from '../lib/content-source';
 
-const games = (await getCollection('games')).sort(
-  (a, b) =>
-    Number(a.data.status === 'coming_soon') - Number(b.data.status === 'coming_soon') ||
-    a.data.order - b.data.order ||
-    a.data.name.localeCompare(b.data.name),
-);
+const games = sortGames(await getGames());
 const mathsGames = games.filter(
   (game) => game.data.status === 'live' && typeof game.data.specs.rtp === 'number',
 );
