@@ -1,21 +1,20 @@
 ---
 import ExperienceCard from './ExperienceCard.astro';
-import { why } from '../../data/site';
-import { getTranslations } from '../../i18n/get-translations';
-interface Props { locale?: string; }
-const { locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
-const keys = ['trust', 'innovation', 'retention'];
+import { localeFromPath } from '../../lib/i18n';
+import { getSiteContent } from '../../lib/site-content';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { sectionCopy, why } = getSiteContent(locale);
 ---
 
 <section class="excellence" id="our-benefits" aria-labelledby="excellence-title">
   <div class="wrap">
     <div class="sec-top home-section-heading rv">
-      <h2 class="d1" id="excellence-title">{t('home.excellence.title')}</h2>
+      <h2 class="d1" id="excellence-title">{sectionCopy.excellenceTitle}</h2>
     </div>
 
     <div class="excellence-grid rv">
-      {why.map((item, index) => <ExperienceCard item={{ ...item, title: t(`home.excellence.${keys[index]}.title`), body: t(`home.excellence.${keys[index]}.body`) }} index={index} />)}
+      {why.map((item, index) => <ExperienceCard item={item} index={index} />)}
     </div>
   </div>
 </section>

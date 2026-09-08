@@ -9,41 +9,47 @@ assistant as-is.
 
 ### "Add our new game Neon Vault. Here are the two images."
 
-1. In Directus Games create a Draft with slug `neon-vault`.
-2. Fill shared specs and structured demo fields from `docs/CMS-GAMES.md`.
-3. Upload Card/Hero in Media and attach them.
-4. Add Approved English identity, overview, SEO and alt.
-5. Add repeatable sections/items/gallery as needed.
-6. Save, run localization validation and publish only this game's ready rows.
-7. Wait for a successful release, then check `/portfolio/neon-vault`, `/games` and `/`.
+1. Save the images as `src/assets/games/neon-vault.webp` (key art) and
+   `src/assets/heroes/neon-vault.webp` (wide banner).
+2. `npm run new-game -- --slug neon-vault --name "Neon Vault" --type slot`
+3. Open `src/content/games/neon-vault.md`, replace every `TODO`, set the real
+   `rtp`, `volatility`, `maxWin`, `bet`, `layout`, `mainFeature`, write the
+   overview.
+4. If there is a demo, add the `demo` block (AI-HANDOVER.md section 4).
+5. Set `status: live` if it is released.
+6. Optionally set `order` (lower numbers come first) to place it in the
+   catalogue; without it the game sorts alphabetically within its status group.
+7. `npm run ship`, then open `/portfolio/neon-vault`, `/games` and `/`.
 
 ### "Mark Blackjack as released."
 
-1. In Directus Games change Blackjack from `coming_soon` to `live`.
-2. Configure and validate demo if it exists.
-3. Save and publish the selected Game row.
+1. In `src/content/games/blackjack.md` change `status: coming_soon` to `status: live`.
+2. Add its `demo` block if a demo exists.
+3. `npm run ship`.
 
 ### "Change the RTP of Gold of Ra to 96.2%."
 
-1. In Directus Games set Gold of Ra `rtp_mode=fixed`, `rtp=0.962`.
-2. Save and publish that Game row. Tile, spec strip and maths board update together.
+1. In `src/content/games/gold-of-ra.md` set `rtp: 0.962`. A number, no percent sign.
+2. `npm run ship`. The tile, the spec strip and the maths board all update.
 
 ### "Take Toy Story off the site."
 
-Do not simply delete the CMS item: the URL exists and may be linked. Instead:
+Do not delete the file: the URL exists and may be linked. Instead:
 
-1. Ask an Administrator to remove the game from the release selection and preserve the record/history.
+1. Move the record to `src/content/_retired/toy-story.md`. Anything outside
+   `src/content/games/` is invisible to the build.
 2. Add `/portfolio/toy-story /games 301` to `public/_redirects`. That file
    is read by Cloudflare Pages, not by the local build, so the redirect can
    only be checked on the deployed preview URL.
 3. In `scripts/verify.mjs`, remove `'toy-story'` from the `OLD` array. This is
    the one sanctioned edit to that file, and only together with step 2.
-4. Create a full release, run all gates, and verify the page count drops by one.
+4. `npm run ship`: every gate passes again and the page count drops by one.
 
 ### "Change the headline on the home page."
 
-1. Edit the existing `home.hero.title` Site String translation. Do not create a random new key.
-2. Approve English, publish that translation key and check line wrapping at 1440 px and 375 px.
+1. `src/components/showcase/Wall.astro`, the `<h1 class="d0">`. Keep it under
+   about 40 characters; the `<em>` wraps the peach-coloured emphasis.
+2. `npm run dev`, check it is two lines at 1440 px and four or fewer at 375 px.
 
 ### "Put our real numbers under the hero."
 

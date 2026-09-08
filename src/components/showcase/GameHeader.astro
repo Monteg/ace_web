@@ -1,9 +1,9 @@
 ---
 import { Image } from 'astro:assets';
-import type { GameRecord } from '../../lib/content-source';
-import { getActiveLocales } from '../../i18n/config';
-import { getTranslations } from '../../i18n/get-translations';
-import { localePath } from '../../i18n/routes';
+import type { CollectionEntry } from 'astro:content';
+import { localeFromPath, localizePath, t } from '../../lib/i18n';
+import { getLocalizedGame } from '../../lib/localized-games';
+import { getSiteContent } from '../../lib/site-content';
 
 /**
  * Game page header: the wide banner as a full-bleed ground, the key art as a
@@ -11,17 +11,17 @@ import { localePath } from '../../i18n/routes';
  * page was a flat banner with the name on top.
  */
 interface Props {
-  game: GameRecord;
+  game: CollectionEntry<'games'>;
   /** Only true when the page below actually renders a demo block (`#demo`). */
   demoAvailable: boolean;
-  locale?: string;
 }
 
-const { game, demoAvailable, locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
-const locales = getActiveLocales();
-const d = game.data;
+const { game, demoAvailable } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { CTA } = getSiteContent(locale);
+const d = getLocalizedGame(game, locale);
 const soon = d.status === 'coming_soon';
+const typeLabel = t(`global.game_type.${d.type}_single`, locale);
 
 // The title sits at poster size. A long name at that size runs to three or
 // four lines and pushes the figures and the CTAs below the fold, so the size
@@ -31,8 +31,6 @@ const soon = d.status === 'coming_soon';
 const words = d.name.trim().split(/\s+/);
 const longestWord = Math.max(...words.map((w) => w.length));
 const fit = Math.min(2 / longestWord, 3.4 / d.name.length).toFixed(3);
-const typeLabel = t(`game.type.${d.type}`);
-const contactHref = `${localePath('/', locale, locales)}#contact`;
 ---
 
 <section class="gh" id="top" style={`--gh-fit:${fit}`}>
@@ -49,29 +47,29 @@ const contactHref = `${localePath('/', locale, locales)}#contact`;
 
   <div class="wrap gh-wrap">
     <div class="gh-copy">
-      <nav class="gh-crumbs" aria-label={t('global.breadcrumb')}>
-        <a href={localePath('/games', locale, locales)}>{t('header.games')}</a>
+      <nav class="gh-crumbs" aria-label={t('game.detail.breadcrumb_aria', locale)}>
+        <a href={localizePath('/games', locale)}>{t('game.detail.breadcrumb.games', locale)}</a>
         <span aria-hidden="true">/</span>
-        <a href={`${localePath('/games', locale, locales)}?type=${d.type}`}>{typeLabel}</a>
+        <a href={`${localizePath('/games', locale)}?type=${d.type}`}>{typeLabel}</a>
         <span aria-hidden="true">/</span>
         <span aria-current="page">{d.name}</span>
       </nav>
 
       <h1 class="gh-title">{d.name}</h1>
 
-      <ul class="gh-pills" aria-label="Game classification">
+      <ul class="gh-pills" aria-label={t('game.detail.classification_aria', locale)}>
         <li class={`gh-pill gh-pill--type gh-pill--${d.type}`}>{typeLabel}</li>
-        {soon && <li class="gh-pill gh-pill--soon">{t('game.status.in_development')}</li>}
+        {soon && <li class="gh-pill gh-pill--soon">{t('game.detail.in_development', locale)}</li>}
       </ul>
 
       <div class="gh-cta">
         {demoAvailable ? (
           <>
-            <a class="btn btn-primary" href="#demo">{t('game.play_demo')}</a>
-            <a class="btn btn-ghost" href={contactHref}>{t('header.lets_talk')}</a>
+            <a class="btn btn-primary" href="#demo">{t('game.detail.play_demo', locale)}</a>
+            <a class="btn btn-ghost" href={CTA.href}>{CTA.label}</a>
           </>
         ) : (
-          <a class="btn btn-primary" href={contactHref}>{t('header.lets_talk')}</a>
+          <a class="btn btn-primary" href={CTA.href}>{CTA.label}</a>
         )}
       </div>
     </div>
@@ -80,7 +78,7 @@ const contactHref = `${localePath('/', locale, locales)}#contact`;
       <div class="gh-tile">
         <Image
           src={d.card}
-          alt={t('game.key_art_alt', { name: d.name })}
+          alt={d.cardAlt}
           widths={[420, 640]}
           sizes="(max-width: 992px) 60vw, 380px"
           loading="eager"
@@ -147,7 +145,6 @@ const contactHref = `${localePath('/', locale, locales)}#contact`;
   .gh-pill--type { border-color: transparent; color: var(--tint-ink); font-weight: 500; backdrop-filter: none; }
   .gh-pill--slot { background: var(--tint-ice); }
   .gh-pill--instant { background: var(--tint-mint); }
-  .gh-pill--crash { background: var(--tint-pink); }
   .gh-pill--table { background: var(--tint-lemon); }
   .gh-pill--soon { background: var(--peach); color: var(--on-brand); border-color: transparent; backdrop-filter: none; }
 

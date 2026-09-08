@@ -6,29 +6,16 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "prepare:content": "node scripts/cms/prepare-content.mjs",
-    "build": "npm run prepare:content && astro build",
+    "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check",
+    "check": "node --test scripts/content/content.test.mjs && node scripts/content/validate-generated.mjs && astro check",
     "verify": "node scripts/verify.mjs",
-    "ship": "npm run build && node scripts/verify.mjs",
-    "new-game": "node scripts/new-game.mjs",
-    "cms:bootstrap": "node scripts/cms/bootstrap.mjs",
-    "cms:schema": "node scripts/cms/apply-schema.mjs",
-    "cms:access": "node scripts/cms/apply-access.mjs",
-    "cms:presets": "node scripts/cms/apply-presets.mjs",
-    "cms:seed-site": "node scripts/cms/seed-site-strings.mjs",
-    "cms:seed-faq": "node scripts/cms/seed-faq.mjs",
-    "cms:migrate": "node scripts/cms/migrate-webflow.mjs",
-    "cms:migrate-assets": "node scripts/cms/migrate-assets.mjs",
-    "cms:import": "node scripts/cms/import-migration.mjs",
-    "cms:parity": "node scripts/cms/parity.mjs",
-    "cms:sync": "node scripts/cms/sync.mjs",
-    "cms:validate": "node scripts/cms/validate.mjs",
-    "cms:publish": "node scripts/cms/publish.mjs",
-    "cms:rollback": "node scripts/cms/rollback.mjs",
-    "cms:deploy-release": "node scripts/cms/deploy-release.mjs",
-    "test:cms-model": "node --test scripts/cms/schema.test.mjs scripts/cms/game-schema.test.mjs scripts/cms/migration.test.mjs scripts/cms/release-schema.test.mjs scripts/cms/localization.test.mjs scripts/cms/conflict.test.mjs scripts/cms/release-selection.test.mjs src/i18n/routes.test.mjs"
+    "ship": "node scripts/content/validate-generated.mjs && astro build && node scripts/verify.mjs",
+    "content:seed": "node scripts/content/build-local-snapshot.mjs",
+    "content:validate": "node scripts/content/validate-generated.mjs",
+    "content:test": "node --test scripts/content/content.test.mjs",
+    "content:workbook": "node scripts/content/create-content-workbook.mjs",
+    "new-game": "node scripts/new-game.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -38,17 +25,15 @@
     "@iconify-json/ph": "^1.2.2",
     "astro": "^5.14.1",
     "astro-icon": "^1.1.5",
-    "csv-parse": "^6.2.1",
-    "gray-matter": "^4.0.3",
     "gsap": "^3.13.0",
-    "marked": "^16.4.2",
-    "sanitize-html": "^2.13.1",
-    "sharp": "^0.34.4",
-    "zod": "^3.25.76"
+    "marked": "^18.0.11",
+    "sanitize-html": "2.13.1",
+    "sharp": "^0.34.4"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@types/sanitize-html": "^2.16.1",
+    "gray-matter": "^4.0.3",
     "typescript": "^5.9.3"
   }
 }

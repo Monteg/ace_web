@@ -1,12 +1,7 @@
 ---
-import { getActiveLocales } from '../i18n/config';
-import { getTranslations } from '../i18n/get-translations';
-import { localePath } from '../i18n/routes';
+import { localeFromPath, localizePath, t } from '../lib/i18n';
 
-interface Props { locale?: string; }
-const { locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
-const locales = getActiveLocales();
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 ---
 
 <div
@@ -16,23 +11,24 @@ const locales = getActiveLocales();
   aria-modal="true"
   aria-labelledby="ageGateTitle"
   aria-describedby="ageGateDescription"
+  data-underage-href={localizePath('/under-18', locale)}
 >
-  <div class="age-panel" data-reject-url={localePath('/under-18', locale, locales)}>
+  <div class="age-panel">
     <div class="age-mark" aria-hidden="true">
       <span>18</span>
       <small>+</small>
     </div>
 
-    <p class="age-kicker eyebrow">{t('age.kicker')}</p>
-    <p class="age-title d2" id="ageGateTitle">{t('age.title')}</p>
+    <p class="age-kicker eyebrow">{t('age_gate.kicker', locale)}</p>
+    <p class="age-title d2" id="ageGateTitle">{t('age_gate.title', locale)}</p>
     <p class="age-description" id="ageGateDescription">
-      {t('age.body')}
+      {t('age_gate.description', locale)}
     </p>
 
     <div class="age-actions">
-      <button class="btn btn-ghost age-reject" id="ageReject" type="button">{t('age.leave')}</button>
+      <button class="btn btn-ghost age-reject" id="ageReject" type="button">{t('age_gate.reject', locale)}</button>
       <button class="btn btn-primary age-confirm" id="ageConfirm" type="button">
-        {t('age.confirm')}
+        {t('age_gate.confirm', locale)}
       </button>
     </div>
   </div>
@@ -183,7 +179,6 @@ const locales = getActiveLocales();
   const confirmButton = document.getElementById('ageConfirm') as HTMLButtonElement | null;
   const rejectButton = document.getElementById('ageReject') as HTMLButtonElement | null;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const rejectUrl = gate?.querySelector<HTMLElement>('[data-reject-url]')?.dataset.rejectUrl ?? '/under-18';
 
   if (gate && siteShell && confirmButton && rejectButton) {
     const verified = document.documentElement.classList.contains('age-verified');
@@ -259,7 +254,7 @@ const locales = getActiveLocales();
       });
 
       rejectButton.addEventListener('click', () => {
-        window.location.replace(rejectUrl);
+        window.location.replace(gate.dataset.underageHref ?? '/under-18');
       });
     }
   }

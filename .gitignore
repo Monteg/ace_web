@@ -1,14 +1,10 @@
 node_modules/
 dist/
-!cms/extensions/**/dist/
-!cms/extensions/**/dist/**
 .astro/
 .DS_Store
 *.log
-.env
-.env.local
-.env.*.local
+outputs/
+.tmp/
 cms/.env
 cms/data/
 cms/migration-output/
-src/generated/cms/

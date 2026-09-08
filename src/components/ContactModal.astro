@@ -1,22 +1,22 @@
 ---
 import { Icon } from 'astro-icon/components';
 import ContactForm from './ContactForm.astro';
-import { getTranslations } from '../i18n/get-translations';
+import { localeFromPath, t } from '../lib/i18n';
+import { getSiteContent } from '../lib/site-content';
 
-interface Props { locale?: string; }
-const { locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { sectionCopy } = getSiteContent(locale);
 ---
 
 <dialog class="contact-dialog" id="contact-dialog" aria-labelledby="contact-dialog-title">
   <div class="dialog-panel">
     <div class="dialog-heading">
-      <h2 class="d2" id="contact-dialog-title">{t('home.contact.title')}</h2>
-      <button class="dialog-close" type="button" aria-label={t('contact.close')} data-contact-close>
+      <h2 class="d2" id="contact-dialog-title">{sectionCopy.contactTitle}</h2>
+      <button class="dialog-close" type="button" aria-label={t('contact.modal.close', locale)} data-contact-close>
         <Icon name="ph:x" aria-hidden="true" />
       </button>
     </div>
-    <ContactForm idPrefix="modal-contact" variant="modal" locale={locale} />
+    <ContactForm idPrefix="modal-contact" variant="modal" />
   </div>
 </dialog>
 

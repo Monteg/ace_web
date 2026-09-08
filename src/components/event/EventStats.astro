@@ -1,10 +1,12 @@
 ---
 import type { EventData } from '../../data/events';
+import { localeFromPath, t } from '../../lib/i18n';
 interface Props { event: EventData }
 const { event } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 ---
 
-<section class="event-stats section-compact" aria-label="Ace Games in numbers">
+<section class="event-stats section-compact" aria-label={t('event.stats.aria', locale)}>
   <div class="wrap">
     <dl class="stats-strip">
       {event.stats.map(stat => (

@@ -21,7 +21,7 @@ const slug = get('--slug');
 const name = get('--name');
 const type = get('--type') ?? 'slot';
 
-const usage = 'usage: npm run new-game -- --slug <slug> --name "<Name>" [--type slot|instant|crash|table]';
+const usage = 'usage: npm run new-game -- --slug <slug> --name "<Name>" [--type slot|instant|table]';
 if (!slug || !name) {
   console.error(usage);
   process.exit(1);
@@ -30,8 +30,8 @@ if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
   console.error(`slug must be lowercase letters, digits and hyphens: got "${slug}"`);
   process.exit(1);
 }
-if (!['slot', 'instant', 'crash', 'table'].includes(type)) {
-  console.error(`type must be slot, instant, crash or table: got "${type}"`);
+if (!['slot', 'instant', 'table'].includes(type)) {
+  console.error(`type must be slot, instant or table: got "${type}"`);
   process.exit(1);
 }
 
@@ -42,7 +42,7 @@ if (existsSync(target)) {
   process.exit(1);
 }
 
-const typeWord = { slot: 'slot', instant: 'instant', crash: 'crash', table: 'table' }[type];
+const typeWord = { slot: 'slot', instant: 'instant', table: 'table' }[type];
 const record = `---
 name: "${name.replace(/"/g, "'")}"
 type: ${type}

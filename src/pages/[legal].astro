@@ -1,0 +1,78 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { company } from '../data/site';
+import { localeFromPath, t } from '../lib/i18n';
+
+export async function getStaticPaths() {
+  const docs = await getCollection('legal');
+  return docs.map((doc) => ({ params: { legal: doc.id }, props: { doc } }));
+}
+
+const { doc } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { Content } = await render(doc);
+---
+
+<Base
+  title={`${doc.data.title} | Ace Games`}
+  description={`${doc.data.title} for acegames.io, operated by ${company.legalName}, a business-to-business developer of online gaming content. Last updated ${doc.data.updated}.`}
+>
+  <section class="legal-page">
+    <div class="wrap">
+      <div class="legal-content">
+        <header class="legal-head">
+          <h1 class="d1">{doc.data.title}</h1>
+          <p class="legal-updated">{t('legal.last_updated', locale, { date: doc.data.updated })}</p>
+        </header>
+        <article class="legal-document"><Content /></article>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .legal-page { padding-block: var(--section-space-compact) var(--section-space); }
+  .legal-content { width: 100%; max-width: 980px; margin-inline: auto; }
+  .legal-head { margin-bottom: var(--section-heading-gap); }
+  .legal-head .d1 {
+    font-size: clamp(2.8rem, 5vw, 4rem); line-height: 1;
+    text-align: center; text-transform: uppercase;
+  }
+  .legal-updated {
+    margin-top: var(--sp-5); text-align: right;
+    font-family: 'JetBrains Mono Variable', monospace; font-size: 12px;
+    font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3);
+  }
+  .legal-document {
+    color: var(--fg-2); font-size: max(1rem, var(--step-0));
+    line-height: 1.65; overflow-wrap: break-word;
+  }
+  .legal-document :global(h2) {
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-weight: 400;
+    color: var(--fg); font-size: var(--step-2); line-height: 1.08;
+    letter-spacing: 0.01em; margin: clamp(36px, 5vw, 48px) 0 var(--sp-4);
+  }
+  .legal-document :global(p) { margin: 0 0 var(--sp-4); }
+  .legal-document :global(ul) {
+    margin: 0 0 var(--sp-5); padding-left: var(--sp-5);
+  }
+  .legal-document :global(li) { padding-left: var(--sp-2); line-height: 1.6; }
+  .legal-document :global(li + li) { margin-top: var(--sp-2); }
+  .legal-document :global(li::marker) { color: var(--brand); }
+  .legal-document :global(strong) { color: var(--fg); font-weight: 650; }
+  .legal-document :global(a) {
+    color: var(--peach); text-underline-offset: 3px;
+    text-decoration-thickness: 1px; transition: color var(--dur-1);
+  }
+  .legal-document :global(a:hover) { color: var(--fg); }
+  .legal-document :global(address) {
+    margin: 0 0 var(--sp-5); color: var(--fg-2);
+    font-style: normal; line-height: 1.7;
+  }
+
+  @media (max-width: 480px) {
+    .legal-head .d1 { font-size: clamp(2.5rem, 13vw, 3.25rem); }
+    .legal-updated { margin-top: var(--sp-4); text-align: left; font-size: 11px; }
+  }
+</style>

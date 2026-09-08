@@ -2,16 +2,21 @@
 import { Icon } from 'astro-icon/components';
 import { currentEvent as event } from '../../data/events';
 import { eventDateRange } from '../../lib/event';
+import { localeFromPath, localizePath, t } from '../../lib/i18n';
+import { getLocalizedEvent } from '../../lib/localized-event';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const localizedEvent = getLocalizedEvent(event, locale);
 ---
 
 <div class="event-announcement">
-  <a class="announcement-link" href={event.eventUrl} data-event-track="sbc_announcement_click">
-    <span class="announcement-desktop">Meet Ace Games at {event.eventName} · {eventDateRange(event, 'short')}</span>
-    <span class="announcement-mobile">Meet us at {event.eventName}</span>
-    <span class="announcement-action">{event.bookingLabel}</span>
+  <a class="announcement-link" href={localizePath(localizedEvent.eventUrl, locale)} data-event-track="sbc_announcement_click">
+    <span class="announcement-desktop">{t('event.announcement.desktop', locale, { event: localizedEvent.eventName, dates: eventDateRange(localizedEvent, 'short', locale) })}</span>
+    <span class="announcement-mobile">{t('event.announcement.mobile', locale, { event: localizedEvent.eventName })}</span>
+    <span class="announcement-action">{localizedEvent.bookingLabel}</span>
     <span class="announcement-arrow" aria-hidden="true"><Icon name="ph:arrow-right" /></span>
   </a>
-  <button class="announcement-close" type="button" aria-label="Dismiss event announcement" data-dismiss-event-announcement hidden>
+  <button class="announcement-close" type="button" aria-label={t('event.announcement.dismiss', locale)} data-dismiss-event-announcement hidden>
     <Icon name="ph:x" aria-hidden="true" />
   </button>
 </div>

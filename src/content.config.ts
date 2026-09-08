@@ -15,7 +15,7 @@ const games = defineCollection({
   schema: ({ image }) =>
     z.object({
       name: z.string().min(2),
-      type: z.enum(['slot', 'instant', 'crash', 'table']),
+      type: z.enum(['slot', 'instant', 'table']),
       status: z.enum(['live', 'coming_soon']).default('live'),
       order: z.number().default(100),
 

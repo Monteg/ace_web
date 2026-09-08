@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import ContactForm from '../components/ContactForm.astro';
@@ -12,27 +13,29 @@ import FutureOfGaming from '../components/showcase/FutureOfGaming.astro';
 import PartnerWall from '../components/showcase/PartnerWall.astro';
 import MathsExplorer from '../components/showcase/MathsExplorer.astro';
 import contactPigeon from '../assets/site/contact-pigeon-v3.png';
-import { heroStats, homepageSections, integration, partners } from '../data/site';
+import { homepageSections, partners } from '../data/site';
 import { CATALOGUE_CATEGORIES } from '../lib/game-categories';
-import { getGames, sortGames } from '../lib/content-source';
-import { getTranslations } from '../i18n/get-translations';
-import { getActiveLocales } from '../i18n/config';
-import { localePath } from '../i18n/routes';
-import { getFaqItems } from '../i18n/site-content';
-import { renderMarkdown } from '../lib/markdown';
+import { localeFromPath, localizePath, t } from '../lib/i18n';
+import { getSiteContent } from '../lib/site-content';
 
-interface Props { locale?: string; }
-const { locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
-const locales = getActiveLocales();
-const games = sortGames(await getGames(locale));
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { faq, heroStats, proofIntro, sectionCopy, integration } = getSiteContent(locale);
+
+const games = (await getCollection('games')).sort(
+  (a, b) =>
+    Number(a.data.status === 'coming_soon') - Number(b.data.status === 'coming_soon') ||
+    a.data.order - b.data.order ||
+    a.data.name.localeCompare(b.data.name),
+);
 const mathsGames = games.filter(
   (game) => game.data.status === 'live' && typeof game.data.specs.rtp === 'number',
 );
 
-const present = CATALOGUE_CATEGORIES.filter((category) => games.some((game) => game.data.type === category.type));
+const present = CATALOGUE_CATEGORIES
+  .filter((category) => games.some((game) => game.data.type === category.type))
+  .map((category) => ({ ...category, label: t(`global.game_type.${category.type}`, locale) }));
 
-const contactTitleWords = t('home.contact.title').trim().split(/\s+/);
+const contactTitleWords = sectionCopy.contactTitle.trim().split(/\s+/);
 const contactTitleLead = contactTitleWords.shift() ?? '';
 const contactTitleAccent = contactTitleWords.pop() ?? '';
 const contactTitleMiddle = contactTitleWords.join(' ');
@@ -40,63 +43,61 @@ const contactTitleMiddle = contactTitleWords.join(' ');
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: getFaqItems(locale)
-    .map((f) => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answerMarkdown } })),
+  mainEntity: faq
+    .filter((f) => f.a)
+    .map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
 };
-const faqItems = getFaqItems(locale);
-const statLabelKeys = ['home.proof.prototypes', 'home.proof.releases', 'home.proof.players', 'home.proof.ecosystem'];
 ---
 
 <Base
-  title={t('home.seo.title')}
-  description={t('home.seo.description')}
+  title={t('home.seo.title', locale)}
+  description={t('home.seo.description', locale)}
   schema={faqSchema}
-  locale={locale}
 >
-  <Wall games={games} locale={locale} />
+  <Wall games={games} />
 
   <!-- ============ proof ============ -->
   <section class="proof cream" id="about-us" aria-labelledby="proof-title">
     <div class="wrap">
-      <h2 id="proof-title" class="proof-intro rv">{t('home.proof.intro')}</h2>
+      <h2 id="proof-title" class="proof-intro rv">{proofIntro}</h2>
       <div class="proof-in rv">
-        {heroStats.map((s, index) => <StatTile {...s} label={t(statLabelKeys[index])} />)}
+        {heroStats.map((s) => <StatTile {...s} />)}
       </div>
     </div>
   </section>
 
-  <Excellence locale={locale} />
+  <Excellence />
 
   <!-- ============ portfolio ============ -->
   <section id="games">
     <div class="wrap">
       <div class="sec-top home-section-heading rv">
-        <h2 class="d1">{t('home.discover_games.title')}</h2>
+        <h2 class="d1">{sectionCopy.portfolioTitle}</h2>
       </div>
 
       <div class="portfolio-controls rv">
-        <div class="chips" role="group" aria-label={t('global.filter_games')}>
-          <button class="chip" type="button" data-filter="all" aria-pressed="true">{t('games.filter.all')}</button>
-          {present.map(({ type }) => (
-            <button class="chip" type="button" data-filter={type} aria-pressed="false">{t(`game.type.${type}`)}</button>
+        <div class="chips" role="group" aria-label={t('catalogue.filter_aria', locale)}>
+          <button class="chip" type="button" data-filter="all" aria-pressed="true">{t('global.filter.all', locale)}</button>
+          {present.map(({ type, label }) => (
+            <button class="chip" type="button" data-filter={type} aria-pressed="false">{label}</button>
           ))}
         </div>
-        <a class="btn btn-ghost see-all" href={localePath('/games', locale, locales)}>
-          {t('home.discover_games.view_all')}
+        <a class="btn btn-ghost see-all" href={localizePath('/games', locale)}>
+          {t('global.action.view_games', locale)}
           <span class="disc" aria-hidden="true"><Icon name="ph:arrow-right" /></span>
         </a>
       </div>
 
       <p class="filter-note" data-filter-note aria-live="polite"></p>
       <div class="cat rv" id="gameGrid">
-        {games.map((g, i) => <GameTile game={g} eager={i < 4} locale={locale} />)}
+        {games.map((g, i) => <GameTile game={g} eager={i < 4} />)}
       </div>
       <script is:inline>
         document.getElementById('gameGrid')?.setAttribute('data-progressive-ready', '');
       </script>
       <div class="load-games-row" data-load-games-row hidden>
         <button class="btn btn-ghost see-all load-games" type="button" data-load-games>
-          {t('home.discover_games.load_more')}
+          {t('global.action.load_games', locale)}
           <span class="disc" aria-hidden="true"><Icon name="ph:arrow-down" /></span>
         </button>
       </div>
@@ -107,14 +108,12 @@ const statLabelKeys = ['home.proof.prototypes', 'home.proof.releases', 'home.pro
   <section id="maths" class="section-continuation">
     <div class="wrap">
       <div class="sec-top home-section-heading rv">
-        <h2 class="d1">{t('home.maths.title')}</h2>
-        <p class="lead">
-          {t('home.maths.description')}
-        </p>
+        <h2 class="d1">{t('home.maths.title', locale)}</h2>
+        <p class="lead">{t('home.maths.lead', locale)}</p>
       </div>
       <div class="rv">
-        <MathsExplorer games={mathsGames} locale={locale}>
-          <Fragment slot="caption">{t('home.maths.caption')}</Fragment>
+        <MathsExplorer games={mathsGames}>
+          <Fragment slot="caption">{t('home.maths.caption', locale)}</Fragment>
         </MathsExplorer>
       </div>
     </div>
@@ -122,17 +121,17 @@ const statLabelKeys = ['home.proof.prototypes', 'home.proof.releases', 'home.pro
 
   {homepageSections.craft && <Craft />}
 
-  <FutureOfGaming locale={locale} />
+  <FutureOfGaming />
 
-  <PartnerWall logos={partners} locale={locale} />
+  <PartnerWall logos={partners} />
 
   <!-- ============ integration and compliance ============ -->
   {homepageSections.integration && (
   <section id="integration">
     <div class="wrap">
       <div class="sec-top rv">
-        <h2 class="d1">The answers your compliance team asks for</h2>
-        <p class="lead">Everything a game acquisition team needs before booking a call. Documentation and certificates on request.</p>
+        <h2 class="d1">{t('home.integration.title', locale)}</h2>
+        <p class="lead">{t('home.integration.lead', locale)}</p>
       </div>
       <div class="groups rv">
         {integration.map((g) => (
@@ -159,17 +158,18 @@ const statLabelKeys = ['home.proof.prototypes', 'home.proof.releases', 'home.pro
   <!-- ============ faq ============ -->
   <section id="faq">
     <div class="wrap">
-      <div class="sec-top home-section-heading rv"><h2 class="d1">{t('home.faq.title')}</h2></div>
+      <div class="sec-top home-section-heading rv"><h2 class="d1">{t('home.faq.title', locale)}</h2></div>
       <div class="faq rv">
-        {faqItems.map((f) => (
+        {faq.map((f) => (
           <details class="faq-item">
             <summary>
-              <span class="faq-question">{f.question}</span>
+              <span class="faq-question">{f.q}</span>
               <span class="faq-icon" aria-hidden="true"></span>
             </summary>
             <div class="answer">
               <div class="answer-in">
-                <div set:html={renderMarkdown(f.answerMarkdown)}></div>
+                {f.a ? <p>{f.a}</p> : <p><span class="need">{f.hint}</span></p>}
+                {f.extra && <p>{f.extra}</p>}
               </div>
             </div>
           </details>
@@ -199,7 +199,7 @@ const statLabelKeys = ['home.proof.prototypes', 'home.proof.releases', 'home.pro
           </h2>
         </div>
 
-        <div class="contact-form-placement rv"><ContactForm locale={locale} /></div>
+        <div class="contact-form-placement rv"><ContactForm /></div>
       </div>
     </div>
   </section>

@@ -1,28 +1,25 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import GameHeader from '../../components/showcase/GameHeader.astro';
 import GameMedia from '../../components/showcase/GameMedia.astro';
 import SpecStrip from '../../components/showcase/SpecStrip.astro';
 import GameTile from '../../components/showcase/GameTile.astro';
-import GameSections from '../../components/showcase/GameSections.astro';
 import { company } from '../../data/site';
 import { demoUrl } from '../../lib/format';
-import { getGames } from '../../lib/content-source';
-import { renderMarkdown } from '../../lib/markdown';
-import { getTranslations } from '../../i18n/get-translations';
-import { getActiveLocales } from '../../i18n/config';
-import { localePath } from '../../i18n/routes';
+import { localeFromPath, localizePath, lowerTypeLabel, t } from '../../lib/i18n';
+import { getLocalizedGame, renderManagedMarkdown } from '../../lib/localized-games';
+import { getSiteContent } from '../../lib/site-content';
 
 export async function getStaticPaths() {
-  const games = await getGames('en');
-  return games.map((game) => ({ params: { slug: game.id }, props: { game, all: games, locale: 'en' } }));
+  const games = await getCollection('games');
+  return games.map((game) => ({ params: { slug: game.id }, props: { game, all: games } }));
 }
 
-const { game, all, locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
-const locales = getActiveLocales();
-const d = game.data;
-const overviewHtml = renderMarkdown(d.overviewMarkdown);
+const { game, all } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const d = getLocalizedGame(game, locale);
+const { CTA } = getSiteContent(locale);
 
 const soon = d.status === 'coming_soon';
 const demo = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
@@ -36,22 +33,30 @@ const productSchema = {
   '@type': 'Product',
   name: d.name,
   brand: { '@type': 'Brand', name: company.name },
-  category: `${t(`game.type.${d.type}`)} game`,
+  category: `${t(`global.game_type.${d.type}_single`, locale)} game`,
   description: d.seo.description,
-  url: new URL(localePath(`/portfolio/${game.id}`, locale, locales), company.origin).href,
+  url: `${company.origin}${localizePath(`/portfolio/${game.id}`, locale)}`,
 };
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: t('header.games'), item: new URL(localePath('/games', locale, locales), company.origin).href },
-    { '@type': 'ListItem', position: 2, name: d.name, item: new URL(localePath(`/portfolio/${game.id}`, locale, locales), company.origin).href },
+    { '@type': 'ListItem', position: 1, name: t('game.detail.breadcrumb.games', locale), item: `${company.origin}${localizePath('/games', locale)}` },
+    { '@type': 'ListItem', position: 2, name: d.name, item: `${company.origin}${localizePath(`/portfolio/${game.id}`, locale)}` },
   ],
 };
+const bodySections = [
+  { title: '', body: d.overview },
+  { title: t('game.detail.core_gameplay', locale), body: d.gameplay },
+  { title: d.mainFeatureLabel || t('global.label.main_feature', locale), body: d.mainFeatureBody },
+  { title: t('game.detail.bonus', locale), body: d.bonus },
+  { title: t('game.detail.multiplier', locale), body: d.multiplier },
+  { title: t('game.detail.design', locale), body: d.designAtmosphere },
+].filter((section) => section.body.trim());
 ---
 
-<Base title={d.seo.title} description={d.seo.description} schema={[productSchema, breadcrumbSchema]} locale={locale}>
-  <GameHeader game={game} demoAvailable={demo !== null} locale={locale} />
+<Base title={d.seo.title} description={d.seo.description} schema={[productSchema, breadcrumbSchema]}>
+  <GameHeader game={game} demoAvailable={demo !== null} />
 
   <section id="demo" class="game-media-section">
     <div class="wrap">
@@ -63,27 +68,27 @@ const breadcrumbSchema = {
             demoSrc={demo}
             poster={d.hero}
             gallery={d.gallery}
-            locale={locale}
+            posterAlt={d.heroAlt}
           />
 
           {!demo && (
             <div class="demo-request">
               <div>
-                <h2 class="d3">{soon ? t('game.status.in_development') : t('game.demo_request')}</h2>
+                <h2 class="d3">{soon ? t('game.detail.in_development', locale) : t('game.detail.demo_on_request', locale)}</h2>
                 <p class="body">
                   {soon
-                    ? t('game.demo_request_soon', { name: d.name })
-                    : t('game.demo_request_live', { name: d.name })}
+                    ? t('game.detail.unreleased_body', locale, { name: d.name })
+                    : t('game.detail.demo_request_body', locale, { name: d.name })}
                 </p>
               </div>
-              <a class="btn btn-primary btn-sm" href={`${localePath('/', locale, locales)}#contact`}>{t('header.lets_talk')}</a>
+              <a class="btn btn-primary btn-sm" href={CTA.href}>{CTA.label}</a>
             </div>
           )}
         </div>
 
-        <aside class="spec-sidebar rv" aria-label={t('game.specifications_aria', { name: d.name })}>
-          <h2 class="d3">{t('game.stats_title')}</h2>
-          <SpecStrip game={game} variant="sidebar" locale={locale} />
+        <aside class="spec-sidebar rv" aria-label={t('game.detail.specs_aria', locale, { name: d.name })}>
+          <h2 class="d3">{t('game.detail.specs', locale)}</h2>
+          <SpecStrip game={game} variant="sidebar" />
         </aside>
       </div>
     </div>
@@ -93,8 +98,15 @@ const breadcrumbSchema = {
     <div class="wrap">
       <div class="over">
         <div class="over-copy">
-          <div class="sec-top rv"><h2 class="d1">{t('game.overview')}</h2></div>
-          <div class="prose rv" set:html={overviewHtml}></div>
+          <div class="sec-top rv"><h2 class="d1">{t('game.detail.overview', locale)}</h2></div>
+          <div class="prose rv">
+            {bodySections.map((section) => (
+              <section>
+                {section.title && <h2>{section.title}</h2>}
+                <div set:html={renderManagedMarkdown(section.body)} />
+              </section>
+            ))}
+          </div>
           {d.highlights.length > 0 && (
             <ul class="highlights rv">
               {d.highlights.map((h) => <li>{h}</li>)}
@@ -103,7 +115,7 @@ const breadcrumbSchema = {
         </div>
         {d.features.length > 0 && (
           <aside class="over-side rv">
-            <h3 class="d3">{t('game.features')}</h3>
+            <h3 class="d3">{t('game.detail.features', locale)}</h3>
             <ol class="feats">
               {d.features.map((f) => (
                 <li>
@@ -118,18 +130,12 @@ const breadcrumbSchema = {
     </div>
   </section>
 
-  {d.sections.length > 0 && (
-    <section class="section-continuation">
-      <div class="wrap"><GameSections sections={d.sections} /></div>
-    </section>
-  )}
-
   {related.length > 0 && (
     <section class="section-continuation">
       <div class="wrap">
-        <div class="sec-top rv"><h2 class="d1">{t('game.related', { type: t(`game.type.${d.type}`).toLowerCase() })}</h2></div>
+        <div class="sec-top rv"><h2 class="d1">{t('game.detail.more_games', locale, { type: lowerTypeLabel(d.type, locale) })}</h2></div>
         <div class="related rv">
-          {related.map((g) => <GameTile game={g} locale={locale} />)}
+          {related.map((g) => <GameTile game={g} />)}
         </div>
       </div>
     </section>

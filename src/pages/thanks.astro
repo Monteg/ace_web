@@ -1,8 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
-import { company, CTA } from '../data/site';
-import { getTranslations } from '../i18n/get-translations';
-const t = getTranslations('en');
+import { company } from '../data/site';
+import { localeFromPath, localizePath, t } from '../lib/i18n';
+import { getSiteContent } from '../lib/site-content';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { CTA } = getSiteContent(locale);
 
 // The form redirects here. A real page, not a hidden div swap, so a submission
 // is a URL you can count as a conversion.
@@ -12,31 +15,28 @@ const t = getTranslations('en');
 // the default, so a script failure shows the reassuring message rather than an
 // error the visitor cannot act on.
 const REASONS: Record<string, string> = {
-  invalid: 'Some fields were missing, or the email address did not look right.',
-  unconfigured: 'The contact form is not connected to an inbox yet.',
-  'send-failed': 'The message could not be delivered just now.',
-  unreadable: 'The form could not be read.',
+  invalid: t('thanks.error.invalid', locale),
+  unconfigured: t('thanks.error.unconfigured', locale),
+  'send-failed': t('thanks.error.send_failed', locale),
+  unreadable: t('thanks.error.unreadable', locale),
 };
 ---
 
 <Base
-  title={t('thanks.seo_title')}
-  description={t('thanks.description')}
+  title={t('thanks.seo.title', locale)}
+  description={t('thanks.seo.description', locale)}
   noindex={true}
-  enableLocaleAlternates={false}
 >
   <section class="utility-page">
     <div class="wrap">
       <div class="panel" data-state="ok">
-        <p class="eyebrow" data-eyebrow>{t('thanks.eyebrow')}</p>
-        <h1 class="d1" data-title>{t('thanks.heading')}</h1>
-        <p class="lead" data-body>
-          {t('thanks.body')}
-        </p>
+        <p class="eyebrow" data-eyebrow>{t('thanks.sent', locale)}</p>
+        <h1 class="d1" data-title>{t('thanks.title', locale)}</h1>
+        <p class="lead" data-body>{t('thanks.body', locale)}</p>
 
         <div class="row">
           <a class="btn btn-primary" href={`mailto:${company.email}`}>{company.email}</a>
-          <a class="btn btn-ghost" data-second href="/games">{t('thanks.games')}</a>
+          <a class="btn btn-ghost" data-second href={localizePath('/games', locale)}>{t('global.action.view_games', locale)}</a>
         </div>
       </div>
     </div>
@@ -44,22 +44,22 @@ const REASONS: Record<string, string> = {
 
   <script type="application/json" id="failure-copy" is:inline set:html={JSON.stringify(REASONS)} />
 
-  <script is:inline define:vars={{ ctaHref: CTA.href }}>
+  <script is:inline define:vars={{ ctaHref: CTA.href, notSent: t('thanks.not_sent', locale), errorTitle: t('thanks.error_title', locale), backToForm: t('thanks.back_to_form', locale), unknownError: t('thanks.error.unknown', locale), errorSuffix: t('thanks.error.suffix', locale) }}>
     const params = new URLSearchParams(window.location.search);
     if (params.get('status') === 'error') {
       const reasons = JSON.parse(document.getElementById('failure-copy').textContent);
-      const reason = reasons[params.get('reason') ?? ''] ?? 'Something went wrong on the way.';
+      const reason = reasons[params.get('reason') ?? ''] ?? unknownError;
 
-      document.querySelector('[data-eyebrow]').textContent = 'Not sent';
-      document.querySelector('[data-title]').textContent = 'That did not send';
+      document.querySelector('[data-eyebrow]').textContent = notSent;
+      document.querySelector('[data-title]').textContent = errorTitle;
       document.querySelector('[data-body]').textContent =
-        `${reason} Mail us directly and we will pick it up from there.`;
+        `${reason} ${errorSuffix}`;
 
       const second = document.querySelector('[data-second]');
-      second.textContent = 'Back to the form';
+      second.textContent = backToForm;
       second.href = ctaHref;
 
-      document.title = 'That did not send | Ace Games';
+      document.title = `${errorTitle} | Ace Games`;
     }
   </script>
 </Base>

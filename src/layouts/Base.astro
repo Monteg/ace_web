@@ -10,9 +10,7 @@ import ContactModal from '../components/ContactModal.astro';
 import { company } from '../data/site';
 import { currentEvent } from '../data/events';
 import { isCampaignActive } from '../lib/event';
-import { getActiveLocales, defaultLocale } from '../i18n/config';
-import { getTranslations } from '../i18n/get-translations';
-import { localePath, stripLocalePrefix } from '../i18n/routes';
+import { alternatePaths, localeFromPath, localizePath, stripLocale, t } from '../lib/i18n';
 
 interface Props {
   title: string;
@@ -28,10 +26,6 @@ interface Props {
   showSiteChrome?: boolean;
   /** Skip the global verification dialog on special routes such as /under-18. */
   showAgeGate?: boolean;
-  /** Active content locale. English intentionally remains prefixless. */
-  locale?: string;
-  /** Events and internal utility pages stay English-only in v1. */
-  enableLocaleAlternates?: boolean;
 }
 
 const {
@@ -43,25 +37,16 @@ const {
   noindex = false,
   showSiteChrome = true,
   showAgeGate = true,
-  locale = defaultLocale,
-  enableLocaleAlternates = true,
 } = Astro.props;
 
-const allLocales = getActiveLocales();
-const locales = enableLocaleAlternates ? allLocales : allLocales.filter((item) => item.code === defaultLocale);
-const localeConfig = locales.find((item) => item.code === locale);
-if (!localeConfig) throw new Error(`Cannot render inactive locale: ${locale}`);
-const t = getTranslations(locale);
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 
 // Self-referencing canonical on every page. The old site had none, and three
 // URLs served a byte-identical home page.
-const canonical = new URL(canonicalPath ?? Astro.url.pathname, Astro.site ?? company.origin).href.replace(/\/$/, '') || company.origin;
+const canonicalRoute = localizePath(stripLocale(canonicalPath ?? Astro.url.pathname), locale);
+const canonical = new URL(canonicalRoute, Astro.site ?? company.origin).href.replace(/\/$/, '') || company.origin;
+const alternates = alternatePaths(stripLocale(canonicalPath ?? Astro.url.pathname));
 const ogImage = new URL(image, Astro.site ?? company.origin).href;
-const canonicalBasePath = stripLocalePrefix(canonicalPath ?? Astro.url.pathname, locales);
-const alternates = locales.map((item) => ({
-  ...item,
-  href: new URL(localePath(canonicalBasePath, item.code, locales), Astro.site ?? company.origin).href,
-}));
 
 const organisation = {
   '@context': 'https://schema.org',
@@ -77,14 +62,14 @@ const organisation = {
     postalCode: company.postcode,
     addressCountry: company.countryCode,
   },
-  description,
+  description: t('home.seo.description', locale),
 };
 
 const graphs = [organisation, ...(schema ? (Array.isArray(schema) ? schema : [schema]) : [])];
 ---
 
 <!doctype html>
-<html lang={localeConfig.hreflang} dir={localeConfig.direction} class:list={{ 'event-campaign-active': isCampaignActive(currentEvent) }}>
+<html lang={locale} class:list={{ 'event-campaign-active': isCampaignActive(currentEvent) }}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -141,8 +126,10 @@ const graphs = [organisation, ...(schema ? (Array.isArray(schema) ? schema : [sc
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {alternates.map((item) => <link rel="alternate" hreflang={item.hreflang} href={item.href} />)}
-    <link rel="alternate" hreflang="x-default" href={new URL(localePath(canonicalBasePath, defaultLocale, locales), Astro.site ?? company.origin).href} />
+    {Object.entries(alternates).map(([lang, href]) => (
+      <link rel="alternate" hreflang={lang} href={new URL(href, Astro.site ?? company.origin).href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={new URL(alternates.en, Astro.site ?? company.origin).href} />
     {noindex && <meta name="robots" content="noindex, follow" />}
 
     <meta property="og:type" content="website" />
@@ -151,8 +138,6 @@ const graphs = [organisation, ...(schema ? (Array.isArray(schema) ? schema : [sc
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:locale" content={localeConfig.hreflang.replace('-', '_')} />
-    {alternates.filter((item) => item.code !== locale).map((item) => <meta property="og:locale:alternate" content={item.hreflang.replace('-', '_')} />)}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
@@ -177,15 +162,15 @@ const graphs = [organisation, ...(schema ? (Array.isArray(schema) ? schema : [sc
   </head>
 
   <body>
-    {showAgeGate && <AgeGate locale={locale} />}
+    {showAgeGate && <AgeGate />}
     <div id="siteShell">
-      <a class="skip" href="#main">{t('global.skip_to_content')}</a>
-      {showSiteChrome && <Header locale={locale} locales={locales} t={t} />}
+      <a class="skip" href="#main">{t('global.skip_to_content', locale)}</a>
+      {showSiteChrome && <Header />}
       <main id="main" tabindex="-1">
         <slot />
       </main>
-      {showSiteChrome && <Footer locale={locale} locales={locales} t={t} />}
-      {showSiteChrome && <ContactModal locale={locale} />}
+      {showSiteChrome && <Footer />}
+      {showSiteChrome && <ContactModal />}
 
       <script>
         // Reveal on scroll. The page ships visible; this adds the hidden start

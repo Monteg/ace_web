@@ -1,7 +1,0 @@
----
-import { getEntry } from 'astro:content';
-import LegalPage from '../components/pages/LegalPage.astro';
-const doc = await getEntry('legal', 'privacy-policy');
-if (!doc) throw new Error('Privacy policy content is missing.');
----
-<LegalPage doc={doc} locale="en" />

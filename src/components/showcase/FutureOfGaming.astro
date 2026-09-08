@@ -4,13 +4,11 @@ import engineeringArt from '../../assets/site/future-engineering.png';
 import strategyArt from '../../assets/site/future-strategy.png';
 import integrationArt from '../../assets/site/future-integration.png';
 import optimizationArt from '../../assets/site/future-optimization.png';
-import { process } from '../../data/site';
-import { getTranslations } from '../../i18n/get-translations';
+import { localeFromPath } from '../../lib/i18n';
+import { getSiteContent } from '../../lib/site-content';
 
-interface Props { locale?: string; }
-const { locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
-const keys = ['engineering', 'strategy', 'integration', 'optimization'];
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { process, sectionCopy } = getSiteContent(locale);
 
 const artwork = {
   engineering: engineeringArt,
@@ -23,7 +21,7 @@ const artwork = {
 <section class="future" id="why-ace-games" aria-labelledby="future-title" data-future-section>
   <div class="wrap">
     <div class="sec-top home-section-heading rv">
-      <h2 class="d1" id="future-title">{t('home.future.title')}</h2>
+      <h2 class="d1" id="future-title">{sectionCopy.futureTitle}</h2>
     </div>
 
     <div class="future-grid" data-future-grid>
@@ -43,8 +41,8 @@ const artwork = {
           </div>
 
           <div class="future-copy">
-            <h3>{t(`home.future.${keys[index]}.title`)}</h3>
-            <p>{t(`home.future.${keys[index]}.body`)}</p>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
           </div>
         </article>
       ))}

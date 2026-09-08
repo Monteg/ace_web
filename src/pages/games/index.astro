@@ -1,23 +1,29 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import CatalogueHero from '../../components/showcase/CatalogueHero.astro';
 import GameTile from '../../components/showcase/GameTile.astro';
 import { company } from '../../data/site';
 import { CATALOGUE_CATEGORIES } from '../../lib/game-categories';
-import { getGames, sortGames } from '../../lib/content-source';
-import { getTranslations } from '../../i18n/get-translations';
-import { getActiveLocales } from '../../i18n/config';
-import { localePath } from '../../i18n/routes';
+import { localeFromPath, localizePath, t } from '../../lib/i18n';
+import { getLocalizedGame } from '../../lib/localized-games';
+import { getSiteContent } from '../../lib/site-content';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { CTA } = getSiteContent(locale);
 
 // /portfolio returned a 404 on the old site: the catalogue existed only as a
 // section of the home page and a dropdown listing 17 of 24 titles.
-interface Props { locale?: string; }
-const { locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
-const locales = getActiveLocales();
-const games = sortGames(await getGames(locale));
+const games = (await getCollection('games')).sort(
+  (a, b) =>
+    Number(a.data.status === 'coming_soon') - Number(b.data.status === 'coming_soon') ||
+    a.data.order - b.data.order ||
+    a.data.name.localeCompare(b.data.name),
+);
 
-const present = CATALOGUE_CATEGORIES.filter((category) => games.some((game) => game.data.type === category.type));
+const present = CATALOGUE_CATEGORIES
+  .filter((category) => games.some((game) => game.data.type === category.type))
+  .map((category) => ({ ...category, label: t(`global.game_type.${category.type}`, locale) }));
 
 const heroIds = ['way-to-olympus', 'cyber-star', 'pirates-rush', 'ace-city'];
 const heroGames = heroIds.flatMap((id) => {
@@ -28,48 +34,45 @@ const heroGames = heroIds.flatMap((id) => {
 const listSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  name: t('games.catalogue_name'),
+  name: t('games.hero.title', locale),
   numberOfItems: games.length,
   itemListElement: games.map((g, i) => ({
     '@type': 'ListItem',
     position: i + 1,
-    name: g.data.name,
-    url: new URL(localePath(`/portfolio/${g.id}`, locale, locales), company.origin).href,
+    name: getLocalizedGame(g, locale).name,
+    url: `${company.origin}${localizePath(`/portfolio/${g.id}`, locale)}`,
   })),
 };
 ---
 
 <Base
-  title={t('games.seo.title')}
-  description={t('games.seo.description', { count: games.length })}
+  title={t('games.seo.title', locale)}
+  description={t('games.seo.description', locale, { count: games.length })}
   schema={listSchema}
-  locale={locale}
 >
-  <CatalogueHero games={heroGames} locale={locale} />
+  <CatalogueHero games={heroGames} />
 
   <section class="catalogue-list">
     <div class="wrap">
-      <div class="chips filters" id="games" role="group" aria-label={t('global.filter_games')}>
-        <button class="chip" type="button" data-filter="all" aria-pressed="true">{t('games.filter.all')}</button>
-        {present.map(({ type }) => (
+      <div class="chips filters" id="games" role="group" aria-label={t('catalogue.filter_aria', locale)}>
+        <button class="chip" type="button" data-filter="all" aria-pressed="true">{t('global.filter.all', locale)}</button>
+        {present.map(({ type, label }) => (
           <button class="chip" type="button" data-filter={type} aria-pressed="false">
-            {t(`game.type.${type}`)}
+            {label}
           </button>
         ))}
       </div>
       <p class="filter-note" data-filter-note aria-live="polite"></p>
 
       <div class="grid-games" id="gameGrid">
-        {games.map((g, i) => <GameTile game={g} eager={i < 4} locale={locale} />)}
+        {games.map((g, i) => <GameTile game={g} eager={i < 4} />)}
       </div>
 
       <div class="tail rv">
-        <h2 class="d3">{t('games.tail.title')}</h2>
-        <p class="body">
-          {t('games.tail.body')}
-        </p>
-        <button class="btn btn-primary" type="button" data-contact-open aria-haspopup="dialog" aria-controls="contact-dialog" hidden>{t('header.lets_talk')}</button>
-        <noscript><a class="btn btn-primary" href={`${localePath('/', locale, locales)}#contact`}>{t('header.lets_talk')}</a></noscript>
+        <h2 class="d3">{t('games.tail.title', locale)}</h2>
+        <p class="body">{t('games.tail.body', locale)}</p>
+        <button class="btn btn-primary" type="button" data-contact-open aria-haspopup="dialog" aria-controls="contact-dialog" hidden>{CTA.label}</button>
+        <noscript><a class="btn btn-primary" href={CTA.href}>{CTA.label}</a></noscript>
       </div>
     </div>
   </section>

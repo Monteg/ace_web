@@ -4,27 +4,30 @@ import { Icon } from 'astro-icon/components';
 import type { CollectionEntry } from 'astro:content';
 import type { EventData } from '../../data/events';
 import { eventDateRange } from '../../lib/event';
+import { gameText } from '../../lib/localized-games';
+import { localeFromPath, t } from '../../lib/i18n';
 
 interface Props { event: EventData; games: CollectionEntry<'games'>[] }
 const { event, games } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 const art = ['ace-city', 'zeus-run', 'chicken-doom'].map(id => games.find(game => game.id === id)!);
 ---
 
 <section class="event-hero" aria-labelledby="event-title">
   <div class="wrap event-hero-grid">
     <div class="hero-copy">
-      <p class="event-date"><Icon name="ph:calendar-blank" aria-hidden="true" />{eventDateRange(event)}<span>· {event.eventLocation}</span></p>
-      <h1 class="d0" id="event-title">Meet Ace Games<br />at <em>{event.eventName}</em></h1>
+      <p class="event-date"><Icon name="ph:calendar-blank" aria-hidden="true" />{eventDateRange(event, 'long', locale)}<span>· {event.eventLocation}</span></p>
+      <h1 class="d0" id="event-title">{t('event.hero.heading', locale)}<br /><em>{event.eventName}</em></h1>
       <p class="hero-tagline">{event.tagline}</p>
       <p class="body hero-intro">{event.introduction}</p>
       <a class="btn btn-primary" href={event.bookingAnchor} data-event-track="book_meeting_hero">
         {event.bookingLabel}<span class="disc" aria-hidden="true"><Icon name="ph:arrow-down-right" /></span>
       </a>
     </div>
-    <div class="hero-art" aria-label="Ace Games titles coming to Lisbon">
+    <div class="hero-art" aria-label={t('event.hero.art_aria', locale)}>
       {art.map((game, index) => (
         <div class:list={['hero-art-tile', { 'hero-art-main': index === 0 }]}>
-          <Image src={game.data.card} alt={`${game.data.name} game artwork`} widths={[320, 460, 640]} sizes={index === 0 ? '(max-width: 768px) 55vw, 340px' : '(max-width: 768px) 35vw, 220px'} loading={index === 0 ? 'eager' : 'lazy'} fetchpriority={index === 0 ? 'high' : 'auto'} />
+          <Image src={game.data.card} alt={gameText(game.id, 'card_logo_alt', locale, `${game.data.name} game artwork`)} widths={[320, 460, 640]} sizes={index === 0 ? '(max-width: 768px) 55vw, 340px' : '(max-width: 768px) 35vw, 220px'} loading={index === 0 ? 'eager' : 'lazy'} fetchpriority={index === 0 ? 'high' : 'auto'} />
         </div>
       ))}
     </div>

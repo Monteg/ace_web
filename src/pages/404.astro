@@ -1,27 +1,25 @@
 ---
 import Base from '../layouts/Base.astro';
-import { CTA } from '../data/site';
-import { getTranslations } from '../i18n/get-translations';
-const t = getTranslations('en');
+import { localeFromPath, localizePath, t } from '../lib/i18n';
+import { getSiteContent } from '../lib/site-content';
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { CTA } = getSiteContent(locale);
 ---
 
 <Base
-  title={t('not_found.seo_title')}
-  description={t('not_found.description')}
+  title={t('not_found.seo.title', locale)}
+  description={t('not_found.seo.description', locale)}
   noindex={true}
-  enableLocaleAlternates={false}
 >
   <section class="utility-page">
     <div class="wrap">
       <div class="not-found">
         <p class="eyebrow">404</p>
-        <h1 class="d1">{t('not_found.title')}</h1>
-        <p class="lead">
-          {t('not_found.body')}
-        </p>
+        <h1 class="d1">{t('not_found.title', locale)}</h1>
+        <p class="lead">{t('not_found.body', locale)}</p>
         <div class="row">
-          <a class="btn btn-primary" href="/games">{t('not_found.games')}</a>
-          <a class="btn btn-ghost" href={CTA.href}>{t('header.lets_talk')}</a>
+          <a class="btn btn-primary" href={localizePath('/games', locale)}>{t('global.action.view_games', locale)}</a>
+          <a class="btn btn-ghost" href={CTA.href}>{CTA.label}</a>
         </div>
       </div>
     </div>

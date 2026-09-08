@@ -3,15 +3,33 @@ import { Icon } from 'astro-icon/components';
 import type { EventData } from '../../data/events';
 import { company } from '../../data/site';
 import { eventDateRange, meetingDays } from '../../lib/event';
+import { localeFromPath, localizePath, t } from '../../lib/i18n';
+import type { MeetingEmailCopy } from '../../lib/event-booking';
 interface Props { event: EventData }
 const { event } = Astro.props;
-const days = meetingDays(event);
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const days = meetingDays(event, locale);
+const emailCopy = {
+  subject: t('event.booking.email.subject', locale),
+  greeting: t('event.booking.email.greeting', locale),
+  request: t('event.booking.email.request', locale),
+  name: t('contact.name', locale),
+  company: t('contact.company', locale),
+  email: t('contact.email', locale),
+  member: t('event.booking.email.member', locale),
+  day: t('event.booking.form.day', locale),
+  time: t('event.booking.email.time', locale),
+  flexible: t('event.booking.email.flexible', locale),
+  topics: t('event.booking.email.topics', locale),
+  topicsFallback: t('event.booking.email.topics_fallback', locale),
+  confirm: t('event.booking.email.confirm', locale),
+} satisfies MeetingEmailCopy;
 ---
 
 <section class="event-booking" id="book-meeting" aria-labelledby="booking-title">
   <div class="wrap booking-layout">
     <div class="booking-copy">
-      <p class="booking-date"><Icon name="ph:calendar-blank" aria-hidden="true" />{eventDateRange(event)} · {event.eventLocation}</p>
+      <p class="booking-date"><Icon name="ph:calendar-blank" aria-hidden="true" />{eventDateRange(event, 'long', locale)} · {event.eventLocation}</p>
       <h2 class="d1" id="booking-title">{event.bookingTitle}</h2>
       <p class="booking-intro">{event.bookingIntro}</p>
       <p class="body">{event.bookingDescription}</p>
@@ -21,29 +39,29 @@ const days = meetingDays(event);
     {event.bookingUrl ? (
       <div class="booking-calendar">
         <Icon name="ph:calendar-check" aria-hidden="true" />
-        <h3>Find a time that works for you</h3>
-        <a class="btn btn-primary" href={event.bookingUrl} data-event-track="book_meeting_final">Choose a meeting time</a>
+        <h3>{t('event.booking.calendar_title', locale)}</h3>
+        <a class="btn btn-primary" href={event.bookingUrl} data-event-track="book_meeting_final">{t('event.booking.calendar_cta', locale)}</a>
       </div>
     ) : (
-      <form class="booking-form" id="meetingForm" action={`mailto:${company.email}`} method="post" enctype="text/plain" data-email={company.email} data-event-name={event.eventName}>
-        <p class="booking-note">Request your preferred time by email. The team will confirm availability directly.</p>
+      <form class="booking-form" id="meetingForm" action={`mailto:${company.email}`} method="post" enctype="text/plain" data-email={company.email} data-event-name={event.eventName} data-email-copy={JSON.stringify(emailCopy)}>
+        <p class="booking-note">{t('event.booking.form.note', locale)}</p>
         <div class="form-pair">
-          <p class="field"><label for="meeting-name">Your name</label><input id="meeting-name" name="name" autocomplete="name" maxlength="120" required /></p>
-          <p class="field"><label for="meeting-company">Company</label><input id="meeting-company" name="company" autocomplete="organization" maxlength="160" required /></p>
+          <p class="field"><label for="meeting-name">{t('contact.name', locale)}</label><input id="meeting-name" name="name" autocomplete="name" maxlength="120" required /></p>
+          <p class="field"><label for="meeting-company">{t('contact.company', locale)}</label><input id="meeting-company" name="company" autocomplete="organization" maxlength="160" required /></p>
         </div>
-        <p class="field"><label for="meeting-email">Work email</label><input id="meeting-email" name="email" type="email" autocomplete="email" maxlength="200" placeholder="you@operator.com" required /></p>
-        <p class="field"><label for="meeting-member">Who would you like to meet?</label><select id="meeting-member" name="member"><option value="team">Ace Games team</option>{event.team.map(member => <option value={member.id}>{member.name}</option>)}</select></p>
+        <p class="field"><label for="meeting-email">{t('contact.email', locale)}</label><input id="meeting-email" name="email" type="email" autocomplete="email" maxlength="200" placeholder={t('contact.email_placeholder', locale)} required /></p>
+        <p class="field"><label for="meeting-member">{t('event.booking.form.member', locale)}</label><select id="meeting-member" name="member"><option value="team">{t('event.booking.form.team', locale)}</option>{event.team.map(member => <option value={member.id}>{member.name}</option>)}</select></p>
         <div class="form-pair">
-          <p class="field"><label for="meeting-day">Preferred day</label><select id="meeting-day" name="day" required><option value="">Choose a day</option>{days.map(day => <option value={day.value}>{day.label}</option>)}</select></p>
-          <p class="field"><label for="meeting-time">Time in Lisbon (optional)</label><input id="meeting-time" name="time" type="time" /></p>
+          <p class="field"><label for="meeting-day">{t('event.booking.form.day', locale)}</label><select id="meeting-day" name="day" required><option value="">{t('event.booking.form.choose_day', locale)}</option>{days.map(day => <option value={day.value}>{day.label}</option>)}</select></p>
+          <p class="field"><label for="meeting-time">{t('event.booking.form.time', locale)}</label><input id="meeting-time" name="time" type="time" /></p>
         </div>
-        <p class="field"><label for="meeting-message">What would you like to discuss?</label><textarea id="meeting-message" name="message" rows="4" maxlength="5000"></textarea></p>
-        <button class="btn btn-primary" type="submit" data-event-track="book_meeting_final">Prepare meeting email<Icon name="ph:arrow-up-right" aria-hidden="true" /></button>
-        <p class="form-fine-print">This prepares an email, not a confirmed booking. Send the draft from your email app to request your meeting. <a href="/privacy-policy">Privacy policy</a>.</p>
+        <p class="field"><label for="meeting-message">{t('event.booking.form.message', locale)}</label><textarea id="meeting-message" name="message" rows="4" maxlength="5000"></textarea></p>
+        <button class="btn btn-primary" type="submit" data-event-track="book_meeting_final">{t('event.booking.form.prepare', locale)}<Icon name="ph:arrow-up-right" aria-hidden="true" /></button>
+        <p class="form-fine-print">{t('event.booking.form.fine_print', locale)} <a href={localizePath('/privacy-policy', locale)}>{t('contact.privacy_link', locale)}</a>.</p>
         <div class="email-draft" id="meetingDraft" hidden>
-          <p class="draft-status" role="status">Your meeting email is ready. Open it in your email app, then send it to the team.</p>
-          <a class="btn btn-ghost" id="meetingMailLink" href={`mailto:${company.email}`}>Open email app<Icon name="ph:envelope-simple" aria-hidden="true" /></a>
-          <details><summary>View or copy your message</summary><pre id="meetingDraftText"></pre></details>
+          <p class="draft-status" role="status">{t('event.booking.form.draft_ready', locale)}</p>
+          <a class="btn btn-ghost" id="meetingMailLink" href={`mailto:${company.email}`}>{t('event.booking.form.open_email', locale)}<Icon name="ph:envelope-simple" aria-hidden="true" /></a>
+          <details><summary>{t('event.booking.form.view_message', locale)}</summary><pre id="meetingDraftText"></pre></details>
         </div>
       </form>
     )}
@@ -123,7 +141,7 @@ const days = meetingDays(event);
         email: String(data.get('email') ?? ''), member: select.selectedOptions[0].text,
         day: day?.selectedOptions[0].text ?? '', time: String(data.get('time') ?? ''),
         message: String(data.get('message') ?? ''),
-      });
+      }, JSON.parse(form.dataset.emailCopy ?? '{}'));
       draftText.textContent = email.body;
       mailLink.href = email.href;
       draft.hidden = false;

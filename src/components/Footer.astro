@@ -2,56 +2,48 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import logo from '../assets/brand/logo.webp';
-import { company, nav, social } from '../data/site';
-import type { SiteLocale } from '../i18n/config';
-import type { Translate } from '../i18n/get-translations';
-import { localePath } from '../i18n/routes';
+import { company, social } from '../data/site';
+import { localeFromPath, localizePath, t } from '../lib/i18n';
+import { getSiteContent } from '../lib/site-content';
 
-interface Props { locale: string; locales: SiteLocale[]; t: Translate; }
-const { locale, locales, t } = Astro.props;
-const footerKeys: Record<string, string> = {
-  '/games': 'header.games', '/#maths': 'home.maths.title', '/#faq': 'header.faq',
-};
-const localizedHref = (href: string) => {
-  const url = new URL(href, company.origin);
-  return `${localePath(url.pathname, locale, locales)}${url.search}${url.hash}`;
-};
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { nav, socialIntro } = getSiteContent(locale);
 ---
 
 <footer class="site-footer">
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-col">
-        <a class="brand" href={localePath('/', locale, locales)}>
+        <a class="brand" href={localizePath('/', locale)}>
           <Image src={logo} alt={company.name} widths={[180]} sizes="90px" loading="lazy" />
         </a>
         <p class="blurb">
-          {t('footer.blurb')}
+          {t('footer.company_intro', locale)}
         </p>
       </div>
 
       <div class="foot-col">
-        <h2>{t('footer.company')}</h2>
+        <h2>{t('footer.company', locale)}</h2>
         <ul>
           {nav.map((item) => (
-            <li><a href={localizedHref(item.href)}>{t(footerKeys[item.href] ?? item.label)}</a></li>
+            <li><a href={item.href}>{item.label}</a></li>
           ))}
-          <li><a href={`${localePath('/', locale, locales)}#contact`}>{t('footer.contact')}</a></li>
+          <li><a href={localizePath('/#contact', locale)}>{t('footer.contact', locale)}</a></li>
         </ul>
       </div>
 
       <div class="foot-col">
-        <h2>{t('footer.legal')}</h2>
+        <h2>{t('footer.legal', locale)}</h2>
         <ul>
-          <li><a href={localePath('/privacy-policy', locale, locales)}>{t('footer.privacy')}</a></li>
-          <li><a href={localePath('/terms-conditions', locale, locales)}>{t('footer.terms')}</a></li>
+          <li><a href={localizePath('/privacy-policy', locale)}>{t('footer.privacy', locale)}</a></li>
+          <li><a href={localizePath('/terms-conditions', locale)}>{t('footer.terms', locale)}</a></li>
           <li><a href={`mailto:${company.legalEmail}`}>{company.legalEmail}</a></li>
         </ul>
       </div>
 
       <div class="foot-col social-col">
-        <h2>{t('footer.follow_us')}</h2>
-        <p class="social-copy">{t('footer.social_intro')}</p>
+        <h2>{t('footer.follow', locale)}</h2>
+        <p class="social-copy">{socialIntro}</p>
         <div class="social-controls">
           {social.map((item) => item.href ? (
             <a
@@ -68,7 +60,7 @@ const localizedHref = (href: string) => {
               type="button"
               class="social-control is-pending"
               aria-label={item.label}
-              title={t('footer.pending_profile')}
+              title="Profile URL pending"
               disabled
             >
               <Icon name={item.icon} aria-hidden="true" />
@@ -81,7 +73,9 @@ const localizedHref = (href: string) => {
     <div class="foot-bottom">
       <span class="age">18+</span>
       <p class="legal">
-        {t('footer.disclaimer', { legalName: company.legalName, address: company.address })}
+        {company.legalName}, {company.address}. Ace Games supplies games to licensed operators and
+        does not offer gambling to consumers. Demo games on this site are free play only, with no
+        prizes of monetary value.
       </p>
       <span class="copy">{new Date().getFullYear()} {company.name}</span>
     </div>

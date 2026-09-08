@@ -3,9 +3,11 @@ import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import type { EventData, EventTeamMember } from '../../data/events';
 import { memberBookingUrl } from '../../lib/event';
+import { localeFromPath, t } from '../../lib/i18n';
 interface Props { member: EventTeamMember; event: EventData }
 const { member, event } = Astro.props;
 const usesLocalBooking = !member.bookingUrl && !event.bookingUrl;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 ---
 
 <article class="team-member rv">
@@ -13,20 +15,20 @@ const usesLocalBooking = !member.bookingUrl && !event.bookingUrl;
     {member.photo ? (
       <Image src={member.photo} alt={member.name} widths={[360, 540, 720]} sizes="(max-width: 768px) 92vw, 400px" loading="lazy" />
     ) : (
-      <div class="photo-pending" role="img" aria-label={`${member.name}: portrait to be supplied`}>
+      <div class="photo-pending" role="img" aria-label={t('event.team.portrait_pending_aria', locale, { name: member.name })}>
         <span class="initial" aria-hidden="true">{member.name[0]}</span>
-        <span class="need">Portrait coming soon</span>
+        <span class="need">{t('event.team.portrait_pending', locale)}</span>
       </div>
     )}
   </div>
   <div class="member-copy">
     <div class="member-name-row">
       <h3>{member.name}</h3>
-      <a class="linkedin" href={member.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${member.name} on LinkedIn (opens in a new tab)`} data-event-track={`linkedin_${member.id}`}><Icon name="ph:linkedin-logo" /></a>
+      <a class="linkedin" href={member.linkedin} target="_blank" rel="noopener noreferrer" aria-label={t('event.team.linkedin_aria', locale, { name: member.name })} data-event-track={`linkedin_${member.id}`}><Icon name="ph:linkedin-logo" /></a>
     </div>
     {member.position && <p class="position">{member.position}</p>}
     <p class="expertise">{member.expertise}</p>
-    <a class="btn btn-ghost" href={memberBookingUrl(event, member)} data-event-member={usesLocalBooking ? member.id : undefined} data-event-track={`book_meeting_${member.id}`}>Meet {member.name} at SBC</a>
+    <a class="btn btn-ghost" href={memberBookingUrl(event, member)} data-event-member={usesLocalBooking ? member.id : undefined} data-event-track={`book_meeting_${member.id}`}>{t('event.team.meet_cta', locale, { name: member.name })}</a>
   </div>
 </article>
 

@@ -11,6 +11,7 @@ specs:
   rtp: 0.951
   volatility: [medium, high]
   mainFeature: "Treasure Chest Discovery Mechanic"
+  layout: "5×5 Treasure Grid"
 highlights:
   - "5×5 treasure grid with hidden chests"
   - "Energy-based exploration system"

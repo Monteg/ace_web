@@ -2,15 +2,17 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import type { CollectionEntry } from 'astro:content';
+import { localeFromPath, localizePath, t } from '../../lib/i18n';
 
 interface Props { game: CollectionEntry<'games'>; name: string; description: string; lead?: boolean }
 const { game, name, description, lead = false } = Astro.props;
-const href = `/portfolio/${game.id}`;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const href = localizePath(`/portfolio/${game.id}`, locale);
 ---
 
 <article class:list={['event-game', 'rv', { 'event-game-lead': lead }]}>
-  <a class="game-visual" href={href} aria-label={`Explore ${name}`}>
-    <Image src={lead ? game.data.hero : game.data.card} alt={`${name} game artwork`} widths={lead ? [480, 800, 1200] : [360, 540, 720]} sizes={lead ? '(max-width: 768px) 92vw, 760px' : '(max-width: 600px) 92vw, (max-width: 992px) 46vw, 400px'} loading="lazy" />
+  <a class="game-visual" href={href} aria-label={t('event.game.explore_aria', locale, { game: name })}>
+    <Image src={lead ? game.data.hero : game.data.card} alt={t('event.game.art_alt', locale, { game: name })} widths={lead ? [480, 800, 1200] : [360, 540, 720]} sizes={lead ? '(max-width: 768px) 92vw, 760px' : '(max-width: 600px) 92vw, (max-width: 992px) 46vw, 400px'} loading="lazy" />
   </a>
   <div class="game-copy">
     <h3><a href={href}>{name}<Icon name="ph:arrow-up-right" aria-hidden="true" /></a></h3>

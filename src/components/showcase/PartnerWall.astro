@@ -7,12 +7,12 @@
  */
 interface Props {
   logos: { name: string; src: string }[];
-  locale?: string;
 }
 
-import { getTranslations } from '../../i18n/get-translations';
-const { logos, locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
+import { localeFromPath, t } from '../../lib/i18n';
+
+const { logos } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 const show = logos.length > 0;
 // Speed stays constant however many logos there are: about 5s per logo,
 // with a floor so a short list does not whip past.
@@ -22,7 +22,7 @@ const seconds = Math.max(24, logos.length * 5);
 {show && (
   <section class="partners" id="partners" aria-labelledby="partners-h">
     <div class="wrap">
-      <h2 class="d3" id="partners-h">{t('home.partners.title')}</h2>
+      <h2 class="d3" id="partners-h">{t('home.partners.title', locale)}</h2>
     </div>
     <div class="marquee" style={`--marquee-s: ${seconds}s`}>
       <ul class="track">

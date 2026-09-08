@@ -2,17 +2,18 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import type { ImageMetadata } from 'astro';
-import { getTranslations } from '../i18n/get-translations';
+import { localeFromPath, t } from '../lib/i18n';
 
 interface Props {
   name: string;
   src: string;
   poster: ImageMetadata;
-  locale?: string;
+  posterAlt?: string;
 }
 
-const { name, src, poster, locale = 'en' } = Astro.props;
-const t = getTranslations(locale);
+const { name, src, poster, posterAlt = '' } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const copyDefault = t('game.media.copy_link', locale);
 ---
 
 <!--
@@ -20,30 +21,30 @@ const t = getTranslations(locale);
   which is why a game page opened as a black rectangle for six seconds or more.
   Nothing is fetched here until the visitor asks for it.
 -->
-<div class="demo" data-src={src}>
+<div class="demo" data-src={src} data-copied={t('global.action.copied', locale)} data-copy-failed={t('global.action.copy_failed', locale)} data-copy-default={copyDefault}>
   <div class="demo-poster">
-    <Image src={poster} alt="" widths={[900, 1400, 1920]} sizes="100vw" loading="lazy" />
+    <Image src={poster} alt={posterAlt} widths={[900, 1400, 1920]} sizes="100vw" loading="lazy" />
   </div>
 
   <button class="demo-play" type="button" data-play>
     <span class="disc" aria-hidden="true"><Icon name="ph:play-fill" /></span>
-    <span class="lab">{t('game.play')} {name}</span>
-    <span class="sub">{t('game.demo.free_play')}</span>
+    <span class="lab">{t('game.media.play_title', locale, { name })}</span>
+    <span class="sub">{t('game.media.free_play', locale)}</span>
   </button>
 
   <div class="demo-loading" data-loading hidden>
-    <p class="lab">{t('game.demo.loading', { name })}</p>
-    <div class="skel" role="progressbar" aria-label={t('game.demo.loading', { name })}><i></i></div>
+    <p class="lab">{t('game.media.loading', locale, { name })}</p>
+    <div class="skel" role="progressbar" aria-label={t('game.media.loading', locale, { name })}><i></i></div>
   </div>
 </div>
 
 <p class="demo-note">
   <span class="age">18+</span>
-  <span>{t('game.demo.evaluation')}</span>
-  <span>{t('game.demo.operator_notice')}</span>
-  <button class="copy" type="button" data-copy={src} data-copied={t('game.demo.copied')} data-copy-failed={t('game.demo.copy_failed')} data-copy-reset={t('game.demo.copy_link')} data-frame-title={t('game.demo.frame_title')}>
+  <span>{t('game.media.evaluation', locale)}</span>
+  <span>{t('game.media.operator_only', locale)}</span>
+  <button class="copy" type="button" data-copy={src}>
     <Icon name="ph:link-simple" />
-    <span data-copy-label>{t('game.demo.copy_link')}</span>
+    <span data-copy-label>{copyDefault}</span>
   </button>
 </p>
 
@@ -124,11 +125,12 @@ const t = getTranslations(locale);
       const label = btn.querySelector<HTMLElement>('[data-copy-label]')!;
       try {
         await navigator.clipboard.writeText(btn.dataset.copy!);
-        label.textContent = btn.dataset.copied ?? 'Copied';
+        label.textContent = btn.closest<HTMLElement>('.demo-note')?.previousElementSibling?.getAttribute('data-copied') ?? 'Copied';
       } catch {
-        label.textContent = btn.dataset.copyFailed ?? 'Copy failed';
+        label.textContent = btn.closest<HTMLElement>('.demo-note')?.previousElementSibling?.getAttribute('data-copy-failed') ?? 'Copy failed';
       }
-      setTimeout(() => (label.textContent = btn.dataset.copyReset ?? 'Copy demo link'), 1800);
+      const demo = btn.closest<HTMLElement>('.demo-note')?.previousElementSibling;
+      setTimeout(() => (label.textContent = demo?.getAttribute('data-copy-default') ?? 'Copy demo link'), 1800);
     });
   }
 
@@ -145,7 +147,7 @@ const t = getTranslations(locale);
 
         const frame = document.createElement('iframe');
         frame.src = demo.dataset.src!;
-        frame.title = play.querySelector('.lab')?.textContent?.trim() ?? demo.closest('.game-media')?.querySelector<HTMLElement>('[data-frame-title]')?.dataset.frameTitle ?? 'Game demo';
+        frame.title = play.querySelector('.lab')?.textContent?.trim() ?? 'Game demo';
         frame.allow = 'fullscreen; autoplay; gamepad';
         frame.allowFullscreen = true;
         // The game runs on our own domain, but it is still a separate origin:

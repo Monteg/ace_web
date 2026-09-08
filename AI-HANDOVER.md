@@ -22,31 +22,26 @@ If any gate says FAIL, stop and read that line.
 Every gate prints what it found. Do not proceed with other work on a broken
 baseline.
 
-With `CONTENT_SOURCE=local`, no database or account is required. CMS work uses
-the Docker/Directus setup in `docs/CMS.md` and environment names from
-`.env.example`. Never commit credentials. The contact form needs three
-production secrets (section 8).
+There is nothing else to set up. No database, no accounts, no environment
+variables for local work. `npm install` may print a few "vulnerabilities" from
+build-time tooling and `npm run dev` may announce a newer Astro; both are
+noise, not problems. The contact form needs three secrets in production
+only (section 8).
 
 ## 2. Mental model in one paragraph
 
-After cutover, Directus working content is published as an immutable release;
-the build downloads that one release into ignored `src/generated/cms/` and
-renders static pages. `src/lib/content-source.ts` is the transition adapter.
-`CONTENT_SOURCE=local` still reads Markdown and TypeScript data as a read-only
-legacy fallback. Site effects remain code-owned. Events remain outside CMS in
-the first version. Nothing is fetched from Directus in a visitor's browser.
+A game is one Markdown file in `src/content/games/`. The build reads all of
+them, checks each against the schema in `src/content.config.ts`, and renders
+one page per game plus the home page, the catalogue and the maths board from
+the same records. Images in `src/assets/` are resized and converted at build
+time. Site-wide facts (nav, contact, FAQ, stats, partner logos) live in
+`src/data/site.ts`. Effect defaults and their browser-storage contracts live
+in `src/data/experience-card-settings.ts` and
+`src/data/border-trail-settings.ts`. Nothing on the site is typed twice.
 
-## 3. Add a game in CMS
+## 3. Add a game
 
-Follow `docs/CMS.md`: create Games item, fill shared specs/demo/media, create
-Approved English game/section/item/gallery translations, Save, then publish
-only the ready rows. Field-level rules are in `docs/CMS-GAMES.md`; release
-semantics are in `docs/CMS-RELEASES.md`.
-
-## 3.1. Legacy local fallback only
-
-Use this workflow only while `CONTENT_SOURCE=local` or to maintain the frozen
-migration backup. Do not update it in parallel with Directus after cutover.
+The most common task. Two images and one file.
 
 **Step 1: images.** Put the key art at `src/assets/games/<slug>.webp` and the
 wide banner at `src/assets/heroes/<slug>.webp`. Any dimensions; the build
@@ -62,7 +57,7 @@ npm run new-game -- --slug neon-vault --name "Neon Vault" --type slot
 
 This writes `src/content/games/neon-vault.md` with every field present and
 the ones you must fill marked `TODO`. A `TODO` left in the file fails
-`npm run ship`, so it cannot slip onto the live site. `--type` is `slot`, `instant`, `crash` or `table`.
+`npm run ship`, so it cannot slip onto the live site. `--type` is `slot`, `instant` or `table`.
 
 **Step 3: fill it in.** Open the file. The front matter (between the `---`
 lines) is data; everything below is the overview prose. Field by field:
@@ -70,7 +65,7 @@ lines) is data; everything below is the overview prose. Field by field:
 | field | what to put | rules |
 | --- | --- | --- |
 | `name` | display name | as the studio spells it |
-| `type` | `slot`, `instant`, `crash` or `table` | drives the badge, the filters, the maths board |
+| `type` | `slot`, `instant` or `table` | drives the badge, the filters, the maths board |
 | `status` | `live` or `coming_soon` | `coming_soon` hides Play, adds the pill, no demo required |
 | `order` | a number, default 100 | lower comes first in the catalogue and the home grid; live titles always precede coming soon |
 | `seo.title` | tab title, up to 70 chars | e.g. `Neon Vault - slot game by Ace Games` |
@@ -138,17 +133,21 @@ request" (or "In development" for `coming_soon`) instead of a player.
 
 | what | where |
 | --- | --- |
-| hero, section headings, buttons and UI labels | existing Directus Site String keys; `src/i18n/en.ts` is the seeded English contract, not a second post-cutover editor |
-| FAQ questions and answers | Directus `faq_items` and `faq_item_translations` |
-| nav and global enum labels | Directus Site Strings; links/layout remain code-owned |
-| company/contact/footer copy | existing Directus Site String slots; structural facts not yet modelled stay in `src/data/site.ts` |
-| a new arbitrary UI slot | add frontend placement and seed its key; a CMS key alone cannot create layout |
+| hero headline, hero line, hero buttons | `src/components/showcase/Wall.astro`, the `<h1>`, `<p class="lead">` and `.wall-btns` block |
+| section headings and leads on the home page | `src/pages/index.astro`, each `<h2 class="d1">` and the `<p class="lead">` after it |
+| the four proof figures under the hero | `heroStats` in `src/data/site.ts`; `value: null` shows the dashed "TBC" |
+| the "Maths, art and engine" block | `src/components/showcase/Craft.astro` |
+| the integration and compliance table | `integration` in `src/data/site.ts`; a `value` replaces the dashed hint |
+| FAQ questions and answers | `faq` in `src/data/site.ts`; `a: null` shows the hint as a gap |
+| nav labels and links | `nav` in `src/data/site.ts`; `Header.astro` intentionally shows only Games, FAQ and Event, while Games categories come from `src/lib/game-categories.ts` |
+| the one call-to-action label | `CTA` in `src/data/site.ts`; it is used everywhere, change it once |
+| company name, address, emails | `company` in `src/data/site.ts`; the footer, the structured data and the legal page descriptions all read from it |
+| footer legal line | `src/components/Footer.astro` |
 | privacy policy, terms | `src/content/legal/*.md` |
-| a game's copy | Directus game/section/item translations; local Markdown only before cutover |
+| a game's copy | its file in `src/content/games/` |
 
-After any CMS copy change, Save, approve, publish only the intended keys and
-let the release run `check` and `ship`. For code-owned copy changes, run the
-same commands locally.
+After any copy change, re-read the page once for grammar and for em-dashes,
+then `npm run ship`.
 
 ## 6. Change how it looks
 

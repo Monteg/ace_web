@@ -11,19 +11,17 @@
  */
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
-import type { GameRecord } from '../../lib/content-source';
-import { getActiveLocales } from '../../i18n/config';
-import { getTranslations } from '../../i18n/get-translations';
-import { localePath } from '../../i18n/routes';
+import type { CollectionEntry } from 'astro:content';
+import { localeFromPath, localizePath, t } from '../../lib/i18n';
+import { getSiteContent } from '../../lib/site-content';
 
 interface Props {
-  games: GameRecord[];
-  locale?: string;
+  games: CollectionEntry<'games'>[];
 }
 
-const { games, locale = 'en' } = Astro.props;
-const locales = getActiveLocales();
-const t = getTranslations(locale);
+const { games } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { CTA } = getSiteContent(locale);
 const live = games.filter((g) => g.data.status === 'live');
 const pool = live.length >= 12 ? live : games;
 
@@ -56,13 +54,13 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
 
   <div class="wrap">
     <div class="wall-copy" data-wall-copy>
-      <h1 class="d0">{t('home.hero.title_lead')} <em>{t('home.hero.title_accent')}</em></h1>
+      <h1 class="d0">{t('home.hero.title', locale)} <em>{t('home.hero.title_accent', locale)}</em></h1>
       <p class="lead">
-        {t('home.hero.description', { count: live.length })}
+        {t('home.hero.lead', locale, { count: live.length })}
       </p>
       <div class="wall-btns">
-        <a class="btn btn-primary" href={`${localePath('/', locale, locales)}#games`}>
-          {t('home.hero.view_games')}
+        <a class="btn btn-primary" href={localizePath('/#games', locale)}>
+          {t('global.action.view_games', locale)}
           <span class="disc" aria-hidden="true"><Icon name="ph:arrow-down" /></span>
         </a>
         <button
@@ -72,7 +70,7 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
           aria-haspopup="dialog"
           aria-controls="contact-dialog"
           hidden
-        >{t('header.lets_talk')}</button>
+        >{CTA.label}</button>
       </div>
     </div>
   </div>
