@@ -18,9 +18,10 @@ interface Props {
   };
   index: number;
   eager?: boolean;
+  autoPreview?: boolean;
 }
 
-const { item, index, eager = false } = Astro.props;
+const { item, index, eager = false, autoPreview = false } = Astro.props;
 const themes = {
   trust: { background: trustBackground, artwork: trustArtwork, className: 'blue' },
   innovation: { background: innovationBackground, artwork: innovationArtwork, className: 'gold' },
@@ -29,7 +30,7 @@ const themes = {
 const theme = themes[item.image as keyof typeof themes] ?? themes.trust;
 const number = String(index + 1).padStart(2, '0');
 const settings = experienceCardDefaults;
-const stageStyle = `--card-perspective: ${settings.perspective}px; --art-depth: ${settings.artDepth}px; --copy-depth: ${settings.copyDepth}px; --glare-opacity: ${settings.glareOpacity}; --hologram-logo: url('${aceLogoPattern.src}');`;
+const stageStyle = `--card-perspective: ${settings.perspective}px; --art-depth: ${settings.artDepth}px; --copy-depth: ${settings.copyDepth}px; --glare-opacity: ${settings.glareOpacity}; --hologram-logo: url('${aceLogoPattern.src}'); --hologram-size: ${settings.hologramSize}px; --hologram-pattern-opacity: ${settings.hologramPatternOpacity}; --hologram-reveal: ${settings.hologramReveal}; --hologram-angle: ${settings.hologramAngle}deg;`;
 ---
 
 <div
@@ -44,6 +45,11 @@ const stageStyle = `--card-perspective: ${settings.perspective}px; --art-depth: 
     data-hover-scale={settings.hoverScale}
     data-motion-duration={settings.response}
     data-glare-travel={settings.glareTravel}
+    data-auto-motion-enabled={settings.autoMotionEnabled}
+    data-auto-sweep-duration={settings.autoSweepDuration}
+    data-auto-transition-duration={settings.autoTransitionDuration}
+    data-auto-loop-delay={settings.autoLoopDelay}
+    data-auto-preview={autoPreview}
   >
     <div class="experience-card-body" aria-hidden="true">
       <ScalableCardFrame src={theme.background} />
@@ -180,17 +186,17 @@ const stageStyle = `--card-perspective: ${settings.perspective}px; --art-depth: 
     content: '';
     position: absolute;
     inset: -42%;
-    transform: rotate(35deg);
+    transform: rotate(var(--hologram-angle, 35deg));
     transform-origin: center;
     background-image: var(--hologram-logo);
     background-repeat: repeat;
     background-position: center;
-    background-size: clamp(48px, 3vw, 56px) auto;
-    opacity: 0.58;
+    background-size: var(--hologram-size, 56px) auto;
+    opacity: var(--hologram-pattern-opacity, 0.58);
     filter: grayscale(1) brightness(1.75) contrast(1.18) drop-shadow(0 0 5px rgb(174 239 255 / 0.22));
   }
   .experience-card[data-pointer-active='true'] .experience-card-hologram {
-    opacity: min(0.22, calc(var(--glare-opacity, 0.28) * 0.7));
+    opacity: var(--hologram-reveal, 0.22);
   }
 
   .experience-card-glare {

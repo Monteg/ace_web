@@ -182,9 +182,11 @@ public Header or Footer and it must stay out of navigation and the sitemap.
 
 The first tool controls the three cards in **Redefining iGaming Excellence**:
 maximum tilt, hover scale, perspective, response time, artwork depth, text
-depth, glare strength and glare travel. The second tool controls the Border
-Trail around the public navigation: orbit duration, trail length, line
-thickness, intensity and blur.
+depth, glare strength and glare travel. It also controls the compact-layout
+automatic loop (enabled state, sweep, entry/exit and pause) and the tiled logo
+hologram (size, print opacity, reveal strength and angle). The second tool
+controls the Border Trail around the public navigation: orbit duration, trail
+length, line thickness, intensity and blur.
 
 The effects are deliberately independent. Each tool has its own preview and
 its own Apply to site, Copy settings and Reset actions. Apply stores a preset
@@ -196,7 +198,10 @@ in the current browser and dispatches a same-tab update. The storage keys are:
 Defaults live in their matching `src/data/*-settings.ts` file. Runtime
 normalization and application live in `src/lib/experience-card-motion.ts` and
 `src/lib/border-trail.ts`. Do not add the Border Trail to the card or combine
-the two settings objects.
+the two settings objects. Every range in the lab has a paired numeric input;
+changing either control updates the other. Its inline Reset returns only that
+value to the latest applied browser preset, while Reset to defaults restores
+the complete built-in preset in the preview.
 
 The excellence cards use a scalable frame generated through Astro `getImage`
 and CSS `border-image`. At 561 to 992 px they switch to a horizontal layout;

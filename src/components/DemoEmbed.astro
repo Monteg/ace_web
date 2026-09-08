@@ -14,151 +14,351 @@ interface Props {
 const { name, src, poster, posterAlt = '' } = Astro.props;
 const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 const copyDefault = t('game.media.copy_link', locale);
+const fullscreenDefault = t('game.media.fullscreen', locale);
 ---
 
-<!--
-  Click to play. The old site booted an 11 to 61 MB game client on page load,
-  which is why a game page opened as a black rectangle for six seconds or more.
-  Nothing is fetched here until the visitor asks for it.
--->
-<div class="demo" data-src={src} data-copied={t('global.action.copied', locale)} data-copy-failed={t('global.action.copy_failed', locale)} data-copy-default={copyDefault}>
-  <div class="demo-poster">
-    <Image src={poster} alt={posterAlt} widths={[900, 1400, 1920]} sizes="100vw" loading="lazy" />
+<div
+  class="demo-experience"
+  data-demo-experience
+  data-copied={t('global.action.copied', locale)}
+  data-copy-failed={t('global.action.copy_failed', locale)}
+  data-copy-default={copyDefault}
+  data-fullscreen-default={fullscreenDefault}
+  data-fullscreen-exit={t('game.media.exit_fullscreen', locale)}
+>
+  <div class="demo-stage" data-demo-stage data-device="desktop">
+    <div class="demo" data-src={src}>
+      <div class="demo-poster">
+        <Image src={poster} alt={posterAlt} widths={[900, 1400, 1920]} sizes="100vw" loading="lazy" />
+      </div>
+
+      <button class="demo-play" type="button" data-play>
+        <span class="disc" aria-hidden="true"><Icon name="ph:play-fill" /></span>
+        <span class="lab">{t('game.media.play_title', locale, { name })}</span>
+        <span class="sub">{t('game.media.free_play', locale)}</span>
+      </button>
+
+      <div class="demo-loading" data-loading hidden>
+        <p class="lab">{t('game.media.loading', locale, { name })}</p>
+        <div class="skel" role="progressbar" aria-label={t('game.media.loading', locale, { name })}><i></i></div>
+      </div>
+    </div>
   </div>
 
-  <button class="demo-play" type="button" data-play>
-    <span class="disc" aria-hidden="true"><Icon name="ph:play-fill" /></span>
-    <span class="lab">{t('game.media.play_title', locale, { name })}</span>
-    <span class="sub">{t('game.media.free_play', locale)}</span>
-  </button>
+  <div class="demo-toolbar">
+    <p class="demo-note">
+      <span class="age">18+</span>
+      <span>{t('game.media.evaluation', locale)}</span>
+      <span class="operator-note">{t('game.media.operator_only', locale)}</span>
+    </p>
 
-  <div class="demo-loading" data-loading hidden>
-    <p class="lab">{t('game.media.loading', locale, { name })}</p>
-    <div class="skel" role="progressbar" aria-label={t('game.media.loading', locale, { name })}><i></i></div>
+    <div class="demo-actions" role="group" aria-label={t('game.media.controls_aria', locale)}>
+      <div class="device-switch" role="group" aria-label={t('game.media.device_aria', locale)}>
+        <button type="button" data-device-control="desktop" aria-pressed="true">
+          <Icon name="ph:desktop" aria-hidden="true" />
+          <span>{t('game.media.desktop', locale)}</span>
+        </button>
+        <button type="button" data-device-control="mobile" aria-pressed="false">
+          <Icon name="ph:device-mobile" aria-hidden="true" />
+          <span>{t('game.media.mobile', locale)}</span>
+        </button>
+      </div>
+
+      <button class="tool-button" type="button" data-copy={src} aria-label={copyDefault}>
+        <Icon name="ph:link-simple" aria-hidden="true" />
+        <span data-copy-label>{copyDefault}</span>
+      </button>
+      <button class="tool-button" type="button" data-fullscreen aria-label={fullscreenDefault} hidden>
+        <Icon name="ph:corners-out" aria-hidden="true" />
+        <span data-fullscreen-label>{fullscreenDefault}</span>
+      </button>
+    </div>
   </div>
 </div>
 
-<p class="demo-note">
-  <span class="age">18+</span>
-  <span>{t('game.media.evaluation', locale)}</span>
-  <span>{t('game.media.operator_only', locale)}</span>
-  <button class="copy" type="button" data-copy={src}>
-    <Icon name="ph:link-simple" />
-    <span data-copy-label>{copyDefault}</span>
-  </button>
-</p>
-
 <style>
+  .demo-experience { min-width: 0; }
+  .demo-stage {
+    display: flex;
+    min-width: 0;
+    justify-content: center;
+    overflow: hidden;
+    background: #060708;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    transition: padding var(--dur-2) var(--ease), background-color var(--dur-2) var(--ease);
+  }
   .demo {
-    position: relative; aspect-ratio: 16 / 9; max-height: 80svh;
-    border: 1px solid var(--line); border-radius: var(--radius);
-    overflow: hidden; background: #000;
+    position: relative;
+    width: 100%;
+    max-height: 80svh;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #000;
+    border-radius: calc(var(--radius-l) - 1px);
+    transition: width var(--dur-2) var(--ease), aspect-ratio var(--dur-2) var(--ease), border-radius var(--dur-2) var(--ease);
+  }
+  .demo-stage[data-device='mobile'] { padding: var(--sp-5); background: var(--ink-2); }
+  .demo-stage[data-device='mobile'] .demo {
+    width: min(100%, 430px);
+    max-height: min(76svh, 760px);
+    aspect-ratio: 9 / 16;
+    border: 1px solid var(--line-2);
+    border-radius: clamp(20px, 3vw, 30px);
+    box-shadow: var(--shadow-2);
+  }
+  .demo-stage:fullscreen {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    align-items: center;
+    background: #000;
+    border: 0;
+    border-radius: 0;
+  }
+  .demo-stage:fullscreen .demo {
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+  .demo-stage[data-device='mobile']:fullscreen { padding: var(--sp-5); }
+  .demo-stage[data-device='mobile']:fullscreen .demo {
+    width: auto;
+    height: calc(100vh - 2 * var(--sp-5));
+    aspect-ratio: 9 / 16;
+    border-radius: clamp(20px, 3vw, 30px);
   }
   .demo-poster { position: absolute; inset: 0; }
-  .demo-poster :global(img) { width: 100%; height: 100%; object-fit: cover; opacity: 0.42; }
+  .demo-poster :global(img) { width: 100%; height: 100%; object-fit: cover; opacity: 0.48; }
   .demo-poster::after {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(72% 72% at 50% 50%, rgb(17 17 17 / 0.62), rgb(17 17 17 / 0.94));
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(72% 72% at 50% 50%, rgb(17 17 17 / 0.52), rgb(17 17 17 / 0.9));
   }
-
   .demo-play {
-    position: absolute; inset: 0; z-index: 2;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: var(--sp-4); padding: var(--sp-5);
-    background: transparent; border: 0; cursor: pointer; color: var(--fg); font: inherit;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-3);
+    padding: var(--sp-5);
+    color: var(--fg);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
   }
   .disc {
-    width: 74px; height: 74px; border-radius: var(--radius-pill); background: var(--brand);
-    display: grid; place-items: center; color: var(--on-brand-button);
-    transition: transform 0.2s var(--ease);
+    display: grid;
+    width: 74px;
+    height: 74px;
+    place-items: center;
+    color: var(--on-brand-button);
+    background: var(--brand);
+    border-radius: var(--radius-pill);
+    box-shadow: 0 18px 44px -14px rgb(255 86 0 / 0.8);
+    transition: transform var(--dur-1) var(--ease);
   }
-  .disc svg { width: 30px; height: 30px; stroke: currentColor; stroke-width: var(--button-icon-stroke); stroke-linejoin: round; }
+  .disc :global(svg) { width: 30px; height: 30px; stroke-width: var(--button-icon-stroke); }
   .demo-play:hover .disc { transform: scale(1.07); }
-  @media (prefers-reduced-motion: reduce) { .demo-play:hover .disc { transform: none; } }
-
   .lab {
-    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif; font-size: 1.35rem;
+    margin: 0;
+    color: var(--on-brand-button);
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
+    font-size: 1.45rem;
+    font-weight: var(--button-label-weight);
+    letter-spacing: var(--button-label-spacing);
+    line-height: 1;
+    text-align: center;
     text-shadow: 0 2px 12px rgb(17 17 17 / 0.9);
   }
-  .demo-play .lab { color: var(--on-brand-button); font-weight: var(--button-label-weight); letter-spacing: var(--button-label-spacing); }
   .sub {
-    font-size: 13px; color: var(--fg-2); max-width: 38ch; text-align: center; line-height: 1.5;
+    max-width: 38ch;
+    color: var(--fg-2);
+    font-size: 13px;
+    line-height: 1.5;
+    text-align: center;
     text-shadow: 0 1px 10px rgb(17 17 17 / 0.95);
   }
-
   .demo-loading {
-    position: absolute; inset: 0; z-index: 3; background: #000;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: var(--sp-4); padding: var(--sp-5);
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-4);
+    padding: var(--sp-5);
+    background: #000;
   }
   .demo-loading[hidden] { display: none; }
-  .skel { width: min(360px, 80%); height: 8px; border-radius: var(--radius-pill); background: var(--ink-3); overflow: hidden; position: relative; }
-  .skel i { position: absolute; inset: 0; width: 38%; background: linear-gradient(90deg, transparent, var(--line-2), transparent); animation: sh 1.15s linear infinite; }
-  @keyframes sh { from { transform: translateX(-100%); } to { transform: translateX(320%); } }
-  @media (prefers-reduced-motion: reduce) { .skel i { animation: none; width: 100%; opacity: 0.4; } }
+  .skel { position: relative; width: min(360px, 80%); height: 8px; overflow: hidden; background: var(--ink-3); border-radius: var(--radius-pill); }
+  .skel i { position: absolute; inset: 0; width: 38%; background: linear-gradient(90deg, transparent, var(--line-2), transparent); animation: demo-loading 1.15s linear infinite; }
+  @keyframes demo-loading { from { transform: translateX(-100%); } to { transform: translateX(320%); } }
+  .demo :global(iframe) { position: absolute; inset: 0; z-index: 4; width: 100%; height: 100%; border: 0; }
 
-  .demo :global(iframe) { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 4; }
-
+  .demo-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3) var(--sp-4);
+    padding-top: var(--sp-3);
+  }
   .demo-note {
-    display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-5); align-items: center;
-    margin-top: var(--sp-3); font-size: 12.5px; color: var(--fg-3);
+    display: flex;
+    min-width: 0;
+    flex: 1 1 360px;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2) var(--sp-3);
+    margin: 0;
+    color: var(--fg-3);
+    font-size: 11.5px;
+    line-height: 1.4;
   }
+  .operator-note { color: color-mix(in srgb, var(--fg-3) 80%, transparent); }
   .age {
-    font-family: 'JetBrains Mono Variable', monospace; font-size: 11px;
-    border: 1px solid var(--line-2); border-radius: var(--radius-pill);
-    padding: 4px 10px; color: var(--fg-2);
+    padding: 4px 10px;
+    color: var(--fg-2);
+    border: 1px solid var(--line-2);
+    border-radius: var(--radius-pill);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 10.5px;
   }
-  /* an evaluator shares demos with their team all day; one click, no URL bar */
-  .copy {
-    margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
-    font: inherit; font-size: 12.5px; color: var(--fg-2); cursor: pointer;
-    background: transparent; border: 1px solid var(--line-2); border-radius: var(--radius-pill);
-    padding: 7px 12px; min-height: 36px; transition: color var(--dur-1), border-color var(--dur-1);
+  .demo-actions,
+  .device-switch { display: flex; align-items: center; gap: var(--sp-2); }
+  .device-switch {
+    gap: 2px;
+    padding: 3px;
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
   }
-  .copy:hover { color: var(--fg); border-color: var(--fg-3); }
-  .copy svg { width: 14px; height: 14px; }
+  .device-switch button,
+  .tool-button {
+    display: inline-flex;
+    min-height: 38px;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 12px;
+    color: var(--fg-2);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    font: inherit;
+    font-size: 11.5px;
+    line-height: 1;
+    white-space: nowrap;
+    transition: color var(--dur-1), background-color var(--dur-1), border-color var(--dur-1), transform var(--dur-1) var(--ease);
+  }
+  .device-switch button:hover,
+  .tool-button:hover { color: var(--fg); }
+  .device-switch button[aria-pressed='true'] { color: var(--on-brand-button); background: var(--brand); }
+  .tool-button { border-color: var(--line-2); }
+  .device-switch :global(svg),
+  .tool-button :global(svg) { width: 16px; height: 16px; stroke-width: var(--button-icon-stroke); }
+  .device-switch button:active,
+  .tool-button:active { transform: scale(0.97); }
+  .tool-button[hidden] { display: none; }
+
+  @media (max-width: 760px) {
+    .demo-actions { width: 100%; flex-wrap: wrap; }
+    .device-switch { flex: 1 1 auto; }
+    .device-switch button { flex: 1; }
+    .operator-note { display: none; }
+  }
+  @media (max-width: 520px) {
+    .demo-stage[data-device='mobile'] { padding: var(--sp-3); }
+    .demo-toolbar { align-items: stretch; }
+    .demo-note { flex-basis: 100%; }
+    .tool-button span { display: none; }
+    .tool-button { width: 40px; padding-inline: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .demo-stage,
+    .demo,
+    .disc,
+    .device-switch button,
+    .tool-button { transition: none; }
+    .demo-play:hover .disc { transform: none; }
+    .skel i { width: 100%; animation: none; opacity: 0.4; }
+  }
 </style>
 
 <script>
-  for (const btn of document.querySelectorAll<HTMLButtonElement>('.copy[data-copy]')) {
-    btn.addEventListener('click', async () => {
-      const label = btn.querySelector<HTMLElement>('[data-copy-label]')!;
+  for (const experience of document.querySelectorAll<HTMLElement>('[data-demo-experience]')) {
+    const stage = experience.querySelector<HTMLElement>('[data-demo-stage]');
+    const demo = experience.querySelector<HTMLElement>('.demo[data-src]');
+    const play = demo?.querySelector<HTMLButtonElement>('[data-play]');
+    const loading = demo?.querySelector<HTMLElement>('[data-loading]');
+    const copy = experience.querySelector<HTMLButtonElement>('[data-copy]');
+    const fullscreen = experience.querySelector<HTMLButtonElement>('[data-fullscreen]');
+    const fullscreenLabel = fullscreen?.querySelector<HTMLElement>('[data-fullscreen-label]');
+    const deviceControls = Array.from(experience.querySelectorAll<HTMLButtonElement>('[data-device-control]'));
+
+    for (const control of deviceControls) {
+      control.addEventListener('click', () => {
+        const device = control.dataset.deviceControl === 'mobile' ? 'mobile' : 'desktop';
+        if (stage) stage.dataset.device = device;
+        deviceControls.forEach((candidate) => candidate.setAttribute('aria-pressed', String(candidate === control)));
+      });
+    }
+
+    copy?.addEventListener('click', async () => {
+      const label = copy.querySelector<HTMLElement>('[data-copy-label]');
       try {
-        await navigator.clipboard.writeText(btn.dataset.copy!);
-        label.textContent = btn.closest<HTMLElement>('.demo-note')?.previousElementSibling?.getAttribute('data-copied') ?? 'Copied';
+        await navigator.clipboard.writeText(copy.dataset.copy ?? '');
+        if (label) label.textContent = experience.dataset.copied ?? 'Copied';
       } catch {
-        label.textContent = btn.closest<HTMLElement>('.demo-note')?.previousElementSibling?.getAttribute('data-copy-failed') ?? 'Copy failed';
+        if (label) label.textContent = experience.dataset.copyFailed ?? 'Copy failed';
       }
-      const demo = btn.closest<HTMLElement>('.demo-note')?.previousElementSibling;
-      setTimeout(() => (label.textContent = demo?.getAttribute('data-copy-default') ?? 'Copy demo link'), 1800);
+      window.setTimeout(() => {
+        if (label) label.textContent = experience.dataset.copyDefault ?? 'Copy demo link';
+      }, 1800);
     });
-  }
 
-  for (const demo of document.querySelectorAll<HTMLElement>('.demo[data-src]')) {
-    const play = demo.querySelector<HTMLButtonElement>('[data-play]');
-    const loading = demo.querySelector<HTMLElement>('[data-loading]');
-    if (!play || !loading) continue;
+    if (stage && fullscreen && stage.requestFullscreen) {
+      fullscreen.hidden = false;
+      fullscreen.addEventListener('click', async () => {
+        if (document.fullscreenElement === stage) await document.exitFullscreen();
+        else await stage.requestFullscreen();
+      });
+      document.addEventListener('fullscreenchange', () => {
+        if (!fullscreenLabel) return;
+        const label = document.fullscreenElement === stage
+          ? experience.dataset.fullscreenExit ?? 'Exit fullscreen'
+          : experience.dataset.fullscreenDefault ?? 'Fullscreen';
+        fullscreenLabel.textContent = label;
+        fullscreen.setAttribute('aria-label', label);
+      });
+    }
 
-    play.addEventListener(
-      'click',
-      () => {
-        play.hidden = true;
-        loading.hidden = false;
+    if (!demo || !play || !loading) continue;
+    play.addEventListener('click', () => {
+      play.hidden = true;
+      loading.hidden = false;
 
-        const frame = document.createElement('iframe');
-        frame.src = demo.dataset.src!;
-        frame.title = play.querySelector('.lab')?.textContent?.trim() ?? 'Game demo';
-        frame.allow = 'fullscreen; autoplay; gamepad';
-        frame.allowFullscreen = true;
-        // The game runs on our own domain, but it is still a separate origin:
-        // give it only what it needs.
-        frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups');
-        frame.addEventListener('load', () => {
-          loading.hidden = true;
-        });
-        demo.appendChild(frame);
-      },
-      { once: true },
-    );
+      const frame = document.createElement('iframe');
+      frame.src = demo.dataset.src ?? '';
+      frame.title = play.querySelector('.lab')?.textContent?.trim() ?? 'Game demo';
+      frame.allow = 'fullscreen; autoplay; gamepad';
+      frame.allowFullscreen = true;
+      frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups');
+      frame.addEventListener('load', () => {
+        loading.hidden = true;
+      });
+      demo.appendChild(frame);
+    }, { once: true });
   }
 </script>

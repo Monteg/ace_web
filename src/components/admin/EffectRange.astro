@@ -1,0 +1,119 @@
+---
+interface Props {
+  id: string;
+  name: string;
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  unit?: string;
+}
+
+const { id, name, label, value, min, max, step, unit = '' } = Astro.props;
+---
+
+<div class="control-row" data-effect-control={name}>
+  <label for={id}>{label}</label>
+  <div class="control-edit">
+    <input
+      class="control-number"
+      id={`${id}Number`}
+      data-number-for={id}
+      type="number"
+      min={min}
+      max={max}
+      step={step}
+      value={value}
+      aria-label={`${label} value`}
+    />
+    {unit && <span class="control-unit" aria-hidden="true">{unit}</span>}
+    <button
+      class="control-reset"
+      type="button"
+      data-reset-for={id}
+      aria-label={`Reset ${label} to the saved value`}
+      title="Return to saved value"
+    >
+      Reset
+    </button>
+  </div>
+  <input id={id} name={name} type="range" min={min} max={max} step={step} value={value} />
+</div>
+
+<style>
+  .control-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px 16px;
+    align-items: center;
+    color: var(--fg);
+    font-size: 0.95rem;
+  }
+  .control-row > label {
+    min-width: 0;
+    line-height: 1.35;
+  }
+  .control-edit {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .control-number {
+    width: 86px;
+    min-height: 34px;
+    padding: 6px 8px;
+    border: 1px solid var(--line-2);
+    border-radius: 8px;
+    outline: none;
+    background: var(--ink-0);
+    color: var(--peach);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.76rem;
+    font-variant-numeric: tabular-nums;
+    transition: border-color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+  }
+  .control-number:focus-visible {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgb(255 86 0 / 0.16);
+  }
+  .control-unit {
+    min-width: 16px;
+    color: var(--fg-3);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.7rem;
+  }
+  .control-reset {
+    min-height: 30px;
+    padding: 5px 9px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--fg-2);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease), background var(--dur-2) var(--ease);
+  }
+  .control-reset:hover,
+  .control-reset:focus-visible {
+    border-color: rgb(255 86 0 / 0.72);
+    outline: none;
+    background: rgb(255 86 0 / 0.08);
+    color: var(--fg);
+  }
+  .control-row > input[type='range'] {
+    grid-column: 1 / -1;
+    width: 100%;
+    accent-color: var(--brand);
+    cursor: pointer;
+  }
+
+  @media (max-width: 520px) {
+    .control-row { grid-template-columns: 1fr; }
+    .control-edit { justify-content: space-between; }
+    .control-row > input[type='range'] { grid-column: 1; }
+  }
+</style>

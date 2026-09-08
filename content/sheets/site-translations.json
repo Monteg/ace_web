@@ -336,6 +336,18 @@
     "status": "Missing"
   },
   {
+    "key": "global.label.preview",
+    "page": "Global",
+    "section": "Game detail",
+    "context": "Released game page without a public demo",
+    "type": "plain",
+    "en": "Preview",
+    "it": "Anteprima",
+    "pt": "Pré-visualização",
+    "es": "Vista previa",
+    "status": "Ready"
+  },
+  {
     "key": "header.nav.games",
     "page": "Global",
     "section": "Header",
@@ -1546,6 +1558,102 @@
     "pt": "",
     "es": "",
     "status": "Missing"
+  },
+  {
+    "key": "game.media.controls_aria",
+    "page": "Game Detail",
+    "section": "Demo",
+    "context": "Accessible label for demo utility controls",
+    "type": "aria",
+    "en": "Demo controls",
+    "it": "Controlli demo",
+    "pt": "Controles da demo",
+    "es": "Controles de la demo",
+    "status": "Ready"
+  },
+  {
+    "key": "game.media.device_aria",
+    "page": "Game Detail",
+    "section": "Demo",
+    "context": "Accessible label for demo viewport selector",
+    "type": "aria",
+    "en": "Preview device",
+    "it": "Dispositivo di anteprima",
+    "pt": "Dispositivo de pré-visualização",
+    "es": "Dispositivo de vista previa",
+    "status": "Ready"
+  },
+  {
+    "key": "game.media.desktop",
+    "page": "Game Detail",
+    "section": "Demo",
+    "context": "Desktop viewport control",
+    "type": "button",
+    "en": "Desktop",
+    "it": "Desktop",
+    "pt": "Desktop",
+    "es": "Escritorio",
+    "status": "Ready"
+  },
+  {
+    "key": "game.media.mobile",
+    "page": "Game Detail",
+    "section": "Demo",
+    "context": "Mobile viewport control",
+    "type": "button",
+    "en": "Mobile",
+    "it": "Mobile",
+    "pt": "Telemóvel",
+    "es": "Móvil",
+    "status": "Ready"
+  },
+  {
+    "key": "game.media.fullscreen",
+    "page": "Game Detail",
+    "section": "Demo",
+    "context": "Enter fullscreen demo control",
+    "type": "button",
+    "en": "Fullscreen",
+    "it": "Schermo intero",
+    "pt": "Ecrã inteiro",
+    "es": "Pantalla completa",
+    "status": "Ready"
+  },
+  {
+    "key": "game.media.exit_fullscreen",
+    "page": "Game Detail",
+    "section": "Demo",
+    "context": "Exit fullscreen demo control",
+    "type": "button",
+    "en": "Exit fullscreen",
+    "it": "Esci da schermo intero",
+    "pt": "Sair do ecrã inteiro",
+    "es": "Salir de pantalla completa",
+    "status": "Ready"
+  },
+  {
+    "key": "game.detail.overview_tabs_aria",
+    "page": "Game Detail",
+    "section": "Overview",
+    "context": "Accessible label for game detail tabs",
+    "type": "aria",
+    "en": "Game details",
+    "it": "Dettagli del gioco",
+    "pt": "Detalhes do jogo",
+    "es": "Detalles del juego",
+    "status": "Ready"
+  },
+  {
+    "key": "game.detail.related_aria",
+    "page": "Game Detail",
+    "section": "Related games",
+    "context": "Accessible label for horizontally scrollable related games",
+    "type": "aria",
+    "en": "Related games",
+    "it": "Giochi correlati",
+    "pt": "Jogos relacionados",
+    "es": "Juegos relacionados",
+    "status": "Ready"
   },
   {
     "key": "demo.play",

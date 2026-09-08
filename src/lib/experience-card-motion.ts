@@ -21,14 +21,24 @@ export function normalizeExperienceCardSettings(value: unknown): ExperienceCardS
   const candidate = value && typeof value === 'object' ? value as Partial<ExperienceCardSettings> : {};
 
   return {
+    autoMotionEnabled: typeof candidate.autoMotionEnabled === 'boolean'
+      ? candidate.autoMotionEnabled
+      : experienceCardDefaults.autoMotionEnabled,
     tiltMax: clampedNumber(candidate.tiltMax, experienceCardDefaults.tiltMax, 0, 18),
     hoverScale: clampedNumber(candidate.hoverScale, experienceCardDefaults.hoverScale, 1, 1.08),
     perspective: clampedNumber(candidate.perspective, experienceCardDefaults.perspective, 600, 2200),
-    response: clampedNumber(candidate.response, experienceCardDefaults.response, 0.12, 0.9),
+    response: clampedNumber(candidate.response, experienceCardDefaults.response, 0.12, 3),
+    autoSweepDuration: clampedNumber(candidate.autoSweepDuration, experienceCardDefaults.autoSweepDuration, 1.2, 12),
+    autoTransitionDuration: clampedNumber(candidate.autoTransitionDuration, experienceCardDefaults.autoTransitionDuration, 0.2, 4),
+    autoLoopDelay: clampedNumber(candidate.autoLoopDelay, experienceCardDefaults.autoLoopDelay, 0, 6),
     artDepth: clampedNumber(candidate.artDepth, experienceCardDefaults.artDepth, 0, 100),
     copyDepth: clampedNumber(candidate.copyDepth, experienceCardDefaults.copyDepth, 0, 120),
     glareOpacity: clampedNumber(candidate.glareOpacity, experienceCardDefaults.glareOpacity, 0, 1),
     glareTravel: clampedNumber(candidate.glareTravel, experienceCardDefaults.glareTravel, 0, 48),
+    hologramSize: clampedNumber(candidate.hologramSize, experienceCardDefaults.hologramSize, 28, 140),
+    hologramPatternOpacity: clampedNumber(candidate.hologramPatternOpacity, experienceCardDefaults.hologramPatternOpacity, 0, 1),
+    hologramReveal: clampedNumber(candidate.hologramReveal, experienceCardDefaults.hologramReveal, 0, 0.7),
+    hologramAngle: clampedNumber(candidate.hologramAngle, experienceCardDefaults.hologramAngle, -90, 90),
   };
 }
 
@@ -53,10 +63,18 @@ export function applyExperienceCardSettings(
     stage.style.setProperty('--art-depth', `${settings.artDepth}px`);
     stage.style.setProperty('--copy-depth', `${settings.copyDepth}px`);
     stage.style.setProperty('--glare-opacity', String(settings.glareOpacity));
+    stage.style.setProperty('--hologram-size', `${settings.hologramSize}px`);
+    stage.style.setProperty('--hologram-pattern-opacity', String(settings.hologramPatternOpacity));
+    stage.style.setProperty('--hologram-reveal', String(settings.hologramReveal));
+    stage.style.setProperty('--hologram-angle', `${settings.hologramAngle}deg`);
     card.dataset.tiltMax = String(settings.tiltMax);
     card.dataset.hoverScale = String(settings.hoverScale);
     card.dataset.motionDuration = String(settings.response);
     card.dataset.glareTravel = String(settings.glareTravel);
+    card.dataset.autoMotionEnabled = String(settings.autoMotionEnabled);
+    card.dataset.autoSweepDuration = String(settings.autoSweepDuration);
+    card.dataset.autoTransitionDuration = String(settings.autoTransitionDuration);
+    card.dataset.autoLoopDelay = String(settings.autoLoopDelay);
   });
 }
 
@@ -102,7 +120,8 @@ export function mountExperienceCardMotion(root: ParentNode = document) {
   if (!cards.length) return;
 
   import('gsap').then(({ gsap }) => {
-    if (!finePointer.matches || compactLayout.matches) {
+    const autoPreview = cards.some((card) => card.dataset.autoPreview === 'true');
+    if (!finePointer.matches || compactLayout.matches || autoPreview) {
       const bindings = cards.flatMap((card) => {
         const stage = card.closest<HTMLElement>('[data-experience-card-stage]');
         const glare = card.querySelector<HTMLElement>('[data-experience-glare]');
@@ -113,58 +132,68 @@ export function mountExperienceCardMotion(root: ParentNode = document) {
         gsap.set(card, { transformStyle: 'preserve-3d' });
 
         const surfaceEffects = hologram ? [glare, hologram] : [glare];
-        const tilt = Math.min(5.5, numberFrom(card.dataset.tiltMax, experienceCardDefaults.tiltMax) * 0.46);
-        const scale = Math.min(1.012, numberFrom(card.dataset.hoverScale, experienceCardDefaults.hoverScale));
-        const response = numberFrom(card.dataset.motionDuration, experienceCardDefaults.response);
-        const sweepDuration = Math.max(2.8, response * 3.5);
-        const settleDuration = Math.max(0.72, response * 0.9);
-        const glareTravel = numberFrom(card.dataset.glareTravel, experienceCardDefaults.glareTravel);
+        const buildTimeline = () => {
+          const tilt = Math.min(5.5, numberFrom(card.dataset.tiltMax, experienceCardDefaults.tiltMax) * 0.46);
+          const scale = Math.min(1.012, numberFrom(card.dataset.hoverScale, experienceCardDefaults.hoverScale));
+          const sweepDuration = numberFrom(card.dataset.autoSweepDuration, experienceCardDefaults.autoSweepDuration);
+          const settleDuration = numberFrom(card.dataset.autoTransitionDuration, experienceCardDefaults.autoTransitionDuration);
+          const loopDelay = numberFrom(card.dataset.autoLoopDelay, experienceCardDefaults.autoLoopDelay);
+          const glareTravel = numberFrom(card.dataset.glareTravel, experienceCardDefaults.glareTravel);
 
-        const timeline = gsap.timeline({ paused: true, repeat: -1, repeatDelay: 0.8 });
-        timeline
-          .call(() => { card.dataset.pointerActive = 'true'; }, [], 0)
-          .to(card, {
-            rotationX: 1.6,
-            rotationY: -tilt,
-            scale,
-            duration: settleDuration,
-            ease: 'sine.inOut',
-          }, 0)
-          .to(surfaceEffects, {
-            '--glare-x': `${50 - glareTravel}%`,
-            '--glare-y': '48%',
-            duration: settleDuration,
-            ease: 'sine.inOut',
-          }, 0)
-          .to(card, {
-            rotationX: -1.6,
-            rotationY: tilt,
-            scale,
-            duration: sweepDuration,
-            ease: 'sine.inOut',
-          }, settleDuration)
-          .to(surfaceEffects, {
-            '--glare-x': `${50 + glareTravel}%`,
-            '--glare-y': '52%',
-            duration: sweepDuration,
-            ease: 'sine.inOut',
-          }, settleDuration)
-          .call(() => { card.dataset.pointerActive = 'false'; }, [], settleDuration + sweepDuration)
-          .to(card, {
-            rotationX: 0,
-            rotationY: 0,
-            scale: 1,
-            duration: settleDuration,
-            ease: 'sine.inOut',
-          }, settleDuration + sweepDuration)
-          .to(surfaceEffects, {
-            '--glare-x': '50%',
-            '--glare-y': '50%',
-            duration: settleDuration,
-            ease: 'sine.inOut',
-          }, settleDuration + sweepDuration);
+          return gsap.timeline({ paused: true, repeat: -1, repeatDelay: loopDelay })
+            .call(() => { card.dataset.pointerActive = 'true'; }, [], 0)
+            .to(card, {
+              rotationX: 1.6,
+              rotationY: -tilt,
+              scale,
+              duration: settleDuration,
+              ease: 'sine.inOut',
+            }, 0)
+            .to(surfaceEffects, {
+              '--glare-x': `${50 - glareTravel}%`,
+              '--glare-y': '48%',
+              duration: settleDuration,
+              ease: 'sine.inOut',
+            }, 0)
+            .to(card, {
+              rotationX: -1.6,
+              rotationY: tilt,
+              scale,
+              duration: sweepDuration,
+              ease: 'sine.inOut',
+            }, settleDuration)
+            .to(surfaceEffects, {
+              '--glare-x': `${50 + glareTravel}%`,
+              '--glare-y': '52%',
+              duration: sweepDuration,
+              ease: 'sine.inOut',
+            }, settleDuration)
+            .call(() => { card.dataset.pointerActive = 'false'; }, [], settleDuration + sweepDuration)
+            .to(card, {
+              rotationX: 0,
+              rotationY: 0,
+              scale: 1,
+              duration: settleDuration,
+              ease: 'sine.inOut',
+            }, settleDuration + sweepDuration)
+            .to(surfaceEffects, {
+              '--glare-x': '50%',
+              '--glare-y': '50%',
+              duration: settleDuration,
+              ease: 'sine.inOut',
+            }, settleDuration + sweepDuration);
+        };
 
-        return [{ card, surfaceEffects, timeline }];
+        let timeline = buildTimeline();
+        return [{
+          card,
+          surfaceEffects,
+          get timeline() { return timeline; },
+          rebuildTimeline() {
+            timeline.kill();
+            timeline = buildTimeline();
+          },
+        }];
       });
 
       const visibility = new Map<HTMLElement, number>();
@@ -191,6 +220,11 @@ export function mountExperienceCardMotion(root: ParentNode = document) {
               - Math.abs(bRect.top + bRect.height / 2 - viewportCenter);
           })[0];
 
+        if (next?.card.dataset.autoMotionEnabled !== 'true') {
+          bindings.forEach(reset);
+          activeCard = null;
+          return;
+        }
         if (next?.card === activeCard) return;
         bindings.forEach(reset);
         activeCard = next?.card ?? null;
@@ -206,6 +240,16 @@ export function mountExperienceCardMotion(root: ParentNode = document) {
       }, { threshold: [0, 0.22, 0.45, 0.7] });
 
       bindings.forEach(({ card }) => observer.observe(card));
+
+      const syncAutomaticMotion = () => {
+        activeCard = null;
+        bindings.forEach((binding) => {
+          reset(binding);
+          binding.rebuildTimeline();
+        });
+        activateNearestCard();
+      };
+      window.addEventListener(EXPERIENCE_CARD_SETTINGS_EVENT, syncAutomaticMotion);
 
       if (finePointer.matches) {
         bindings.forEach((binding) => {

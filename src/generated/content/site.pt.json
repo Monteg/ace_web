@@ -1,1 +1,11 @@
-{}
+{
+  "global.label.preview": "Pré-visualização",
+  "game.media.controls_aria": "Controles da demo",
+  "game.media.device_aria": "Dispositivo de pré-visualização",
+  "game.media.desktop": "Desktop",
+  "game.media.mobile": "Telemóvel",
+  "game.media.fullscreen": "Ecrã inteiro",
+  "game.media.exit_fullscreen": "Sair do ecrã inteiro",
+  "game.detail.overview_tabs_aria": "Detalhes do jogo",
+  "game.detail.related_aria": "Jogos relacionados"
+}

@@ -11,7 +11,7 @@ import { getLocalizedGame } from '../../lib/localized-games';
  */
 interface Props {
   game: CollectionEntry<'games'>;
-  variant?: 'strip' | 'sidebar';
+  variant?: 'strip' | 'sidebar' | 'hero';
 }
 
 const { game, variant = 'strip' } = Astro.props;
@@ -110,6 +110,56 @@ const lit = new Set<Volatility>(s.volatility);
   .ss.ss--sidebar .ss-meter { height: 11px; }
   .ss.ss--sidebar .ss-bar { width: 14px; }
 
+  .ss.ss--hero {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    background: color-mix(in srgb, var(--fg) 9%, transparent);
+    border: 1px solid color-mix(in srgb, var(--fg) 12%, transparent);
+    box-shadow: var(--shadow-1);
+    backdrop-filter: blur(18px);
+  }
+  .ss.ss--hero .ss-cell {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-items: center;
+    column-gap: var(--sp-3);
+    row-gap: 2px;
+    min-height: 78px;
+    padding: var(--sp-3) var(--sp-4);
+    background: color-mix(in srgb, var(--ink-2) 82%, transparent);
+  }
+  .ss.ss--hero .ss-head { display: contents; }
+  .ss.ss--hero .ss-head .tile {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    width: 34px;
+    height: 34px;
+    color: var(--brand);
+    background: transparent;
+  }
+  .ss.ss--hero .ss-head .tile :global(svg) { width: 24px; height: 24px; }
+  .ss.ss--hero .ss-label {
+    grid-column: 2;
+    grid-row: 2;
+    color: var(--fg-3);
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+  }
+  .ss.ss--hero .ss-value {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--sp-2);
+    font-family: 'Inter Variable', sans-serif;
+    font-size: clamp(0.78rem, 1vw, 0.92rem);
+    font-weight: 650;
+    line-height: 1.2;
+  }
+  .ss.ss--hero .ss-meter { height: 11px; gap: 2px; }
+  .ss.ss--hero .ss-bar { width: 4px; }
+
   @media (max-width: 992px) {
     .ss { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .ss.ss--sidebar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -118,10 +168,18 @@ const lit = new Set<Volatility>(s.volatility);
       align-items: flex-start;
       padding: var(--sp-4);
     }
+    .ss.ss--hero { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .ss.ss--hero .ss-cell {
+      display: grid;
+      align-items: center;
+      padding: var(--sp-3) var(--sp-4);
+    }
   }
   @media (max-width: 560px) {
     .ss { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .ss.ss--sidebar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ss.ss--hero { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .ss-cell { padding: var(--sp-4); }
+    .ss.ss--hero .ss-cell { min-height: 72px; padding: var(--sp-3); }
   }
 </style>
