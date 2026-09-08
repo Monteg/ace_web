@@ -12,6 +12,7 @@ specs:
   maxWin: { value: 1700, unit: x, approx: false }
   volatility: [low, very_high]
   bet: { min: 1.0, max: 100.0 }
+  layout: "Adjustable Pin Board"
 demo:
   mode: adapter
   gameId: "264c592a-900c-412a-9a5c-3fe3b41dc7f8"

@@ -1,8 +1,9 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import { CTA } from '../../data/site';
-import { TYPE_LABEL } from '../../lib/format';
+import { localeFromPath, localizePath, t } from '../../lib/i18n';
+import { getLocalizedGame } from '../../lib/localized-games';
+import { getSiteContent } from '../../lib/site-content';
 
 /**
  * Game page header: the wide banner as a full-bleed ground, the key art as a
@@ -16,8 +17,11 @@ interface Props {
 }
 
 const { game, demoAvailable } = Astro.props;
-const d = game.data;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { CTA } = getSiteContent(locale);
+const d = getLocalizedGame(game, locale);
 const soon = d.status === 'coming_soon';
+const typeLabel = t(`global.game_type.${d.type}_single`, locale);
 
 // The title sits at poster size. A long name at that size runs to three or
 // four lines and pushes the figures and the CTAs below the fold, so the size
@@ -43,25 +47,25 @@ const fit = Math.min(2 / longestWord, 3.4 / d.name.length).toFixed(3);
 
   <div class="wrap gh-wrap">
     <div class="gh-copy">
-      <nav class="gh-crumbs" aria-label="Breadcrumb">
-        <a href="/games">Games</a>
+      <nav class="gh-crumbs" aria-label={t('game.detail.breadcrumb_aria', locale)}>
+        <a href={localizePath('/games', locale)}>{t('game.detail.breadcrumb.games', locale)}</a>
         <span aria-hidden="true">/</span>
-        <a href={`/games?type=${d.type}`}>{TYPE_LABEL[d.type]}</a>
+        <a href={`${localizePath('/games', locale)}?type=${d.type}`}>{typeLabel}</a>
         <span aria-hidden="true">/</span>
         <span aria-current="page">{d.name}</span>
       </nav>
 
       <h1 class="gh-title">{d.name}</h1>
 
-      <ul class="gh-pills" aria-label="Game classification">
-        <li class={`gh-pill gh-pill--type gh-pill--${d.type}`}>{TYPE_LABEL[d.type]}</li>
-        {soon && <li class="gh-pill gh-pill--soon">In development</li>}
+      <ul class="gh-pills" aria-label={t('game.detail.classification_aria', locale)}>
+        <li class={`gh-pill gh-pill--type gh-pill--${d.type}`}>{typeLabel}</li>
+        {soon && <li class="gh-pill gh-pill--soon">{t('game.detail.in_development', locale)}</li>}
       </ul>
 
       <div class="gh-cta">
         {demoAvailable ? (
           <>
-            <a class="btn btn-primary" href="#demo">Play the demo</a>
+            <a class="btn btn-primary" href="#demo">{t('game.detail.play_demo', locale)}</a>
             <a class="btn btn-ghost" href={CTA.href}>{CTA.label}</a>
           </>
         ) : (
@@ -74,7 +78,7 @@ const fit = Math.min(2 / longestWord, 3.4 / d.name.length).toFixed(3);
       <div class="gh-tile">
         <Image
           src={d.card}
-          alt={`${d.name} key art`}
+          alt={d.cardAlt}
           widths={[420, 640]}
           sizes="(max-width: 992px) 60vw, 380px"
           loading="eager"

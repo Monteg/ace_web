@@ -1,12 +1,15 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import GameHeader from '../../components/showcase/GameHeader.astro';
 import GameMedia from '../../components/showcase/GameMedia.astro';
 import SpecStrip from '../../components/showcase/SpecStrip.astro';
 import GameTile from '../../components/showcase/GameTile.astro';
-import { CTA, company } from '../../data/site';
-import { demoUrl, TYPE_LABEL } from '../../lib/format';
+import { company } from '../../data/site';
+import { demoUrl } from '../../lib/format';
+import { localeFromPath, localizePath, lowerTypeLabel, t } from '../../lib/i18n';
+import { getLocalizedGame, renderManagedMarkdown } from '../../lib/localized-games';
+import { getSiteContent } from '../../lib/site-content';
 
 export async function getStaticPaths() {
   const games = await getCollection('games');
@@ -14,8 +17,9 @@ export async function getStaticPaths() {
 }
 
 const { game, all } = Astro.props;
-const d = game.data;
-const { Content } = await render(game);
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const d = getLocalizedGame(game, locale);
+const { CTA } = getSiteContent(locale);
 
 const soon = d.status === 'coming_soon';
 const demo = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
@@ -29,18 +33,26 @@ const productSchema = {
   '@type': 'Product',
   name: d.name,
   brand: { '@type': 'Brand', name: company.name },
-  category: `${TYPE_LABEL[d.type]} game`,
+  category: `${t(`global.game_type.${d.type}_single`, locale)} game`,
   description: d.seo.description,
-  url: `${company.origin}/portfolio/${game.id}`,
+  url: `${company.origin}${localizePath(`/portfolio/${game.id}`, locale)}`,
 };
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Games', item: `${company.origin}/games` },
-    { '@type': 'ListItem', position: 2, name: d.name, item: `${company.origin}/portfolio/${game.id}` },
+    { '@type': 'ListItem', position: 1, name: t('game.detail.breadcrumb.games', locale), item: `${company.origin}${localizePath('/games', locale)}` },
+    { '@type': 'ListItem', position: 2, name: d.name, item: `${company.origin}${localizePath(`/portfolio/${game.id}`, locale)}` },
   ],
 };
+const bodySections = [
+  { title: '', body: d.overview },
+  { title: t('game.detail.core_gameplay', locale), body: d.gameplay },
+  { title: d.mainFeatureLabel || t('global.label.main_feature', locale), body: d.mainFeatureBody },
+  { title: t('game.detail.bonus', locale), body: d.bonus },
+  { title: t('game.detail.multiplier', locale), body: d.multiplier },
+  { title: t('game.detail.design', locale), body: d.designAtmosphere },
+].filter((section) => section.body.trim());
 ---
 
 <Base title={d.seo.title} description={d.seo.description} schema={[productSchema, breadcrumbSchema]}>
@@ -56,16 +68,17 @@ const breadcrumbSchema = {
             demoSrc={demo}
             poster={d.hero}
             gallery={d.gallery}
+            posterAlt={d.heroAlt}
           />
 
           {!demo && (
             <div class="demo-request">
               <div>
-                <h2 class="d3">{soon ? 'In development' : 'Demo on request'}</h2>
+                <h2 class="d3">{soon ? t('game.detail.in_development', locale) : t('game.detail.demo_on_request', locale)}</h2>
                 <p class="body">
                   {soon
-                    ? `${d.name} is not released yet. Ask us for the current build and the maths sheet, and we will send them over.`
-                    : `A playable build of ${d.name} is available on request.`}
+                    ? t('game.detail.unreleased_body', locale, { name: d.name })
+                    : t('game.detail.demo_request_body', locale, { name: d.name })}
                 </p>
               </div>
               <a class="btn btn-primary btn-sm" href={CTA.href}>{CTA.label}</a>
@@ -73,8 +86,8 @@ const breadcrumbSchema = {
           )}
         </div>
 
-        <aside class="spec-sidebar rv" aria-label={`${d.name} game specifications`}>
-          <h2 class="d3">Game stats & specs</h2>
+        <aside class="spec-sidebar rv" aria-label={t('game.detail.specs_aria', locale, { name: d.name })}>
+          <h2 class="d3">{t('game.detail.specs', locale)}</h2>
           <SpecStrip game={game} variant="sidebar" />
         </aside>
       </div>
@@ -85,8 +98,15 @@ const breadcrumbSchema = {
     <div class="wrap">
       <div class="over">
         <div class="over-copy">
-          <div class="sec-top rv"><h2 class="d1">Overview</h2></div>
-          <div class="prose rv"><Content /></div>
+          <div class="sec-top rv"><h2 class="d1">{t('game.detail.overview', locale)}</h2></div>
+          <div class="prose rv">
+            {bodySections.map((section) => (
+              <section>
+                {section.title && <h2>{section.title}</h2>}
+                <div set:html={renderManagedMarkdown(section.body)} />
+              </section>
+            ))}
+          </div>
           {d.highlights.length > 0 && (
             <ul class="highlights rv">
               {d.highlights.map((h) => <li>{h}</li>)}
@@ -95,7 +115,7 @@ const breadcrumbSchema = {
         </div>
         {d.features.length > 0 && (
           <aside class="over-side rv">
-            <h3 class="d3">Features</h3>
+            <h3 class="d3">{t('game.detail.features', locale)}</h3>
             <ol class="feats">
               {d.features.map((f) => (
                 <li>
@@ -113,7 +133,7 @@ const breadcrumbSchema = {
   {related.length > 0 && (
     <section class="section-continuation">
       <div class="wrap">
-        <div class="sec-top rv"><h2 class="d1">More {TYPE_LABEL[d.type].toLowerCase()} games</h2></div>
+        <div class="sec-top rv"><h2 class="d1">{t('game.detail.more_games', locale, { type: lowerTypeLabel(d.type, locale) })}</h2></div>
         <div class="related rv">
           {related.map((g) => <GameTile game={g} />)}
         </div>

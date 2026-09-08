@@ -4,6 +4,9 @@ import { fileURLToPath } from 'node:url';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import logo from '../assets/brand/logo.webp';
+import { localeFromPath, t } from '../lib/i18n';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 
 const youtubeVideoId = 'oHg5SJYRHA0';
 const exactVideoUrl = 'https://youtu.be/oHg5SJYRHA0?list=RDoHg5SJYRHA0';
@@ -15,23 +18,22 @@ const localVideoExists = existsSync(
 ---
 
 <Base
-  title="Ace-rolled | Ace Games"
-  description="The Ace Games response to a declined age verification."
-  canonicalPath="/under-18"
+  title={t('under18.seo.title', locale)}
+  description={t('under18.seo.description', locale)}
   noindex
   showSiteChrome={false}
   showAgeGate={false}
 >
   <div class="under-18-page">
-    <header class="under-18-brand" aria-label="Ace Games">
-      <Image src={logo} alt="Ace Games" widths={[140, 220]} sizes="110px" loading="eager" />
+    <header class="under-18-brand" aria-label={t('under18.brand_aria', locale)}>
+      <Image src={logo} alt={t('under18.logo_alt', locale)} widths={[140, 220]} sizes="110px" loading="eager" />
     </header>
 
     <section class="under-18-content" aria-labelledby="under-18-title">
-      <p class="under-18-eyebrow">Come back when you are 18</p>
+      <p class="under-18-eyebrow">{t('under18.eyebrow', locale)}</p>
       <h1 id="under-18-title">
-        <span>Nice try, you just got</span>
-        <strong>Ace-rolled</strong>
+        <span>{t('under18.title_lead', locale)}</span>
+        <strong>{t('under18.title_accent', locale)}</strong>
       </h1>
 
       <div class="under-18-video-shell">
@@ -43,14 +45,14 @@ const localVideoExists = existsSync(
             loop
             playsinline
             preload="auto"
-            aria-label="RickRoll'D"
+            aria-label={t('under18.video_aria', locale)}
           ></video>
         ) : (
           <iframe
             id="under18Player"
             data-under-18-video
             src={youtubeEmbedUrl}
-            title="RickRoll'D: oHg5SJYRHA0"
+            title={t('under18.video_title', locale)}
             allow="autoplay; encrypted-media; picture-in-picture"
             referrerpolicy="strict-origin-when-cross-origin"
             loading="eager"
@@ -60,19 +62,19 @@ const localVideoExists = existsSync(
 
         {!localVideoExists && (
           <div class="under-18-video-fallback" data-under-18-video-fallback hidden>
-            <p>YouTube blocked embedded playback</p>
-            <a href={exactVideoUrl} target="_blank" rel="noreferrer">Play RickRoll'D on YouTube</a>
+            <p>{t('under18.video_blocked', locale)}</p>
+            <a href={exactVideoUrl} target="_blank" rel="noreferrer">{t('under18.play_youtube', locale)}</a>
           </div>
         )}
       </div>
 
       <div class="under-18-actions">
-        <button class="sound-toggle" type="button" data-under-18-sound aria-pressed="false">Tap for sound</button>
+        <button class="sound-toggle" type="button" data-under-18-sound aria-pressed="false" data-label-tap={t('under18.tap_for_sound', locale)} data-label-on={t('under18.sound_on', locale)} data-label-off={t('under18.sound_off', locale)}>{t('under18.tap_for_sound', locale)}</button>
       </div>
     </section>
 
     <footer class="under-18-footer">
-      <a href="https://www.google.com/" rel="noreferrer">Leave site</a>
+      <a href="https://www.google.com/" rel="noreferrer">{t('under18.leave', locale)}</a>
     </footer>
   </div>
 </Base>
@@ -343,7 +345,11 @@ const localVideoExists = existsSync(
 
   const setSoundState = (soundIsOn: boolean, needsGesture = false) => {
     if (!soundToggle) return;
-    soundToggle.textContent = needsGesture ? 'Tap for sound' : soundIsOn ? 'Sound on' : 'Sound off';
+    soundToggle.textContent = needsGesture
+      ? soundToggle.dataset.labelTap ?? 'Tap for sound'
+      : soundIsOn
+        ? soundToggle.dataset.labelOn ?? 'Sound on'
+        : soundToggle.dataset.labelOff ?? 'Sound off';
     soundToggle.setAttribute('aria-pressed', String(soundIsOn));
     soundToggle.dataset.soundPrompt = String(needsGesture);
   };

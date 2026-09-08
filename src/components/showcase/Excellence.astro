@@ -1,6 +1,10 @@
 ---
 import ExperienceCard from './ExperienceCard.astro';
-import { sectionCopy, why } from '../../data/site';
+import { localeFromPath } from '../../lib/i18n';
+import { getSiteContent } from '../../lib/site-content';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { sectionCopy, why } = getSiteContent(locale);
 ---
 
 <section class="excellence" id="our-benefits" aria-labelledby="excellence-title">

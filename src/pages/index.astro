@@ -13,8 +13,13 @@ import FutureOfGaming from '../components/showcase/FutureOfGaming.astro';
 import PartnerWall from '../components/showcase/PartnerWall.astro';
 import MathsExplorer from '../components/showcase/MathsExplorer.astro';
 import contactPigeon from '../assets/site/contact-pigeon-v3.png';
-import { faq, heroStats, homepageSections, integration, partners, proofIntro, sectionCopy } from '../data/site';
+import { homepageSections, partners } from '../data/site';
 import { CATALOGUE_CATEGORIES } from '../lib/game-categories';
+import { localeFromPath, localizePath, t } from '../lib/i18n';
+import { getSiteContent } from '../lib/site-content';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { faq, heroStats, proofIntro, sectionCopy, integration } = getSiteContent(locale);
 
 const games = (await getCollection('games')).sort(
   (a, b) =>
@@ -26,7 +31,9 @@ const mathsGames = games.filter(
   (game) => game.data.status === 'live' && typeof game.data.specs.rtp === 'number',
 );
 
-const present = CATALOGUE_CATEGORIES.filter((category) => games.some((game) => game.data.type === category.type));
+const present = CATALOGUE_CATEGORIES
+  .filter((category) => games.some((game) => game.data.type === category.type))
+  .map((category) => ({ ...category, label: t(`global.game_type.${category.type}`, locale) }));
 
 const contactTitleWords = sectionCopy.contactTitle.trim().split(/\s+/);
 const contactTitleLead = contactTitleWords.shift() ?? '';
@@ -43,8 +50,8 @@ const faqSchema = {
 ---
 
 <Base
-  title="Custom casino game development for operators | Ace Games"
-  description="Ace Games builds slots, crash and instant games for licensed operators. Maths, art, engine and RGS in-house, published RTP on every title, playable demos for all of them."
+  title={t('home.seo.title', locale)}
+  description={t('home.seo.description', locale)}
   schema={faqSchema}
 >
   <Wall games={games} />
@@ -69,14 +76,14 @@ const faqSchema = {
       </div>
 
       <div class="portfolio-controls rv">
-        <div class="chips" role="group" aria-label="Filter games by type">
-          <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+        <div class="chips" role="group" aria-label={t('catalogue.filter_aria', locale)}>
+          <button class="chip" type="button" data-filter="all" aria-pressed="true">{t('global.filter.all', locale)}</button>
           {present.map(({ type, label }) => (
             <button class="chip" type="button" data-filter={type} aria-pressed="false">{label}</button>
           ))}
         </div>
-        <a class="btn btn-ghost see-all" href="/games">
-          View Game
+        <a class="btn btn-ghost see-all" href={localizePath('/games', locale)}>
+          {t('global.action.view_games', locale)}
           <span class="disc" aria-hidden="true"><Icon name="ph:arrow-right" /></span>
         </a>
       </div>
@@ -90,7 +97,7 @@ const faqSchema = {
       </script>
       <div class="load-games-row" data-load-games-row hidden>
         <button class="btn btn-ghost see-all load-games" type="button" data-load-games>
-          Load Game
+          {t('global.action.load_games', locale)}
           <span class="disc" aria-hidden="true"><Icon name="ph:arrow-down" /></span>
         </button>
       </div>
@@ -101,14 +108,12 @@ const faqSchema = {
   <section id="maths" class="section-continuation">
     <div class="wrap">
       <div class="sec-top home-section-heading rv">
-        <h2 class="d1">Every game, by the numbers</h2>
-        <p class="lead">
-          All our games on one board: each lane is a volatility level, each game sits at its published RTP. Hover a game for the figures, click to open it.
-        </p>
+        <h2 class="d1">{t('home.maths.title', locale)}</h2>
+        <p class="lead">{t('home.maths.lead', locale)}</p>
       </div>
       <div class="rv">
         <MathsExplorer games={mathsGames}>
-          <Fragment slot="caption">Published RTP and volatility for every title. RTP bands and volatility modes are configuration, set per operator and per market.</Fragment>
+          <Fragment slot="caption">{t('home.maths.caption', locale)}</Fragment>
         </MathsExplorer>
       </div>
     </div>
@@ -125,8 +130,8 @@ const faqSchema = {
   <section id="integration">
     <div class="wrap">
       <div class="sec-top rv">
-        <h2 class="d1">The answers your compliance team asks for</h2>
-        <p class="lead">Everything a game acquisition team needs before booking a call. Documentation and certificates on request.</p>
+        <h2 class="d1">{t('home.integration.title', locale)}</h2>
+        <p class="lead">{t('home.integration.lead', locale)}</p>
       </div>
       <div class="groups rv">
         {integration.map((g) => (
@@ -153,7 +158,7 @@ const faqSchema = {
   <!-- ============ faq ============ -->
   <section id="faq">
     <div class="wrap">
-      <div class="sec-top home-section-heading rv"><h2 class="d1">Frequently asked questions</h2></div>
+      <div class="sec-top home-section-heading rv"><h2 class="d1">{t('home.faq.title', locale)}</h2></div>
       <div class="faq rv">
         {faq.map((f) => (
           <details class="faq-item">

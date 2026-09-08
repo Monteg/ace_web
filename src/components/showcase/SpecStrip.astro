@@ -2,6 +2,8 @@
 import { Icon } from 'astro-icon/components';
 import type { CollectionEntry } from 'astro:content';
 import { bet, maxWin, rtp, volatility, type Volatility } from '../../lib/format';
+import { localeFromPath, t } from '../../lib/i18n';
+import { getLocalizedGame } from '../../lib/localized-games';
 
 /**
  * The six figures a buyer scans first, in one strip under the header.
@@ -13,7 +15,8 @@ interface Props {
 }
 
 const { game, variant = 'strip' } = Astro.props;
-const s = game.data.specs;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const s = getLocalizedGame(game, locale).specs;
 
 type Cell = {
   icon: string;
@@ -26,12 +29,12 @@ type Cell = {
 // The labels live here and the values come from the record: on the old CMS
 // both were free text and 14 of 24 games had them swapped.
 const cells: Cell[] = [
-  { icon: 'ph:percent', tint: 'mint', label: 'RTP', value: rtp(s.rtp) },
-  { icon: 'ph:wave-sine', tint: 'ice', label: 'Volatility', value: volatility(s.volatility), meter: true },
-  { icon: 'ph:trend-up', tint: 'lemon', label: 'Max win', value: maxWin(s.maxWin) },
-  { icon: 'ph:coins', tint: 'peach', label: 'Bet range', value: bet(s.bet) },
-  { icon: 'ph:grid-four', tint: 'sky', label: 'Layout', value: s.layout ?? null },
-  { icon: 'ph:sparkle', tint: 'pink', label: 'Main feature', value: s.mainFeature ?? null },
+  { icon: 'ph:percent', tint: 'mint', label: t('global.label.rtp', locale), value: rtp(s.rtp) },
+  { icon: 'ph:wave-sine', tint: 'ice', label: t('global.label.volatility', locale), value: volatility(s.volatility), meter: true },
+  { icon: 'ph:trend-up', tint: 'lemon', label: t('global.label.max_win', locale), value: maxWin(s.maxWin) },
+  { icon: 'ph:coins', tint: 'peach', label: t('global.label.bet_range', locale), value: bet(s.bet) },
+  { icon: 'ph:grid-four', tint: 'sky', label: t('global.label.layout', locale), value: s.layout ?? null },
+  { icon: 'ph:sparkle', tint: 'pink', label: t('global.label.main_feature', locale), value: s.mainFeature ?? null },
 ];
 
 // Volatility as a meter, the way every competitor's catalogue shows it. A bar
@@ -48,7 +51,7 @@ const lit = new Set<Volatility>(s.volatility);
         <span class="ss-label">{c.label}</span>
       </dt>
       <dd class="ss-value">
-        <span class="ss-figure tnum">{c.value ? c.value : <span class="need">On request</span>}</span>
+        <span class="ss-figure tnum">{c.value ? c.value : <span class="need">{t('global.label.on_request', locale)}</span>}</span>
         {c.meter && (
           <span class="ss-meter" aria-hidden="true">
             {BANDS.map((b) => <i class={`ss-bar${lit.has(b) ? ' is-on' : ''}`} />)}

@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { company } from '../data/site';
+import { localeFromPath, t } from '../lib/i18n';
 
 export async function getStaticPaths() {
   const docs = await getCollection('legal');
@@ -9,6 +10,7 @@ export async function getStaticPaths() {
 }
 
 const { doc } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 const { Content } = await render(doc);
 ---
 
@@ -21,7 +23,7 @@ const { Content } = await render(doc);
       <div class="legal-content">
         <header class="legal-head">
           <h1 class="d1">{doc.data.title}</h1>
-          <p class="legal-updated">Last updated: {doc.data.updated}</p>
+          <p class="legal-updated">{t('legal.last_updated', locale, { date: doc.data.updated })}</p>
         </header>
         <article class="legal-document"><Content /></article>
       </div>

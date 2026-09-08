@@ -3,8 +3,14 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import CatalogueHero from '../../components/showcase/CatalogueHero.astro';
 import GameTile from '../../components/showcase/GameTile.astro';
-import { CTA, company } from '../../data/site';
+import { company } from '../../data/site';
 import { CATALOGUE_CATEGORIES } from '../../lib/game-categories';
+import { localeFromPath, localizePath, t } from '../../lib/i18n';
+import { getLocalizedGame } from '../../lib/localized-games';
+import { getSiteContent } from '../../lib/site-content';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { CTA } = getSiteContent(locale);
 
 // /portfolio returned a 404 on the old site: the catalogue existed only as a
 // section of the home page and a dropdown listing 17 of 24 titles.
@@ -15,7 +21,9 @@ const games = (await getCollection('games')).sort(
     a.data.name.localeCompare(b.data.name),
 );
 
-const present = CATALOGUE_CATEGORIES.filter((category) => games.some((game) => game.data.type === category.type));
+const present = CATALOGUE_CATEGORIES
+  .filter((category) => games.some((game) => game.data.type === category.type))
+  .map((category) => ({ ...category, label: t(`global.game_type.${category.type}`, locale) }));
 
 const heroIds = ['way-to-olympus', 'cyber-star', 'pirates-rush', 'ace-city'];
 const heroGames = heroIds.flatMap((id) => {
@@ -26,28 +34,28 @@ const heroGames = heroIds.flatMap((id) => {
 const listSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  name: 'Ace Games catalogue',
+  name: t('games.hero.title', locale),
   numberOfItems: games.length,
   itemListElement: games.map((g, i) => ({
     '@type': 'ListItem',
     position: i + 1,
-    name: g.data.name,
-    url: `${company.origin}/portfolio/${g.id}`,
+    name: getLocalizedGame(g, locale).name,
+    url: `${company.origin}${localizePath(`/portfolio/${g.id}`, locale)}`,
   })),
 };
 ---
 
 <Base
-  title="Casino games: slots, crash and instant games | Ace Games"
-  description={`Explore all ${games.length} Ace Games titles with published RTP, volatility and playable demos where available. Slot, instant and table games for licensed operators.`}
+  title={t('games.seo.title', locale)}
+  description={t('games.seo.description', locale, { count: games.length })}
   schema={listSchema}
 >
   <CatalogueHero games={heroGames} />
 
   <section class="catalogue-list">
     <div class="wrap">
-      <div class="chips filters" id="games" role="group" aria-label="Filter games by type">
-        <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+      <div class="chips filters" id="games" role="group" aria-label={t('catalogue.filter_aria', locale)}>
+        <button class="chip" type="button" data-filter="all" aria-pressed="true">{t('global.filter.all', locale)}</button>
         {present.map(({ type, label }) => (
           <button class="chip" type="button" data-filter={type} aria-pressed="false">
             {label}
@@ -61,11 +69,8 @@ const listSchema = {
       </div>
 
       <div class="tail rv">
-        <h2 class="d3">Missing a mechanic?</h2>
-        <p class="body">
-          Tell us what your lobby is short of and we will design the maths around it rather than
-          reskinning something we already made.
-        </p>
+        <h2 class="d3">{t('games.tail.title', locale)}</h2>
+        <p class="body">{t('games.tail.body', locale)}</p>
         <button class="btn btn-primary" type="button" data-contact-open aria-haspopup="dialog" aria-controls="contact-dialog" hidden>{CTA.label}</button>
         <noscript><a class="btn btn-primary" href={CTA.href}>{CTA.label}</a></noscript>
       </div>

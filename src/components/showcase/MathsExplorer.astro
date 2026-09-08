@@ -11,16 +11,22 @@
  */
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import { maxWin, rtp as fmtRtp, volatility as fmtVol, TYPE_LABEL, TYPE_PLURAL } from '../../lib/format';
+import { maxWin, rtp as fmtRtp, volatility as fmtVol } from '../../lib/format';
+import { localeFromPath, localizePath, t } from '../../lib/i18n';
+import { getLocalizedGame } from '../../lib/localized-games';
 
 interface Props {
   games: CollectionEntry<'games'>[];
 }
 const { games } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 
 const BANDS = ['low', 'medium', 'high', 'very_high'] as const;
 const LANE_LABEL: Record<(typeof BANDS)[number], string> = {
-  low: 'Low', medium: 'Medium', high: 'High', very_high: 'Very high',
+  low: t('global.label.low', locale),
+  medium: t('global.label.medium', locale),
+  high: t('global.label.high', locale),
+  very_high: t('global.label.very_high', locale),
 };
 // lane 0 is the top row (very high), lane 3 the bottom (low)
 const laneOf = (b: (typeof BANDS)[number]) => 3 - BANDS.indexOf(b);
@@ -76,24 +82,29 @@ const present = types.filter((t) => numeric.some((g) => g.data.type === t));
 
 <div class="mx" data-mx>
   <div class="mx-top">
-    <div class="chips" role="group" aria-label="Highlight games by type">
-      <button class="chip" type="button" data-mx-filter="all" aria-pressed="true">All</button>
-      {present.map((t) => (
-        <button class="chip" type="button" data-mx-filter={t} aria-pressed="false">{TYPE_PLURAL[t]}</button>
+    <div class="chips" role="group" aria-label={t('catalogue.filter_aria', locale)}>
+      <button class="chip" type="button" data-mx-filter="all" aria-pressed="true">{t('global.filter.all', locale)}</button>
+      {present.map((categoryType) => (
+        <button class="chip" type="button" data-mx-filter={categoryType} aria-pressed="false">{t(`global.game_type.${categoryType}`, locale)}</button>
       ))}
     </div>
-    <p class="mx-hint">Further right, more returned to players. Higher up, bigger swings.</p>
+    <p class="mx-hint">{t('home.maths.hint', locale)}</p>
   </div>
 
   <div class="mx-scroll">
     <div class="mx-board" style={`--lanes: ${BANDS.length}`}>
       <div class="mx-labels" aria-hidden="true">
-        {[...BANDS].reverse().map((b) => <span class="mx-lane-label">{LANE_LABEL[b]}</span>)}
-        <span class="mx-axis-name">Volatility</span>
+        {[...BANDS].reverse().map((b) => (
+          <span class={`mx-lane-label mx-lane-label--${b}`}>
+            {b === 'very_high' && <small>{t('home.maths.volatility_axis', locale)}</small>}
+            <strong>{LANE_LABEL[b]}</strong>
+          </span>
+        ))}
+        <span class="mx-rtp-axis">{t('global.label.rtp', locale)} <small>(Published)</small></span>
       </div>
 
       <div class="mx-track">
-        {[...BANDS].reverse().map(() => <div class="mx-lane"></div>)}
+        {[...BANDS].reverse().map((b) => <div class={`mx-lane mx-lane--${b}`}></div>)}
 
         {ticks.map((t) => (
           <span class="mx-tick" style={`left: ${xOf(t)}%`}>
@@ -110,38 +121,56 @@ const present = types.filter((t) => numeric.some((g) => g.data.type === t));
         ))}
 
         <ul class="mx-marks">
-          {placed.map((p) => (
+          {placed.map((p) => {
+            const localized = getLocalizedGame(p.game, locale);
+            return (
             <li
               class="mx-mark"
               data-type={p.game.data.type}
+              data-row={p.row}
               style={`left: ${p.x}%; --lane: ${p.lane}; --row: ${p.row};`}
             >
               <a
                 class="mx-dot"
-                href={`/portfolio/${p.game.id}`}
-                data-name={p.game.data.name}
-                data-type={TYPE_LABEL[p.game.data.type]}
+                href={localizePath(`/portfolio/${p.game.id}`, locale)}
+                data-name={localized.name}
+                data-type={t(`global.game_type.${p.game.data.type}_single`, locale)}
                 data-rtp={fmtRtp(p.game.data.specs.rtp)}
                 data-vol={fmtVol(p.game.data.specs.volatility)}
-                data-max={maxWin(p.game.data.specs.maxWin) ?? 'On request'}
-                aria-label={`${p.game.data.name}: RTP ${fmtRtp(p.game.data.specs.rtp)}, volatility ${fmtVol(p.game.data.specs.volatility)}`}
+                data-max={maxWin(p.game.data.specs.maxWin) ?? t('global.label.on_request', locale)}
+                aria-label={`${localized.name}: ${t('global.label.rtp', locale)} ${fmtRtp(p.game.data.specs.rtp)}, ${t('global.label.volatility', locale)} ${fmtVol(p.game.data.specs.volatility)}`}
               >
-                <Image src={p.game.data.card} alt="" width={96} height={96} loading="lazy" />
+                <span class="mx-dot-art">
+                  <Image src={p.game.data.card} alt="" width={96} height={96} loading="lazy" />
+                </span>
               </a>
             </li>
-          ))}
+            );
+          })}
         </ul>
       </div>
     </div>
   </div>
 
   <div class="mx-foot">
-    <ul class="mx-legend" aria-label="Game types">
-      {present.map((t) => (
-        <li data-type={t}><i></i>{TYPE_PLURAL[t]}</li>
-      ))}
-      <li class="mx-legend-adj"><i class="adj"></i>Adjustable volatility</li>
-    </ul>
+    <div class="mx-legend-wrap">
+      <div class="mx-type-legend">
+        <span class="mx-legend-title">{t('global.aria.game_types', locale)}</span>
+        <ul class="mx-legend" aria-label={t('global.aria.game_types', locale)}>
+          {present.map((categoryType) => (
+            <li data-type={categoryType}><i></i>{t(`global.game_type.${categoryType}`, locale)}</li>
+          ))}
+        </ul>
+      </div>
+      <span class="mx-legend-separator" aria-hidden="true"></span>
+      <div class="mx-legend-adj">
+        <i class="adj" aria-hidden="true"></i>
+        <span>
+          <strong>{t('home.maths.adjustable', locale)}</strong>
+          <small>Game can operate across this range</small>
+        </span>
+      </div>
+    </div>
     <p class="mx-caption"><slot name="caption" /></p>
   </div>
 
@@ -151,11 +180,11 @@ const present = types.filter((t) => numeric.some((g) => g.data.type === t));
       <b data-tip-name></b>
       <span class="mx-tip-type" data-tip-type></span>
       <dl>
-        <div><dt>RTP</dt><dd class="tnum" data-tip-rtp></dd></div>
-        <div><dt>Volatility</dt><dd data-tip-vol></dd></div>
-        <div><dt>Max win</dt><dd class="tnum" data-tip-max></dd></div>
+        <div><dt>{t('global.label.rtp', locale)}</dt><dd class="tnum" data-tip-rtp></dd></div>
+        <div><dt>{t('global.label.volatility', locale)}</dt><dd data-tip-vol></dd></div>
+        <div><dt>{t('global.label.max_win', locale)}</dt><dd class="tnum" data-tip-max></dd></div>
       </dl>
-      <span class="mx-tip-go">Open the game</span>
+      <span class="mx-tip-go">{t('home.maths.open_game', locale)}</span>
     </div>
   </div>
 </div>
@@ -164,57 +193,78 @@ const present = types.filter((t) => numeric.some((g) => g.data.type === t));
   .mx {
     position: relative;
     background: var(--ink-2); border-radius: var(--radius-l);
-    padding: var(--sp-5) var(--sp-5) var(--sp-4); box-shadow: var(--shadow-1);
-    --lane-h: 108px; --dot: 52px;
+    padding: 28px;
+    box-shadow: 0 1px 0 rgb(255 240 200 / 0.05) inset, 0 12px 16px rgb(5 4 2 / 0.7);
+    --lane-h: 80px; --lane-gap: 6px; --dot: 40px;
   }
-  .mx-top { display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-5); align-items: center; justify-content: space-between; margin-bottom: var(--sp-4); }
-  .mx-hint { font-size: 13px; color: var(--fg-3); }
+  .mx-top { display: flex; flex-wrap: wrap; gap: var(--sp-4) var(--sp-6); align-items: center; justify-content: space-between; }
+  .mx-hint { max-width: 56ch; font-size: 13px; line-height: 1.5; color: var(--fg-3); text-align: right; }
 
-  .mx-scroll { overflow-x: auto; overscroll-behavior-x: contain; border-radius: var(--radius); }
+  .mx-scroll {
+    overflow-x: auto; overscroll-behavior-x: contain; padding-top: 20px;
+    scrollbar-width: none;
+  }
+  .mx-scroll::-webkit-scrollbar { display: none; }
   .mx-board {
-    display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 0 var(--sp-3);
-    min-width: 720px; padding-bottom: 30px; position: relative;
+    display: grid; grid-template-columns: 144px minmax(0, 1fr); gap: 0 var(--sp-3);
+    min-width: 800px; padding-bottom: 48px; position: relative;
   }
   .mx-labels {
-    display: grid; grid-template-rows: repeat(var(--lanes), var(--lane-h)); position: relative;
+    display: flex; flex-direction: column; gap: var(--lane-gap); position: relative;
+    height: calc(var(--lanes) * var(--lane-h) + (var(--lanes) - 1) * var(--lane-gap));
   }
   .mx-lane-label {
-    display: flex; align-items: center;
-    font-family: 'JetBrains Mono Variable', monospace; font-size: 11px; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--fg-3);
+    display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+    flex: 1 1 0; min-height: 0; gap: 5px;
+    padding: 12px 16px; border: 1px solid; border-radius: var(--radius-s);
+    text-transform: uppercase; color: var(--on-brand-button);
   }
-  .mx-axis-name {
-    position: absolute; left: 0; bottom: -26px;
-    font-family: 'JetBrains Mono Variable', monospace; font-size: 10.5px; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--fg-3);
+  .mx-lane-label strong { font-size: 16px; line-height: 20px; font-weight: 650; letter-spacing: 0.01em; }
+  .mx-lane-label small { font-size: 10px; line-height: 13px; font-weight: 650; letter-spacing: 0.06em; color: #febd46; }
+  .mx-rtp-axis {
+    position: absolute; left: 19px; top: calc(100% + 15px);
+    font-size: 13px; line-height: 20px; font-weight: 650; color: var(--fg); white-space: nowrap;
   }
+  .mx-rtp-axis small { font: inherit; }
 
-  .mx-track { position: relative; height: calc(var(--lane-h) * var(--lanes)); }
-  .mx-lane {
-    height: var(--lane-h); border-radius: var(--radius-s);
-    background: linear-gradient(90deg, rgb(255 240 200 / 0.03), rgb(255 240 200 / 0.015));
-    border-bottom: 1px solid var(--line);
+  .mx-lane-label--very_high { border-color: #40100d; background: linear-gradient(90deg, #70100c, rgb(33 17 18 / 0.5)); }
+  .mx-lane-label--high { border-color: #472d0d; background: linear-gradient(90deg, #ac5303, rgb(47 32 11 / 0.5)); }
+  .mx-lane-label--medium { border-color: #06314f; background: linear-gradient(90deg, #004e9c, rgb(4 36 58 / 0.5)); }
+  .mx-lane-label--low { border-color: #102c1a; background: linear-gradient(90deg, #105c27, rgb(11 43 23 / 0.5)); }
+
+  .mx-track {
+    position: relative;
+    display: flex; flex-direction: column; gap: var(--lane-gap);
+    height: calc(var(--lanes) * var(--lane-h) + (var(--lanes) - 1) * var(--lane-gap));
   }
-  .mx-lane:first-child { border-top: 1px solid var(--line); }
+  .mx-lane {
+    flex: 0 0 var(--lane-h); border: 1px solid; border-radius: var(--radius-s);
+  }
+  .mx-lane--very_high { border-color: #551714; background: linear-gradient(90deg, rgb(43 16 17 / 0.5), rgb(33 17 18 / 0.5)); }
+  .mx-lane--high { border-color: #724d19; background: linear-gradient(90deg, rgb(58 44 19 / 0.5), rgb(46 34 17 / 0.5)); }
+  .mx-lane--medium { border-color: #25658f; background: linear-gradient(90deg, rgb(16 39 53 / 0.5), rgb(13 33 45 / 0.5)); }
+  .mx-lane--low { border-color: #2c7844; background: linear-gradient(90deg, rgb(22 59 33 / 0.5), rgb(20 41 27 / 0.5)); }
 
   .mx-tick {
-    position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px dashed rgb(255 240 200 / 0.09);
+    position: absolute; top: 0; bottom: 0; width: 1px;
+    background: repeating-linear-gradient(to bottom, rgb(244 241 230 / 0.7) 0 4px, transparent 4px 8px);
     pointer-events: none;
   }
+  .mx-tick::after { content: ''; position: absolute; left: 0; top: 100%; width: 1px; height: 11px; background: var(--fg); }
   .mx-tick b {
-    position: absolute; top: 100%; left: 0; transform: translate(-50%, 8px);
-    font-family: 'JetBrains Mono Variable', monospace; font-weight: 500; font-size: 11px; color: var(--fg-3);
+    position: absolute; top: 100%; left: 0; transform: translate(-50%, 14px);
+    font-family: 'JetBrains Mono Variable', monospace; font-weight: 500; font-size: 12px; line-height: 18px; color: var(--fg-2);
   }
 
   .mx-bracket {
-    position: absolute; width: 2px; border-radius: 1px;
-    background: linear-gradient(180deg, var(--peach), rgb(246 203 149 / 0.35));
-    top: calc(var(--from) * var(--lane-h) + var(--lane-h) / 2);
-    height: calc((var(--to) - var(--from)) * var(--lane-h));
-    transform: translateX(-50%); pointer-events: none; opacity: 0.8;
+    position: absolute; width: 3px; border-radius: 1px;
+    background: #febd46; box-shadow: 0 0 2px var(--brand);
+    top: calc(var(--from) * (var(--lane-h) + var(--lane-gap)) + var(--lane-h) / 2);
+    height: calc((var(--to) - var(--from)) * (var(--lane-h) + var(--lane-gap)));
+    transform: translateX(-50%); pointer-events: none;
   }
   .mx-bracket::before, .mx-bracket::after {
-    content: ''; position: absolute; left: 50%; width: 10px; height: 2px; background: var(--peach);
+    content: ''; position: absolute; left: 50%; width: 11px; height: 2px; background: #febd46;
     transform: translateX(-50%);
   }
   .mx-bracket::before { top: 0; }
@@ -222,23 +272,32 @@ const present = types.filter((t) => numeric.some((g) => g.data.type === t));
 
   .mx-marks { list-style: none; position: absolute; inset: 0; margin: 0; padding: 0; }
   .mx-mark {
-    position: absolute;
-    top: calc(var(--lane) * var(--lane-h) + (var(--lane-h) - var(--dot)) / 2 + var(--row) * 26px - 13px);
+    position: absolute; width: var(--dot); height: var(--dot);
+    top: calc(var(--lane) * (var(--lane-h) + var(--lane-gap)) + (var(--lane-h) - var(--dot)) / 2 + var(--row) * 36px - 18px);
     transform: translateX(-50%);
     transition: opacity var(--dur-2) var(--ease), filter var(--dur-2) var(--ease);
   }
-  .mx-mark[data-row='0'] { }
   .mx-dot {
     display: block; width: var(--dot); height: var(--dot); border-radius: var(--radius-pill);
     overflow: hidden; background: var(--ink-3);
     box-shadow: 0 0 0 2.5px var(--ring, var(--fg-3)), 0 8px 18px -8px rgb(5 4 2 / 0.9);
     transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
   }
-  .mx-dot :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .mx-mark[data-type='slot'] { --ring: var(--tint-ice); }
-  .mx-mark[data-type='instant'] { --ring: var(--tint-mint); }
+  .mx-dot-art { display: block; width: 100%; height: 100%; }
+  .mx-dot-art :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mx-mark[data-type='slot'] { --ring: #feffff; }
+  .mx-mark[data-type='instant'] { --ring: #05e3e4; }
   .mx-mark[data-type='table'] { --ring: var(--tint-lemon); }
+  .mx-mark[data-type='instant'] .mx-dot {
+    width: 28px; height: 28px; margin: 6px; border-radius: 2px;
+    transform: rotate(45deg); box-shadow: 0 0 0 2.5px var(--ring), 0 0 8.4px var(--ring), 0 8px 18px -8px rgb(5 4 2 / 0.9);
+  }
+  .mx-mark[data-type='instant'] .mx-dot-art {
+    width: var(--dot); height: var(--dot); transform: translate(-6px, -6px) rotate(-45deg) scale(1.03);
+  }
   .mx-dot:hover, .mx-dot:focus-visible { transform: scale(1.22); box-shadow: 0 0 0 3px var(--brand), 0 14px 28px -10px rgb(5 4 2 / 0.95); z-index: 2; }
+  .mx-mark[data-type='instant'] .mx-dot:hover,
+  .mx-mark[data-type='instant'] .mx-dot:focus-visible { transform: rotate(45deg) scale(1.22); }
   .mx-mark:has(.mx-dot:hover), .mx-mark:has(.mx-dot:focus-visible) { z-index: 5; }
 
   /* highlight, never hide */
@@ -247,15 +306,32 @@ const present = types.filter((t) => numeric.some((g) => g.data.type === t));
   .mx[data-active='instant'] .mx-mark:not([data-type='instant']),
   .mx[data-active='table'] .mx-mark:not([data-type='table']) { opacity: 0.22; filter: grayscale(1); }
 
-  .mx-foot { display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-6); align-items: center; justify-content: space-between; margin-top: var(--sp-5); }
-  .mx-legend { list-style: none; display: flex; flex-wrap: wrap; gap: var(--sp-4); font-size: 12.5px; color: var(--fg-2); }
-  .mx-legend li { display: inline-flex; align-items: center; gap: 8px; }
+  .mx-foot {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 492px); gap: var(--sp-6);
+    align-items: center; padding: var(--sp-4) 18px; margin-top: var(--sp-3);
+    background: var(--ink-3); border: 1px solid #40403b; border-radius: 16px;
+  }
+  .mx-legend-wrap { display: flex; align-items: stretch; min-width: 0; }
+  .mx-type-legend { display: flex; flex-direction: column; justify-content: center; gap: 7px; }
+  .mx-legend-title { font-size: 13px; line-height: 20px; font-weight: 550; color: var(--on-brand-button); }
+  .mx-legend { list-style: none; display: flex; flex-wrap: wrap; gap: 10px var(--sp-5); font-size: 12.5px; color: var(--fg-2); }
+  .mx-legend li { display: inline-flex; align-items: center; gap: 9px; min-height: 20px; white-space: nowrap; }
   .mx-legend i { width: 14px; height: 14px; border-radius: 50%; background: var(--ink-3); box-shadow: 0 0 0 2px var(--fg-3); }
-  .mx-legend li[data-type='slot'] i { box-shadow: 0 0 0 2px var(--tint-ice); }
-  .mx-legend li[data-type='instant'] i { box-shadow: 0 0 0 2px var(--tint-mint); }
+  .mx-legend li[data-type='slot'] i { box-shadow: 0 0 0 2px #feffff, 0 0 5px #feffff; }
+  .mx-legend li[data-type='instant'] i { border-radius: 1px; transform: rotate(45deg); box-shadow: 0 0 0 2px #05e3e4, 0 0 8.4px #05e3e4; }
   .mx-legend li[data-type='table'] i { box-shadow: 0 0 0 2px var(--tint-lemon); }
-  .mx-legend i.adj { width: 2px; height: 16px; border-radius: 1px; background: var(--peach); box-shadow: none; }
-  .mx-caption { font-size: 13px; color: var(--fg-3); max-width: 60ch; }
+  .mx-legend-separator { width: 1px; margin: 0 var(--sp-5); background: rgb(246 203 149 / 0.55); }
+  .mx-legend-adj { display: flex; align-items: center; gap: var(--sp-4); min-width: 250px; }
+  .mx-legend-adj i.adj { position: relative; width: 3px; height: 48px; border-radius: 1px; background: #febd46; box-shadow: 0 0 2px var(--brand); flex: none; }
+  .mx-legend-adj i.adj::before, .mx-legend-adj i.adj::after {
+    content: ''; position: absolute; left: 50%; width: 11px; height: 2px; background: #febd46; transform: translateX(-50%);
+  }
+  .mx-legend-adj i.adj::before { top: 0; }
+  .mx-legend-adj i.adj::after { bottom: 0; }
+  .mx-legend-adj span { display: flex; flex-direction: column; justify-content: center; gap: 3px; }
+  .mx-legend-adj strong { font-size: 13px; line-height: 20px; font-weight: 550; color: var(--on-brand-button); white-space: nowrap; }
+  .mx-legend-adj small { font-size: 10px; line-height: 16px; font-weight: 500; color: #9ca9b6; white-space: nowrap; }
+  .mx-caption { font-size: 12px; line-height: 20px; font-weight: 500; color: #9ca9b6; max-width: 60ch; }
 
 
   .mx-tip {
@@ -280,9 +356,29 @@ const present = types.filter((t) => numeric.some((g) => g.data.type === t));
     .mx-tip { position: fixed; left: var(--sp-4); right: var(--sp-4); bottom: var(--sp-4); width: auto; pointer-events: auto; }
   }
   @media (max-width: 768px) {
-    .mx { padding: var(--sp-4); --lane-h: 88px; --dot: 40px; }
-    .mx-board { grid-template-columns: 78px minmax(0, 1fr); }
+    .mx { padding: var(--sp-4); --lane-h: 68px; --lane-gap: 5px; --dot: 36px; }
+    .mx-scroll { margin-inline: calc(var(--sp-4) * -1); padding-inline: var(--sp-4); }
+    .mx-board { grid-template-columns: 112px minmax(0, 1fr); min-width: 780px; }
+    .mx-lane-label { padding: 8px 10px; gap: 3px; }
+    .mx-lane-label strong { font-size: 13px; }
+    .mx-lane-label small { font-size: 9px; line-height: 11px; }
+    .mx-rtp-axis { font-size: 12px; }
+    .mx-mark { top: calc(var(--lane) * (var(--lane-h) + var(--lane-gap)) + (var(--lane-h) - var(--dot)) / 2 + var(--row) * 30px - 15px); }
+    .mx-mark[data-type='instant'] .mx-dot { width: 26px; height: 26px; margin: 5px; }
+    .mx-mark[data-type='instant'] .mx-dot-art { transform: translate(-5px, -5px) rotate(-45deg) scale(1.03); }
     .mx-hint { display: none; }
+    .mx-foot { grid-template-columns: 1fr; gap: var(--sp-4); }
+    .mx-caption { max-width: none; }
+  }
+  @media (max-width: 480px) {
+    .mx-top .chips { flex-wrap: nowrap; width: 100%; overflow-x: auto; padding-bottom: 2px; }
+    .mx-foot { padding: var(--sp-4); gap: var(--sp-4); }
+    .mx-legend-wrap { flex-wrap: wrap; gap: var(--sp-4); }
+    .mx-type-legend { width: 100%; gap: var(--sp-2); }
+    .mx-legend-separator { display: none; }
+    .mx-legend-adj { width: 100%; min-width: 0; padding-top: var(--sp-4); border-top: 1px solid var(--line); }
+    .mx-legend-adj small { white-space: normal; }
+    .mx-caption { padding-top: var(--sp-4); border-top: 1px solid var(--line); }
   }
   @media (prefers-reduced-motion: reduce) {
     .mx-mark, .mx-dot { transition: none; }

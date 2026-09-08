@@ -94,13 +94,178 @@ export function mountExperienceCardMotion(root: ParentNode = document) {
   mountSettingsSync();
 
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const compactLayout = window.matchMedia('(max-width: 992px)');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (!finePointer.matches || reducedMotion.matches) return;
+  if (reducedMotion.matches) return;
 
-  const cards = root.querySelectorAll<HTMLElement>('[data-experience-card]:not([data-motion-mounted])');
+  const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-experience-card]:not([data-motion-mounted])'));
   if (!cards.length) return;
 
   import('gsap').then(({ gsap }) => {
+    if (!finePointer.matches || compactLayout.matches) {
+      const bindings = cards.flatMap((card) => {
+        const stage = card.closest<HTMLElement>('[data-experience-card-stage]');
+        const glare = card.querySelector<HTMLElement>('[data-experience-glare]');
+        const hologram = card.querySelector<HTMLElement>('[data-experience-hologram]');
+        if (!stage || !glare) return [];
+
+        card.dataset.motionMounted = 'true';
+        gsap.set(card, { transformStyle: 'preserve-3d' });
+
+        const surfaceEffects = hologram ? [glare, hologram] : [glare];
+        const tilt = Math.min(5.5, numberFrom(card.dataset.tiltMax, experienceCardDefaults.tiltMax) * 0.46);
+        const scale = Math.min(1.012, numberFrom(card.dataset.hoverScale, experienceCardDefaults.hoverScale));
+        const response = numberFrom(card.dataset.motionDuration, experienceCardDefaults.response);
+        const sweepDuration = Math.max(2.8, response * 3.5);
+        const settleDuration = Math.max(0.72, response * 0.9);
+        const glareTravel = numberFrom(card.dataset.glareTravel, experienceCardDefaults.glareTravel);
+
+        const timeline = gsap.timeline({ paused: true, repeat: -1, repeatDelay: 0.8 });
+        timeline
+          .call(() => { card.dataset.pointerActive = 'true'; }, [], 0)
+          .to(card, {
+            rotationX: 1.6,
+            rotationY: -tilt,
+            scale,
+            duration: settleDuration,
+            ease: 'sine.inOut',
+          }, 0)
+          .to(surfaceEffects, {
+            '--glare-x': `${50 - glareTravel}%`,
+            '--glare-y': '48%',
+            duration: settleDuration,
+            ease: 'sine.inOut',
+          }, 0)
+          .to(card, {
+            rotationX: -1.6,
+            rotationY: tilt,
+            scale,
+            duration: sweepDuration,
+            ease: 'sine.inOut',
+          }, settleDuration)
+          .to(surfaceEffects, {
+            '--glare-x': `${50 + glareTravel}%`,
+            '--glare-y': '52%',
+            duration: sweepDuration,
+            ease: 'sine.inOut',
+          }, settleDuration)
+          .call(() => { card.dataset.pointerActive = 'false'; }, [], settleDuration + sweepDuration)
+          .to(card, {
+            rotationX: 0,
+            rotationY: 0,
+            scale: 1,
+            duration: settleDuration,
+            ease: 'sine.inOut',
+          }, settleDuration + sweepDuration)
+          .to(surfaceEffects, {
+            '--glare-x': '50%',
+            '--glare-y': '50%',
+            duration: settleDuration,
+            ease: 'sine.inOut',
+          }, settleDuration + sweepDuration);
+
+        return [{ card, surfaceEffects, timeline }];
+      });
+
+      const visibility = new Map<HTMLElement, number>();
+      let activeCard: HTMLElement | null = null;
+      let manualCard: HTMLElement | null = null;
+      let resumeTimer = 0;
+
+      const reset = (binding: (typeof bindings)[number]) => {
+        binding.timeline.pause(0);
+        binding.card.dataset.pointerActive = 'false';
+        gsap.set(binding.card, { rotationX: 0, rotationY: 0, scale: 1 });
+        gsap.set(binding.surfaceEffects, { '--glare-x': '50%', '--glare-y': '50%' });
+      };
+
+      const activateNearestCard = () => {
+        if (manualCard) return;
+        const viewportCenter = window.innerHeight / 2;
+        const next = bindings
+          .filter(({ card }) => (visibility.get(card) ?? 0) >= 0.22)
+          .sort((a, b) => {
+            const aRect = a.card.getBoundingClientRect();
+            const bRect = b.card.getBoundingClientRect();
+            return Math.abs(aRect.top + aRect.height / 2 - viewportCenter)
+              - Math.abs(bRect.top + bRect.height / 2 - viewportCenter);
+          })[0];
+
+        if (next?.card === activeCard) return;
+        bindings.forEach(reset);
+        activeCard = next?.card ?? null;
+        if (next) {
+          next.card.dataset.pointerActive = 'true';
+          next.timeline.restart();
+        }
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => visibility.set(entry.target as HTMLElement, entry.intersectionRatio));
+        activateNearestCard();
+      }, { threshold: [0, 0.22, 0.45, 0.7] });
+
+      bindings.forEach(({ card }) => observer.observe(card));
+
+      if (finePointer.matches) {
+        bindings.forEach((binding) => {
+          let pointerFrame = 0;
+          let latestPointer: PointerEvent | null = null;
+
+          const renderPointer = () => {
+            pointerFrame = 0;
+            if (!latestPointer) return;
+
+            const rect = binding.card.getBoundingClientRect();
+            const x = Math.min(1, Math.max(-1, ((latestPointer.clientX - rect.left) / rect.width) * 2 - 1));
+            const y = Math.min(1, Math.max(-1, ((latestPointer.clientY - rect.top) / rect.height) * 2 - 1));
+            const tilt = numberFrom(binding.card.dataset.tiltMax, experienceCardDefaults.tiltMax);
+            const scale = numberFrom(binding.card.dataset.hoverScale, experienceCardDefaults.hoverScale);
+            const duration = numberFrom(binding.card.dataset.motionDuration, experienceCardDefaults.response);
+            const glareTravel = numberFrom(binding.card.dataset.glareTravel, experienceCardDefaults.glareTravel);
+
+            gsap.to(binding.card, {
+              rotationX: -y * tilt,
+              rotationY: x * tilt,
+              scale,
+              duration,
+              ease: 'power3.out',
+              overwrite: true,
+            });
+            gsap.to(binding.surfaceEffects, {
+              '--glare-x': `${50 + x * glareTravel}%`,
+              '--glare-y': `${50 + y * glareTravel}%`,
+              duration: Math.max(0.18, duration * 0.78),
+              ease: 'power2.out',
+              overwrite: true,
+            });
+          };
+
+          binding.card.addEventListener('pointerenter', () => {
+            window.clearTimeout(resumeTimer);
+            bindings.forEach(reset);
+            manualCard = binding.card;
+            activeCard = binding.card;
+            binding.card.dataset.pointerActive = 'true';
+          });
+          binding.card.addEventListener('pointermove', (event) => {
+            latestPointer = event;
+            if (!pointerFrame) pointerFrame = requestAnimationFrame(renderPointer);
+          });
+          binding.card.addEventListener('pointerleave', () => {
+            latestPointer = null;
+            if (pointerFrame) cancelAnimationFrame(pointerFrame);
+            pointerFrame = 0;
+            manualCard = null;
+            activeCard = null;
+            reset(binding);
+            resumeTimer = window.setTimeout(activateNearestCard, 500);
+          });
+        });
+      }
+      return;
+    }
+
     cards.forEach((card) => {
       card.dataset.motionMounted = 'true';
       const stage = card.closest<HTMLElement>('[data-experience-card-stage]');

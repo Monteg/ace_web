@@ -12,13 +12,16 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import type { CollectionEntry } from 'astro:content';
-import { CTA } from '../../data/site';
+import { localeFromPath, localizePath, t } from '../../lib/i18n';
+import { getSiteContent } from '../../lib/site-content';
 
 interface Props {
   games: CollectionEntry<'games'>[];
 }
 
 const { games } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { CTA } = getSiteContent(locale);
 const live = games.filter((g) => g.data.status === 'live');
 const pool = live.length >= 12 ? live : games;
 
@@ -51,13 +54,13 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
 
   <div class="wrap">
     <div class="wall-copy" data-wall-copy>
-      <h1 class="d0">Slots and crash games, <em>built end to end</em></h1>
+      <h1 class="d0">{t('home.hero.title', locale)} <em>{t('home.hero.title_accent', locale)}</em></h1>
       <p class="lead">
-        {live.length} slot, crash and instant titles, built and certified in-house, playable here before you email us.
+        {t('home.hero.lead', locale, { count: live.length })}
       </p>
       <div class="wall-btns">
-        <a class="btn btn-primary" href="#games">
-          View Game
+        <a class="btn btn-primary" href={localizePath('/#games', locale)}>
+          {t('global.action.view_games', locale)}
           <span class="disc" aria-hidden="true"><Icon name="ph:arrow-down" /></span>
         </a>
         <button

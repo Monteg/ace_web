@@ -276,9 +276,9 @@ const stageStyle = `--card-perspective: ${settings.perspective}px; --art-depth: 
     .experience-card h3 { font-size: clamp(1.5rem, 6.8vw, 2rem); }
     .experience-card p { font-size: clamp(0.82rem, 3.45vw, 0.94rem); }
   }
-  @media (hover: none), (pointer: coarse) {
-    .experience-card { transform: none !important; }
-    .experience-card-hologram, .experience-card-glare { display: none; }
+  @media (max-width: 992px), (hover: none), (pointer: coarse) {
+    .experience-card-hologram,
+    .experience-card-glare { transition-duration: 420ms; }
   }
   @media (prefers-reduced-motion: reduce) {
     .experience-card { transform: none !important; }

@@ -1,31 +1,34 @@
 ---
 import '@fontsource-variable/caveat';
-import { CTA, sectionCopy } from '../data/site';
+import { localeFromPath, localizePath, t } from '../lib/i18n';
+import { getSiteContent } from '../lib/site-content';
 
 interface Props {
   idPrefix?: string;
   variant?: 'panel' | 'modal';
 }
 const { idPrefix = 'f', variant = 'panel' } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { CTA, sectionCopy } = getSiteContent(locale);
 ---
 
 <form class:list={['form', 'contact-form', { 'contact-form--modal': variant === 'modal' }]} method="post" action="/api/contact">
   <div class="pair">
     <p class="field">
-      <label for={`${idPrefix}-name`}>Your name</label>
+      <label for={`${idPrefix}-name`}>{t('contact.name', locale)}</label>
       <input id={`${idPrefix}-name`} name="name" type="text" autocomplete="name" required />
     </p>
     <p class="field">
-      <label for={`${idPrefix}-company`}>Company</label>
+      <label for={`${idPrefix}-company`}>{t('contact.company', locale)}</label>
       <input id={`${idPrefix}-company`} name="company" type="text" autocomplete="organization" required />
     </p>
   </div>
   <p class="field">
-    <label for={`${idPrefix}-email`}>Work email</label>
-    <input id={`${idPrefix}-email`} name="email" type="email" autocomplete="email" placeholder="you@operator.com" required />
+    <label for={`${idPrefix}-email`}>{t('contact.email', locale)}</label>
+    <input id={`${idPrefix}-email`} name="email" type="email" autocomplete="email" placeholder={t('contact.email_placeholder', locale)} required />
   </p>
   <p class="field">
-    <label for={`${idPrefix}-msg`}>What are you looking for?</label>
+    <label for={`${idPrefix}-msg`}>{t('contact.message', locale)}</label>
     <textarea id={`${idPrefix}-msg`} name="message" rows="4"></textarea>
   </p>
   <input type="text" name="website" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true" />
@@ -41,7 +44,7 @@ const { idPrefix = 'f', variant = 'panel' } = Astro.props;
     </div>
   </div>
   <p class="consent">
-    We use what you send here only to answer you. See the <a href="/privacy-policy">privacy policy</a>.
+    {t('contact.consent_before', locale)} <a href={localizePath('/privacy-policy', locale)}>{t('contact.privacy_link', locale)}</a>.
   </p>
 </form>
 

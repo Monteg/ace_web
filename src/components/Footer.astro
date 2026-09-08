@@ -2,43 +2,47 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import logo from '../assets/brand/logo.webp';
-import { company, nav, social, socialIntro } from '../data/site';
+import { company, social } from '../data/site';
+import { localeFromPath, localizePath, t } from '../lib/i18n';
+import { getSiteContent } from '../lib/site-content';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { nav, socialIntro } = getSiteContent(locale);
 ---
 
 <footer class="site-footer">
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-col">
-        <a class="brand" href="/">
+        <a class="brand" href={localizePath('/', locale)}>
           <Image src={logo} alt={company.name} widths={[180]} sizes="90px" loading="lazy" />
         </a>
         <p class="blurb">
-          Custom slot and crash game development for licensed operators. Maths, art and engineering
-          in-house.
+          {t('footer.company_intro', locale)}
         </p>
       </div>
 
       <div class="foot-col">
-        <h2>Company</h2>
+        <h2>{t('footer.company', locale)}</h2>
         <ul>
           {nav.map((item) => (
             <li><a href={item.href}>{item.label}</a></li>
           ))}
-          <li><a href="/#contact">Contact</a></li>
+          <li><a href={localizePath('/#contact', locale)}>{t('footer.contact', locale)}</a></li>
         </ul>
       </div>
 
       <div class="foot-col">
-        <h2>Legal</h2>
+        <h2>{t('footer.legal', locale)}</h2>
         <ul>
-          <li><a href="/privacy-policy">Privacy policy</a></li>
-          <li><a href="/terms-conditions">Terms and conditions</a></li>
+          <li><a href={localizePath('/privacy-policy', locale)}>{t('footer.privacy', locale)}</a></li>
+          <li><a href={localizePath('/terms-conditions', locale)}>{t('footer.terms', locale)}</a></li>
           <li><a href={`mailto:${company.legalEmail}`}>{company.legalEmail}</a></li>
         </ul>
       </div>
 
       <div class="foot-col social-col">
-        <h2>Follow Us</h2>
+        <h2>{t('footer.follow', locale)}</h2>
         <p class="social-copy">{socialIntro}</p>
         <div class="social-controls">
           {social.map((item) => item.href ? (

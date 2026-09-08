@@ -4,7 +4,9 @@ import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import playIcon from '../../assets/ui/game-card-play.svg';
 import { company } from '../../data/site';
-import { demoUrl, rtp, TYPE_LABEL, volatility } from '../../lib/format';
+import { demoUrl, rtp, volatility } from '../../lib/format';
+import { localeFromPath, localizePath, t } from '../../lib/i18n';
+import { getLocalizedGame } from '../../lib/localized-games';
 
 interface Props {
   game: CollectionEntry<'games'>;
@@ -14,26 +16,28 @@ interface Props {
 }
 
 const { game, eager = false, featured = false } = Astro.props;
-const d = game.data;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const d = getLocalizedGame(game, locale);
 const soon = d.status === 'coming_soon';
-const href = `/portfolio/${game.id}`;
+const href = localizePath(`/portfolio/${game.id}`, locale);
 const bands = ['low', 'medium', 'high', 'very_high'] as const;
 const layeredArt = d.cardLayers;
 const cardVolatility = volatility(d.specs.volatility).replaceAll(' / ', '/');
 const quickPlayUrl = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
+const typeLabel = t(`global.game_type.${d.type}_single`, locale);
 ---
 
 <article class:list={['gt', { 'gt-featured': featured, 'gt-layered': layeredArt, 'gt-soon': soon }]} data-game-card data-type={d.type} data-status={d.status}>
   <div class="gt-surface">
     <a class="gt-link" href={href}>
-      <span class="sr-only">{d.name}, {TYPE_LABEL[d.type]}{soon ? ', coming soon' : ''}</span>
+      <span class="sr-only">{d.name}, {typeLabel}{soon ? `, ${t('global.label.coming_soon', locale)}` : ''}</span>
     </a>
 
     <div class="gt-art">
       <Image
         class:list={['gt-background', { 'gt-background-single': !layeredArt }]}
         src={layeredArt?.background ?? d.card}
-        alt=""
+        alt={layeredArt ? '' : d.cardAlt}
         widths={featured ? [640, 900, 1200] : [320, 460, 640]}
         sizes={featured
           ? '(max-width: 768px) 92vw, (max-width: 1100px) 60vw, 640px'
@@ -46,7 +50,7 @@ const quickPlayUrl = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
         <Image
           class="gt-logo"
           src={layeredArt.logo}
-          alt=""
+          alt={d.cardAlt}
           widths={[254, 306, 424]}
           sizes="(max-width: 440px) 74vw, 306px"
           loading={eager ? 'eager' : 'lazy'}
@@ -54,7 +58,7 @@ const quickPlayUrl = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
       )}
     </div>
 
-    <span class:list={['gt-type', `gt-type-${d.type}`]}>{soon ? 'Coming soon' : TYPE_LABEL[d.type]}</span>
+    <span class:list={['gt-type', `gt-type-${d.type}`]}>{soon ? t('global.label.coming_soon', locale) : typeLabel}</span>
 
     {quickPlayUrl && (
       <a
@@ -62,10 +66,10 @@ const quickPlayUrl = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
         href={quickPlayUrl}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Play ${d.name} demo in a new tab`}
+        aria-label={t('game.card.play_aria', locale, { name: d.name })}
       >
         <img src={playIcon.src} alt="" width="16" height="16" />
-        <b>Play</b>
+        <b>{t('global.action.play', locale)}</b>
       </a>
     )}
 
@@ -73,7 +77,7 @@ const quickPlayUrl = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
       <h3>{d.name}</h3>
       <dl class="gt-meta">
         <div class="gt-stat">
-          <dt>RTP</dt>
+          <dt>{t('global.label.rtp', locale)}</dt>
           <dd class:list={['gt-rtp', 'tnum', { 'gt-rtp-configurable': d.specs.rtp === 'configurable' }]}>{rtp(d.specs.rtp)}</dd>
         </div>
         <div class="gt-stat">
@@ -81,7 +85,7 @@ const quickPlayUrl = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
             <span class="vmeter" aria-hidden="true">
               {bands.map((b) => <i class:list={{ on: d.specs.volatility.includes(b) }}></i>)}
             </span>
-            <span>Volatility</span>
+            <span>{t('global.label.volatility', locale)}</span>
           </dt>
           <dd class="gt-volatility">{cardVolatility}</dd>
         </div>

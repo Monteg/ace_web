@@ -8,9 +8,13 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check",
+    "check": "node --test scripts/content/content.test.mjs && node scripts/content/validate-generated.mjs && astro check",
     "verify": "node scripts/verify.mjs",
-    "ship": "astro build && node scripts/verify.mjs",
+    "ship": "node scripts/content/validate-generated.mjs && astro build && node scripts/verify.mjs",
+    "content:seed": "node scripts/content/build-local-snapshot.mjs",
+    "content:validate": "node scripts/content/validate-generated.mjs",
+    "content:test": "node --test scripts/content/content.test.mjs",
+    "content:workbook": "node scripts/content/create-content-workbook.mjs",
     "new-game": "node scripts/new-game.mjs"
   },
   "dependencies": {
@@ -22,10 +26,14 @@
     "astro": "^5.14.1",
     "astro-icon": "^1.1.5",
     "gsap": "^3.13.0",
+    "marked": "^18.0.11",
+    "sanitize-html": "2.13.1",
     "sharp": "^0.34.4"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@types/sanitize-html": "^2.16.1",
+    "gray-matter": "^4.0.3",
     "typescript": "^5.9.3"
   }
 }

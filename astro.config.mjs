@@ -1,17 +1,26 @@
 import { defineConfig } from 'astro/config';
 import icon from 'astro-icon';
 import sitemap from '@astrojs/sitemap';
+import { DEFAULT_LOCALE, LOCALES } from './locales.mjs';
 
 export default defineConfig({
   site: 'https://acegames.io',
   trailingSlash: 'never',
   build: { format: 'file' },
+  i18n: {
+    defaultLocale: DEFAULT_LOCALE,
+    locales: [...LOCALES],
+    fallback: Object.fromEntries(LOCALES.filter((locale) => locale !== DEFAULT_LOCALE).map((locale) => [locale, DEFAULT_LOCALE])),
+    routing: {
+      prefixDefaultLocale: false,
+      redirectToDefaultLocale: false,
+      fallbackType: 'rewrite',
+    },
+  },
   integrations: [
     icon({ include: { ph: ['*'] } }),
     sitemap({
-      filter: (page) =>
-        page !== 'https://acegames.io/effects-lab' &&
-        page !== 'https://acegames.io/under-18',
+      filter: (page) => !/^\/(?:[a-z]{2}\/)?(?:404|effects-lab|under-18)$/.test(new URL(page).pathname),
     }),
   ],
   image: { responsiveStyles: true },

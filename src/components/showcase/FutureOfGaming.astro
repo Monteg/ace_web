@@ -4,7 +4,11 @@ import engineeringArt from '../../assets/site/future-engineering.png';
 import strategyArt from '../../assets/site/future-strategy.png';
 import integrationArt from '../../assets/site/future-integration.png';
 import optimizationArt from '../../assets/site/future-optimization.png';
-import { process, sectionCopy } from '../../data/site';
+import { localeFromPath } from '../../lib/i18n';
+import { getSiteContent } from '../../lib/site-content';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { process, sectionCopy } = getSiteContent(locale);
 
 const artwork = {
   engineering: engineeringArt,

@@ -3,8 +3,10 @@ import { Icon } from 'astro-icon/components';
 import type { CollectionEntry } from 'astro:content';
 import type { EventData } from '../../data/events';
 import EventGameCard from './EventGameCard.astro';
+import { localeFromPath, localizePath, t } from '../../lib/i18n';
 interface Props { event: EventData; games: CollectionEntry<'games'>[] }
 const { event, games } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 ---
 
 <section aria-labelledby="event-games-title">
@@ -15,7 +17,7 @@ const { event, games } = Astro.props;
         <EventGameCard game={games.find(game => game.id === item.id)!} name={item.name} description={item.description} lead={index === 0} />
       ))}
     </div>
-    <a class="btn btn-ghost games-cta rv" href="/games" data-event-track="explore_all_games">Explore all games<span class="disc" aria-hidden="true"><Icon name="ph:arrow-right" /></span></a>
+    <a class="btn btn-ghost games-cta rv" href={localizePath('/games', locale)} data-event-track="explore_all_games">{t('event.games.explore_all', locale)}<span class="disc" aria-hidden="true"><Icon name="ph:arrow-right" /></span></a>
   </div>
 </section>
 
