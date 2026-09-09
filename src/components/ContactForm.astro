@@ -1,0 +1,170 @@
+---
+import '@fontsource-variable/caveat';
+import { localeFromPath, localizePath, t } from '../lib/i18n';
+import { getSiteContent } from '../lib/site-content';
+
+interface Props {
+  idPrefix?: string;
+  variant?: 'panel' | 'modal';
+}
+const { idPrefix = 'f', variant = 'panel' } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { CTA, sectionCopy } = getSiteContent(locale);
+---
+
+<form class:list={['form', 'contact-form', { 'contact-form--modal': variant === 'modal' }]} method="post" action="/api/contact">
+  <div class="pair">
+    <p class="field">
+      <label for={`${idPrefix}-name`}>{t('contact.name', locale)}</label>
+      <input id={`${idPrefix}-name`} name="name" type="text" autocomplete="name" required />
+    </p>
+    <p class="field">
+      <label for={`${idPrefix}-company`}>{t('contact.company', locale)}</label>
+      <input id={`${idPrefix}-company`} name="company" type="text" autocomplete="organization" required />
+    </p>
+  </div>
+  <p class="field">
+    <label for={`${idPrefix}-email`}>{t('contact.email', locale)}</label>
+    <input id={`${idPrefix}-email`} name="email" type="email" autocomplete="email" placeholder={t('contact.email_placeholder', locale)} required />
+  </p>
+  <p class="field">
+    <label for={`${idPrefix}-msg`}>{t('contact.message', locale)}</label>
+    <textarea id={`${idPrefix}-msg`} name="message" rows="4"></textarea>
+  </p>
+  <input type="text" name="website" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true" />
+  <div class="contact-actions">
+    <button class="btn btn-primary submit" type="submit">{CTA.label}</button>
+    <div class="contact-prompt">
+      <p class="contact-message">{sectionCopy.contactBody}</p>
+      <span class="contact-arrow-motion" aria-hidden="true">
+        <svg class="contact-arrow" xmlns="http://www.w3.org/2000/svg" width="42" height="19" viewBox="0 0 42 19" fill="none" focusable="false">
+          <path d="M0.301734 0.0409922C0.555209 -0.0682641 0.849539 0.0483822 0.958961 0.301734C7.43363 15.323 25.4073 21.4655 39.6933 13.6611L36.5273 12.7988C36.261 12.7262 36.1033 12.4509 36.1758 12.1845C36.2484 11.9181 36.5236 11.7613 36.79 11.834L41.1318 13.0176C41.3981 13.0903 41.555 13.3655 41.4824 13.6318L40.2988 17.9726C40.2262 18.239 39.9509 18.3967 39.6845 18.3242C39.4181 18.2515 39.2613 17.9763 39.334 17.7099L40.2021 14.5234C25.3961 22.6338 6.7538 16.2714 0.0409922 0.698219C-0.0682641 0.444744 0.0483822 0.150414 0.301734 0.0409922Z" fill="currentColor" />
+        </svg>
+      </span>
+    </div>
+  </div>
+  <p class="consent">
+    {t('contact.consent_before', locale)} <a href={localizePath('/privacy-policy', locale)}>{t('contact.privacy_link', locale)}</a>.
+  </p>
+</form>
+
+<style>
+  .contact-message {
+    max-width: 9ch;
+    margin: 0;
+    font-family: 'Caveat Variable', 'Segoe Print', 'Bradley Hand', cursive;
+    font-size: clamp(2rem, 2.1vw, 2.55rem);
+    font-weight: 520;
+    line-height: 0.82;
+    color: var(--cream);
+    text-align: center;
+    transform: rotate(-4deg);
+    text-shadow: 0 3px 16px rgb(0 0 0 / 0.6);
+  }
+
+  .form {
+    display: grid;
+    gap: 10px;
+    min-width: 0;
+    padding: clamp(18px, 1.2vw, 20px);
+    background: rgb(17 15 14 / 0.88);
+    border: 1px solid rgb(255 86 0 / 0.52);
+    border-radius: var(--radius-l);
+    box-shadow: 0 28px 70px rgb(0 0 0 / 0.34), inset 0 1px rgb(255 255 255 / 0.035);
+    backdrop-filter: blur(15px);
+  }
+  .contact-form { width: 100%; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); margin: 0; }
+  .field { display: flex; flex-direction: column; gap: 6px; margin: 0; }
+  .field label { font-size: 14px; font-weight: 500; color: var(--fg); }
+  .field input, .field textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 14px;
+    font: inherit;
+    font-size: 16px;
+    color: var(--fg);
+    background: rgb(11 11 10 / 0.72);
+    border: 1px solid rgb(255 255 245 / 0.16);
+    border-radius: var(--radius-l);
+    box-shadow: inset 0 1px 8px rgb(0 0 0 / 0.28);
+    transition: border-color var(--dur-1), box-shadow var(--dur-1), background var(--dur-1);
+  }
+  .field input::placeholder, .field textarea::placeholder { color: var(--fg-3); }
+  .field input:focus, .field textarea:focus {
+    border-color: var(--brand);
+    background: rgb(11 11 10 / 0.88);
+    box-shadow: 0 0 0 3px rgb(255 86 0 / 0.12), inset 0 1px 8px rgb(0 0 0 / 0.25);
+  }
+  .field textarea { height: 88px; min-height: 88px; resize: vertical; }
+  .contact-actions {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 1.2vw, 18px);
+    min-height: 102px;
+    position: relative;
+    z-index: 2;
+  }
+  .contact-prompt {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex: 0 0 170px;
+    flex-direction: column;
+    align-items: center;
+    align-self: flex-start;
+    margin-top: -17px;
+    transform: rotate(-1.5deg);
+  }
+  .contact-arrow-motion {
+    display: block;
+    width: 108px;
+    height: 44px;
+    align-self: flex-start;
+    margin: 12px 0 0 16px;
+    transform-origin: left center;
+  }
+  .contact-arrow {
+    width: 100%;
+    height: 100%;
+    color: var(--cream);
+    filter: drop-shadow(0 2px 8px rgb(255 86 0 / 0.42));
+    transform: scaleX(-1) rotate(-5deg);
+    transform-origin: center;
+  }
+  .submit { flex: 0 0 auto; justify-self: start; min-height: 46px; padding-inline: 26px; }
+  .consent { font-size: 13px; color: var(--fg-3); line-height: 1.5; }
+  .consent a { color: var(--fg-2); text-underline-offset: 3px; }
+
+  @media (max-width: 560px) {
+    .contact-message { font-size: 2rem; }
+    .form { padding: var(--sp-5); border-radius: var(--radius-l); }
+    .pair { grid-template-columns: 1fr; }
+    .field input, .field textarea { min-height: 52px; border-radius: var(--radius); }
+    .field textarea { min-height: 120px; }
+    .contact-actions { flex-wrap: wrap; gap: 8px; min-height: 96px; }
+    .contact-prompt { flex-basis: 148px; margin-top: -12px; }
+    .contact-arrow-motion { width: 92px; height: 39px; margin-left: 16px; }
+    .submit { flex: 1 1 auto; width: auto; padding-inline: 18px; }
+  }
+  .contact-form--modal {
+    padding: 0; border: 0; background: transparent; box-shadow: none; backdrop-filter: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .contact-arrow-motion { transform: none !important; opacity: 1 !important; }
+  }
+</style>
+
+<script>
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    import('gsap').then(({ gsap }) => {
+      for (const arrow of document.querySelectorAll('.contact-arrow-motion')) {
+        gsap.to(arrow, {
+          x: -8, y: 2, rotation: -2, scale: 1.045,
+          duration: 0.72, repeat: -1, yoyo: true,
+          ease: 'sine.inOut', transformOrigin: 'left center',
+        });
+      }
+    });
+  }
+</script>

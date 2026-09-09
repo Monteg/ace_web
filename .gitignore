@@ -1,23 +1,10 @@
-# dependencies
 node_modules/
-
-# build output
 dist/
 .astro/
-
-# local env and tooling
-.npm/
-.env
-.env.*
-!.env.example
-.wrangler/
-.vscode/
-.idea/
-
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# os
 .DS_Store
+*.log
+outputs/
+.tmp/
+cms/.env
+cms/data/
+cms/migration-output/

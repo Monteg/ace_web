@@ -1,0 +1,18 @@
+---
+import type { EventData } from '../../data/events';
+import EventTeamMember from './EventTeamMember.astro';
+interface Props { event: EventData }
+const { event } = Astro.props;
+---
+
+<section class="event-team section-continuation" aria-labelledby="event-team-title">
+  <div class="wrap">
+    <div class="sec-top rv"><h2 class="d1" id="event-team-title">{event.teamTitle}</h2></div>
+    <div class="team-grid">{event.team.map(member => <EventTeamMember member={member} event={event} />)}</div>
+  </div>
+</section>
+
+<style>
+  .team-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-6); }
+  @media (max-width: 768px) { .team-grid { grid-template-columns: 1fr; gap: var(--sp-7); } }
+</style>

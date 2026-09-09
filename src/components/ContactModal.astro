@@ -1,0 +1,121 @@
+---
+import { Icon } from 'astro-icon/components';
+import ContactForm from './ContactForm.astro';
+import { localeFromPath, t } from '../lib/i18n';
+import { getSiteContent } from '../lib/site-content';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { sectionCopy } = getSiteContent(locale);
+---
+
+<dialog class="contact-dialog" id="contact-dialog" aria-labelledby="contact-dialog-title">
+  <div class="dialog-panel">
+    <div class="dialog-heading">
+      <h2 class="d2" id="contact-dialog-title">{sectionCopy.contactTitle}</h2>
+      <button class="dialog-close" type="button" aria-label={t('contact.modal.close', locale)} data-contact-close>
+        <Icon name="ph:x" aria-hidden="true" />
+      </button>
+    </div>
+    <ContactForm idPrefix="modal-contact" variant="modal" />
+  </div>
+</dialog>
+
+<style>
+  .contact-dialog {
+    width: min(640px, calc(100% - 32px));
+    max-width: none; max-height: calc(100dvh - 32px);
+    margin: auto; padding: 0; border: 1px solid var(--line-2);
+    border-radius: var(--radius-l); background: var(--ink-2); color: var(--fg);
+    box-shadow: var(--shadow-2); overflow-y: auto; overscroll-behavior: contain;
+  }
+  .contact-dialog::backdrop { background: rgb(5 4 2 / 0.78); }
+  .dialog-panel { padding: var(--sp-6); }
+  .dialog-heading { display: flex; align-items: flex-start; gap: var(--sp-4); margin-bottom: var(--sp-5); }
+  .dialog-heading h2 { flex: 1; padding-top: 6px; }
+  .dialog-close {
+    flex: 0 0 44px; width: 44px; height: 44px; display: grid; place-items: center;
+    border: 1px solid var(--line-2); border-radius: var(--radius-pill);
+    background: var(--ink-3); color: var(--fg); cursor: pointer;
+  }
+  .dialog-close:hover { border-color: var(--brand); }
+  .dialog-close svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: var(--button-icon-stroke); }
+  .contact-dialog[open] { animation: contact-dialog-in 240ms var(--ease); }
+  .contact-dialog[open]::backdrop { animation: contact-backdrop-in 240ms var(--ease); }
+  .contact-dialog.is-closing { animation: contact-dialog-out 180ms var(--ease) forwards; }
+  .contact-dialog.is-closing::backdrop { animation: contact-backdrop-out 180ms var(--ease) forwards; }
+  :global(html.contact-modal-open), :global(html.contact-modal-open body) { overflow: hidden; }
+  :global(html.contact-modal-open body) { padding-right: var(--contact-scrollbar-gap, 0px); }
+  @keyframes contact-dialog-in { from { opacity: 0; transform: translateY(12px) scale(0.985); } to { opacity: 1; transform: none; } }
+  @keyframes contact-dialog-out { to { opacity: 0; transform: translateY(8px) scale(0.99); } }
+  @keyframes contact-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes contact-backdrop-out { to { opacity: 0; } }
+  @media (max-width: 560px) { .dialog-panel { padding: var(--sp-5); } }
+  @media (prefers-reduced-motion: reduce) {
+    .contact-dialog[open], .contact-dialog[open]::backdrop { animation: none; }
+  }
+</style>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('#contact-dialog');
+  if (dialog && typeof dialog.showModal === 'function') {
+    const triggers = document.querySelectorAll<HTMLElement>('[data-contact-open]');
+    const close = dialog.querySelector<HTMLButtonElement>('[data-contact-close]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let opener: HTMLElement | null = null;
+    let closingTimer: ReturnType<typeof setTimeout>;
+
+    function finishClose() {
+      if (!dialog) return;
+      dialog.close();
+    }
+    function requestClose() {
+      if (!dialog?.open || dialog.classList.contains('is-closing')) return;
+      if (reducedMotion.matches) finishClose();
+      else {
+        dialog.classList.add('is-closing');
+        closingTimer = setTimeout(finishClose, 180);
+      }
+    }
+    function openDialog(trigger: HTMLElement | null) {
+      if (dialog!.open) return;
+      opener = trigger;
+      document.documentElement.style.setProperty('--contact-scrollbar-gap', `${window.innerWidth - document.documentElement.clientWidth}px`);
+      document.documentElement.classList.add('contact-modal-open');
+      dialog!.showModal();
+      dialog!.querySelector<HTMLInputElement>('input[name="name"]')?.focus({ preventScroll: true });
+    }
+    for (const trigger of triggers) {
+      trigger.hidden = false;
+      trigger.addEventListener('click', () => openDialog(trigger));
+    }
+    document.addEventListener('ace:open-contact', (event: Event) => {
+      const detail = (event as CustomEvent<{ opener?: HTMLElement }>).detail;
+      openDialog(detail?.opener ?? null);
+    });
+    close?.addEventListener('click', requestClose);
+    dialog.addEventListener('cancel', (event) => { event.preventDefault(); requestClose(); });
+    dialog.addEventListener('close', () => {
+      clearTimeout(closingTimer);
+      dialog.classList.remove('is-closing');
+      document.documentElement.classList.remove('contact-modal-open');
+      document.documentElement.style.removeProperty('--contact-scrollbar-gap');
+      opener?.focus({ preventScroll: true });
+    });
+    let pressedBackdrop = false;
+    function outside(event: MouseEvent) {
+      const rect = dialog!.getBoundingClientRect();
+      return event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+    }
+    dialog.addEventListener('pointerdown', (event) => { pressedBackdrop = event.target === dialog && outside(event); });
+    dialog.addEventListener('click', (event) => { if (pressedBackdrop && event.target === dialog && outside(event)) requestClose(); });
+    // Native dialog supplies background inertness; explicitly wrap keyboard focus.
+    dialog.addEventListener('keydown', (event) => {
+      if (event.key !== 'Tab') return;
+      const focusable = Array.from(dialog.querySelectorAll<HTMLElement>('a[href], button, input, textarea, select, [tabindex]'))
+        .filter((el) => el.tabIndex >= 0 && !el.hasAttribute('disabled') && el.getClientRects().length > 0);
+      const first = focusable[0], last = focusable.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    });
+  }
+</script>

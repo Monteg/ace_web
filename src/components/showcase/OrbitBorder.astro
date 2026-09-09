@@ -1,0 +1,59 @@
+<span class="orbit-border" aria-hidden="true"></span>
+
+<style>
+  @property --experience-orbit-angle {
+    syntax: '<angle>';
+    inherits: true;
+    initial-value: 0deg;
+  }
+
+  .orbit-border {
+    --experience-orbit-angle: 0deg;
+    position: absolute;
+    inset: 0;
+    z-index: var(--orbit-z, 0);
+    overflow: visible;
+    pointer-events: none;
+    border-radius: inherit;
+    opacity: var(--orbit-opacity, 0.62);
+    animation: experience-orbit var(--orbit-duration, 5.6s) linear infinite;
+  }
+  .orbit-border::before,
+  .orbit-border::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: var(--orbit-width, 1.5px);
+    border-radius: inherit;
+    background: conic-gradient(
+      from var(--experience-orbit-angle) at 50% 50%,
+      transparent 0%,
+      transparent calc(100% - var(--orbit-length, 32%)),
+      rgb(255 86 0 / 0.08) calc(100% - var(--orbit-length, 32%)),
+      rgb(255 86 0 / 0.62) 91%,
+      rgb(246 203 149 / 0.94) 95%,
+      rgb(255 255 245 / 0.98) 97%,
+      rgb(255 86 0 / 0.82) 99%,
+      transparent 100%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+  .orbit-border::before {
+    filter: drop-shadow(0 0 3px rgb(255 86 0 / 0.72));
+  }
+  .orbit-border::after {
+    inset: -5px;
+    padding: calc(var(--orbit-width, 1.5px) + 4px);
+    opacity: var(--orbit-halo-opacity, 0.58);
+    filter: blur(var(--orbit-blur, 7px));
+  }
+  @keyframes experience-orbit {
+    to { --experience-orbit-angle: 360deg; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .orbit-border { animation: none; opacity: 0; }
+  }
+</style>

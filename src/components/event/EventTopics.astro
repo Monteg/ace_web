@@ -1,0 +1,30 @@
+---
+import type { EventData } from '../../data/events';
+interface Props { event: EventData }
+const { event } = Astro.props;
+---
+
+<section class="event-topics section-continuation" aria-labelledby="event-topics-title">
+  <div class="wrap topics-layout">
+    <h2 class="d1 rv" id="event-topics-title">{event.topicsTitle}</h2>
+    <div class="topics-list">
+      {event.topics.map((topic, index) => (
+        <article class="topic rv">
+          <span class="topic-number mono" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+          <div><h3>{topic.title}</h3><p>{topic.description}</p></div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .topics-layout { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: var(--sp-8); }
+  .topics-layout .d1 { font-size: var(--step-3); max-width: 14ch; line-height: 1.05; }
+  .topics-list { display: grid; gap: var(--sp-5); }
+  .topic { display: flex; gap: var(--sp-5); padding-top: var(--sp-5); border-top: 1px solid var(--line); }
+  .topic-number { font-size: 0.875rem; color: var(--brand); padding-top: var(--sp-1); }
+  .topic h3 { font-size: 1.25rem; font-weight: 600; margin: 0 0 var(--sp-2); line-height: 1.4; }
+  .topic p { color: var(--fg-2); font-size: 1rem; line-height: 1.65; }
+  @media (max-width: 768px) { .topics-layout { grid-template-columns: 1fr; gap: var(--sp-6); } .topics-layout .d1 { max-width: 20ch; } }
+</style>

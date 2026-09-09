@@ -1,8 +1,4 @@
 # Every line here fixes something that is broken on the current site.
-#
-# Only Cloudflare Pages reads this file. The live copy of these rules is
-# deploy/nginx/conf.d/default.conf, which nginx serves from the cluster.
-# Change both.
 
 # linked from the footer of all 24 game pages today, returns 404
 /utility/style-guide      /terms-conditions          301
@@ -13,6 +9,10 @@
 # 404 today: there was no catalogue page at its own URL
 /portfolio                /games                     301
 /portfolio/               /games                     301
+
+# Italian locale was replaced with German; preserve old public links.
+/it                       /de                        301
+/it/*                     /de/:splat                 301
 
 # Webflow provided this for free; Cloudflare Pages does not
 https://www.acegames.io/* https://acegames.io/:splat  301

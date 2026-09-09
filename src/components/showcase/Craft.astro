@@ -12,39 +12,42 @@ import { Icon } from 'astro-icon/components';
 import mathsArt from '../../assets/heroes/zeus-run.webp';
 import artArt from '../../assets/games/vikings-gold.webp';
 import engineArt from '../../assets/heroes/star-rocket.webp';
+import { localeFromPath, t } from '../../lib/i18n';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 
 const columns = [
   {
-    title: 'Maths',
+    title: t('home.craft.maths.title', locale),
     icon: 'ph:function',
     tint: 'mint',
     art: mathsArt,
-    alt: 'Zeus Run key art',
+    alt: t('home.craft.maths.alt', locale),
     copy: [
-      'RTP bands, volatility modes and bet ranges are configuration, certified per market.',
-      'The maths sheet ships with the game as part of the deliverable.',
+      t('home.craft.maths.body_1', locale),
+      t('home.craft.maths.body_2', locale),
     ],
   },
   {
-    title: 'Art',
+    title: t('home.craft.art.title', locale),
     icon: 'ph:paint-brush',
     tint: 'pink',
     art: artArt,
-    alt: 'Vikings Gold key art',
+    alt: t('home.craft.art.alt', locale),
     copy: [
-      'Characters, symbols and animation are drawn by our own artists.',
-      'A theme can be reskinned for your brand or built from scratch.',
+      t('home.craft.art.body_1', locale),
+      t('home.craft.art.body_2', locale),
     ],
   },
   {
-    title: 'Engine',
+    title: t('home.craft.engine.title', locale),
     icon: 'ph:cpu',
     tint: 'ice',
     art: engineArt,
-    alt: 'Star Rocket key art',
+    alt: t('home.craft.engine.alt', locale),
     copy: [
-      'An HTML5 client running on our own RGS.',
-      'One integration switches on the whole catalogue.',
+      t('home.craft.engine.body_1', locale),
+      t('home.craft.engine.body_2', locale),
     ],
   },
 ];
@@ -52,11 +55,10 @@ const columns = [
 
 <section class="cream craft" id="craft">
   <div class="wrap">
-    <div class="sec-top rv">
-      <h2 class="d2">Maths, art and engine, all under one roof</h2>
+    <div class="sec-top home-section-heading rv">
+      <h2 class="d1">{t('home.craft.title', locale)}</h2>
       <p class="body">
-        Every title is designed, drawn, coded and served by the same team, so nothing waits on a
-        third party.
+        {t('home.craft.lead', locale)}
       </p>
     </div>
 

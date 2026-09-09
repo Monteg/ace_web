@@ -12,13 +12,16 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import type { CollectionEntry } from 'astro:content';
-import { CTA } from '../../data/site';
+import { localeFromPath, localizePath, t } from '../../lib/i18n';
+import { getSiteContent } from '../../lib/site-content';
 
 interface Props {
   games: CollectionEntry<'games'>[];
 }
 
 const { games } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { CTA } = getSiteContent(locale);
 const live = games.filter((g) => g.data.status === 'live');
 const pool = live.length >= 12 ? live : games;
 
@@ -51,16 +54,23 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
 
   <div class="wrap">
     <div class="wall-copy" data-wall-copy>
-      <h1 class="d0">Slots and crash games, <em>built end to end</em></h1>
+      <h1 class="d0">{t('home.hero.title', locale)} <em>{t('home.hero.title_accent', locale)}</em></h1>
       <p class="lead">
-        {live.length} slot, crash and instant titles, built and certified in-house, playable here before you email us.
+        {t('home.hero.lead', locale, { count: live.length })}
       </p>
       <div class="wall-btns">
-        <a class="btn btn-primary" href="#games">
-          See the games
+        <a class="btn btn-primary" href={localizePath('/#games', locale)}>
+          {t('global.action.view_games', locale)}
           <span class="disc" aria-hidden="true"><Icon name="ph:arrow-down" /></span>
         </a>
-        <a class="btn btn-ghost" href={CTA.href}>{CTA.label}</a>
+        <button
+          class="btn btn-ghost"
+          type="button"
+          data-contact-open
+          aria-haspopup="dialog"
+          aria-controls="contact-dialog"
+          hidden
+        >{CTA.label}</button>
       </div>
     </div>
   </div>
@@ -69,6 +79,7 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
 <style>
   .wall {
     position: relative; overflow: hidden; padding: 0;
+    margin-top: calc(-1 * var(--site-header-height, 120px));
     min-height: min(100dvh, 920px);
     display: flex; align-items: flex-end;
     background: var(--ink-0);
@@ -159,7 +170,8 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
       gsap.registerPlugin(ScrollTrigger);
       gsap
         .timeline({
-          scrollTrigger: { trigger: root, start: 'top top', end: 'bottom top', scrub: 0.6 },
+          // Hold both layers for another 180 CSS px, without a spacer or wheel counting.
+          scrollTrigger: { trigger: root, start: 'top+=180 top', end: 'bottom top', scrub: 0.6 },
         })
         .to(tilt, { rotateX: 4, rotateZ: -2, yPercent: 18, scale: 1.12, opacity: 0.18, ease: 'none' }, 0)
         .to(copy, { yPercent: -18, opacity: 0.35, ease: 'none' }, 0);

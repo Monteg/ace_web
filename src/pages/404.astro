@@ -1,23 +1,24 @@
 ---
 import Base from '../layouts/Base.astro';
-import { CTA } from '../data/site';
+import { localeFromPath, localizePath, t } from '../lib/i18n';
+import { getSiteContent } from '../lib/site-content';
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { CTA } = getSiteContent(locale);
 ---
 
 <Base
-  title="Page not found | Ace Games"
-  description="That page does not exist. Browse the game catalogue or get in touch."
+  title={t('not_found.seo.title', locale)}
+  description={t('not_found.seo.description', locale)}
   noindex={true}
 >
-  <section>
+  <section class="utility-page">
     <div class="wrap">
       <div class="not-found">
         <p class="eyebrow">404</p>
-        <h1 class="d1">That page does not exist</h1>
-        <p class="lead">
-          It may have moved, or the link may be wrong. The catalogue is the fastest way back.
-        </p>
+        <h1 class="d1">{t('not_found.title', locale)}</h1>
+        <p class="lead">{t('not_found.body', locale)}</p>
         <div class="row">
-          <a class="btn btn-primary" href="/games">See the games</a>
+          <a class="btn btn-primary" href={localizePath('/games', locale)}>{t('global.action.view_games', locale)}</a>
           <a class="btn btn-ghost" href={CTA.href}>{CTA.label}</a>
         </div>
       </div>
@@ -28,7 +29,7 @@ import { CTA } from '../data/site';
 <style>
   .not-found {
     display: flex; flex-direction: column; gap: var(--sp-4);
-    align-items: flex-start; padding-block: var(--sp-8);
+    align-items: flex-start;
   }
   .row { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-3); }
 </style>

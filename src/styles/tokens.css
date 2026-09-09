@@ -23,6 +23,10 @@
   --brand-hover: #ff6b22;
   --brand-deep: #c43f00;
   --on-brand: #15130e;
+  --on-brand-button: #ffffff;
+  --button-label-weight: 400;
+  --button-label-spacing: 0.04em;
+  --button-icon-stroke: 8;
   --peach: #f6cb95;
 
   /* the single inverted block */
@@ -50,11 +54,15 @@
   --step-3: clamp(1.9rem, 1.35rem + 2.2vw, 3.2rem);
   --step-4: clamp(2.6rem, 1.6rem + 4.2vw, 5rem);
   --step-5: clamp(3.4rem, 1.8rem + 7vw, 8.5rem); /* poster size, hero only */
+  --home-section-title-size: clamp(2.1rem, 1.78rem + 2.35vw, 3.5rem);
 
   /* spacing */
   --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
   --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
-  --sp-9: clamp(72px, 9vw, 140px);
+  --section-space: clamp(72px, 7.5vw, 112px);
+  --section-space-compact: clamp(48px, 5vw, 72px);
+  --section-heading-gap: clamp(36px, 3.75vw, 48px);
+  --sp-9: var(--section-space);
 
   --radius-s: 8px;
   --radius: 14px;

@@ -12,7 +12,7 @@ still has to supply).
 ## What this is
 
 The acegames.io website. Ace Games is a B2B iGaming studio: it builds slot,
-crash and instant games and licenses them to casino operators. It does not
+instant and table games and licenses them to casino operators. It does not
 take bets and has no consumer product. The audience for every page is an
 operator's game acquisition or compliance team. Everything on the site is
 built by Ace Games in-house, including the game engines behind the demos.
@@ -25,7 +25,7 @@ pages. The result is a folder of files any CDN can serve.
 ## Commands
 
 ```bash
-npm install          # once, Node 22 or newer (see .nvmrc)
+npm install          # once, Node 20 or newer (see .nvmrc)
 npm run dev          # http://localhost:4321, hot reload (add -- --port 4400 if 4321 is busy)
 npm run build        # writes dist/
 npm run verify       # the parity gates against dist/
@@ -47,12 +47,14 @@ src/content/games/*.md          game records, one per title; the filename is the
 src/content/legal/*.md          privacy policy and terms
 src/content.config.ts           the schema, the safety net (see below)
 src/data/site.ts                nav, CTA, stats, FAQ, integration table, partners
+src/data/*-settings.ts          defaults and browser storage contracts for tunable effects
 src/lib/format.ts               RTP, max win, volatility and demo URL formatting
 src/lib/catalogue-filter.ts     the reorder-not-hide filter used by both catalogues
+src/lib/*-motion.ts             browser-side experience card and border trail behavior
 src/layouts/Base.astro          head, SEO, canonical, JSON-LD, skip link, reveal
-src/components/                 Header, Footer, StatTile, DemoEmbed (shared)
+src/components/                 Header, Footer, ContactForm, ContactModal, StatTile, DemoEmbed
 src/components/showcase/        the design layer, listed below
-src/pages/                      index, games, portfolio/[slug], [legal], thanks, 404
+src/pages/                      index, games, portfolio/[slug], event, effects-lab, [legal], thanks, 404
 src/styles/tokens.css           every colour, size, radius and duration
 src/styles/base.css             type, buttons, chips, icon tiles, the cream block
 src/assets/games/*.webp         key art, one per game (any size)
@@ -62,11 +64,6 @@ functions/api/contact.ts        Cloudflare Pages Function: the contact form
 public/_headers, _redirects     CSP, caching, five redirects
 scripts/verify.mjs              the gates
 scripts/new-game.mjs            the scaffolder
-Dockerfile                      serves the built dist from nginx
-deploy/nginx/                   the serving rules: _headers and _redirects again
-deploy/bootstrap/               namespace, RBAC, pull secret; once, by hand
-helm/chart, helm/env/           the deployment
-.gitlab-ci.yml                  a push to main puts it live, see docs/CI.md
 ```
 
 The showcase components:
@@ -74,8 +71,15 @@ The showcase components:
 - `Wall.astro`: the hero, three drifting rows of the catalogue's own key art
   in shallow perspective; GSAP ScrollTrigger (lazy-loaded) flattens it on
   scroll. Static tilted wall without JS or under reduced motion.
-- `GameTile.astro`: catalogue tile with art, type badge, name, RTP and a
-  four-bar volatility meter; Play affordance on hover.
+- `GameTile.astro`: catalogue tile with art, type badge, RTP and a four-bar
+  volatility meter; the game name remains available to assistive technology
+  but is not duplicated visually over artwork that already contains it.
+- `Excellence.astro`, `ExperienceCard.astro` and `ScalableCardFrame.astro`:
+  the three-card iGaming excellence section. Desktop and phone use vertical
+  cards; tablet uses a horizontal art-and-copy layout. Pointer devices get
+  configurable tilt, depth and glare.
+- `OrbitBorder.astro`: the independent animated trail around the main
+  navigation border. It is not part of the experience-card effect.
 - `MathsExplorer.astro`: the "every game by the numbers" board, four
   volatility lanes with each game's art placed by RTP, hover card, filter
   that dims instead of hiding.
@@ -105,11 +109,11 @@ The showcase components:
    Adapter demos get a lobby URL derived from the page's own slug; direct
    builds carry none.
 6. **One `<h1>` per page, and it names the page.**
-7. **Every image goes through `<Image>` from `astro:assets` with an explicit
-   `sizes`.** Never hand-write `<img src="/src/assets/...">`. The build
-   generates the responsive variants and the dimensions. The one exception is
-   operator logos: SVGs in `public/partners/`, rendered by `PartnerWall.astro`
-   with a fixed width and height.
+7. **Every raster image goes through the Astro asset pipeline.** Use `<Image>`
+   with an explicit `sizes`, or `getImage()` when an optimized image must be
+   consumed by CSS, as in the scalable nine-slice card frame. Never hand-write
+   `<img src="/src/assets/...">`. The one exception is operator logos: SVGs
+   in `public/partners/`, rendered by `PartnerWall.astro` with fixed dimensions.
 8. **Nothing from the old site comes back.** `verify.mjs` fails on the strings
    `webflow`, `website-files`, `Brandfluencer`, `tncflow`, `marketplace-checkout`,
    `_CHEB`, `utility/style-guide`, `placeholder.60f9b184`, `Grow With Authentic`.
@@ -134,12 +138,16 @@ tints (`--tint-*`) for icon tiles and type badges, nothing else.
 
 - Use tokens from `src/styles/tokens.css` for colours, radii and durations.
   Raw `rgb()` values are acceptable only inside gradient scrims and overlays.
-- Text on orange is near-black (`--on-brand`), not white: white on `#FF5600`
-  measures 3.16:1 and fails WCAG AA.
+- Current orange buttons use white text and white icons through
+  `--on-brand-button`, by the owner's explicit visual decision. Keep labels
+  large and bold enough for this treatment; do not use it for small body text.
 - One accent. The wall is the one bold move on the home page; keep the rest
   quiet. Do not add gradients, glows, particles, or a second marquee.
 - Motion only on `transform` and `opacity`, only with a reason (hierarchy,
   storytelling, feedback), always gated behind `prefers-reduced-motion`.
+- `/effects-lab` tunes experience-card motion and navigation Border Trail as
+  two independent effects with separate Apply, Copy and Reset actions. Do not
+  merge them or expose this technical route in public navigation.
 - Buttons are pills. Cards use `--radius-l`. Do not mix.
 - No em-dashes anywhere in copy. Use a comma, a full stop, or a colon.
 - No emoji in markup or copy. Icons come from `astro-icon` (`ph:` Phosphor).

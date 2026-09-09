@@ -1,0 +1,54 @@
+---
+import ExperienceCard from './ExperienceCard.astro';
+import { localeFromPath } from '../../lib/i18n';
+import { getSiteContent } from '../../lib/site-content';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { sectionCopy, why } = getSiteContent(locale);
+---
+
+<section class="excellence" id="our-benefits" aria-labelledby="excellence-title">
+  <div class="wrap">
+    <div class="sec-top home-section-heading rv">
+      <h2 class="d1" id="excellence-title">{sectionCopy.excellenceTitle}</h2>
+    </div>
+
+    <div class="excellence-grid rv">
+      {why.map((item, index) => <ExperienceCard item={item} index={index} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .excellence {
+    overflow: clip;
+    border-bottom: 1px solid var(--line);
+  }
+  .excellence-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    align-items: start;
+    gap: clamp(18px, 2.2vw, 30px);
+    width: min(100%, 1280px);
+    margin-inline: auto;
+    padding-inline: 0;
+  }
+
+  @media (min-width: 561px) and (max-width: 992px) {
+    .excellence-grid {
+      grid-template-columns: 1fr;
+      gap: clamp(52px, 8vw, 76px);
+      width: min(100%, 840px);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .excellence-grid {
+      grid-template-columns: 1fr;
+      gap: var(--sp-7);
+      width: min(100%, 430px);
+      padding-inline: 0;
+    }
+  }
+</style>

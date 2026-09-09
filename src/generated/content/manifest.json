@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "sourceHash": "b9dcc0458effa56e7c89f9cd626ab834d0099a4c86566310b7c1c7a9e16e0a6b",
+  "locales": [
+    "en",
+    "de",
+    "pt",
+    "es"
+  ],
+  "siteTranslationCount": 315,
+  "gameCount": 24,
+  "gameTranslationCount": 480
+}

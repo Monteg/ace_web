@@ -1,0 +1,261 @@
+---
+import { localeFromPath, localizePath, t } from '../lib/i18n';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+---
+
+<div
+  class="age-gate"
+  id="ageGate"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="ageGateTitle"
+  aria-describedby="ageGateDescription"
+  data-underage-href={localizePath('/under-18', locale)}
+>
+  <div class="age-panel">
+    <div class="age-mark" aria-hidden="true">
+      <span>18</span>
+      <small>+</small>
+    </div>
+
+    <p class="age-kicker eyebrow">{t('age_gate.kicker', locale)}</p>
+    <p class="age-title d2" id="ageGateTitle">{t('age_gate.title', locale)}</p>
+    <p class="age-description" id="ageGateDescription">
+      {t('age_gate.description', locale)}
+    </p>
+
+    <div class="age-actions">
+      <button class="btn btn-ghost age-reject" id="ageReject" type="button">{t('age_gate.reject', locale)}</button>
+      <button class="btn btn-primary age-confirm" id="ageConfirm" type="button">
+        {t('age_gate.confirm', locale)}
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  :global(html.age-gate-required),
+  :global(html.age-gate-required body) {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  :global(html.age-gate-required) :global(#siteShell) {
+    visibility: hidden;
+    pointer-events: none;
+    user-select: none;
+  }
+  :global(#siteShell) { display: contents; }
+
+  .age-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483647;
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    place-items: center;
+    padding: clamp(var(--sp-4), 4vw, var(--sp-7));
+    overflow: hidden;
+    overscroll-behavior: contain;
+    touch-action: none;
+    background: rgb(0 0 0 / 0.95);
+  }
+  :global(html.age-gate-required) .age-gate {
+    display: grid;
+    animation: age-overlay-in 300ms var(--ease);
+  }
+  .age-gate[hidden],
+  :global(html.age-verified) .age-gate { display: none; }
+  .age-gate.is-leaving {
+    animation: none;
+    opacity: 0;
+    transition: opacity 300ms var(--ease);
+  }
+
+  .age-panel {
+    width: min(100%, 760px);
+    max-height: calc(100dvh - (2 * var(--sp-4)));
+    overflow-y: auto;
+    padding: clamp(var(--sp-6), 5vw, var(--sp-8));
+    text-align: center;
+    background: var(--ink-2);
+    border: 1px solid var(--line-2);
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-2);
+  }
+  :global(html.age-gate-required) .age-panel { animation: age-panel-in 300ms var(--ease); }
+  .age-gate.is-leaving .age-panel {
+    animation: none;
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+    transition: opacity 300ms var(--ease), transform 300ms var(--ease);
+  }
+
+  .age-mark {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 68px;
+    height: 68px;
+    margin: 0 auto var(--sp-5);
+    color: var(--peach);
+    border: 2px solid var(--brand);
+    border-radius: var(--radius-pill);
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .age-mark small {
+    position: absolute;
+    top: -6px;
+    right: -5px;
+    display: grid;
+    place-items: center;
+    width: 23px;
+    height: 23px;
+    color: var(--on-brand);
+    background: var(--brand);
+    border: 3px solid var(--ink-2);
+    border-radius: var(--radius-pill);
+    font: inherit;
+    font-size: 1rem;
+  }
+
+  .age-kicker { margin-bottom: var(--sp-3); }
+  .age-title {
+    max-width: 18ch;
+    margin-inline: auto;
+    color: var(--fg);
+  }
+  .age-description {
+    max-width: 46ch;
+    margin: var(--sp-4) auto 0;
+    color: var(--fg-2);
+    font-size: var(--step-0);
+  }
+  .age-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: var(--sp-3);
+    margin-top: var(--sp-7);
+  }
+  .age-actions .btn { width: 100%; }
+
+  @keyframes age-overlay-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes age-panel-in {
+    from { opacity: 0; transform: translateY(8px) scale(0.985); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @media (max-width: 600px) {
+    .age-panel { padding: var(--sp-6) var(--sp-5); }
+    .age-mark { width: 60px; height: 60px; margin-bottom: var(--sp-4); font-size: 1.75rem; }
+    .age-title { font-size: clamp(1.85rem, 9vw, 2.5rem); }
+    .age-actions { grid-template-columns: 1fr; margin-top: var(--sp-6); }
+    .age-confirm { order: -1; }
+    .age-actions .btn { min-height: 50px; padding-inline: var(--sp-4); white-space: normal; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.age-gate-required) .age-gate,
+    :global(html.age-gate-required) .age-panel,
+    .age-gate.is-leaving,
+    .age-gate.is-leaving .age-panel {
+      animation: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const gate = document.getElementById('ageGate');
+  const siteShell = document.getElementById('siteShell');
+  const confirmButton = document.getElementById('ageConfirm') as HTMLButtonElement | null;
+  const rejectButton = document.getElementById('ageReject') as HTMLButtonElement | null;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (gate && siteShell && confirmButton && rejectButton) {
+    const verified = document.documentElement.classList.contains('age-verified');
+
+    if (verified) {
+      gate.hidden = true;
+    } else {
+      siteShell.setAttribute('inert', '');
+
+      const scrollKeys = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End']);
+      const stopScroll = (event: Event) => event.preventDefault();
+      const keepFocusInside = (event: FocusEvent) => {
+        if (!gate.contains(event.target as Node)) confirmButton.focus({ preventScroll: true });
+      };
+      const handleKeydown = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          return;
+        }
+
+        if (scrollKeys.has(event.key)) {
+          event.preventDefault();
+          return;
+        }
+
+        if (event.key === 'Tab') {
+          const first = rejectButton;
+          const last = confirmButton;
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+      };
+
+      const removeGuards = () => {
+        document.removeEventListener('wheel', stopScroll, true);
+        document.removeEventListener('touchmove', stopScroll, true);
+        document.removeEventListener('keydown', handleKeydown, true);
+        document.removeEventListener('focusin', keepFocusInside, true);
+      };
+
+      document.addEventListener('wheel', stopScroll, { passive: false, capture: true });
+      document.addEventListener('touchmove', stopScroll, { passive: false, capture: true });
+      document.addEventListener('keydown', handleKeydown, true);
+      document.addEventListener('focusin', keepFocusInside, true);
+
+      requestAnimationFrame(() => confirmButton.focus({ preventScroll: true }));
+
+      confirmButton.addEventListener('click', () => {
+        try {
+          localStorage.setItem('age_verified_18', 'true');
+        } catch {
+          // Storage can be unavailable in hardened browser modes. The current
+          // page still unlocks, and the gate will return on the next load.
+        }
+
+        confirmButton.disabled = true;
+        rejectButton.disabled = true;
+        gate.classList.add('is-leaving');
+
+        window.setTimeout(() => {
+          gate.hidden = true;
+          document.documentElement.classList.remove('age-gate-required');
+          document.documentElement.classList.add('age-verified');
+          siteShell.removeAttribute('inert');
+          removeGuards();
+        }, reduceMotion.matches ? 0 : 300);
+      });
+
+      rejectButton.addEventListener('click', () => {
+        window.location.replace(gate.dataset.underageHref ?? '/under-18');
+      });
+    }
+  }
+</script>

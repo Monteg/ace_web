@@ -1,6 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
-import { company, CTA } from '../data/site';
+import { company } from '../data/site';
+import { localeFromPath, localizePath, t } from '../lib/i18n';
+import { getSiteContent } from '../lib/site-content';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const { CTA } = getSiteContent(locale);
 
 // The form redirects here. A real page, not a hidden div swap, so a submission
 // is a URL you can count as a conversion.
@@ -10,31 +15,28 @@ import { company, CTA } from '../data/site';
 // the default, so a script failure shows the reassuring message rather than an
 // error the visitor cannot act on.
 const REASONS: Record<string, string> = {
-  invalid: 'Some fields were missing, or the email address did not look right.',
-  unconfigured: 'The contact form is not connected to an inbox yet.',
-  'send-failed': 'The message could not be delivered just now.',
-  unreadable: 'The form could not be read.',
+  invalid: t('thanks.error.invalid', locale),
+  unconfigured: t('thanks.error.unconfigured', locale),
+  'send-failed': t('thanks.error.send_failed', locale),
+  unreadable: t('thanks.error.unreadable', locale),
 };
 ---
 
 <Base
-  title="Thank you | Ace Games"
-  description="Your message has reached the Ace Games team. We answer in one working day."
+  title={t('thanks.seo.title', locale)}
+  description={t('thanks.seo.description', locale)}
   noindex={true}
 >
-  <section>
+  <section class="utility-page">
     <div class="wrap">
       <div class="panel" data-state="ok">
-        <p class="eyebrow" data-eyebrow>Message sent</p>
-        <h1 class="d1" data-title>Thank you</h1>
-        <p class="lead" data-body>
-          It is with the team now and we answer in one working day. If it is urgent, mail us
-          directly and it lands in the same inbox.
-        </p>
+        <p class="eyebrow" data-eyebrow>{t('thanks.sent', locale)}</p>
+        <h1 class="d1" data-title>{t('thanks.title', locale)}</h1>
+        <p class="lead" data-body>{t('thanks.body', locale)}</p>
 
         <div class="row">
           <a class="btn btn-primary" href={`mailto:${company.email}`}>{company.email}</a>
-          <a class="btn btn-ghost" data-second href="/games">See the games</a>
+          <a class="btn btn-ghost" data-second href={localizePath('/games', locale)}>{t('global.action.view_games', locale)}</a>
         </div>
       </div>
     </div>
@@ -42,22 +44,22 @@ const REASONS: Record<string, string> = {
 
   <script type="application/json" id="failure-copy" is:inline set:html={JSON.stringify(REASONS)} />
 
-  <script is:inline define:vars={{ ctaHref: CTA.href }}>
+  <script is:inline define:vars={{ ctaHref: CTA.href, notSent: t('thanks.not_sent', locale), errorTitle: t('thanks.error_title', locale), backToForm: t('thanks.back_to_form', locale), unknownError: t('thanks.error.unknown', locale), errorSuffix: t('thanks.error.suffix', locale) }}>
     const params = new URLSearchParams(window.location.search);
     if (params.get('status') === 'error') {
       const reasons = JSON.parse(document.getElementById('failure-copy').textContent);
-      const reason = reasons[params.get('reason') ?? ''] ?? 'Something went wrong on the way.';
+      const reason = reasons[params.get('reason') ?? ''] ?? unknownError;
 
-      document.querySelector('[data-eyebrow]').textContent = 'Not sent';
-      document.querySelector('[data-title]').textContent = 'That did not send';
+      document.querySelector('[data-eyebrow]').textContent = notSent;
+      document.querySelector('[data-title]').textContent = errorTitle;
       document.querySelector('[data-body]').textContent =
-        `${reason} Mail us directly and we will pick it up from there.`;
+        `${reason} ${errorSuffix}`;
 
       const second = document.querySelector('[data-second]');
-      second.textContent = 'Back to the form';
+      second.textContent = backToForm;
       second.href = ctaHref;
 
-      document.title = 'That did not send | Ace Games';
+      document.title = `${errorTitle} | Ace Games`;
     }
   </script>
 </Base>
@@ -65,7 +67,7 @@ const REASONS: Record<string, string> = {
 <style>
   .panel {
     display: flex; flex-direction: column; gap: var(--sp-4);
-    align-items: flex-start; padding-block: var(--sp-8); max-width: 60ch;
+    align-items: flex-start; max-width: 60ch;
   }
   .row { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-3); }
 </style>

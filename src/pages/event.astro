@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EventHero from '../components/event/EventHero.astro';
+import WhyAceGames from '../components/event/WhyAceGames.astro';
+import EventStats from '../components/event/EventStats.astro';
+import FeaturedGames from '../components/event/FeaturedGames.astro';
+import EventTeam from '../components/event/EventTeam.astro';
+import EventTopics from '../components/event/EventTopics.astro';
+import EventBooking from '../components/event/EventBooking.astro';
+import { currentEvent as event } from '../data/events';
+import { eventDateRange } from '../lib/event';
+import { localeFromPath, t } from '../lib/i18n';
+import { getLocalizedEvent } from '../lib/localized-event';
+
+const games = await getCollection('games');
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const localizedEvent = getLocalizedEvent(event, locale);
+const primaryGame = games.find(game => game.id === 'ace-city')!;
+const shareImage = await getImage({ src: primaryGame.data.hero, width: 1200, format: 'jpg' });
+const description = t('event.seo.description', locale, {
+  event: localizedEvent.eventName,
+  dates: eventDateRange(localizedEvent, 'long', locale),
+});
+---
+
+<Base title={`${localizedEvent.headline} | Ace Games`} description={description} image={shareImage.src} canonicalPath={localizedEvent.eventUrl}>
+  <EventHero event={localizedEvent} games={games} />
+  <WhyAceGames event={localizedEvent} />
+  <EventStats event={localizedEvent} />
+  <FeaturedGames event={localizedEvent} games={games} />
+  <EventTeam event={localizedEvent} />
+  <EventTopics event={localizedEvent} />
+  <EventBooking event={localizedEvent} />
+</Base>

@@ -1,0 +1,11 @@
+{
+  "global.label.preview": "Vista previa",
+  "game.media.controls_aria": "Controles de la demo",
+  "game.media.device_aria": "Dispositivo de vista previa",
+  "game.media.desktop": "Escritorio",
+  "game.media.mobile": "Móvil",
+  "game.media.fullscreen": "Pantalla completa",
+  "game.media.exit_fullscreen": "Salir de pantalla completa",
+  "game.detail.overview_tabs_aria": "Detalles del juego",
+  "game.detail.related_aria": "Juegos relacionados"
+}

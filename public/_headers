@@ -1,7 +1,3 @@
-# Only Cloudflare Pages reads this file. The site is served by nginx on the
-# cluster, so deploy/nginx/snippets/security-headers.conf carries the same rules
-# and is the one that is actually live. Change both.
-
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN

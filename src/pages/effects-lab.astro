@@ -1,0 +1,674 @@
+---
+import Base from '../layouts/Base.astro';
+import ExperienceCard from '../components/showcase/ExperienceCard.astro';
+import GameTile from '../components/showcase/GameTile.astro';
+import OrbitBorder from '../components/showcase/OrbitBorder.astro';
+import EffectRange from '../components/admin/EffectRange.astro';
+import { getEntry } from 'astro:content';
+import { why } from '../data/site';
+import { experienceCardDefaults } from '../data/experience-card-settings';
+import { borderTrailDefaults } from '../data/border-trail-settings';
+import { gameCardDefaults } from '../data/game-card-settings';
+
+const previewCard = why[1];
+const motionSettings = experienceCardDefaults;
+const borderSettings = borderTrailDefaults;
+const gameCardSettings = gameCardDefaults;
+const gameCardPreview = await getEntry('games', 'pirates-rush');
+if (!gameCardPreview) throw new Error('Pirates Rush is required for the Effects Lab game-card preview.');
+const borderPreviewStyle = `--orbit-duration: ${borderSettings.orbitDuration}s; --orbit-length: ${borderSettings.orbitLength}%; --orbit-width: ${borderSettings.orbitWidth}px; --orbit-opacity: ${borderSettings.orbitOpacity}; --orbit-blur: ${borderSettings.orbitBlur}px;`;
+---
+
+<Base
+  title="Effects Lab | Ace Games"
+  description="Local controls for tuning the Ace Games card motion and navigation border trail."
+  canonicalPath="/effects-lab"
+  noindex
+  showSiteChrome={false}
+>
+  <section class="effects-lab" aria-labelledby="effects-lab-title">
+    <div class="wrap">
+      <header class="lab-heading">
+        <h1 class="d1" id="effects-lab-title">Effects Lab</h1>
+        <p class="lead">Tune each site effect independently, preview it live, then apply only that effect to the site.</p>
+        <p class="lab-note">This technical page is excluded from navigation and search indexing. CMS access control can be added with the future admin area.</p>
+      </header>
+
+      <section class="lab-tool" aria-labelledby="motion-settings-title">
+        <div class="lab-layout">
+          <div class="preview-shell card-preview" id="motionPreview">
+            <ExperienceCard item={previewCard} index={1} eager autoPreview />
+          </div>
+
+          <form class="effect-controls" id="motionControls">
+            <div class="control-heading">
+              <p class="eyebrow">Effect 01</p>
+              <h2 class="d3" id="motion-settings-title">Motion settings</h2>
+              <p>Move the pointer over the card while adjusting tilt, depth and glare.</p>
+            </div>
+
+            <label class="control-toggle">
+              <span>
+                <b>Automatic mobile animation</b>
+                <small>Runs the idle sweep on compact and touch layouts. Pointer hover still controls one card at a time.</small>
+              </span>
+              <input id="autoMotionEnabled" name="autoMotionEnabled" type="checkbox" checked={motionSettings.autoMotionEnabled} />
+              <i aria-hidden="true"></i>
+              <output for="autoMotionEnabled" id="autoMotionEnabledValue">Enabled</output>
+            </label>
+
+            <EffectRange id="tiltMax" name="tiltMax" label="Maximum tilt" value={motionSettings.tiltMax} min={0} max={18} step={0.5} unit="°" />
+            <EffectRange id="hoverScale" name="hoverScale" label="Hover scale" value={motionSettings.hoverScale} min={1} max={1.08} step={0.005} unit="×" />
+            <EffectRange id="perspective" name="perspective" label="Perspective" value={motionSettings.perspective} min={600} max={2200} step={50} unit="px" />
+            <EffectRange id="response" name="response" label="Response time" value={motionSettings.response} min={0.12} max={3} step={0.02} unit="s" />
+
+            <div class="control-subheading">
+              <h3>Automatic loop</h3>
+              <p>Adjust the travel, the smooth entry and exit, and the pause between cycles.</p>
+            </div>
+            <EffectRange id="autoSweepDuration" name="autoSweepDuration" label="Sweep duration" value={motionSettings.autoSweepDuration} min={1.2} max={12} step={0.05} unit="s" />
+            <EffectRange id="autoTransitionDuration" name="autoTransitionDuration" label="Entry and exit duration" value={motionSettings.autoTransitionDuration} min={0.2} max={4} step={0.05} unit="s" />
+            <EffectRange id="autoLoopDelay" name="autoLoopDelay" label="Pause between cycles" value={motionSettings.autoLoopDelay} min={0} max={6} step={0.05} unit="s" />
+
+            <EffectRange id="artDepth" name="artDepth" label="Artwork depth" value={motionSettings.artDepth} min={0} max={100} step={2} unit="px" />
+            <EffectRange id="copyDepth" name="copyDepth" label="Text depth" value={motionSettings.copyDepth} min={0} max={120} step={2} unit="px" />
+            <EffectRange id="glareOpacity" name="glareOpacity" label="Glare strength" value={motionSettings.glareOpacity} min={0} max={1} step={0.02} />
+            <EffectRange id="glareTravel" name="glareTravel" label="Glare travel" value={motionSettings.glareTravel} min={0} max={48} step={2} unit="%" />
+
+            <div class="control-subheading">
+              <h3>Logo hologram</h3>
+              <p>Control the tiled Ace Games pattern independently from the glare.</p>
+            </div>
+            <EffectRange id="hologramSize" name="hologramSize" label="Logo tile size" value={motionSettings.hologramSize} min={28} max={140} step={1} unit="px" />
+            <EffectRange id="hologramPatternOpacity" name="hologramPatternOpacity" label="Logo print opacity" value={motionSettings.hologramPatternOpacity} min={0} max={1} step={0.01} />
+            <EffectRange id="hologramReveal" name="hologramReveal" label="Hologram reveal strength" value={motionSettings.hologramReveal} min={0} max={0.7} step={0.01} />
+            <EffectRange id="hologramAngle" name="hologramAngle" label="Pattern angle" value={motionSettings.hologramAngle} min={-90} max={90} step={1} unit="°" />
+
+            <div class="control-actions">
+              <button class="btn btn-primary" type="button" id="applyMotionSettings">Apply to site</button>
+              <button class="btn btn-ghost" type="button" id="copyMotionSettings">Copy settings</button>
+              <button class="btn btn-ghost" type="reset">Reset to defaults</button>
+            </div>
+
+            <pre class="settings-output" id="motionSettingsOutput" aria-label="Current motion settings"></pre>
+            <p class="copy-status" id="motionStatus" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="lab-tool lab-tool--border" aria-labelledby="border-trail-title">
+        <div class="lab-layout">
+          <div class="preview-shell border-preview-shell">
+            <div
+              class="border-preview"
+              id="borderPreview"
+              data-border-trail-host
+              style={borderPreviewStyle}
+            >
+              <span>Navigation border preview</span>
+              <OrbitBorder />
+            </div>
+          </div>
+
+          <form class="effect-controls" id="borderControls">
+            <div class="control-heading">
+              <p class="eyebrow">Effect 02</p>
+              <h2 class="d3" id="border-trail-title">Border trail</h2>
+              <p>Configure the illuminated trail used around the top navigation menu.</p>
+            </div>
+
+            <EffectRange id="orbitDuration" name="orbitDuration" label="Orbit duration" value={borderSettings.orbitDuration} min={1.5} max={20} step={0.1} unit="s" />
+            <EffectRange id="orbitLength" name="orbitLength" label="Trail length" value={borderSettings.orbitLength} min={6} max={60} step={1} unit="%" />
+            <EffectRange id="orbitWidth" name="orbitWidth" label="Line thickness" value={borderSettings.orbitWidth} min={0.5} max={4} step={0.1} unit="px" />
+            <EffectRange id="orbitOpacity" name="orbitOpacity" label="Trail intensity" value={borderSettings.orbitOpacity} min={0} max={1} step={0.02} />
+            <EffectRange id="orbitBlur" name="orbitBlur" label="Glow blur" value={borderSettings.orbitBlur} min={0} max={16} step={1} unit="px" />
+
+            <div class="control-actions">
+              <button class="btn btn-primary" type="button" id="applyBorderSettings">Apply to site</button>
+              <button class="btn btn-ghost" type="button" id="copyBorderSettings">Copy settings</button>
+              <button class="btn btn-ghost" type="reset">Reset to defaults</button>
+            </div>
+
+            <pre class="settings-output settings-output--border" id="borderSettingsOutput" aria-label="Current border trail settings"></pre>
+            <p class="copy-status" id="borderStatus" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="lab-tool lab-tool--game" aria-labelledby="game-card-settings-title">
+        <div class="lab-layout">
+          <div class="preview-shell game-card-preview" id="gameCardPreview">
+            <div class="preview-mode" role="group" aria-label="Game Card preview mode">
+              <button type="button" data-game-preview-mode="desktop" aria-pressed="true">Desktop</button>
+              <button type="button" data-game-preview-mode="mobile" aria-pressed="false">Mobile</button>
+            </div>
+            <div class="game-card-preview-frame">
+              <GameTile game={gameCardPreview} eager />
+            </div>
+            <p class="preview-hint">Move the pointer over the card to preview its hover state.</p>
+          </div>
+
+          <form class="effect-controls game-card-controls" id="gameCardControls">
+            <div class="control-heading">
+              <p class="eyebrow">Effect 03</p>
+              <h2 class="d3" id="game-card-settings-title">Game card</h2>
+              <p>Fine-tune the shared catalogue card. The saved preset applies to every Game Card on the site.</p>
+            </div>
+
+            <label class="control-toggle">
+              <span>
+                <b>Quick Play in a new tab</b>
+                <small>When disabled, the Play action disappears and the entire card opens the game information page.</small>
+              </span>
+              <input id="gameQuickPlayEnabled" name="quickPlayEnabled" type="checkbox" checked={gameCardSettings.quickPlayEnabled} />
+              <i aria-hidden="true"></i>
+              <output for="gameQuickPlayEnabled" id="gameQuickPlayEnabledValue">Enabled</output>
+            </label>
+
+            <div class="control-grid">
+              <EffectRange id="gameHoverScale" name="hoverScale" label="Card hover scale" value={gameCardSettings.hoverScale} min={1} max={1.08} step={0.001} unit="×" />
+              <EffectRange id="gameHoverLift" name="hoverLift" label="Card lift" value={gameCardSettings.hoverLift} min={0} max={18} step={1} unit="px" />
+              <EffectRange id="gameMotionDuration" name="motionDuration" label="Motion duration" value={gameCardSettings.motionDuration} min={0.1} max={1.2} step={0.05} unit="s" />
+              <EffectRange id="gameCornerRadius" name="cornerRadius" label="Corner radius" value={gameCardSettings.cornerRadius} min={0} max={32} step={1} unit="px" />
+              <EffectRange id="gameBackgroundScale" name="backgroundScale" label="Background scale" value={gameCardSettings.backgroundScale} min={1} max={1.2} step={0.005} unit="×" />
+              <EffectRange id="gameBackgroundOpacity" name="backgroundOpacity" label="Background opacity" value={gameCardSettings.backgroundOpacity} min={0.2} max={1} step={0.02} />
+              <EffectRange id="gameLogoScale" name="logoScale" label="Logo scale" value={gameCardSettings.logoScale} min={1} max={1.5} step={0.005} unit="×" />
+              <EffectRange id="gameLogoShiftX" name="logoShiftX" label="Logo horizontal shift" value={gameCardSettings.logoShiftX} min={-30} max={20} step={0.1} unit="%" />
+              <EffectRange id="gameLogoLift" name="logoLift" label="Logo lift" value={gameCardSettings.logoLift} min={0} max={60} step={1} unit="%" />
+              <EffectRange id="gamePlayPosition" name="playPosition" label="Play button position" value={gameCardSettings.playPosition} min={36} max={68} step={0.1} unit="%" />
+              <EffectRange id="gamePlayTravel" name="playTravel" label="Play reveal travel" value={gameCardSettings.playTravel} min={0} max={40} step={1} unit="px" />
+              <EffectRange id="gameButtonHoverScale" name="buttonHoverScale" label="Play hover scale" value={gameCardSettings.buttonHoverScale} min={1} max={1.12} step={0.005} unit="×" />
+              <EffectRange id="gameMobileBackgroundOpacity" name="mobileBackgroundOpacity" label="Mobile background opacity" value={gameCardSettings.mobileBackgroundOpacity} min={0.55} max={1} step={0.01} />
+              <EffectRange id="gameMobileLogoLift" name="mobileLogoLift" label="Mobile logo lift" value={gameCardSettings.mobileLogoLift} min={0} max={50} step={1} unit="%" />
+              <EffectRange id="gameShadeHeight" name="shadeHeight" label="Shade height" value={gameCardSettings.shadeHeight} min={35} max={85} step={0.1} unit="%" />
+              <EffectRange id="gameShadeOpacity" name="shadeOpacity" label="Shade strength" value={gameCardSettings.shadeOpacity} min={0} max={1} step={0.02} />
+              <EffectRange id="gameShadeBlur" name="shadeBlur" label="Shade blur" value={gameCardSettings.shadeBlur} min={0} max={30} step={1} unit="px" />
+              <EffectRange id="gameBorderWidth" name="borderWidth" label="Border width" value={gameCardSettings.borderWidth} min={0} max={4} step={0.1} unit="px" />
+              <EffectRange id="gameBorderOpacity" name="borderOpacity" label="Border intensity" value={gameCardSettings.borderOpacity} min={0} max={1} step={0.02} />
+            </div>
+
+            <div class="control-actions">
+              <button class="btn btn-primary" type="button" id="applyGameCardSettings">Apply to site</button>
+              <button class="btn btn-ghost" type="button" id="copyGameCardSettings">Copy settings</button>
+              <button class="btn btn-ghost" type="reset">Reset to defaults</button>
+            </div>
+
+            <pre class="settings-output settings-output--game" id="gameCardSettingsOutput" aria-label="Current game card settings"></pre>
+            <p class="copy-status" id="gameCardStatus" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <footer class="lab-footer">
+        Motion, Border Trail and Game Card presets are stored separately in this browser and apply only to their matching site effect.
+      </footer>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .effects-lab { min-height: 100vh; padding-block: clamp(28px, 4vw, 60px); }
+  .lab-heading {
+    max-width: 920px;
+    margin-bottom: clamp(40px, 6vw, 80px);
+  }
+  .lab-heading .lead { max-width: 760px; margin-top: var(--sp-4); }
+  .lab-note {
+    max-width: 760px;
+    margin-top: var(--sp-4);
+    color: var(--fg-3);
+    font-size: var(--step--1);
+    line-height: 1.6;
+  }
+  .lab-tool { scroll-margin-top: var(--sp-6); }
+  .lab-tool--border,
+  .lab-tool--game {
+    margin-top: clamp(96px, 12vw, 180px);
+    padding-top: clamp(72px, 9vw, 128px);
+    border-top: 1px solid var(--line);
+  }
+  .lab-layout {
+    display: grid;
+    grid-template-columns: minmax(320px, 0.8fr) minmax(440px, 1.2fr);
+    gap: clamp(40px, 7vw, 104px);
+    align-items: start;
+  }
+  .preview-shell {
+    position: sticky;
+    top: var(--sp-5);
+    display: grid;
+    place-items: center;
+    min-width: 0;
+    min-height: 420px;
+    padding: var(--sp-5);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    background: var(--ink-2);
+    box-shadow: var(--shadow-1);
+  }
+  .card-preview :global([data-experience-card-stage]) { width: min(100%, 420px); }
+  .border-preview-shell {
+    min-height: 320px;
+    background:
+      radial-gradient(circle at 50% 0%, rgb(255 86 0 / 0.08), transparent 58%),
+      var(--ink-2);
+  }
+  .border-preview {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-height: 92px;
+    border: 1px solid rgb(255 86 0 / 0.42);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--ink-0) 76%, transparent);
+    box-shadow: 0 16px 38px -22px rgb(0 0 0 / 0.9);
+  }
+  .border-preview > span {
+    position: relative;
+    z-index: 1;
+    color: var(--fg-2);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .game-card-preview {
+    align-content: center;
+    grid-template-rows: auto 1fr auto;
+    min-height: 600px;
+    background:
+      radial-gradient(circle at 50% 22%, rgb(255 86 0 / 0.1), transparent 44%),
+      var(--ink-2);
+  }
+  .preview-mode {
+    display: inline-flex;
+    justify-self: end;
+    gap: 3px;
+    margin-bottom: var(--sp-4);
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    background: var(--ink-0);
+  }
+  .preview-mode button {
+    min-height: 32px;
+    padding-inline: 12px;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--fg-3);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .preview-mode button[aria-pressed='true'] { background: var(--brand); color: var(--on-brand-button); }
+  .preview-mode button:focus-visible { outline: 2px solid var(--peach); outline-offset: 2px; }
+  .game-card-preview-frame { width: min(100%, 320px); }
+  .preview-hint {
+    width: min(100%, 320px);
+    margin-top: var(--sp-4);
+    color: var(--fg-3);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .effect-controls {
+    display: grid;
+    gap: var(--sp-5);
+    padding: clamp(24px, 3.5vw, 44px);
+    border: 1px solid var(--line-2);
+    border-radius: var(--radius-l);
+    background: var(--ink-2);
+    box-shadow: var(--shadow-1);
+  }
+  .control-heading .eyebrow {
+    margin: 0 0 var(--sp-2);
+    color: var(--brand);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .control-heading > p:last-child { margin-top: var(--sp-2); color: var(--fg-2); }
+  .control-subheading {
+    display: grid;
+    gap: 5px;
+    margin-top: var(--sp-2);
+    padding-top: var(--sp-5);
+    border-top: 1px solid var(--line);
+  }
+  .control-subheading h3 {
+    margin: 0;
+    color: var(--fg);
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .control-subheading p { color: var(--fg-3); font-size: 0.78rem; line-height: 1.5; }
+  .control-toggle {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 48px auto;
+    gap: var(--sp-3);
+    align-items: center;
+    padding: var(--sp-4);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--ink-0);
+    cursor: pointer;
+  }
+  .control-toggle > span { display: grid; gap: 4px; }
+  .control-toggle b { color: var(--fg); font-size: 0.95rem; }
+  .control-toggle small { color: var(--fg-3); font-size: 0.76rem; line-height: 1.45; }
+  .control-toggle input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+  }
+  .control-toggle i {
+    position: relative;
+    width: 48px;
+    height: 28px;
+    border: 1px solid var(--line-2);
+    border-radius: var(--radius-pill);
+    background: var(--ink-3);
+    transition: border-color var(--dur-2) var(--ease), background var(--dur-2) var(--ease);
+  }
+  .control-toggle i::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--fg-2);
+    transition: transform var(--dur-2) var(--ease), background var(--dur-2) var(--ease);
+  }
+  .control-toggle input:checked + i { border-color: var(--brand); background: rgb(255 86 0 / 0.2); }
+  .control-toggle input:checked + i::after { transform: translateX(20px); background: var(--brand); }
+  .control-toggle input:focus-visible + i { outline: 2px solid var(--peach); outline-offset: 3px; }
+  .control-toggle output {
+    min-width: 58px;
+    color: var(--peach);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.72rem;
+    text-align: right;
+    text-transform: uppercase;
+  }
+  .control-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+  .control-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-5) var(--sp-6);
+  }
+  .settings-output {
+    min-height: 220px;
+    overflow: auto;
+    padding: var(--sp-4);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--ink-0);
+    color: var(--fg-2);
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.76rem;
+    line-height: 1.65;
+  }
+  .settings-output--border { min-height: 154px; }
+  .settings-output--game { min-height: 390px; }
+  .copy-status { min-height: 1.4em; color: var(--peach); font-size: var(--step--1); }
+  .lab-footer {
+    margin-top: clamp(72px, 9vw, 128px);
+    padding-top: var(--sp-4);
+    border-top: 1px solid var(--line);
+    color: var(--fg-3);
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 900px) {
+    .lab-layout { grid-template-columns: 1fr; }
+    .preview-shell { position: static; min-height: 0; }
+    .card-preview :global([data-experience-card-stage]) { width: min(100%, 390px); }
+    .border-preview-shell { min-height: 240px; }
+  }
+  @media (max-width: 520px) {
+    .preview-shell { padding: var(--sp-3); }
+    .effect-controls { padding: var(--sp-5); }
+    .control-actions .btn { width: 100%; }
+    .border-preview { min-height: 76px; }
+    .control-grid { grid-template-columns: 1fr; }
+    .game-card-preview { min-height: 0; }
+    .control-toggle { grid-template-columns: minmax(0, 1fr) 48px; }
+    .control-toggle output { grid-column: 1 / -1; text-align: left; }
+  }
+</style>
+
+<script>
+  import {
+    applyExperienceCardSettings,
+    normalizeExperienceCardSettings,
+    readExperienceCardSettings,
+    saveExperienceCardSettings,
+  } from '../lib/experience-card-motion';
+  import {
+    applyBorderTrailSettings,
+    normalizeBorderTrailSettings,
+    readBorderTrailSettings,
+    saveBorderTrailSettings,
+  } from '../lib/border-trail';
+  import {
+    applyGameCardSettings,
+    normalizeGameCardSettings,
+    readGameCardSettings,
+    saveGameCardSettings,
+  } from '../lib/game-card-settings';
+  import { experienceCardDefaults } from '../data/experience-card-settings';
+  import { borderTrailDefaults } from '../data/border-trail-settings';
+  import { gameCardDefaults } from '../data/game-card-settings';
+
+  const motionPreview = document.getElementById('motionPreview');
+  const motionForm = document.getElementById('motionControls') as HTMLFormElement | null;
+  const motionOutput = document.getElementById('motionSettingsOutput');
+  const motionStatus = document.getElementById('motionStatus');
+  const motionAutoEnabled = document.getElementById('autoMotionEnabled') as HTMLInputElement | null;
+  const motionAutoEnabledValue = document.getElementById('autoMotionEnabledValue');
+  const motionInputs = motionForm
+    ? Array.from(motionForm.querySelectorAll<HTMLInputElement>('input[type="range"]'))
+    : [];
+
+  const borderForm = document.getElementById('borderControls') as HTMLFormElement | null;
+  const borderOutput = document.getElementById('borderSettingsOutput');
+  const borderStatus = document.getElementById('borderStatus');
+  const borderInputs = borderForm
+    ? Array.from(borderForm.querySelectorAll<HTMLInputElement>('input[type="range"]'))
+    : [];
+
+  const gameCardPreview = document.getElementById('gameCardPreview');
+  const gameCardForm = document.getElementById('gameCardControls') as HTMLFormElement | null;
+  const gameCardOutput = document.getElementById('gameCardSettingsOutput');
+  const gameCardStatus = document.getElementById('gameCardStatus');
+  const gameCardQuickPlay = document.getElementById('gameQuickPlayEnabled') as HTMLInputElement | null;
+  const gameCardQuickPlayValue = document.getElementById('gameQuickPlayEnabledValue');
+  const gameCardInputs = gameCardForm
+    ? Array.from(gameCardForm.querySelectorAll<HTMLInputElement>('input[type="range"]'))
+    : [];
+  const gameCardPreviewTarget = gameCardPreview?.querySelector<HTMLElement>('[data-game-card]');
+  const gameCardPreviewModeButtons = gameCardPreview
+    ? Array.from(gameCardPreview.querySelectorAll<HTMLButtonElement>('[data-game-preview-mode]'))
+    : [];
+
+  const valuesFrom = (inputs: HTMLInputElement[]) =>
+    Object.fromEntries(inputs.map((input) => [input.name, Number(input.value)]));
+
+  const setInputValues = (inputs: HTMLInputElement[], settings: Record<string, number>) => {
+    inputs.forEach((input) => {
+      const value = settings[input.name];
+      if (typeof value !== 'number') return;
+      input.value = String(value);
+      const numberInput = document.getElementById(`${input.id}Number`) as HTMLInputElement | null;
+      if (numberInput) numberInput.value = String(value);
+    });
+  };
+
+  const syncNumberFields = (inputs: HTMLInputElement[]) => {
+    inputs.forEach((input) => {
+      const numberInput = document.getElementById(`${input.id}Number`) as HTMLInputElement | null;
+      if (numberInput && document.activeElement !== numberInput) numberInput.value = input.value;
+    });
+  };
+
+  const syncMotionPreview = () => {
+    const settings = normalizeExperienceCardSettings({
+      ...valuesFrom(motionInputs),
+      autoMotionEnabled: motionAutoEnabled?.checked ?? true,
+    });
+    applyExperienceCardSettings(settings, motionPreview ?? document);
+    syncNumberFields(motionInputs);
+    if (motionAutoEnabledValue) motionAutoEnabledValue.textContent = settings.autoMotionEnabled ? 'Enabled' : 'Disabled';
+    if (motionOutput) motionOutput.textContent = JSON.stringify(settings, null, 2);
+    window.dispatchEvent(new CustomEvent('ace:experience-card-settings', { detail: settings }));
+    return settings;
+  };
+
+  const syncBorderPreview = () => {
+    const settings = normalizeBorderTrailSettings(valuesFrom(borderInputs));
+    applyBorderTrailSettings(settings);
+    syncNumberFields(borderInputs);
+    if (borderOutput) borderOutput.textContent = JSON.stringify(settings, null, 2);
+    return settings;
+  };
+
+  const syncGameCardPreview = () => {
+    const settings = normalizeGameCardSettings({
+      ...valuesFrom(gameCardInputs),
+      quickPlayEnabled: gameCardQuickPlay?.checked ?? true,
+    });
+    applyGameCardSettings(settings, gameCardPreview ?? document);
+    syncNumberFields(gameCardInputs);
+    if (gameCardQuickPlayValue) gameCardQuickPlayValue.textContent = settings.quickPlayEnabled ? 'Enabled' : 'Disabled';
+    if (gameCardOutput) gameCardOutput.textContent = JSON.stringify(settings, null, 2);
+    return settings;
+  };
+
+  let savedMotion = readExperienceCardSettings() ?? experienceCardDefaults;
+  let savedBorder = readBorderTrailSettings() ?? borderTrailDefaults;
+  let savedGameCard = readGameCardSettings() ?? gameCardDefaults;
+  setInputValues(motionInputs, savedMotion as unknown as Record<string, number>);
+  setInputValues(borderInputs, savedBorder as unknown as Record<string, number>);
+  setInputValues(gameCardInputs, savedGameCard as unknown as Record<string, number>);
+  if (motionAutoEnabled) motionAutoEnabled.checked = savedMotion.autoMotionEnabled;
+  if (gameCardQuickPlay) gameCardQuickPlay.checked = savedGameCard.quickPlayEnabled;
+
+  const bindRangeControls = (
+    inputs: HTMLInputElement[],
+    syncPreview: () => unknown,
+    getSaved: () => Record<string, number>,
+  ) => {
+    inputs.forEach((range) => {
+      const numberInput = document.getElementById(`${range.id}Number`) as HTMLInputElement | null;
+      const resetButton = range.closest('[data-effect-control]')?.querySelector<HTMLButtonElement>('[data-reset-for]');
+
+      range.addEventListener('input', () => {
+        if (numberInput) numberInput.value = range.value;
+        syncPreview();
+      });
+
+      numberInput?.addEventListener('input', () => {
+        if (!Number.isFinite(numberInput.valueAsNumber)) return;
+        const min = Number(range.min);
+        const max = Number(range.max);
+        range.value = String(Math.min(max, Math.max(min, numberInput.valueAsNumber)));
+        syncPreview();
+      });
+
+      numberInput?.addEventListener('blur', () => {
+        numberInput.value = range.value;
+      });
+
+      resetButton?.addEventListener('click', () => {
+        const savedValue = getSaved()[range.name];
+        if (typeof savedValue !== 'number') return;
+        range.value = String(savedValue);
+        if (numberInput) numberInput.value = String(savedValue);
+        syncPreview();
+      });
+    });
+  };
+
+  bindRangeControls(motionInputs, syncMotionPreview, () => savedMotion as unknown as Record<string, number>);
+  bindRangeControls(borderInputs, syncBorderPreview, () => savedBorder as unknown as Record<string, number>);
+  bindRangeControls(gameCardInputs, syncGameCardPreview, () => savedGameCard as unknown as Record<string, number>);
+  motionAutoEnabled?.addEventListener('change', syncMotionPreview);
+  gameCardQuickPlay?.addEventListener('change', syncGameCardPreview);
+  gameCardPreviewModeButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const mobile = button.dataset.gamePreviewMode === 'mobile';
+      if (gameCardPreviewTarget) gameCardPreviewTarget.dataset.mobilePreview = String(mobile);
+      gameCardPreviewModeButtons.forEach((item) => {
+        item.setAttribute('aria-pressed', String(item === button));
+      });
+    });
+  });
+  syncMotionPreview();
+  syncBorderPreview();
+  syncGameCardPreview();
+
+  motionForm?.addEventListener('reset', () => requestAnimationFrame(() => {
+    syncMotionPreview();
+    if (motionStatus) motionStatus.textContent = 'Motion preview returned to factory defaults. Apply to save it.';
+  }));
+  borderForm?.addEventListener('reset', () => requestAnimationFrame(() => {
+    syncBorderPreview();
+    if (borderStatus) borderStatus.textContent = 'Border preview returned to factory defaults. Apply to save it.';
+  }));
+  gameCardForm?.addEventListener('reset', () => requestAnimationFrame(() => {
+    syncGameCardPreview();
+    if (gameCardStatus) gameCardStatus.textContent = 'Game Card preview returned to factory defaults. Apply to save it.';
+  }));
+
+  document.getElementById('applyMotionSettings')?.addEventListener('click', () => {
+    const settings = saveExperienceCardSettings(syncMotionPreview());
+    savedMotion = settings;
+    applyExperienceCardSettings(settings);
+    if (motionStatus) motionStatus.textContent = 'Motion applied. Open site tabs update instantly.';
+  });
+  document.getElementById('applyBorderSettings')?.addEventListener('click', () => {
+    const settings = saveBorderTrailSettings(syncBorderPreview());
+    savedBorder = settings;
+    applyBorderTrailSettings(settings);
+    if (borderStatus) borderStatus.textContent = 'Border Trail applied to the site navigation.';
+  });
+  document.getElementById('applyGameCardSettings')?.addEventListener('click', () => {
+    const settings = saveGameCardSettings(syncGameCardPreview());
+    savedGameCard = settings;
+    applyGameCardSettings(settings);
+    if (gameCardStatus) gameCardStatus.textContent = 'Game Card preset saved and applied across the site.';
+  });
+
+  const copySettings = async (output: HTMLElement | null, status: HTMLElement | null) => {
+    try {
+      await navigator.clipboard.writeText(output?.textContent ?? '');
+      if (status) status.textContent = 'Settings copied.';
+    } catch {
+      if (status) status.textContent = 'Copy is unavailable in this browser.';
+    }
+  };
+
+  document.getElementById('copyMotionSettings')?.addEventListener('click', () => {
+    void copySettings(motionOutput, motionStatus);
+  });
+  document.getElementById('copyBorderSettings')?.addEventListener('click', () => {
+    void copySettings(borderOutput, borderStatus);
+  });
+  document.getElementById('copyGameCardSettings')?.addEventListener('click', () => {
+    void copySettings(gameCardOutput, gameCardStatus);
+  });
+</script>

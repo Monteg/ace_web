@@ -5,20 +5,11 @@ few days, most of it waiting for DNS.
 
 If you are doing this with an AI assistant, point it at `AGENTS.md` first.
 
-> **The hosting changed.** Sections 2 and 3 put the site on Cloudflare Pages.
-> It now builds and deploys to the company's own Kubernetes cluster on every
-> push to `main`: `docs/CI.md` is that runbook and `deploy/bootstrap/README.md`
-> is the one-time setup. Everything else here still holds — the Webflow exit,
-> the DNS and mail care in section 6, analytics, the 30-day rollback — reading
-> "point the records at Pages" as "point them at the cluster's ingress".
-> Section 4's three variables belong wherever the contact form ends up living,
-> which `docs/CI.md` explains is not settled yet.
-
 ---
 
 ## 0. Run it on your own machine first
 
-You need [Node.js](https://nodejs.org) 22 or newer. Check with `node --version`.
+You need [Node.js](https://nodejs.org) 20 or newer. Check with `node --version`.
 
 ```bash
 npm install
@@ -84,7 +75,7 @@ an art-heavy site does not turn into a bill that grows with traffic.
    - Framework preset: **Astro**
    - Build command: `npm run build`
    - Build output directory: `dist`
-   - Node version: add an environment variable `NODE_VERSION` = `22`
+   - Node version: add an environment variable `NODE_VERSION` = `20`
 4. Save and deploy. A few minutes later you get a `*.pages.dev` address.
 
 Open it and click around. This is the real site, just not on your domain yet.

@@ -35,7 +35,9 @@ them, checks each against the schema in `src/content.config.ts`, and renders
 one page per game plus the home page, the catalogue and the maths board from
 the same records. Images in `src/assets/` are resized and converted at build
 time. Site-wide facts (nav, contact, FAQ, stats, partner logos) live in
-`src/data/site.ts`. Nothing on the site is typed twice.
+`src/data/site.ts`. Effect defaults and their browser-storage contracts live
+in `src/data/experience-card-settings.ts` and
+`src/data/border-trail-settings.ts`. Nothing on the site is typed twice.
 
 ## 3. Add a game
 
@@ -69,13 +71,13 @@ lines) is data; everything below is the overview prose. Field by field:
 | `seo.title` | tab title, up to 70 chars | e.g. `Neon Vault - slot game by Ace Games` |
 | `seo.description` | 60 to 165 chars | one honest sentence about the mechanic |
 | `card` / `hero` | paths to the two images | relative to the record's own folder (`../../assets/...`), as scaffolded |
+| `gallery` | list of `{ image, alt }` screenshots | optional; one image is static, two or more get manual arrows, count, swipe and keyboard navigation |
 | `specs.rtp` | a number, `0.945`, or the word `configurable` | never a string like `"94.5%"`; the template formats it |
 | `specs.maxWin` | `{ value: 5000, unit: x }` or `{ value: 120000, unit: coins, approx: true }` | omit the whole line if unknown; the page then shows "On request" |
 | `specs.volatility` | list from `low`, `medium`, `high`, `very_high` | one band, or several if the game has selectable modes |
 | `specs.bet` | `{ min: 0.2, max: 100 }` | omit if unknown |
 | `specs.mainFeature`, `specs.layout` | short strings | e.g. `Expanding wilds`, `5x3 reels, 20 paylines` |
 | `demo` | see section 4 | omit entirely for a title with no demo |
-| `highlights` | 3 to 5 short bullets | shown under the spec strip |
 | `features` | list of `{ title, body }` | shown in the sidebar of the game page |
 
 Below the front matter write the overview: two or three paragraphs, then an
@@ -136,7 +138,7 @@ request" (or "In development" for `coming_soon`) instead of a player.
 | the "Maths, art and engine" block | `src/components/showcase/Craft.astro` |
 | the integration and compliance table | `integration` in `src/data/site.ts`; a `value` replaces the dashed hint |
 | FAQ questions and answers | `faq` in `src/data/site.ts`; `a: null` shows the hint as a gap |
-| nav labels and links | `nav` in `src/data/site.ts` (the footer reuses it) |
+| nav labels and links | `nav` in `src/data/site.ts`; `Header.astro` intentionally shows only Games, FAQ and Event, while Games categories come from `src/lib/game-categories.ts` |
 | the one call-to-action label | `CTA` in `src/data/site.ts`; it is used everywhere, change it once |
 | company name, address, emails | `company` in `src/data/site.ts`; the footer, the structured data and the legal page descriptions all read from it |
 | footer legal line | `src/components/Footer.astro` |
@@ -155,8 +157,9 @@ component's `<style>` block.
 
 Things that are easy and safe:
 
-- Brand orange: `--brand` and `--brand-hover`. Keep `--on-brand` dark unless
-  the new orange is much darker; check contrast is at least 4.5:1.
+- Brand orange: `--brand` and `--brand-hover`. Orange CTA buttons currently
+  use the owner-approved white `--on-brand-button` label and icon treatment.
+  Keep this consistent and do not reuse it for small body text.
 - Section spacing: `--sp-9`.
 - Display type size: `--step-4` (headings) and `--step-5` (game page title).
   The home hero has its own `clamp()` on `.wall-copy .d0` in `Wall.astro`.
@@ -170,6 +173,39 @@ Things that are deliberate and should stay unless the owner asks:
 - Pill buttons and `--radius-l` cards.
 - The volatility meter on tiles and the maths board's lanes: they are the
   parts buyers screenshot.
+
+### 6.1. Tune the interactive effects
+
+Open `/effects-lab` locally. This is a technical, `noindex` route without the
+public Header or Footer and it must stay out of navigation and the sitemap.
+
+The first tool controls the three cards in **Redefining iGaming Excellence**:
+maximum tilt, hover scale, perspective, response time, artwork depth, text
+depth, glare strength and glare travel. It also controls the compact-layout
+automatic loop (enabled state, sweep, entry/exit and pause) and the tiled logo
+hologram (size, print opacity, reveal strength and angle). The second tool
+controls the Border Trail around the public navigation: orbit duration, trail
+length, line thickness, intensity and blur.
+
+The effects are deliberately independent. Each tool has its own preview and
+its own Apply to site, Copy settings and Reset actions. Apply stores a preset
+in the current browser and dispatches a same-tab update. The storage keys are:
+
+- `ace_experience_card_effects_v1`;
+- `ace_border_trail_effects_v1`.
+
+Defaults live in their matching `src/data/*-settings.ts` file. Runtime
+normalization and application live in `src/lib/experience-card-motion.ts` and
+`src/lib/border-trail.ts`. Do not add the Border Trail to the card or combine
+the two settings objects. Every range in the lab has a paired numeric input;
+changing either control updates the other. Its inline Reset returns only that
+value to the latest applied browser preset, while Reset to defaults restores
+the complete built-in preset in the preview.
+
+The excellence cards use a scalable frame generated through Astro `getImage`
+and CSS `border-image`. At 561 to 992 px they switch to a horizontal layout;
+phones remain vertical. Verify all three layouts whenever card art, copy or
+frame geometry changes.
 
 ## 7. Partner logos, stats, certificates: filling the gaps
 
@@ -199,7 +235,7 @@ Full runbook in `DEPLOY.md`. The short form:
 
 1. Push the repo to GitHub.
 2. Cloudflare Pages, connect the repo, build command `npm run build`, output
-   `dist`, environment variable `NODE_VERSION` = `22`.
+   `dist`, environment variable `NODE_VERSION` = `20`.
 3. Add the three secrets for the contact form: `RESEND_API_KEY`, `CONTACT_TO`,
    `CONTACT_FROM` (see `.env.example`). Until they exist the form lands on
    an honest "not connected yet" page.
@@ -234,20 +270,21 @@ check.
 - **Three games with "Coming soon" and no demo** (Blackjack, Good Stuff, Toy
   Story). They are unreleased. Their pages exist so the URLs survive.
 - **`PartnerWall` renders nothing.** The `partners` list is empty on purpose.
-- **The hero video from the old site is gone.** Replaced by the wall of key
-  art, which is 200 KB instead of 116 MB.
+- **The home hero video from the old site is gone.** It is replaced by the
+  wall of key art. The separate `/games` hero currently uses an external S3
+  MP4 and has its own performance risk.
 - **The privacy policy names Webflow.** Accurate for the old host; the owner
   and their lawyer update that text after the move. Listed in `TODO.md`.
-- **`astro check` may print a hint** (an unused variable, `is:inline`). Hints
-  are not errors; the bar is 0 errors.
+- **`astro check` must be clean.** The current stable snapshot reports 0
+  errors, 0 warnings and 0 hints.
 
 ## 11. Things not to do
 
 - Do not add a CMS, a database, React, Tailwind, or a component library. The
   site is Markdown, tokens and Astro components on purpose.
-- Do not load fonts, scripts or images from a third-party host. Everything is
-  self-hosted in `public/` and `src/assets/`; the old site died when its host
-  did.
+- Do not introduce a new third-party asset dependency without a documented
+  reason, CSP review and fallback. The current `/games` hero is the one known
+  exception and loads its MP4 from the Ace Games S3 bucket.
 - Do not put a full demo URL in a record.
 - Do not change a slug without a redirect.
 - Do not remove or loosen a gate in `scripts/verify.mjs`. The only sanctioned

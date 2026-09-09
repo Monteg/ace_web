@@ -1,0 +1,79 @@
+---
+import { Icon } from 'astro-icon/components';
+import { currentEvent as event } from '../../data/events';
+import { eventDateRange } from '../../lib/event';
+import { localeFromPath, localizePath, t } from '../../lib/i18n';
+import { getLocalizedEvent } from '../../lib/localized-event';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+const localizedEvent = getLocalizedEvent(event, locale);
+---
+
+<div class="event-announcement">
+  <a class="announcement-link" href={localizePath(localizedEvent.eventUrl, locale)} data-event-track="sbc_announcement_click">
+    <span class="announcement-desktop">{t('event.announcement.desktop', locale, { event: localizedEvent.eventName, dates: eventDateRange(localizedEvent, 'short', locale) })}</span>
+    <span class="announcement-mobile">{t('event.announcement.mobile', locale, { event: localizedEvent.eventName })}</span>
+    <span class="announcement-action">{localizedEvent.bookingLabel}</span>
+    <span class="announcement-arrow" aria-hidden="true"><Icon name="ph:arrow-right" /></span>
+  </a>
+  <button class="announcement-close" type="button" aria-label={t('event.announcement.dismiss', locale)} data-dismiss-event-announcement hidden>
+    <Icon name="ph:x" aria-hidden="true" />
+  </button>
+</div>
+
+<style>
+  .event-announcement {
+    position: relative; pointer-events: auto;
+    background: var(--brand); color: var(--on-brand-button);
+  }
+  .announcement-link {
+    display: flex; justify-content: center; align-items: center; gap: var(--sp-3);
+    min-height: 44px; padding: var(--sp-2) max(var(--gutter), 60px);
+    background: var(--brand); color: var(--on-brand-button); font-size: 0.875rem;
+    font-weight: 500; line-height: 1.35; text-decoration: none;
+    transition: background var(--dur-1);
+  }
+  :global(html:not(.event-campaign-active)) .event-announcement { display: none; }
+  .announcement-link:hover, .announcement-close:hover { background: var(--brand-hover); }
+  .announcement-close {
+    position: absolute; right: var(--sp-2); top: 0; bottom: 0;
+    display: grid; place-items: center; width: 44px; min-height: 44px;
+    padding: 0; border: 0; border-radius: var(--radius-pill);
+    background: transparent; color: var(--on-brand-button); cursor: pointer;
+    transition: background var(--dur-1);
+  }
+  .announcement-close[hidden] { display: none; }
+  .announcement-close svg { stroke: currentColor; stroke-width: var(--button-icon-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .announcement-close:focus-visible { outline: 2px solid var(--on-brand-button); outline-offset: -6px; }
+  .announcement-action { font-weight: 750; }
+  .announcement-arrow {
+    display: grid;
+    flex: none;
+    place-items: center;
+    color: var(--on-brand-button);
+    animation: announcement-arrow-nudge 3.2s var(--ease-out) infinite;
+    will-change: transform;
+  }
+  .announcement-arrow :global(svg) {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    stroke-width: 2.35;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .announcement-close svg { width: 18px; height: 18px; flex: none; }
+  @keyframes announcement-arrow-nudge {
+    0%, 10%, 20%, 100% { transform: translateX(0); }
+    5%, 15% { transform: translateX(5px); }
+  }
+  .announcement-mobile { display: none; }
+  @media (max-width: 768px) {
+    .announcement-desktop, .announcement-action { display: none; }
+    .announcement-mobile { display: inline; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .announcement-link, .announcement-close { transition: none; }
+    .announcement-arrow { animation: none; will-change: auto; }
+  }
+</style>

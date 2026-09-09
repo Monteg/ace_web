@@ -1,0 +1,8 @@
+---
+description: Ace Games website, rules and how-to
+alwaysApply: true
+---
+Read AGENTS.md before changing anything (invariants, design rules). Follow the
+step-by-step tasks in AI-HANDOVER.md and docs/RECIPES.md. After any change run
+`npx astro check` (0 errors) and `npm run ship` (every gate passes). Never invent facts to
+fill the dashed gaps listed in TODO.md.

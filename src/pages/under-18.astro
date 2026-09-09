@@ -1,0 +1,442 @@
+---
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import logo from '../assets/brand/logo.webp';
+import { localeFromPath, t } from '../lib/i18n';
+
+const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
+
+const youtubeVideoId = 'oHg5SJYRHA0';
+const exactVideoUrl = 'https://youtu.be/oHg5SJYRHA0?list=RDoHg5SJYRHA0';
+const youtubeEmbedUrl = `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1`;
+const localVideoPublicPath = '/media/rickroll-d-oHg5SJYRHA0.mp4';
+const localVideoExists = existsSync(
+  fileURLToPath(new URL('../../public/media/rickroll-d-oHg5SJYRHA0.mp4', import.meta.url)),
+);
+---
+
+<Base
+  title={t('under18.seo.title', locale)}
+  description={t('under18.seo.description', locale)}
+  noindex
+  showSiteChrome={false}
+  showAgeGate={false}
+>
+  <div class="under-18-page">
+    <header class="under-18-brand" aria-label={t('under18.brand_aria', locale)}>
+      <Image src={logo} alt={t('under18.logo_alt', locale)} widths={[140, 220]} sizes="110px" loading="eager" />
+    </header>
+
+    <section class="under-18-content" aria-labelledby="under-18-title">
+      <p class="under-18-eyebrow">{t('under18.eyebrow', locale)}</p>
+      <h1 id="under-18-title">
+        <span>{t('under18.title_lead', locale)}</span>
+        <strong>{t('under18.title_accent', locale)}</strong>
+      </h1>
+
+      <div class="under-18-video-shell">
+        {localVideoExists ? (
+          <video
+            data-under-18-local-video
+            src={localVideoPublicPath}
+            autoplay
+            loop
+            playsinline
+            preload="auto"
+            aria-label={t('under18.video_aria', locale)}
+          ></video>
+        ) : (
+          <iframe
+            id="under18Player"
+            data-under-18-video
+            src={youtubeEmbedUrl}
+            title={t('under18.video_title', locale)}
+            allow="autoplay; encrypted-media; picture-in-picture"
+            referrerpolicy="strict-origin-when-cross-origin"
+            loading="eager"
+            tabindex="-1"
+          ></iframe>
+        )}
+
+        {!localVideoExists && (
+          <div class="under-18-video-fallback" data-under-18-video-fallback hidden>
+            <p>{t('under18.video_blocked', locale)}</p>
+            <a href={exactVideoUrl} target="_blank" rel="noreferrer">{t('under18.play_youtube', locale)}</a>
+          </div>
+        )}
+      </div>
+
+      <div class="under-18-actions">
+        <button class="sound-toggle" type="button" data-under-18-sound aria-pressed="false" data-label-tap={t('under18.tap_for_sound', locale)} data-label-on={t('under18.sound_on', locale)} data-label-off={t('under18.sound_off', locale)}>{t('under18.tap_for_sound', locale)}</button>
+      </div>
+    </section>
+
+    <footer class="under-18-footer">
+      <a href="https://www.google.com/" rel="noreferrer">{t('under18.leave', locale)}</a>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  :global(html),
+  :global(body) { overflow: hidden; }
+  .under-18-page {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 100vh;
+    height: 100dvh;
+    padding: clamp(12px, 2.2vh, 28px) var(--gutter);
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 78% 18%, rgb(255 86 0 / 0.16), transparent 32%),
+      radial-gradient(circle at 20% 86%, rgb(246 203 149 / 0.07), transparent 36%),
+      var(--ink-0);
+  }
+  .under-18-page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.22;
+    background-image: repeating-linear-gradient(0deg, transparent 0 3px, rgb(255 255 245 / 0.025) 3px 4px);
+  }
+  .under-18-brand {
+    display: flex;
+    justify-content: center;
+  }
+  .under-18-brand :global(img) { width: clamp(88px, 9vw, 116px); height: auto; }
+  .under-18-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: min(100%, 1080px);
+    margin-inline: auto;
+    min-height: 0;
+    padding-block: clamp(8px, 2vh, 22px);
+    text-align: center;
+  }
+  .under-18-content h1 {
+    width: 100%;
+    max-width: min(100%, 1120px);
+    margin: 0 0 clamp(12px, 2vh, 22px);
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.012em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+  .under-18-eyebrow {
+    margin: 0 0 clamp(7px, 1.2vh, 12px);
+    color: var(--fg);
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
+    font-size: clamp(1.35rem, 2.3vw, 2.2rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.018em;
+    text-transform: uppercase;
+  }
+  .under-18-content h1 span,
+  .under-18-content h1 strong { display: block; }
+  .under-18-content h1 span {
+    color: var(--fg);
+    font-size: clamp(1.35rem, 2.3vw, 2.2rem);
+    line-height: 1;
+    letter-spacing: 0.018em;
+  }
+  .under-18-content h1 strong {
+    margin-top: clamp(3px, 0.55vh, 7px);
+    font-family: inherit;
+    font-size: clamp(4rem, 8.4vw, 8.4rem);
+    font-weight: 400;
+    line-height: 0.82;
+    letter-spacing: inherit;
+    color: var(--brand);
+    text-shadow: 0 0 34px rgb(255 86 0 / 0.2);
+  }
+  .under-18-video-shell {
+    position: relative;
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: min(900px, 85.333dvh);
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ink-2);
+    border: 1px solid rgb(255 86 0 / 0.58);
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-2), 0 0 54px -32px rgb(255 86 0 / 0.75);
+  }
+  .under-18-video-shell::before,
+  .under-18-video-shell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .under-18-video-shell::before {
+    background: var(--ink-2);
+    animation: video-reveal 1.35s 0.45s var(--ease) forwards;
+  }
+  .under-18-video-shell::after {
+    background:
+      linear-gradient(180deg, var(--ink-2) 0 9%, rgb(17 17 17 / 0.72) 14%, transparent 23%),
+      linear-gradient(0deg, var(--ink-2) 0 9%, rgb(17 17 17 / 0.72) 14%, transparent 23%);
+  }
+  .under-18-video-shell iframe {
+    position: absolute;
+    top: -16%;
+    left: -16%;
+    display: block;
+    width: 132%;
+    height: 132%;
+    border: 0;
+    pointer-events: none;
+  }
+  .under-18-video-shell video {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    object-fit: cover;
+  }
+  .under-18-video-fallback {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-4);
+    padding: var(--sp-6);
+    color: var(--fg);
+    background:
+      linear-gradient(rgb(8 8 8 / 0.42), rgb(8 8 8 / 0.86)),
+      url('https://i.ytimg.com/vi/oHg5SJYRHA0/maxresdefault.jpg') center / cover no-repeat,
+      var(--ink-2);
+    text-align: center;
+  }
+  .under-18-video-fallback[hidden] { display: none; }
+  .under-18-video-fallback p {
+    margin: 0;
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
+    font-size: clamp(1.2rem, 2.2vw, 2rem);
+    letter-spacing: 0.018em;
+    text-transform: uppercase;
+  }
+  .under-18-video-fallback a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    padding: 10px 18px;
+    color: var(--on-brand-button);
+    background: var(--brand);
+    border: 1px solid var(--brand);
+    border-radius: var(--radius-pill);
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
+    letter-spacing: var(--button-label-spacing);
+    text-decoration: none;
+    transition: transform var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+  }
+  .under-18-video-fallback a:hover { background: var(--brand-hover); transform: scale(1.035); }
+  @keyframes video-reveal { to { opacity: 0; visibility: hidden; } }
+  .under-18-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: clamp(10px, 1.6vh, 18px);
+  }
+  .sound-toggle,
+  .under-18-footer a {
+    min-height: 44px;
+    padding: 10px 18px;
+    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
+    font-size: 1rem;
+    letter-spacing: var(--button-label-spacing);
+    border-radius: var(--radius-pill);
+  }
+  .sound-toggle {
+    color: var(--on-brand-button);
+    background: var(--brand);
+    border: 1px solid var(--brand);
+    cursor: pointer;
+    transition: transform var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+  }
+  .sound-toggle:hover { background: var(--brand-hover); transform: scale(1.035); }
+  .under-18-footer {
+    display: flex;
+    justify-content: center;
+  }
+  .under-18-footer a {
+    display: inline-flex;
+    align-items: center;
+    color: var(--fg-2);
+    border: 1px solid var(--line-2);
+    text-decoration: none;
+    transition: color var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
+  }
+  .under-18-footer a:hover { color: var(--fg); border-color: var(--fg-3); }
+
+  @media (max-width: 560px) {
+    .under-18-page { padding-inline: var(--sp-4); }
+    .under-18-brand :global(img) { width: clamp(72px, 21vw, 88px); }
+    .under-18-eyebrow { font-size: clamp(1.08rem, 4.8vw, 1.35rem); }
+    .under-18-content h1 span { font-size: clamp(1.12rem, 5.2vw, 1.45rem); }
+    .under-18-content h1 strong { font-size: clamp(3rem, 14vw, 4.2rem); }
+    .under-18-video-shell { border-radius: var(--radius); }
+    .under-18-actions { width: 100%; margin-top: 9px; }
+    .sound-toggle { min-height: 40px; padding: 8px 15px; font-size: 0.92rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sound-toggle { transition: none; }
+    .sound-toggle:hover { transform: none; }
+    .under-18-page::before { display: none; }
+    .under-18-video-shell::before { display: none; }
+  }
+</style>
+
+<script is:inline src="https://www.youtube.com/iframe_api"></script>
+<script>
+  interface YouTubePlayer {
+    playVideo: () => void;
+    seekTo: (seconds: number, allowSeekAhead?: boolean) => void;
+    mute: () => void;
+    unMute: () => void;
+    isMuted: () => boolean;
+    getPlayerState: () => number;
+  }
+
+  interface YouTubeApi {
+    Player: new (
+      target: string,
+      options: {
+        events: {
+          onReady: (event: { target: YouTubePlayer }) => void;
+          onStateChange: (event: { data: number; target: YouTubePlayer }) => void;
+          onError: () => void;
+        };
+      },
+    ) => YouTubePlayer;
+    PlayerState: { ENDED: number; PLAYING: number };
+  }
+
+  declare global {
+    interface Window {
+      YT?: YouTubeApi;
+      onYouTubeIframeAPIReady?: () => void;
+    }
+  }
+
+  const soundToggle = document.querySelector<HTMLButtonElement>('[data-under-18-sound]');
+  const localVideo = document.querySelector<HTMLVideoElement>('[data-under-18-local-video]');
+  const videoFallback = document.querySelector<HTMLElement>('[data-under-18-video-fallback]');
+  let player: YouTubePlayer | null = null;
+  let fallbackTimer = 0;
+  let waitingForSoundGesture = true;
+
+  const setSoundState = (soundIsOn: boolean, needsGesture = false) => {
+    if (!soundToggle) return;
+    soundToggle.textContent = needsGesture
+      ? soundToggle.dataset.labelTap ?? 'Tap for sound'
+      : soundIsOn
+        ? soundToggle.dataset.labelOn ?? 'Sound on'
+        : soundToggle.dataset.labelOff ?? 'Sound off';
+    soundToggle.setAttribute('aria-pressed', String(soundIsOn));
+    soundToggle.dataset.soundPrompt = String(needsGesture);
+  };
+
+  const recoverMutedAutoplay = () => {
+    if (!player || !window.YT) return;
+    if (player.getPlayerState() === window.YT.PlayerState.PLAYING) {
+      const soundIsOn = !player.isMuted();
+      waitingForSoundGesture = !soundIsOn;
+      setSoundState(soundIsOn, waitingForSoundGesture);
+      return;
+    }
+    waitingForSoundGesture = true;
+    player.mute();
+    player.playVideo();
+    setSoundState(false, true);
+  };
+
+  const startLocalVideo = async () => {
+    if (!localVideo) return;
+    localVideo.muted = false;
+    try {
+      await localVideo.play();
+      waitingForSoundGesture = false;
+      setSoundState(true);
+    } catch {
+      localVideo.muted = true;
+      waitingForSoundGesture = true;
+      setSoundState(false, true);
+      void localVideo.play();
+    }
+  };
+
+  if (localVideo) void startLocalVideo();
+
+  window.onYouTubeIframeAPIReady = () => {
+    if (!window.YT || localVideo) return;
+    player = new window.YT.Player('under18Player', {
+      events: {
+        onReady: ({ target }) => {
+          player = target;
+          target.unMute();
+          target.playVideo();
+          waitingForSoundGesture = false;
+          setSoundState(true);
+          fallbackTimer = window.setTimeout(recoverMutedAutoplay, 900);
+        },
+        onStateChange: ({ data, target }) => {
+          if (window.YT && data === window.YT.PlayerState.PLAYING) {
+            const soundIsOn = !target.isMuted();
+            setSoundState(soundIsOn, !soundIsOn && waitingForSoundGesture);
+          }
+          if (window.YT && data === window.YT.PlayerState.ENDED) {
+            target.seekTo(0, true);
+            target.playVideo();
+          }
+        },
+        onError: () => {
+          if (videoFallback) videoFallback.hidden = false;
+          if (soundToggle) soundToggle.hidden = true;
+        },
+      },
+    });
+  };
+
+  if (soundToggle) {
+    soundToggle.addEventListener('click', () => {
+      if (localVideo) {
+        const nextSoundIsOn = localVideo.muted;
+        waitingForSoundGesture = false;
+        localVideo.muted = !nextSoundIsOn;
+        void localVideo.play();
+        setSoundState(nextSoundIsOn);
+        return;
+      }
+      if (!player) return;
+      window.clearTimeout(fallbackTimer);
+      const nextSoundIsOn = player.isMuted();
+      waitingForSoundGesture = false;
+      if (nextSoundIsOn) player.unMute();
+      else player.mute();
+      player.playVideo();
+      setSoundState(nextSoundIsOn);
+    });
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) player?.playVideo();
+  });
+</script>
