@@ -126,7 +126,6 @@ async function loadGames() {
     parsed.data.status ??= 'live';
     parsed.data.order ??= 100;
     parsed.data.gallery ??= [];
-    parsed.data.highlights ??= [];
     parsed.data.features ??= [];
     validateGame(slug, parsed.data);
     games.push({ slug, data: parsed.data, body: parsed.content.trim() });
@@ -182,7 +181,7 @@ function buildTranslationRows(games, existingRows = []) {
         context,
         type,
         en: values[fieldKey] ?? '',
-        it: previous?.it ?? '',
+        de: previous?.de ?? '',
         pt: previous?.pt ?? '',
         es: previous?.es ?? '',
         status: translationStatus(values[fieldKey], previous, values[fieldKey]),
@@ -200,7 +199,7 @@ function buildTranslationRows(games, existingRows = []) {
         context: `Stable repeatable feature ${featureId} title`,
         type: 'plain',
         en: feature.title,
-        it: previousTitle?.it ?? '',
+        de: previousTitle?.de ?? '',
         pt: previousTitle?.pt ?? '',
         es: previousTitle?.es ?? '',
         status: translationStatus(feature.title, previousTitle, feature.title),
@@ -215,7 +214,7 @@ function buildTranslationRows(games, existingRows = []) {
         context: `Stable repeatable feature ${featureId} body`,
         type: 'rich',
         en: feature.body,
-        it: previousBody?.it ?? '',
+        de: previousBody?.de ?? '',
         pt: previousBody?.pt ?? '',
         es: previousBody?.es ?? '',
         status: translationStatus(feature.body, previousBody, feature.body),

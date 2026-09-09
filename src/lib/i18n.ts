@@ -1,5 +1,5 @@
 import siteEn from '../generated/content/site.en.json';
-import siteIt from '../generated/content/site.it.json';
+import siteDe from '../generated/content/site.de.json';
 import sitePt from '../generated/content/site.pt.json';
 import siteEs from '../generated/content/site.es.json';
 import { DEFAULT_LOCALE, LOCALES, LOCALE_LABELS, type Locale } from '../../locales.mjs';
@@ -9,7 +9,7 @@ export type { Locale };
 
 const messages: Record<Locale, Record<string, string>> = {
   en: siteEn,
-  it: siteIt,
+  de: siteDe,
   pt: sitePt,
   es: siteEs,
 };

@@ -12,10 +12,10 @@ import {
 } from './lib.mjs';
 
 test('field-level locale fallback uses EN without changing route', () => {
-  assert.equal(resolveTranslation({ en: 'Games', it: '' }, 'it'), 'Games');
-  assert.equal(localizedRoute('/portfolio/pirates-rush', 'it'), '/it/portfolio/pirates-rush');
-  assert.equal(localizedRoute('/it/games', 'pt'), '/pt/games');
-  assert.equal(localizedRoute('/it/games?type=table#games', 'es'), '/es/games?type=table#games');
+  assert.equal(resolveTranslation({ en: 'Games', de: '' }, 'de'), 'Games');
+  assert.equal(localizedRoute('/portfolio/pirates-rush', 'de'), '/de/portfolio/pirates-rush');
+  assert.equal(localizedRoute('/de/games', 'pt'), '/pt/games');
+  assert.equal(localizedRoute('/de/games?type=table#games', 'es'), '/es/games?type=table#games');
 });
 
 test('translation validation catches duplicate keys and missing EN', () => {

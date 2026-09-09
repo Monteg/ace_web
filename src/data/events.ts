@@ -1,4 +1,7 @@
 import type { ImageMetadata } from 'astro';
+import angelinaPhoto from '../assets/event/team/angelina-sbc-lisbon-2026.png';
+import mykolaPhoto from '../assets/event/team/mykola-sbc-lisbon-2026.png';
+import timurPhoto from '../assets/event/team/timur-sbc-lisbon-2026.png';
 
 export interface EventTeamMember {
   id: string;
@@ -56,9 +59,9 @@ export const sbcLisbon = {
   ],
   teamTitle: 'Meet the team in Lisbon',
   team: [
-    { id: 'angelina', name: 'Angelina', position: null, photo: null, expertise: 'Partnerships, markets, and game boutique', linkedin: 'https://www.linkedin.com/in/astasiuk', bookingUrl: null },
-    { id: 'timur', name: 'Timur', position: null, photo: null, expertise: 'Game development, product, and player behaviour', linkedin: 'https://www.linkedin.com/in/timur-rafiev-52593a120/', bookingUrl: null },
-    { id: 'mykola', name: 'Mykola', position: null, photo: null, expertise: 'Gaming engineering, scale, and pragmatic technology', linkedin: 'https://www.linkedin.com/in/mykola-dorofii/', bookingUrl: null },
+    { id: 'angelina', name: 'Angelina', position: null, photo: angelinaPhoto, expertise: 'Partnerships, markets, and game boutique', linkedin: 'https://www.linkedin.com/in/astasiuk/', bookingUrl: null },
+    { id: 'timur', name: 'Timur', position: null, photo: timurPhoto, expertise: 'Game development, product, and player behaviour', linkedin: 'https://www.linkedin.com/in/timur-rafiev-52593a120/', bookingUrl: null },
+    { id: 'mykola', name: 'Mykola', position: null, photo: mykolaPhoto, expertise: 'Gaming engineering, scale, and pragmatic technology', linkedin: 'https://www.linkedin.com/in/mykola-dorofii/', bookingUrl: null },
   ] satisfies EventTeamMember[],
   topicsTitle: 'What can we talk about in Lisbon?',
   topics: [

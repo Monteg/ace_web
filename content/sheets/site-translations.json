@@ -6,7 +6,7 @@
     "context": "Skip link shown to keyboard users",
     "type": "aria",
     "en": "Skip to content",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -18,7 +18,7 @@
     "context": "Primary contact call to action",
     "type": "button",
     "en": "Let's talk",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -30,7 +30,7 @@
     "context": "Link to the games catalogue",
     "type": "button",
     "en": "View games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -42,7 +42,7 @@
     "context": "Loads more game cards",
     "type": "button",
     "en": "Load games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -54,7 +54,7 @@
     "context": "Quick play button",
     "type": "button",
     "en": "Play",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -66,7 +66,7 @@
     "context": "Close control accessible label",
     "type": "aria",
     "en": "Close",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -78,7 +78,7 @@
     "context": "Clipboard error feedback",
     "type": "plain",
     "en": "Copy failed",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -90,7 +90,7 @@
     "context": "Clipboard success feedback",
     "type": "plain",
     "en": "Copied",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -102,7 +102,7 @@
     "context": "Show all game types",
     "type": "button",
     "en": "All",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -114,7 +114,7 @@
     "context": "Accessible label for game type filters",
     "type": "aria",
     "en": "Filter games by type",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -126,7 +126,7 @@
     "context": "Slot category label",
     "type": "plain",
     "en": "Slots",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -138,7 +138,7 @@
     "context": "Instant category label",
     "type": "plain",
     "en": "Instant",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -150,7 +150,7 @@
     "context": "Table category label",
     "type": "plain",
     "en": "Table",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -162,7 +162,7 @@
     "context": "Single slot badge",
     "type": "plain",
     "en": "Slot",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -174,7 +174,7 @@
     "context": "Single instant badge",
     "type": "plain",
     "en": "Instant",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -186,7 +186,7 @@
     "context": "Single table badge",
     "type": "plain",
     "en": "Table",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -198,7 +198,7 @@
     "context": "Return to player abbreviation",
     "type": "plain",
     "en": "RTP",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -210,7 +210,7 @@
     "context": "Volatility label",
     "type": "plain",
     "en": "Volatility",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -222,7 +222,7 @@
     "context": "Maximum win label",
     "type": "plain",
     "en": "Max win",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -234,7 +234,7 @@
     "context": "Value supplied on request",
     "type": "plain",
     "en": "On request",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -246,7 +246,7 @@
     "context": "Bet range label",
     "type": "plain",
     "en": "Bet range",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -258,7 +258,7 @@
     "context": "Game layout label",
     "type": "plain",
     "en": "Layout",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -270,7 +270,7 @@
     "context": "Main feature label",
     "type": "plain",
     "en": "Main feature",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -282,7 +282,7 @@
     "context": "Low volatility label",
     "type": "plain",
     "en": "Low",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -294,7 +294,7 @@
     "context": "Medium volatility label",
     "type": "plain",
     "en": "Medium",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -306,7 +306,7 @@
     "context": "High volatility label",
     "type": "plain",
     "en": "High",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -318,7 +318,7 @@
     "context": "Very high volatility label",
     "type": "plain",
     "en": "Very high",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -330,7 +330,7 @@
     "context": "Unreleased game badge",
     "type": "plain",
     "en": "Coming soon",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -342,7 +342,7 @@
     "context": "Released game page without a public demo",
     "type": "plain",
     "en": "Preview",
-    "it": "Anteprima",
+    "de": "",
     "pt": "Pré-visualização",
     "es": "Vista previa",
     "status": "Ready"
@@ -354,7 +354,7 @@
     "context": "Main navigation",
     "type": "plain",
     "en": "Games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -366,7 +366,7 @@
     "context": "Main navigation",
     "type": "plain",
     "en": "Event",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -378,7 +378,7 @@
     "context": "Main navigation",
     "type": "plain",
     "en": "About Us",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -390,7 +390,7 @@
     "context": "Main navigation",
     "type": "plain",
     "en": "Our Benefits",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -402,7 +402,7 @@
     "context": "Main navigation",
     "type": "plain",
     "en": "Why Ace Games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -414,7 +414,7 @@
     "context": "Main navigation",
     "type": "plain",
     "en": "FAQ",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -426,7 +426,7 @@
     "context": "Mobile menu accessible label",
     "type": "aria",
     "en": "Open menu",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -438,7 +438,7 @@
     "context": "Mobile menu accessible label",
     "type": "aria",
     "en": "Close menu",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -450,7 +450,7 @@
     "context": "Games submenu accessible label",
     "type": "aria",
     "en": "Open games menu",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -462,7 +462,7 @@
     "context": "Language selector accessible label",
     "type": "aria",
     "en": "Language",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -474,7 +474,7 @@
     "context": "Modal eyebrow",
     "type": "plain",
     "en": "Age verification",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -486,7 +486,7 @@
     "context": "Modal title",
     "type": "plain",
     "en": "This content is intended for persons 18 years or older.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -498,7 +498,7 @@
     "context": "Modal explanation",
     "type": "plain",
     "en": "Please confirm you meet the legal age requirement to continue.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -510,7 +510,7 @@
     "context": "Under-age action",
     "type": "button",
     "en": "No, take me back",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -522,7 +522,7 @@
     "context": "Adult confirmation action",
     "type": "button",
     "en": "Yes, I'm 18 years or older",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -534,7 +534,7 @@
     "context": "Browser and search title",
     "type": "seo_title",
     "en": "Custom casino game development for operators | Ace Games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -546,7 +546,7 @@
     "context": "Search description",
     "type": "seo_description",
     "en": "Ace Games builds slots, instant and table games for licensed operators. Maths, art, engine and RGS in-house, with published RTP and playable demos.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -558,7 +558,7 @@
     "context": "Main heading, plain part",
     "type": "plain",
     "en": "Slots, instant and table games,",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -570,7 +570,7 @@
     "context": "Main heading, highlighted part",
     "type": "plain",
     "en": "built end to end",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -582,7 +582,7 @@
     "context": "{count} is the live game count",
     "type": "plain",
     "en": "{count} slot, instant and table titles, built and certified in-house, playable here before you email us.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -594,7 +594,7 @@
     "context": "Proof section headline",
     "type": "plain",
     "en": "Ace Games builds casino games worldwide, combining design, audio, and technology to create high-performance slots, instant and table games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -606,7 +606,7 @@
     "context": "Statistic label",
     "type": "plain",
     "en": "Prototypes",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -618,7 +618,7 @@
     "context": "Statistic label",
     "type": "plain",
     "en": "Game Releases",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -630,7 +630,7 @@
     "context": "Statistic label",
     "type": "plain",
     "en": "Players Reached",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -642,7 +642,7 @@
     "context": "Statistic label",
     "type": "plain",
     "en": "Operator Ecosystem",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -654,7 +654,7 @@
     "context": "Section heading",
     "type": "plain",
     "en": "Redefining iGaming Excellence",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -666,7 +666,7 @@
     "context": "Benefit card heading",
     "type": "plain",
     "en": "Trust at the Core",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -678,7 +678,7 @@
     "context": "Benefit card body",
     "type": "plain",
     "en": "Built on certified RNG standards and secure architecture, Ace Games delivers fair gameplay, stability, and regulatory readiness.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -690,7 +690,7 @@
     "context": "Benefit card heading",
     "type": "plain",
     "en": "Innovation That Drives Performance",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -702,7 +702,7 @@
     "context": "Benefit card body",
     "type": "plain",
     "en": "We create mechanics designed to increase retention, session length, and player lifetime value.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -714,7 +714,7 @@
     "context": "Benefit card heading",
     "type": "plain",
     "en": "Retention Engineered for Scale",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -726,7 +726,7 @@
     "context": "Benefit card body",
     "type": "plain",
     "en": "Our games are built to keep players returning, with mechanics optimized for session time, repeat play, and operator revenue.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -738,7 +738,7 @@
     "context": "Section heading",
     "type": "plain",
     "en": "DISCOVER ACE GAMES",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -750,7 +750,7 @@
     "context": "Section heading",
     "type": "plain",
     "en": "Every game, by the numbers",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -762,7 +762,7 @@
     "context": "Section introduction",
     "type": "plain",
     "en": "All our games on one board: each lane is a volatility level, each game sits at its published RTP. Hover a game for the figures, click to open it.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -774,7 +774,7 @@
     "context": "Chart caption",
     "type": "plain",
     "en": "Published RTP and volatility for every title. RTP bands and volatility modes are configuration, set per operator and per market.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -786,7 +786,7 @@
     "context": "Axis explanation",
     "type": "plain",
     "en": "Further right, more returned to players. Higher up, bigger swings.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -798,7 +798,7 @@
     "context": "Chart legend",
     "type": "plain",
     "en": "Adjustable volatility",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -810,7 +810,7 @@
     "context": "Chart tooltip action",
     "type": "plain",
     "en": "Open the game",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -822,7 +822,7 @@
     "context": "Section heading",
     "type": "plain",
     "en": "The Future of Gaming with Ace Games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -834,7 +834,7 @@
     "context": "Process card heading",
     "type": "plain",
     "en": "Expert Engineering Team",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -846,7 +846,7 @@
     "context": "Process card body",
     "type": "plain",
     "en": "Developers, mathematicians, and designers building high-performance casino games for scale and stability.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -858,7 +858,7 @@
     "context": "Process card heading",
     "type": "plain",
     "en": "Game Strategy & Product Design",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -870,7 +870,7 @@
     "context": "Process card body",
     "type": "plain",
     "en": "We align RTP models, volatility curves, and engagement mechanics with your business goals before development begins.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -882,7 +882,7 @@
     "context": "Process card heading",
     "type": "plain",
     "en": "Build & Integrate",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -894,7 +894,7 @@
     "context": "Process card body",
     "type": "plain",
     "en": "We develop, test, and integrate games into your platform with fast deployment and stable performance.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -906,7 +906,7 @@
     "context": "Process card heading",
     "type": "plain",
     "en": "Monitor & Optimize",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -918,7 +918,7 @@
     "context": "Process card body",
     "type": "plain",
     "en": "Post-launch analytics and player behavior tracking help improve retention and operator profitability.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -930,7 +930,7 @@
     "context": "Section heading",
     "type": "plain",
     "en": "Frequently asked questions",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -942,7 +942,7 @@
     "context": "Accordion question",
     "type": "plain",
     "en": "What types of casino games do you develop?",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -954,7 +954,7 @@
     "context": "Accordion answer",
     "type": "rich",
     "en": "We develop a wide range of casino products including slot, instant, and table games, plus custom mechanics tailored to operator needs. Each game is designed to maximize engagement, retention, and revenue performance.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -966,7 +966,7 @@
     "context": "Accordion question",
     "type": "plain",
     "en": "How long does it take to develop a casino game?",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -978,7 +978,7 @@
     "context": "Accordion answer",
     "type": "rich",
     "en": "Development timelines depend on complexity. Standard slot projects typically take 3–6 months, while advanced mechanics or custom game concepts may require 6–12 months.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -990,7 +990,7 @@
     "context": "Accordion question",
     "type": "plain",
     "en": "Can I order a fully customized casino game?",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1002,7 +1002,7 @@
     "context": "Accordion answer",
     "type": "rich",
     "en": "Yes. We design fully customized games aligned with your brand, audience, and platform requirements, from theme and visuals to mechanics and reward systems.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1014,7 +1014,7 @@
     "context": "Accordion question",
     "type": "plain",
     "en": "How do you ensure game quality and fairness?",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1026,7 +1026,7 @@
     "context": "Accordion answer",
     "type": "rich",
     "en": "Every game undergoes extensive testing including functional QA, performance testing, and RNG validation to ensure fair gameplay and stable performance.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1038,7 +1038,7 @@
     "context": "Accordion question",
     "type": "plain",
     "en": "Do you provide post-launch support?",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1050,7 +1050,7 @@
     "context": "Accordion answer",
     "type": "rich",
     "en": "Yes. We provide ongoing support, updates, and performance optimization to ensure games remain competitive and profitable over time.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1062,7 +1062,7 @@
     "context": "Contact section and modal heading",
     "type": "plain",
     "en": "Contact our team today",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1074,7 +1074,7 @@
     "context": "Handwritten prompt near submit button",
     "type": "plain",
     "en": "Drop us a message!",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1086,7 +1086,7 @@
     "context": "Form label",
     "type": "plain",
     "en": "Your name",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1098,7 +1098,7 @@
     "context": "Form label",
     "type": "plain",
     "en": "Company",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1110,7 +1110,7 @@
     "context": "Form label",
     "type": "plain",
     "en": "Work email",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1122,7 +1122,7 @@
     "context": "Work email input example",
     "type": "plain",
     "en": "you@operator.com",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1134,7 +1134,7 @@
     "context": "Form label",
     "type": "plain",
     "en": "What are you looking for?",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1146,7 +1146,7 @@
     "context": "Privacy note before policy link",
     "type": "plain",
     "en": "We use what you send here only to answer you. See the",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1158,7 +1158,7 @@
     "context": "Privacy note link",
     "type": "plain",
     "en": "privacy policy",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1170,7 +1170,7 @@
     "context": "Close button accessible label",
     "type": "aria",
     "en": "Close contact form",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1182,7 +1182,7 @@
     "context": "Browser and search title",
     "type": "seo_title",
     "en": "Casino games: slots, instant and table games | Ace Games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1194,7 +1194,7 @@
     "context": "{count} is total game count",
     "type": "seo_description",
     "en": "Explore all {count} Ace Games titles with published RTP, volatility and playable demos where available. Slot, instant and table games for licensed operators.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1206,7 +1206,7 @@
     "context": "Hero eyebrow",
     "type": "plain",
     "en": "Games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1218,7 +1218,7 @@
     "context": "Hero heading, plain part",
     "type": "plain",
     "en": "Every game we have",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1230,7 +1230,7 @@
     "context": "Hero heading, highlighted part",
     "type": "plain",
     "en": "built",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1242,7 +1242,7 @@
     "context": "Catalogue introduction",
     "type": "plain",
     "en": "Published RTP and volatility on each title, and a demo you can play without talking to anyone first. Configuration is per operator and per market.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1254,7 +1254,7 @@
     "context": "Custom game prompt heading",
     "type": "plain",
     "en": "Missing a mechanic?",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1266,7 +1266,7 @@
     "context": "Custom game prompt body",
     "type": "plain",
     "en": "Tell us what your lobby is short of and we will design the maths around it rather than reskinning something we already made.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1278,7 +1278,7 @@
     "context": "{name} is the game name",
     "type": "aria",
     "en": "Play {name} demo in a new tab",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1290,7 +1290,7 @@
     "context": "Catalogue breadcrumb",
     "type": "plain",
     "en": "Games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1302,7 +1302,7 @@
     "context": "Jump to demo button",
     "type": "button",
     "en": "Play the demo",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1314,7 +1314,7 @@
     "context": "Unreleased game heading",
     "type": "plain",
     "en": "In development",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1326,7 +1326,7 @@
     "context": "No public demo heading",
     "type": "plain",
     "en": "Demo on request",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1338,7 +1338,7 @@
     "context": "{name} is the game name",
     "type": "plain",
     "en": "{name} is not released yet. Ask us for the current build and the maths sheet, and we will send them over.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1350,7 +1350,7 @@
     "context": "{name} is the game name",
     "type": "plain",
     "en": "A playable build of {name} is available on request.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1362,7 +1362,7 @@
     "context": "Specifications panel heading",
     "type": "plain",
     "en": "Game stats & specs",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1374,7 +1374,7 @@
     "context": "{name} is the game name",
     "type": "aria",
     "en": "{name} game specifications",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1386,7 +1386,7 @@
     "context": "Overview section heading",
     "type": "plain",
     "en": "Overview",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1398,7 +1398,7 @@
     "context": "Features panel heading",
     "type": "plain",
     "en": "Features",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1410,7 +1410,7 @@
     "context": "{type} is a localized lowercase game type",
     "type": "plain",
     "en": "More {type} games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1422,7 +1422,7 @@
     "context": "Gameplay subsection heading",
     "type": "plain",
     "en": "Core gameplay",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1434,7 +1434,7 @@
     "context": "Bonus subsection heading",
     "type": "plain",
     "en": "Bonus spins & bonus game",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1446,7 +1446,7 @@
     "context": "Multiplier subsection heading",
     "type": "plain",
     "en": "Multiplier wins",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1458,7 +1458,7 @@
     "context": "Design subsection heading",
     "type": "plain",
     "en": "Design & atmosphere",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1470,7 +1470,7 @@
     "context": "Demo tab label",
     "type": "button",
     "en": "Play",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1482,7 +1482,7 @@
     "context": "Gallery tab label",
     "type": "button",
     "en": "Gallery",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1494,7 +1494,7 @@
     "context": "{name} is the game name",
     "type": "button",
     "en": "Play {name}",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1506,7 +1506,7 @@
     "context": "Free-play disclaimer",
     "type": "plain",
     "en": "Free play only. No real money and no prizes.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1518,7 +1518,7 @@
     "context": "{name} is the game name",
     "type": "plain",
     "en": "Loading {name}",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1530,7 +1530,7 @@
     "context": "Evaluation disclaimer",
     "type": "plain",
     "en": "Demo for evaluation only. No real money, no prizes.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1542,7 +1542,7 @@
     "context": "Business-to-business disclaimer",
     "type": "plain",
     "en": "Ace Games supplies licensed operators and does not offer gambling to consumers.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1554,7 +1554,7 @@
     "context": "Copy demo action",
     "type": "button",
     "en": "Copy demo link",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1566,7 +1566,7 @@
     "context": "Accessible label for demo utility controls",
     "type": "aria",
     "en": "Demo controls",
-    "it": "Controlli demo",
+    "de": "",
     "pt": "Controles da demo",
     "es": "Controles de la demo",
     "status": "Ready"
@@ -1578,7 +1578,7 @@
     "context": "Accessible label for demo viewport selector",
     "type": "aria",
     "en": "Preview device",
-    "it": "Dispositivo di anteprima",
+    "de": "",
     "pt": "Dispositivo de pré-visualização",
     "es": "Dispositivo de vista previa",
     "status": "Ready"
@@ -1590,7 +1590,7 @@
     "context": "Desktop viewport control",
     "type": "button",
     "en": "Desktop",
-    "it": "Desktop",
+    "de": "",
     "pt": "Desktop",
     "es": "Escritorio",
     "status": "Ready"
@@ -1602,7 +1602,7 @@
     "context": "Mobile viewport control",
     "type": "button",
     "en": "Mobile",
-    "it": "Mobile",
+    "de": "",
     "pt": "Telemóvel",
     "es": "Móvil",
     "status": "Ready"
@@ -1614,7 +1614,7 @@
     "context": "Enter fullscreen demo control",
     "type": "button",
     "en": "Fullscreen",
-    "it": "Schermo intero",
+    "de": "",
     "pt": "Ecrã inteiro",
     "es": "Pantalla completa",
     "status": "Ready"
@@ -1626,7 +1626,7 @@
     "context": "Exit fullscreen demo control",
     "type": "button",
     "en": "Exit fullscreen",
-    "it": "Esci da schermo intero",
+    "de": "",
     "pt": "Sair do ecrã inteiro",
     "es": "Salir de pantalla completa",
     "status": "Ready"
@@ -1638,7 +1638,7 @@
     "context": "Accessible label for game detail tabs",
     "type": "aria",
     "en": "Game details",
-    "it": "Dettagli del gioco",
+    "de": "",
     "pt": "Detalhes do jogo",
     "es": "Detalles del juego",
     "status": "Ready"
@@ -1650,7 +1650,7 @@
     "context": "Accessible label for horizontally scrollable related games",
     "type": "aria",
     "en": "Related games",
-    "it": "Giochi correlati",
+    "de": "",
     "pt": "Jogos relacionados",
     "es": "Juegos relacionados",
     "status": "Ready"
@@ -1662,7 +1662,7 @@
     "context": "{name} is the game name",
     "type": "button",
     "en": "Play {name}",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1674,7 +1674,7 @@
     "context": "{name} is the game name",
     "type": "plain",
     "en": "Loading {name}",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1686,7 +1686,7 @@
     "context": "{name} is the game name",
     "type": "aria",
     "en": "Loading {name}",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1698,7 +1698,7 @@
     "context": "Demo disclaimer",
     "type": "plain",
     "en": "Free play only. No real money and no prizes.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1710,7 +1710,7 @@
     "context": "Demo disclaimer",
     "type": "plain",
     "en": "Demo for evaluation only. No real money, no prizes.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1722,7 +1722,7 @@
     "context": "B2B disclaimer",
     "type": "plain",
     "en": "Ace Games supplies licensed operators and does not offer gambling to consumers.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1734,7 +1734,7 @@
     "context": "Copy action",
     "type": "button",
     "en": "Copy demo link",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1746,7 +1746,7 @@
     "context": "Footer column heading",
     "type": "plain",
     "en": "Company",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1758,7 +1758,7 @@
     "context": "Footer link",
     "type": "plain",
     "en": "Contact",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1770,7 +1770,7 @@
     "context": "Footer column heading",
     "type": "plain",
     "en": "Legal",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1782,7 +1782,7 @@
     "context": "Footer link",
     "type": "plain",
     "en": "Privacy policy",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1794,7 +1794,7 @@
     "context": "Footer link",
     "type": "plain",
     "en": "Terms and conditions",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1806,7 +1806,7 @@
     "context": "Footer column heading",
     "type": "plain",
     "en": "Follow Us",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1818,7 +1818,7 @@
     "context": "Social links introduction",
     "type": "plain",
     "en": "Stay updated with our latest games, news, and partnerships.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1830,7 +1830,7 @@
     "context": "Company description",
     "type": "plain",
     "en": "Custom slot, instant and table game development for licensed operators. Maths, art and engineering in-house.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1842,7 +1842,7 @@
     "context": "{date} is the document update date",
     "type": "plain",
     "en": "Last updated: {date}",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1854,7 +1854,7 @@
     "context": "Browser title",
     "type": "seo_title",
     "en": "Thank you | Ace Games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1866,7 +1866,7 @@
     "context": "Search description",
     "type": "seo_description",
     "en": "Your message has reached the Ace Games team. We answer in one working day.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1878,7 +1878,7 @@
     "context": "Success eyebrow",
     "type": "plain",
     "en": "Message sent",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1890,7 +1890,7 @@
     "context": "Success heading",
     "type": "plain",
     "en": "Thank you",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1902,7 +1902,7 @@
     "context": "Success message",
     "type": "plain",
     "en": "It is with the team now and we answer in one working day. If it is urgent, mail us directly and it lands in the same inbox.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1914,7 +1914,7 @@
     "context": "Error eyebrow",
     "type": "plain",
     "en": "Not sent",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1926,7 +1926,7 @@
     "context": "Error heading",
     "type": "plain",
     "en": "That did not send",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1938,7 +1938,7 @@
     "context": "Error action",
     "type": "button",
     "en": "Back to the form",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1950,7 +1950,7 @@
     "context": "Invalid form error",
     "type": "plain",
     "en": "Some fields were missing, or the email address did not look right.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1962,7 +1962,7 @@
     "context": "Unconfigured form error",
     "type": "plain",
     "en": "The contact form is not connected to an inbox yet.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1974,7 +1974,7 @@
     "context": "Delivery error",
     "type": "plain",
     "en": "The message could not be delivered just now.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1986,7 +1986,7 @@
     "context": "Unreadable form error",
     "type": "plain",
     "en": "The form could not be read.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -1998,7 +1998,7 @@
     "context": "Unknown error",
     "type": "plain",
     "en": "Something went wrong on the way.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2010,7 +2010,7 @@
     "context": "Instruction appended to error reason",
     "type": "plain",
     "en": "Mail us directly and we will pick it up from there.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2022,7 +2022,7 @@
     "context": "Browser title",
     "type": "seo_title",
     "en": "Page not found | Ace Games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2034,7 +2034,7 @@
     "context": "Search description",
     "type": "seo_description",
     "en": "That page does not exist. Browse our games or get in touch.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2046,7 +2046,7 @@
     "context": "Page heading",
     "type": "plain",
     "en": "That page does not exist",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2058,7 +2058,7 @@
     "context": "Page explanation",
     "type": "plain",
     "en": "It may have moved, or the link may be wrong. The Games page is the fastest way back.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2070,7 +2070,7 @@
     "context": "Browser title",
     "type": "seo_title",
     "en": "Ace-rolled | Ace Games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2082,7 +2082,7 @@
     "context": "Search description",
     "type": "seo_description",
     "en": "The Ace Games response to a declined age verification.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2094,7 +2094,7 @@
     "context": "Top message",
     "type": "plain",
     "en": "Come back when you are 18",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2106,7 +2106,7 @@
     "context": "Joke heading lead",
     "type": "plain",
     "en": "Nice try, you just got",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2118,7 +2118,7 @@
     "context": "Joke heading accent",
     "type": "plain",
     "en": "Ace-rolled",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2130,7 +2130,7 @@
     "context": "Sound action",
     "type": "button",
     "en": "Tap for sound",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2142,7 +2142,7 @@
     "context": "Sound enabled action",
     "type": "button",
     "en": "Sound on",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2154,7 +2154,7 @@
     "context": "Sound disabled action",
     "type": "button",
     "en": "Sound off",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2166,7 +2166,7 @@
     "context": "Exit link",
     "type": "button",
     "en": "Leave site",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2178,7 +2178,7 @@
     "context": "YouTube embed failure",
     "type": "plain",
     "en": "YouTube blocked embedded playback",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2190,7 +2190,7 @@
     "context": "Fallback external link",
     "type": "button",
     "en": "Play RickRoll'D on YouTube",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2202,7 +2202,7 @@
     "context": "Accessible name for the primary navigation",
     "type": "aria",
     "en": "Main navigation",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2214,7 +2214,7 @@
     "context": "Accessible name for a list of game categories",
     "type": "aria",
     "en": "Game types",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2226,7 +2226,7 @@
     "context": "Footer link to the maths section",
     "type": "plain",
     "en": "Maths",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2238,7 +2238,7 @@
     "context": "Footer link to the studio section",
     "type": "plain",
     "en": "Studio",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2250,7 +2250,7 @@
     "context": "Footer link to the integration section",
     "type": "plain",
     "en": "Integration",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2262,7 +2262,7 @@
     "context": "Screen-reader label for closing the event announcement",
     "type": "aria",
     "en": "Dismiss event announcement",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2274,7 +2274,7 @@
     "context": "Accessible name for game breadcrumb navigation",
     "type": "aria",
     "en": "Breadcrumb",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2286,7 +2286,7 @@
     "context": "Accessible name for game type and status labels",
     "type": "aria",
     "en": "Game classification",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2298,7 +2298,7 @@
     "context": "Vertical axis title on the maths explorer",
     "type": "plain",
     "en": "Volatility",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2310,7 +2310,7 @@
     "context": "Heading shown above real operator logos",
     "type": "plain",
     "en": "Live with",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2322,7 +2322,7 @@
     "context": "Heading for the in-house production section",
     "type": "plain",
     "en": "Maths, art and engine, all under one roof",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2334,7 +2334,7 @@
     "context": "Intro beneath the in-house production heading",
     "type": "plain",
     "en": "Every title is designed, drawn, coded and served by the same team, so nothing waits on a third party.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2346,7 +2346,7 @@
     "context": "Maths capability card title",
     "type": "plain",
     "en": "Maths",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2358,7 +2358,7 @@
     "context": "First paragraph in the maths capability card",
     "type": "plain",
     "en": "RTP bands, volatility modes and bet ranges are configuration, certified per market.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2370,7 +2370,7 @@
     "context": "Second paragraph in the maths capability card",
     "type": "plain",
     "en": "The maths sheet ships with the game as part of the deliverable.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2382,7 +2382,7 @@
     "context": "Alternative text for the maths capability artwork",
     "type": "alt",
     "en": "Zeus Run key art",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2394,7 +2394,7 @@
     "context": "Art capability card title",
     "type": "plain",
     "en": "Art",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2406,7 +2406,7 @@
     "context": "First paragraph in the art capability card",
     "type": "plain",
     "en": "Characters, symbols and animation are drawn by our own artists.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2418,7 +2418,7 @@
     "context": "Second paragraph in the art capability card",
     "type": "plain",
     "en": "A theme can be reskinned for your brand or built from scratch.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2430,7 +2430,7 @@
     "context": "Alternative text for the art capability artwork",
     "type": "alt",
     "en": "Vikings Gold key art",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2442,7 +2442,7 @@
     "context": "Engine capability card title",
     "type": "plain",
     "en": "Engine",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2454,7 +2454,7 @@
     "context": "First paragraph in the engine capability card",
     "type": "plain",
     "en": "An HTML5 client running on our own RGS.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2466,7 +2466,7 @@
     "context": "Second paragraph in the engine capability card",
     "type": "plain",
     "en": "One integration switches on the whole portfolio.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2478,7 +2478,7 @@
     "context": "Alternative text for the engine capability artwork",
     "type": "alt",
     "en": "Star Rocket key art",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2490,7 +2490,7 @@
     "context": "Compliance and integration section heading",
     "type": "plain",
     "en": "The answers your compliance team asks for",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2502,7 +2502,7 @@
     "context": "Compliance and integration section intro",
     "type": "plain",
     "en": "Everything a game acquisition team needs before booking a call. Documentation and certificates on request.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2514,7 +2514,7 @@
     "context": "Integration facts group heading",
     "type": "plain",
     "en": "Integration",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2526,7 +2526,7 @@
     "context": "Integration method row label",
     "type": "plain",
     "en": "Method",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2538,7 +2538,7 @@
     "context": "Expected integration method information",
     "type": "plain",
     "en": "Direct REST API, seamless wallet, or both",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2550,7 +2550,7 @@
     "context": "Aggregators row label",
     "type": "plain",
     "en": "Aggregators",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2562,7 +2562,7 @@
     "context": "Expected aggregator information",
     "type": "plain",
     "en": "The aggregators you are live on",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2574,7 +2574,7 @@
     "context": "Documentation row label",
     "type": "plain",
     "en": "Documentation",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2586,7 +2586,7 @@
     "context": "Expected documentation information",
     "type": "plain",
     "en": "Link to the integration docs",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2598,7 +2598,7 @@
     "context": "Go-live time row label",
     "type": "plain",
     "en": "Time to go live",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2610,7 +2610,7 @@
     "context": "Expected go-live timing information",
     "type": "plain",
     "en": "Typical days from credentials to lobby",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2622,7 +2622,7 @@
     "context": "Compliance facts group heading",
     "type": "plain",
     "en": "Compliance",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2634,7 +2634,7 @@
     "context": "Testing laboratory row label",
     "type": "plain",
     "en": "Testing laboratory",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2646,7 +2646,7 @@
     "context": "Expected testing laboratory information",
     "type": "plain",
     "en": "GLI, iTech Labs, BMM, whichever is true",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2658,7 +2658,7 @@
     "context": "Certification row label",
     "type": "plain",
     "en": "Certified to",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2670,7 +2670,7 @@
     "context": "Expected certification information",
     "type": "plain",
     "en": "Standard and certificate numbers",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2682,7 +2682,7 @@
     "context": "Jurisdictions row label",
     "type": "plain",
     "en": "Jurisdictions",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2694,7 +2694,7 @@
     "context": "Expected jurisdiction information",
     "type": "plain",
     "en": "Markets approved today",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2706,7 +2706,7 @@
     "context": "Legal entity row label",
     "type": "plain",
     "en": "Legal entity",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2718,7 +2718,7 @@
     "context": "Commercial facts group heading",
     "type": "plain",
     "en": "Commercial and product",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2730,7 +2730,7 @@
     "context": "Commercial model row label",
     "type": "plain",
     "en": "Model",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2742,7 +2742,7 @@
     "context": "Expected commercial model information",
     "type": "plain",
     "en": "Revenue share, licence fee, or both",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2754,7 +2754,7 @@
     "context": "Languages row label",
     "type": "plain",
     "en": "Languages",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2766,7 +2766,7 @@
     "context": "Expected localization information",
     "type": "plain",
     "en": "Localisations shipped",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2778,7 +2778,7 @@
     "context": "Currencies row label",
     "type": "plain",
     "en": "Currencies",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2790,7 +2790,7 @@
     "context": "Expected currency information",
     "type": "plain",
     "en": "Fiat and crypto support",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2802,7 +2802,7 @@
     "context": "Platforms row label",
     "type": "plain",
     "en": "Platforms",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2814,7 +2814,7 @@
     "context": "Supported platforms value",
     "type": "plain",
     "en": "HTML5, portrait and landscape, mobile first",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2826,7 +2826,7 @@
     "context": "Accessible name for the standalone brand header",
     "type": "aria",
     "en": "Ace Games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2838,7 +2838,7 @@
     "context": "Alternative text for the Ace Games logo",
     "type": "alt",
     "en": "Ace Games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2850,7 +2850,7 @@
     "context": "Accessible name for the local video",
     "type": "aria",
     "en": "RickRoll'D",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2862,7 +2862,7 @@
     "context": "Title for the embedded YouTube player",
     "type": "aria",
     "en": "RickRoll'D: oHg5SJYRHA0",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2874,7 +2874,7 @@
     "context": "Event city shown beside dates",
     "type": "plain",
     "en": "Lisbon",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2886,7 +2886,7 @@
     "context": "Search and browser title; {event} is the event name",
     "type": "seo_title",
     "en": "Meet Ace Games at {event}",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2898,7 +2898,7 @@
     "context": "Search description; {event} and {dates} are inserted automatically",
     "type": "seo_description",
     "en": "Meet the Ace Games team at {event}, {dates}. Explore our games, custom game development and book a meeting with the team.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2910,7 +2910,7 @@
     "context": "Desktop announcement; {event} and {dates} are inserted automatically",
     "type": "plain",
     "en": "Meet Ace Games at {event} · {dates}",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2922,7 +2922,7 @@
     "context": "Mobile announcement; {event} is inserted automatically",
     "type": "plain",
     "en": "Meet us at {event}",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2934,7 +2934,7 @@
     "context": "Heading shown before the event name",
     "type": "plain",
     "en": "Meet Ace Games at",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2946,7 +2946,7 @@
     "context": "Event hero tagline",
     "type": "plain",
     "en": "Games shaped by 15+ years in game development and tested with real players.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2958,7 +2958,7 @@
     "context": "Event hero introductory paragraph",
     "type": "rich",
     "en": "Meet the Ace Games team in Lisbon to explore the portfolio, discuss a tailored game for your business, and talk through the route to launch.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2970,7 +2970,7 @@
     "context": "Accessible name for the hero game artwork group",
     "type": "aria",
     "en": "Ace Games titles coming to Lisbon",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2982,7 +2982,7 @@
     "context": "Primary event booking button",
     "type": "button",
     "en": "Book a meeting",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -2994,7 +2994,7 @@
     "context": "Section heading",
     "type": "plain",
     "en": "Why meet Ace Games?",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3006,7 +3006,7 @@
     "context": "First reason title",
     "type": "plain",
     "en": "Explore a different kind of game",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3018,7 +3018,7 @@
     "context": "First reason description",
     "type": "rich",
     "en": "Ace combines familiar gaming mechanics with iGaming formats: intuitive to enter, with the risk and reward of gambling, and fresh enough to keep players engaged and coming back for the gameplay itself.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3030,7 +3030,7 @@
     "context": "Second reason title",
     "type": "plain",
     "en": "Tested with real players",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3042,7 +3042,7 @@
     "context": "Second reason description",
     "type": "rich",
     "en": "We test games in our own live environment before taking them to external operators. This gives us real data on how each game performs with players: from return rates, bet patterns, and session activity to how individual mechanics work in practice.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3054,7 +3054,7 @@
     "context": "Third reason title",
     "type": "plain",
     "en": "Exclusive games for your brand",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3066,7 +3066,7 @@
     "context": "Third reason description",
     "type": "rich",
     "en": "Our team develops branded games around your goals, audience, and market. We handle the full process from concept to a launch-ready title in one month.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3078,7 +3078,7 @@
     "context": "Accessible name for the statistics section",
     "type": "aria",
     "en": "Ace Games in numbers",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3090,7 +3090,7 @@
     "context": "First statistic label",
     "type": "plain",
     "en": "games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3102,7 +3102,7 @@
     "context": "Second statistic label",
     "type": "plain",
     "en": "years of game-development experience",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3114,7 +3114,7 @@
     "context": "Third statistic label",
     "type": "plain",
     "en": "unique players testing our games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3126,7 +3126,7 @@
     "context": "Section heading",
     "type": "plain",
     "en": "A taste of what we’ll bring to Lisbon",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3138,7 +3138,7 @@
     "context": "Link to the full game catalogue",
     "type": "button",
     "en": "Explore all games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3150,7 +3150,7 @@
     "context": "Game artwork link label; {game} is inserted automatically",
     "type": "aria",
     "en": "Explore {game}",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3162,7 +3162,7 @@
     "context": "Game artwork alternative text; {game} is inserted automatically",
     "type": "alt",
     "en": "{game} game artwork",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3174,7 +3174,7 @@
     "context": "Ace City display name in the event selection",
     "type": "plain",
     "en": "Ace City",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3186,7 +3186,7 @@
     "context": "Ace City event card description",
     "type": "plain",
     "en": "Crime, style, and rising stakes. A cinematic urban slot where every win builds the multiplier.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3198,7 +3198,7 @@
     "context": "Zeus Run display name in the event selection",
     "type": "plain",
     "en": "Zeus Runner",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3210,7 +3210,7 @@
     "context": "Zeus Run event card description",
     "type": "plain",
     "en": "A fast, high-stakes runner built around split-second choices. Pick a path, build the multiplier, and decide how far you’re willing to push before cashing out.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3222,7 +3222,7 @@
     "context": "Plinko display name in the event selection",
     "type": "plain",
     "en": "Plinko",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3234,7 +3234,7 @@
     "context": "Plinko event card description",
     "type": "plain",
     "en": "A familiar arcade mechanic with adjustable risk. Choose the board setup, drop the balls, and see which multiplier slots they land in.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3246,7 +3246,7 @@
     "context": "Chicken Doom display name in the event selection",
     "type": "plain",
     "en": "Chicken Doom",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3258,7 +3258,7 @@
     "context": "Chicken Doom event card description",
     "type": "plain",
     "en": "Take the chicken through a series of enemy encounters, with each successful step unlocking a higher multiplier. Cash out after any safe step or keep going for more.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3270,7 +3270,7 @@
     "context": "Section heading",
     "type": "plain",
     "en": "Meet the team in Lisbon",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3282,7 +3282,7 @@
     "context": "Angelina expertise description",
     "type": "plain",
     "en": "Partnerships, markets, and game boutique",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3294,7 +3294,7 @@
     "context": "Timur expertise description",
     "type": "plain",
     "en": "Game development, product, and player behaviour",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3306,7 +3306,7 @@
     "context": "Mykola expertise description",
     "type": "plain",
     "en": "Gaming engineering, scale, and pragmatic technology",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3318,7 +3318,7 @@
     "context": "Accessible placeholder text; {name} is inserted automatically",
     "type": "aria",
     "en": "{name}: portrait to be supplied",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3330,7 +3330,7 @@
     "context": "Visible portrait placeholder text",
     "type": "plain",
     "en": "Portrait coming soon",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3342,7 +3342,7 @@
     "context": "LinkedIn link label; {name} is inserted automatically",
     "type": "aria",
     "en": "{name} on LinkedIn (opens in a new tab)",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3354,7 +3354,7 @@
     "context": "Team member booking button; {name} is inserted automatically",
     "type": "button",
     "en": "Meet {name} at SBC",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3366,7 +3366,7 @@
     "context": "Section heading",
     "type": "plain",
     "en": "What can we talk about in Lisbon?",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3378,7 +3378,7 @@
     "context": "First topic title",
     "type": "plain",
     "en": "Player acquisition & retention",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3390,7 +3390,7 @@
     "context": "First topic description",
     "type": "plain",
     "en": "How game mechanics, formats, and visuals can help keep acquired players engaged.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3402,7 +3402,7 @@
     "context": "Second topic title",
     "type": "plain",
     "en": "Custom games",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3414,7 +3414,7 @@
     "context": "Second topic description",
     "type": "plain",
     "en": "Games built around a specific brand, market, and audience.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3426,7 +3426,7 @@
     "context": "Third topic title",
     "type": "plain",
     "en": "Game formats",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3438,7 +3438,7 @@
     "context": "Third topic description",
     "type": "plain",
     "en": "Mechanics for different player behaviours, markets, and product goals.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3450,7 +3450,7 @@
     "context": "Fourth topic title",
     "type": "plain",
     "en": "Integration & distribution",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3462,7 +3462,7 @@
     "context": "Fourth topic description",
     "type": "plain",
     "en": "Ways to bring Ace Games to your platform.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3474,7 +3474,7 @@
     "context": "Section heading",
     "type": "plain",
     "en": "Book your meeting in Lisbon",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3486,7 +3486,7 @@
     "context": "Booking introduction",
     "type": "plain",
     "en": "Meet the Ace Games team during SBC Lisbon.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3498,7 +3498,7 @@
     "context": "Booking description",
     "type": "rich",
     "en": "Choose a convenient time below and tell us what you’d like to discuss. We’ll confirm the meeting details directly.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3510,7 +3510,7 @@
     "context": "External calendar heading",
     "type": "plain",
     "en": "Find a time that works for you",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3522,7 +3522,7 @@
     "context": "External calendar button",
     "type": "button",
     "en": "Choose a meeting time",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3534,7 +3534,7 @@
     "context": "Instruction shown above the booking form",
     "type": "plain",
     "en": "Request your preferred time by email. The team will confirm availability directly.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3546,7 +3546,7 @@
     "context": "Team member selector label",
     "type": "plain",
     "en": "Who would you like to meet?",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3558,7 +3558,7 @@
     "context": "Whole team option",
     "type": "plain",
     "en": "Ace Games team",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3570,7 +3570,7 @@
     "context": "Preferred day field label",
     "type": "plain",
     "en": "Preferred day",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3582,7 +3582,7 @@
     "context": "Empty preferred day option",
     "type": "plain",
     "en": "Choose a day",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3594,7 +3594,7 @@
     "context": "Time field label",
     "type": "plain",
     "en": "Time in Lisbon (optional)",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3606,7 +3606,7 @@
     "context": "Discussion message label",
     "type": "plain",
     "en": "What would you like to discuss?",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3618,7 +3618,7 @@
     "context": "Prepare email submit button",
     "type": "button",
     "en": "Prepare meeting email",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3630,7 +3630,7 @@
     "context": "Explanation shown before the privacy link",
     "type": "plain",
     "en": "This prepares an email, not a confirmed booking. Send the draft from your email app to request your meeting.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3642,7 +3642,7 @@
     "context": "Status shown after generating an email",
     "type": "plain",
     "en": "Your meeting email is ready. Open it in your email app, then send it to the team.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3654,7 +3654,7 @@
     "context": "Open email application button",
     "type": "button",
     "en": "Open email app",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3666,7 +3666,7 @@
     "context": "Expandable email preview summary",
     "type": "plain",
     "en": "View or copy your message",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3678,7 +3678,7 @@
     "context": "Email subject template; {event} and {company} are inserted automatically",
     "type": "plain",
     "en": "{event}: meeting request from {company}",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3690,7 +3690,7 @@
     "context": "Email greeting",
     "type": "plain",
     "en": "Hello Ace Games,",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3702,7 +3702,7 @@
     "context": "Meeting request sentence; {event} is inserted automatically",
     "type": "plain",
     "en": "I’d like to request a meeting at {event}.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3714,7 +3714,7 @@
     "context": "Selected team member label",
     "type": "plain",
     "en": "Meet",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3726,7 +3726,7 @@
     "context": "Preferred time label",
     "type": "plain",
     "en": "Preferred time (Lisbon)",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3738,7 +3738,7 @@
     "context": "Fallback when no time is selected",
     "type": "plain",
     "en": "Flexible",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3750,7 +3750,7 @@
     "context": "Discussion topics heading",
     "type": "plain",
     "en": "Topics to discuss",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3762,7 +3762,7 @@
     "context": "Fallback discussion topic",
     "type": "plain",
     "en": "Portfolio and partnership opportunities",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"
@@ -3774,7 +3774,7 @@
     "context": "Final confirmation request",
     "type": "plain",
     "en": "Please confirm the time and meeting location.",
-    "it": "",
+    "de": "",
     "pt": "",
     "es": "",
     "status": "Missing"

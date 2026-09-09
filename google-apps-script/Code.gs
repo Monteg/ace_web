@@ -7,7 +7,7 @@ const ACE = Object.freeze({
     log: '05 Publish Log',
   },
   registryUrl: 'https://raw.githubusercontent.com/Monteg/ace_web/main/content/sheets/seed.json',
-  locales: ['en', 'it', 'pt', 'es'],
+  locales: ['en', 'de', 'pt', 'es'],
   types: ['plain', 'rich', 'button', 'aria', 'seo_title', 'seo_description', 'alt'],
   gameTypes: ['slot', 'instant', 'table'],
   gameStatuses: ['live', 'coming_soon'],
@@ -132,7 +132,7 @@ function buildSnapshot_(publishId) {
   const games = objects_(SpreadsheetApp.getActive().getSheetByName(ACE.sheets.games)).filter(row => text_(row.Slug) && text_(row['Validation Status']) !== 'Inactive');
   const activeSlugs = new Set(games.map(row => text_(row.Slug)));
   const gameText = objects_(SpreadsheetApp.getActive().getSheetByName(ACE.sheets.gameText)).filter(row => activeSlugs.has(text_(row.Slug)) && text_(row['Field Key']) && text_(row.Status) !== 'Inactive');
-  const normalizedSite = site.map(row => ({ key: row.Key, page: row.Page, section: row.Section, context: row.Context, type: row.Type, en: row.EN, it: row.IT, pt: row.PT, es: row.ES }));
+  const normalizedSite = site.map(row => ({ key: row.Key, page: row.Page, section: row.Section, context: row.Context, type: row.Type, en: row.EN, de: row.DE, pt: row.PT, es: row.ES }));
   const normalizedGames = games.map(row => ({
     id: row['Game ID'], name: row['Internal Name'], slug: row.Slug, status: row.Status, order: Number(row.Order), type: row.Type,
     rtp: row.RTP === 'configurable' ? 'configurable' : Number(row.RTP), volatility: row.Volatility,
@@ -141,7 +141,7 @@ function buildSnapshot_(publishId) {
     demoGameId: row['Adapter Game ID'], demoBuild: row['Direct Build'], demoVersion: row['Direct Version'], demoApiHost: row['API Host'],
     cardLogo: row['Card Logo'], cardBackground: row['Card Background'], heroImage: row['Hero Image'],
   }));
-  const normalizedGameText = gameText.map(row => ({ game: row.Game, slug: row.Slug, fieldKey: row['Field Key'], group: row.Group, context: row.Context, type: row.Type, en: row.EN, it: row.IT, pt: row.PT, es: row.ES }));
+  const normalizedGameText = gameText.map(row => ({ game: row.Game, slug: row.Slug, fieldKey: row['Field Key'], group: row.Group, context: row.Context, type: row.Type, en: row.EN, de: row.DE, pt: row.PT, es: row.ES }));
   return {
     schemaVersion: 1, publishId, publishedAt: new Date().toISOString(),
     siteTranslations: normalizedSite, games: normalizedGames, gameTranslations: normalizedGameText,
@@ -181,7 +181,7 @@ function mergeTranslationRows_(sheetName, incoming, ...identityFields) {
       });
       if (headers.includes('Last Synced')) sheet.getRange(found.index, headers.indexOf('Last Synced') + 1).setValue(new Date());
       if (headers.includes('Source Hash')) sheet.getRange(found.index, headers.indexOf('Source Hash') + 1).setValue(hash_(source.en));
-      if (englishWasEditedInSheet || (oldEnglish && oldEnglish !== source.en && ['IT', 'PT', 'ES'].some(locale => text_(found.row[locale])))) setStatus_(sheet, found.index, 'SOURCE CHANGED');
+      if (englishWasEditedInSheet || (oldEnglish && oldEnglish !== source.en && ['DE', 'PT', 'ES'].some(locale => text_(found.row[locale])))) setStatus_(sheet, found.index, 'SOURCE CHANGED');
     }
   });
   rows.forEach((row, index) => { if (!active.has(identity(row))) setStatus_(sheet, index + 2, 'Inactive'); });
@@ -235,7 +235,7 @@ function validateTranslationSheet_(sheetName, identityHeaders, errors, knownIden
     seen.add(identity);
     if (!text_(row.EN)) errors.push(`${place}: EN is required`);
     if (!ACE.types.includes(text_(row.Type))) errors.push(`${place}: invalid Type`);
-    ['EN', 'IT', 'PT', 'ES'].forEach(locale => { if (/<\/?(?:script|iframe|object|embed)\b/i.test(text_(row[locale]))) errors.push(`${place}: unsafe HTML in ${locale}`); });
+    ['EN', 'DE', 'PT', 'ES'].forEach(locale => { if (/<\/?(?:script|iframe|object|embed)\b/i.test(text_(row[locale]))) errors.push(`${place}: unsafe HTML in ${locale}`); });
     if (row.Type === 'seo_title' && text_(row.EN).length > 70) errors.push(`${place}: SEO title exceeds 70 characters`);
     if (row.Type === 'seo_description' && text_(row.EN).length > 165) errors.push(`${place}: SEO description exceeds 165 characters`);
   });
@@ -264,7 +264,7 @@ function refreshRowStatus_(sheet, rowNumber) {
     const visibleCount = sheet.getName() === ACE.sheets.site ? 9 : 10;
     const currentHash = hash_(JSON.stringify(values.slice(0, visibleCount)));
     const baseline = text_(row['Last Published Hash']);
-    const baseStatus = !text_(row.EN) ? 'Error' : ['IT', 'PT', 'ES'].every(locale => text_(row[locale])) ? 'Ready' : 'Missing';
+    const baseStatus = !text_(row.EN) ? 'Error' : ['DE', 'PT', 'ES'].every(locale => text_(row[locale])) ? 'Ready' : 'Missing';
     setStatus_(sheet, rowNumber, baseline && baseline === currentHash ? baseStatus : 'Changed');
   } else {
     const currentHash = hash_(JSON.stringify(values.slice(0, 23)));

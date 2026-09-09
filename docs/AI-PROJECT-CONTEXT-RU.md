@@ -1162,7 +1162,6 @@ Volatility values:
 | specs.mainFeature | string |
 | specs.layout | string |
 | demo | adapter или direct |
-| highlights | string array |
 | features | array title + body |
 
 ### 18.3. Max win

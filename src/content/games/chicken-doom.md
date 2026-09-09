@@ -1,37 +1,47 @@
 ---
-name: "Chicken Doom"
+name: Chicken doom
 type: instant
 status: live
 seo:
-  title: "Chicken Doom - instant game by Ace Games"
-  description: "Players choose a bet amount and risk level before starting the round. Each step has its own multiplier and is resolved by the server."
+  title: Chicken Doom - instant game by Ace Games
+  description: >-
+    Players choose a bet amount and risk level before starting the round. Each
+    step has its own multiplier and is resolved by the server.
 card: ../../assets/games/chicken-doom.webp
 hero: ../../assets/heroes/chicken-doom.webp
 specs:
   rtp: 0.97
-  maxWin: { value: 50, unit: x, approx: false }
-  volatility: [low, medium, high]
-  bet: { min: 3.0, max: 500.0 }
-  mainFeature: "Step Multiplier Progression"
-  layout: "Step Path Progression"
+  maxWin:
+    value: 50
+    unit: x
+    approx: false
+  volatility:
+    - low
+    - medium
+    - high
+  bet:
+    min: 3
+    max: 500
+  mainFeature: Step Multiplier Progression
+  layout: Step Path Progression
 demo:
   mode: direct
-  build: "doom"
+  build: doom
   version: 57
-  apiHost: "https://pigeon-road-api.demo.rstars.cc"
-highlights:
-  - "Step multipliers"
-  - "Cash Out"
-  - "Risk levels"
-  - "Round history"
+  apiHost: 'https://pigeon-road-api.demo.rstars.cc'
 features:
-  - title: "Step-By-Step Progression"
-    body: "Guide the chicken through sequential steps with rising multipliers."
-  - title: "Risk Or Collect Decisions"
-    body: "Collect after a successful step or continue for more."
-  - title: "Three Risk Levels"
-    body: "Choose Low, Medium, or High gameplay."
+  - title: STEP-BY-STEP PROGRESSION
+    body: Guide the chicken through sequential steps with rising multipliers.
+  - title: RISK OR COLLECT DECISIONS
+    body: Collect after a successful step or continue for more.
+  - title: THREE RISK LEVELS
+    body: 'Choose Low, Medium, or High gameplay.'
 ---
+Chicken Doom is a step multiplier game where players guide a chicken along a dangerous path of rising coefficients.
+
+After each successful step, players can collect the current payout or continue for a higher multiplier.
+
+## Core Gameplay
 
 Players choose a bet amount and risk level before starting the round.
 
@@ -39,9 +49,15 @@ Each step has its own multiplier and is resolved by the server.
 
 If the chicken fails on a step before Cash Out, the round ends and the bet is lost.
 
+## Main Feature
+
 Step Multiplier Progression
 
 Each successful step unlocks a higher coefficient and increases the potential payout.
+
+## Bonus Spins & Bonus Game
+
+### ROUND FLOW
 
 The round starts with bet setup, risk selection, and server confirmation.
 
@@ -51,11 +67,17 @@ Successful steps unlock Cash Out and allow the player to continue to the next st
 
 The round ends after Cash Out or after a failed step.
 
+## Multiple Payline Wins
+
+### EXTRA FEATURE
+
 Risk Level System
 
 Low, Medium, and High modes change step count, multiplier growth, and win probability.
 
-## Building A Step Multiplier Experience
+## Design & Atmosphere
+
+### BUILDING A STEP MULTIPLIER EXPERIENCE
 
 Chicken Doom is built around short rounds, rising coefficients, and constant collect-or-continue decisions.
 

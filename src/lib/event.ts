@@ -3,7 +3,7 @@ import type { Locale } from './i18n';
 
 const localeTag: Record<Locale, string> = {
   en: 'en-GB',
-  it: 'it-IT',
+  de: 'de-DE',
   pt: 'pt-PT',
   es: 'es-ES',
 };

@@ -70,7 +70,6 @@ const games = defineCollection({
         ])
         .optional(),
 
-      highlights: z.array(z.string()).default([]),
       features: z.array(z.object({ title: z.string(), body: z.string() })).default([]),
     }),
 });

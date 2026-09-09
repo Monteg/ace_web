@@ -1,47 +1,60 @@
 ---
-name: "Star Go"
+name: Star go
 type: instant
 status: live
 seo:
-  title: "Star Go - instant game by Ace Games"
-  description: "Star Go: The game is played on a 36-cell closed board with four corners and four sides."
+  title: Star Go - instant game by Ace Games
+  description: >-
+    Star Go: The game is played on a 36-cell closed board with four corners and
+    four sides.
 card: ../../assets/games/star-go.webp
 hero: ../../assets/heroes/star-go.webp
 specs:
   rtp: 0.95
-  maxWin: { value: 50, unit: x, approx: false }
-  volatility: [medium, high]
-  bet: { min: 3.0, max: 500.0 }
-  mainFeature: "Dynamic Board Progression"
-  layout: "36-Cell Closed Board"
+  maxWin:
+    value: 50
+    unit: x
+    approx: false
+  volatility:
+    - medium
+    - high
+  bet:
+    min: 3
+    max: 500
+  mainFeature: Dynamic Board Progression
+  layout: 36-Cell Closed Board
 demo:
   mode: direct
-  build: "monopoly"
+  build: monopoly
   version: 31
-  apiHost: "https://monopoly-api.demo.rstars.cc"
-highlights:
-  - "36-cell closed board with dice-based movement"
-  - "Common, Uncommon, Rare, and Epic multiplier cells"
-  - "Chance events with Jump, Reroll, and Extra Spin effects"
-  - "Two Wheel of Fortune bonuses with x5 to x100 payouts"
+  apiHost: 'https://monopoly-api.demo.rstars.cc'
 features:
-  - title: "Dice-Based Board Movement"
-    body: "Roll two dice and move across a 36-cell closed board."
-  - title: "Risk Or Collect Decisions"
-    body: "Continue after each move or secure the current winnings."
-  - title: "Dynamic Board Regeneration"
-    body: "Complete a full loop to refresh regular cell values."
+  - title: DICE-BASED BOARD MOVEMENT
+    body: Roll two dice and move across a 36-cell closed board.
+  - title: RISK OR COLLECT DECISIONS
+    body: Continue after each move or secure the current winnings.
+  - title: DYNAMIC BOARD REGENERATION
+    body: Complete a full loop to refresh regular cell values.
 ---
+Star Go is a risk-driven board dice game where players roll two dice, move across a dynamic board, and multiply their bet.
+
+Each turn creates a choice between continuing the run for higher rewards or securing the current result.
+
+## Core Gameplay
 
 The game is played on a 36-cell closed board with four corners and four sides.
 
-Players roll two dice, move forward by 2-12 cells, and trigger the result of the landed cell.
+Players roll two dice, move forward by 2–12 cells, and trigger the result of the landed cell.
 
 After each move, players can continue playing or collect their current winnings.
+
+## Main Feature
 
 Dynamic Board Progression
 
 After every full loop around the board, regular cells regenerate with a new reward distribution.
+
+## Bonus Spins & Bonus Game
 
 Two corner cells are x0 risk zones that end the round and remove the current bet.
 
@@ -51,11 +64,17 @@ The second Wheel of Fortune corner uses dynamic sectors based on configured rewa
 
 Both wheels offer bonus payouts ranging from x5 to x100.
 
+## Multiple Payline Wins
+
+### EXTRA FEATURE
+
 Chance Cell Events
 
 Chance cells trigger instant effects such as Jump, Reroll, or Extra Spin.
 
-## Building A Risk-Driven Board System
+## Design & Atmosphere
+
+### BUILDING A RISK-DRIVEN BOARD SYSTEM
 
 Star Go is built around a survival-style dice loop where every move can increase or end the run.
 

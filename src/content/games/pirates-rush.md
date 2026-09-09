@@ -1,10 +1,13 @@
 ---
-name: "Pirates Rush"
+name: Pirates Rush
 type: slot
 status: live
 seo:
-  title: "Pirates Rush - slot game by Ace Games"
-  description: "Pirates Rush is played on a 5×3 grid with 11 fixed paylines. Winning combinations are formed by matching symbols from left to right along active lines."
+  title: Pirates Rush - slot game by Ace Games
+  description: >-
+    Pirates Rush is played on a 5×3 grid with 11 fixed paylines. Winning
+    combinations are formed by matching symbols from left to right along active
+    lines.
 card: ../../assets/games/pirates-rush.webp
 cardLayers:
   background: ../../assets/games/card-layers/pirates-rush-background.webp
@@ -12,23 +15,29 @@ cardLayers:
 hero: ../../assets/heroes/pirates-rush.webp
 specs:
   rtp: 0.948
-  maxWin: { value: 120000, unit: coins, approx: true }
-  volatility: [medium, high]
-  bet: { min: 1.0, max: 5000.0 }
-  mainFeature: "Progressive Payline Multiplier"
-  layout: "5×3 Reels, 11 Fixed Paylines"
+  maxWin:
+    value: 120000
+    unit: coins
+    approx: true
+  volatility:
+    - medium
+    - high
+  bet:
+    min: 1
+    max: 5000
+  mainFeature: Progressive Payline Multiplier
+  layout: '5×3 Reels, 11 Fixed Paylines'
 demo:
   mode: adapter
-  gameId: "8c3f1a7e-4b6d-4e9a-9f21-5d0c8a2b7e64"
+  gameId: 8c3f1a7e-4b6d-4e9a-9f21-5d0c8a2b7e64
 features:
-  - title: "Progressive Win Multiplier"
-    body: "Every winning payline increases the multiplier for the round"
-  - title: "Free Spins with Persistent Multiplier"
-    body: "In bonus mode, the multiplier carries over between spins"
-  - title: "Multiple Payline Wins"
-    body: "Up to 11 paylines can combine to boost the multiplier and total payout"
+  - title: Progressive Win Multiplier
+    body: Every winning payline increases the multiplier for the round
+  - title: Free Spins with Persistent Multiplier
+    body: 'In bonus mode, the multiplier carries over between spins'
+  - title: Multiple Payline Wins
+    body: Up to 11 paylines can combine to boost the multiplier and total payout
 ---
-
 Pirates Rush drops players into a high-seas treasure hunt filled with danger and opportunity. With progressive multipliers, powerful Free Spins, and classic pirate-themed symbols, every spin brings the chance for explosive rewards.
 
 ## Core Gameplay

@@ -66,10 +66,6 @@ specs:
 # demo:                                       # delete this whole block if there is no demo yet
 #   mode: adapter
 #   gameId: TODO-paste-the-uuid-from-the-game-team
-highlights:
-  - "TODO one short benefit"
-  - "TODO one short benefit"
-  - "TODO one short benefit"
 features:
   - title: "TODO feature name"
     body: "TODO one sentence on what it does for the player."

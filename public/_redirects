@@ -10,5 +10,9 @@
 /portfolio                /games                     301
 /portfolio/               /games                     301
 
+# Italian locale was replaced with German; preserve old public links.
+/it                       /de                        301
+/it/*                     /de/:splat                 301
+
 # Webflow provided this for free; Cloudflare Pages does not
 https://www.acegames.io/* https://acegames.io/:splat  301

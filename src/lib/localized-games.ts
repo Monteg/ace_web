@@ -2,7 +2,7 @@ import type { CollectionEntry } from 'astro:content';
 import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
 import gamesEn from '../generated/content/games.en.json';
-import gamesIt from '../generated/content/games.it.json';
+import gamesDe from '../generated/content/games.de.json';
 import gamesPt from '../generated/content/games.pt.json';
 import gamesEs from '../generated/content/games.es.json';
 import type { Locale } from './i18n';
@@ -10,7 +10,7 @@ import type { Locale } from './i18n';
 type GameMessages = Record<string, Record<string, string>>;
 const messages: Record<Locale, GameMessages> = {
   en: gamesEn,
-  it: gamesIt,
+  de: gamesDe,
   pt: gamesPt,
   es: gamesEs,
 };

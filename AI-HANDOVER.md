@@ -78,7 +78,6 @@ lines) is data; everything below is the overview prose. Field by field:
 | `specs.bet` | `{ min: 0.2, max: 100 }` | omit if unknown |
 | `specs.mainFeature`, `specs.layout` | short strings | e.g. `Expanding wilds`, `5x3 reels, 20 paylines` |
 | `demo` | see section 4 | omit entirely for a title with no demo |
-| `highlights` | 3 to 5 short bullets | shown under the spec strip |
 | `features` | list of `{ title, body }` | shown in the sidebar of the game page |
 
 Below the front matter write the overview: two or three paragraphs, then an

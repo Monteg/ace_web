@@ -139,11 +139,6 @@ const breadcrumbSchema = {
             </div>
           )}
 
-          {d.highlights.length > 0 && (
-            <ul class="highlights rv">
-              {d.highlights.map((highlight) => <li>{highlight}</li>)}
-            </ul>
-          )}
         </div>
       </div>
     </div>
@@ -285,9 +280,6 @@ const breadcrumbSchema = {
   .tab-copy { color: color-mix(in srgb, var(--fg) 72%, var(--fg-2)); font-size: clamp(15.5px, 1vw, 16.5px); line-height: 1.62; }
   .tab-copy :global(p) { margin: 0; }
   .tab-copy :global(p + p) { margin-top: var(--sp-3); }
-  .highlights { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); margin: 0; list-style: none; }
-  .highlights li { position: relative; padding: var(--sp-4) var(--sp-4) var(--sp-4) var(--sp-6); color: var(--fg-2); background: var(--ink-2); border-radius: var(--radius); font-size: 14px; line-height: 1.5; }
-  .highlights li::before { content: ''; position: absolute; top: 1.35em; left: var(--sp-4); width: 7px; height: 7px; background: var(--brand); border-radius: 2px; }
 
   .related-section {
     overflow: visible;
@@ -333,7 +325,6 @@ const breadcrumbSchema = {
     .tab-list button { min-height: 58px; padding-inline: 10px; font-size: clamp(0.95rem, 4.4vw, 1.08rem); }
     .tab-list button:last-child:nth-child(odd) { grid-column: 1 / -1; }
     .tab-panels { min-height: 132px; padding-top: var(--sp-4); }
-    .highlights { grid-template-columns: minmax(0, 1fr); }
     .related-heading .d1 { font-size: clamp(1.8rem, 8.5vw, 2.2rem); }
   }
   @media (max-width: 440px) { .related-grid { grid-template-columns: minmax(0, 1fr); } }

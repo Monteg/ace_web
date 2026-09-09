@@ -1,9 +1,9 @@
 export const DEFAULT_LOCALE = 'en';
-export const LOCALES = ['en', 'it', 'pt', 'es'];
+export const LOCALES = ['en', 'de', 'pt', 'es'];
 
 export const LOCALE_LABELS = {
   en: 'English',
-  it: 'Italiano',
+  de: 'Deutsch',
   pt: 'Português',
   es: 'Español',
 };

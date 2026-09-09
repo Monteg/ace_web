@@ -65,8 +65,8 @@ function statusFormatting(range) {
   range.conditionalFormats.add('containsText', { text: 'Failed', format: { fill: COLORS.error, font: { color: '#7D0904', bold: true } } });
 }
 
-const siteHeaders = ['Key', 'Page', 'Section', 'Context', 'Type', 'EN', 'IT', 'PT', 'ES', 'Status'];
-const siteRows = seed.siteTranslations.map((row) => [row.key, row.page, row.section, row.context, row.type, row.en, row.it, row.pt, row.es, '']);
+const siteHeaders = ['Key', 'Page', 'Section', 'Context', 'Type', 'EN', 'DE', 'PT', 'ES', 'Status'];
+const siteRows = seed.siteTranslations.map((row) => [row.key, row.page, row.section, row.context, row.type, row.en, row.de, row.pt, row.es, '']);
 const site = addSheet('01 Site Translations', siteHeaders, siteRows, {
   freezeColumns: 5,
   tableName: 'SiteTranslations',
@@ -98,8 +98,8 @@ games.sheet.getRange(`P2:P${games.lastRow}`).dataValidation = { rule: { type: 'l
 games.sheet.getRange(`X2:Y${games.lastRow}`).dataValidation = { rule: { type: 'list', values: [true, false] } };
 statusFormatting(games.sheet.getRange(`Z2:Z${games.lastRow}`));
 
-const gameTextHeaders = ['Game', 'Slug', 'Field Key', 'Group', 'Context', 'Type', 'EN', 'IT', 'PT', 'ES', 'Status'];
-const gameTextRows = seed.gameTranslations.map((row) => [row.game, row.slug, row.fieldKey, row.group, row.context, row.type, row.en, row.it, row.pt, row.es, '']);
+const gameTextHeaders = ['Game', 'Slug', 'Field Key', 'Group', 'Context', 'Type', 'EN', 'DE', 'PT', 'ES', 'Status'];
+const gameTextRows = seed.gameTranslations.map((row) => [row.game, row.slug, row.fieldKey, row.group, row.context, row.type, row.en, row.de, row.pt, row.es, '']);
 const gameText = addSheet('03 Game Translations', gameTextHeaders, gameTextRows, {
   freezeColumns: 6,
   tableName: 'GameTranslations',
@@ -114,7 +114,7 @@ statusFormatting(gameText.sheet.getRange(`K2:K${gameText.lastRow}`));
 const settingsRows = [
   ['Project', 'Ace Games'],
   ['Default Locale', 'en'],
-  ['Locales', 'en,it,pt,es'],
+  ['Locales', 'en,de,pt,es'],
   ['Target Branch', 'main'],
   ['Registry URL', 'https://raw.githubusercontent.com/Monteg/ace_web/main/content/sheets/seed.json'],
   ['Production URL', 'https://acegames.io'],

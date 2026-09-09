@@ -20,7 +20,7 @@ Run `npm run content:seed` after adding a known frontend slot or changing Englis
 
 ## 01 Site Translations
 
-`Key | Page | Section | Context | Type | EN | IT | PT | ES | Status`
+`Key | Page | Section | Context | Type | EN | DE | PT | ES | Status`
 
 The authoring view also contains hidden `Last Synced`, `Last Published Hash` and `Source Hash` metadata. They drive reliable `Changed`/`SOURCE CHANGED` detection and must not be edited by translators.
 
@@ -41,7 +41,7 @@ Hidden metadata follows the same hash model as Site Translations. `Validation St
 
 ## 03 Game Translations
 
-`Game | Slug | Field Key | Group | Context | Type | EN | IT | PT | ES | Status`
+`Game | Slug | Field Key | Group | Context | Type | EN | DE | PT | ES | Status`
 
 This sheet also has hidden `Last Synced`, `Last Published Hash` and `Source Hash` columns.
 
