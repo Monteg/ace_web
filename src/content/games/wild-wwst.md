@@ -8,6 +8,9 @@ seo:
     The game is played on a 5×3 reel layout with fixed paylines. Wins are formed
     from left to right along active lines and are summed across the reels.
 card: ../../assets/games/wild-wwst.webp
+cardLayers:
+  background: ../../assets/games/card-layers/wild-wwst-background.webp
+  logo: ../../assets/games/card-layers/wild-wwst-logo.webp
 hero: ../../assets/heroes/wild-wwst.webp
 specs:
   rtp: 0.958

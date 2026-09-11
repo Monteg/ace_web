@@ -9,6 +9,9 @@ seo:
     empty cells. Players spend Energy to open cells and reveal what lies beneath
     them.
 card: ../../assets/games/stars-digger.webp
+cardLayers:
+  background: ../../assets/games/card-layers/stars-digger-background.webp
+  logo: ../../assets/games/card-layers/stars-digger-logo.webp
 hero: ../../assets/heroes/stars-digger.webp
 specs:
   rtp: 0.951

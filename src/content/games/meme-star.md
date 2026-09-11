@@ -8,6 +8,9 @@ seo:
     Each round starts at 1.00x and the multiplier changes in real time during
     active gameplay.
 card: ../../assets/games/meme-star.webp
+cardLayers:
+  background: ../../assets/games/card-layers/meme-star-background.webp
+  logo: ../../assets/games/card-layers/meme-star-logo.webp
 hero: ../../assets/heroes/meme-star.webp
 specs:
   rtp: 0.974

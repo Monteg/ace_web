@@ -9,6 +9,9 @@ seo:
     Players select cells to reveal multipliers that increase their current
     winnings.
 card: ../../assets/games/star-miner.webp
+cardLayers:
+  background: ../../assets/games/card-layers/star-miner-background.webp
+  logo: ../../assets/games/card-layers/star-miner-logo.webp
 hero: ../../assets/heroes/star-miner.webp
 specs:
   rtp: 0.958

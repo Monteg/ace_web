@@ -43,7 +43,7 @@ export function getSiteContent(locale: Locale) {
   const CTA = { ...baseCTA, label: t('global.cta.lets_talk', locale), href: localizePath(baseCTA.href, locale) };
   const heroStats = baseHeroStats.map((stat, index) => ({
     ...stat,
-    label: t(['home.proof.prototypes', 'home.proof.releases', 'home.proof.players', 'home.proof.ecosystem'][index], locale),
+    label: t(['home.proof.prototypes', 'home.proof.releases', 'home.proof.players'][index], locale),
   }));
   const why = baseWhy.map((item, index) => ({
     ...item,
@@ -98,6 +98,7 @@ export function getSiteContent(locale: Locale) {
     process,
     faq,
     integration,
+    proofTitle: t('home.proof.title', locale),
     proofIntro: t('home.proof.intro', locale),
     socialIntro: t('footer.social_intro', locale) || baseSocialIntro,
     sectionCopy: {
@@ -106,7 +107,8 @@ export function getSiteContent(locale: Locale) {
       excellenceTitle: t('home.excellence.title', locale),
       futureTitle: t('home.future.title', locale),
       contactTitle: t('contact.title', locale),
-      contactBody: t('contact.prompt', locale),
+      contactBody: t('contact.body', locale),
+      contactPrompt: t('contact.prompt', locale),
     },
   };
 }

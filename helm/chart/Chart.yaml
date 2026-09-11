@@ -1,0 +1,9 @@
+apiVersion: v2
+name: www
+description: The acegames.io website — static pages served by nginx.
+type: application
+# The chart is versioned with the repo, not released separately: CI installs it
+# straight from the checkout, so appVersion is set per deploy from the image tag.
+version: 0.1.0
+appVersion: "0.1.0"
+

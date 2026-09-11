@@ -78,7 +78,8 @@ const fit = Math.min(2 / longestWord, 3.5 / d.name.length).toFixed(3);
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: 50% 50%;
+    transform-origin: center;
     opacity: 0.88;
   }
   .gh-bg::after {
@@ -187,7 +188,6 @@ const fit = Math.min(2 / longestWord, 3.5 / d.name.length).toFixed(3);
 
   @media (max-width: 992px) {
     .gh { --gh-col: 0.78; }
-    .gh-bg :global(img) { object-position: 62% center; }
     .gh-bg::after {
       background:
         linear-gradient(180deg, rgb(10 12 13 / 0.14), rgb(10 12 13 / 0.5) 52%, var(--ink) 100%),
@@ -199,7 +199,6 @@ const fit = Math.min(2 / longestWord, 3.5 / d.name.length).toFixed(3);
   }
   @media (max-width: 640px) {
     .gh { --gh-col: 1; }
-    .gh-bg :global(img) { object-position: 68% center; }
     .gh-bg::after {
       background:
         linear-gradient(180deg, rgb(10 12 13 / 0.34), rgb(10 12 13 / 0.6) 42%, var(--ink) 78%),

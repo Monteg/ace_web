@@ -1,0 +1,82 @@
+# Defaults. Everything environment-specific lives in helm/env/<env>.yaml, and
+# CI overrides image.tag on the command line with the commit it built.
+
+replicaCount: 2
+
+image:
+  repository: registry.gitlab.com/money.energy/www
+  # Set by CI: --set image.tag=$CI_COMMIT_SHORT_SHA. Never pinned in git, so
+  # nobody has to remember to bump a file that a pipeline already knows.
+  tag: ""
+  pullPolicy: IfNotPresent
+
+# The registry is private. deploy/bootstrap/README.md creates this secret from a
+# project deploy token scoped to read_registry.
+imagePullSecrets:
+  - name: gitlab-registry
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: nginx
+  annotations: {}
+  hosts: []
+  tls: []
+
+# A static site: the work is memory-mapped files, so the floor is low and the
+# ceiling only has to survive a traffic spike.
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    cpu: 500m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 101
+  runAsGroup: 101
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
+
+nodeSelector: {}
+tolerations: []
+# Spread the replicas across nodes when the scheduler can, so one drained node
+# is never the whole site.
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          topologyKey: kubernetes.io/hostname
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: www
+

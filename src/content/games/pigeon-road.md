@@ -8,6 +8,9 @@ seo:
     Players choose a bet amount and risk level before starting the round. Each
     step has its own multiplier and is resolved by the server.
 card: ../../assets/games/pigeon-road.webp
+cardLayers:
+  background: ../../assets/games/card-layers/pigeon-road-background.webp
+  logo: ../../assets/games/card-layers/pigeon-road-logo.webp
 hero: ../../assets/heroes/pigeon-road.webp
 specs:
   rtp: 0.97

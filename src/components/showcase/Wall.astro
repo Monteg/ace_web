@@ -13,7 +13,6 @@ import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import type { CollectionEntry } from 'astro:content';
 import { localeFromPath, localizePath, t } from '../../lib/i18n';
-import { getSiteContent } from '../../lib/site-content';
 
 interface Props {
   games: CollectionEntry<'games'>[];
@@ -21,7 +20,6 @@ interface Props {
 
 const { games } = Astro.props;
 const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
-const { CTA } = getSiteContent(locale);
 const live = games.filter((g) => g.data.status === 'live');
 const pool = live.length >= 12 ? live : games;
 
@@ -55,22 +53,18 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
   <div class="wrap">
     <div class="wall-copy" data-wall-copy>
       <h1 class="d0">{t('home.hero.title', locale)} <em>{t('home.hero.title_accent', locale)}</em></h1>
-      <p class="lead">
-        {t('home.hero.lead', locale, { count: live.length })}
-      </p>
+      <div class="wall-leads">
+        <p class="lead">{t('home.hero.lead', locale)}</p>
+        <p class="lead">{t('home.hero.lead_secondary', locale)}</p>
+      </div>
       <div class="wall-btns">
-        <a class="btn btn-primary" href={localizePath('/#games', locale)}>
-          {t('global.action.view_games', locale)}
+        <a class="btn btn-primary" href={localizePath('/#contact', locale)}>
+          {t('home.hero.primary_cta', locale)}
+        </a>
+        <a class="btn btn-ghost" href={localizePath('/#games', locale)}>
+          {t('home.hero.secondary_cta', locale)}
           <span class="disc" aria-hidden="true"><Icon name="ph:arrow-down" /></span>
         </a>
-        <button
-          class="btn btn-ghost"
-          type="button"
-          data-contact-open
-          aria-haspopup="dialog"
-          aria-controls="contact-dialog"
-          hidden
-        >{CTA.label}</button>
       </div>
     </div>
   </div>
@@ -140,7 +134,8 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
   }
   .wall-copy .d0 { max-width: 23ch; font-size: clamp(2.8rem, 5.6vw, 5.8rem); }
   .wall-copy .d0 em { font-style: normal; color: var(--peach); }
-  .wall-copy .lead { max-width: 40ch; }
+  .wall-leads { display: grid; gap: 0.7em; max-width: 56ch; }
+  .wall-copy .lead { max-width: none; }
   .wall-btns { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
 
   @media (max-width: 768px) {

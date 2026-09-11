@@ -8,6 +8,9 @@ seo:
     Star Loot: Players choose a bet amount and risk level before starting the
     round.
 card: ../../assets/games/star-loot.webp
+cardLayers:
+  background: ../../assets/games/card-layers/star-loot-background.webp
+  logo: ../../assets/games/card-layers/star-loot-logo.webp
 hero: ../../assets/heroes/star-loot.webp
 specs:
   rtp: 0.974

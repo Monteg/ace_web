@@ -8,6 +8,9 @@ seo:
     Players choose a bet amount and Low, Medium, or High risk before starting
     the round.
 card: ../../assets/games/good-staf.webp
+cardLayers:
+  background: ../../assets/games/card-layers/good-staf-background.webp
+  logo: ../../assets/games/card-layers/good-staf-logo.webp
 hero: ../../assets/heroes/good-staf.webp
 specs:
   rtp: configurable

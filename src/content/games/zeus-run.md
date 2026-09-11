@@ -8,6 +8,9 @@ seo:
     At each checkpoint, players choose one of three paths, with only one safe
     route forward.
 card: ../../assets/games/zeus-run.webp
+cardLayers:
+  background: ../../assets/games/card-layers/zeus-run-background.webp
+  logo: ../../assets/games/card-layers/zeus-run-logo.webp
 hero: ../../assets/heroes/zeus-run.webp
 specs:
   rtp: 0.945

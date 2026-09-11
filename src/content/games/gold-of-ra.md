@@ -6,6 +6,9 @@ seo:
   title: Gold of Ra - slot game by Ace Games
   description: Gold of Ra features a 5×3 reel layout with 11 fixed paylines.
 card: ../../assets/games/gold-of-ra.webp
+cardLayers:
+  background: ../../assets/games/card-layers/gold-of-ra-background.webp
+  logo: ../../assets/games/card-layers/gold-of-ra-logo.webp
 hero: ../../assets/heroes/gold-of-ra.webp
 specs:
   rtp: 0.94

@@ -6,7 +6,12 @@ const ACE = Object.freeze({
     settings: '04 Settings',
     log: '05 Publish Log',
   },
-  registryUrl: 'https://raw.githubusercontent.com/Monteg/ace_web/main/content/sheets/seed.json',
+  gitlab: {
+    apiUrl: 'https://gitlab.com/api/v4',
+    projectId: '86013072',
+    branch: 'main',
+    registryPath: 'content/sheets/seed.json',
+  },
   locales: ['en', 'de', 'pt', 'es'],
   types: ['plain', 'rich', 'button', 'aria', 'seo_title', 'seo_description', 'alt'],
   gameTypes: ['slot', 'instant', 'table'],
@@ -39,6 +44,7 @@ function syncContentFromSite() {
   mergeTranslationRows_(ACE.sheets.site, seed.siteTranslations, 'key');
   mergeGameRows_(seed.games);
   mergeTranslationRows_(ACE.sheets.gameText, seed.gameTranslations, 'slug', 'fieldKey');
+  refreshPublicSettings_();
   formatWorkbook_();
   SpreadsheetApp.getActive().toast('Content registry synchronized. Local translations were preserved.', 'Ace Games', 6);
 }
@@ -89,38 +95,40 @@ function publishChanges() {
   assertPublisher_();
   const errors = [...validateTranslations(), ...validateGames()];
   if (errors.length) throw new Error(`Publish blocked by ${errors.length} validation error(s).`);
-  const settings = settings_();
   const properties = PropertiesService.getScriptProperties();
-  const githubToken = properties.getProperty('GITHUB_TOKEN');
-  const owner = properties.getProperty('GITHUB_OWNER') || 'Monteg';
-  const repo = properties.getProperty('GITHUB_REPO') || 'ace_web';
-  const branch = properties.getProperty('GITHUB_BRANCH') || 'main';
-  if (!githubToken) throw new Error('Set GITHUB_TOKEN in Apps Script Settings > Script properties. Never put it in a cell.');
+  const gitlab = gitlabConfig_();
+  const triggerToken = properties.getProperty('GITLAB_TRIGGER_TOKEN');
+  if (!triggerToken) throw new Error('Set GITLAB_TRIGGER_TOKEN in Apps Script Settings > Script properties. Never put it in a cell.');
+  const serviceAccount = properties.getProperty('SERVICE_ACCOUNT_EMAIL');
+  if (!serviceAccount) throw new Error('Set SERVICE_ACCOUNT_EMAIL in Apps Script Settings > Script properties so GitLab CI can read the snapshot.');
+  refreshPublicSettings_();
 
   const publishId = Utilities.getUuid();
   const snapshot = buildSnapshot_(publishId);
   const folder = snapshotFolder_();
   const file = folder.createFile(`ace-content-${publishId}.json`, JSON.stringify(snapshot), MimeType.PLAIN_TEXT);
-  const serviceAccount = properties.getProperty('SERVICE_ACCOUNT_EMAIL');
-  if (serviceAccount) file.addViewer(serviceAccount);
+  file.addViewer(serviceAccount);
 
-  appendLog_([new Date(), currentUser_(), snapshot.counts.site, snapshot.counts.gameText, snapshot.counts.games, snapshot.counts.images, publishId, 'Queued', '', '']);
-  const payload = {
-    event_type: 'ace-content-publish',
-    client_payload: { spreadsheet_id: SpreadsheetApp.getActive().getId(), snapshot_file_id: file.getId(), publish_id: publishId, branch },
-  };
-  const response = UrlFetchApp.fetch(`https://api.github.com/repos/${owner}/${repo}/dispatches`, {
+  const response = UrlFetchApp.fetch(`${gitlab.apiUrl}/projects/${encodeURIComponent(gitlab.projectId)}/trigger/pipeline`, {
     method: 'post',
     muteHttpExceptions: true,
-    contentType: 'application/json',
-    headers: { Authorization: `Bearer ${githubToken}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' },
-    payload: JSON.stringify(payload),
+    payload: {
+      token: triggerToken,
+      ref: gitlab.branch,
+      'variables[ACE_CONTENT_PUBLISH]': 'true',
+      'variables[SPREADSHEET_ID]': SpreadsheetApp.getActive().getId(),
+      'variables[SNAPSHOT_FILE_ID]': file.getId(),
+      'variables[PUBLISH_ID]': publishId,
+    },
   });
-  if (response.getResponseCode() !== 204) {
-    appendLog_([new Date(), currentUser_(), 0, 0, 0, 0, publishId, 'Failed', '', `GitHub dispatch ${response.getResponseCode()}: ${response.getContentText()}`]);
-    throw new Error(`GitHub publish trigger failed: ${response.getResponseCode()}`);
+  if (response.getResponseCode() !== 201) {
+    const error = `GitLab trigger ${response.getResponseCode()}: ${response.getContentText()}`;
+    appendLog_([new Date(), currentUser_(), snapshot.counts.site, snapshot.counts.gameText, snapshot.counts.games, snapshot.counts.images, publishId, 'Failed', '', error]);
+    throw new Error(`GitLab publish trigger failed: ${response.getResponseCode()}`);
   }
-  SpreadsheetApp.getActive().toast('Publish queued. Normal deployment time is about 1–3 minutes.', 'Ace Games', 8);
+  const pipeline = JSON.parse(response.getContentText());
+  appendLog_([new Date(), currentUser_(), snapshot.counts.site, snapshot.counts.gameText, snapshot.counts.games, snapshot.counts.images, pipeline.id || publishId, 'Queued', pipeline.web_url || '', '']);
+  SpreadsheetApp.getActive().toast('Publish queued in GitLab. Normal deployment time is about 3–6 minutes.', 'Ace Games', 8);
 }
 
 function showPublishLog() {
@@ -305,9 +313,35 @@ function assertPublisher_() {
   if (!email || (allowed.length && !allowed.includes(email))) throw new Error('Your Google account is not allowed to publish production content.');
 }
 
-function settings_() {
-  const rows = objects_(SpreadsheetApp.getActive().getSheetByName(ACE.sheets.settings));
-  return Object.fromEntries(rows.map(row => [text_(row.Setting), row.Value]));
+function gitlabConfig_() {
+  const properties = PropertiesService.getScriptProperties();
+  return {
+    apiUrl: text_(properties.getProperty('GITLAB_API_URL')) || ACE.gitlab.apiUrl,
+    projectId: text_(properties.getProperty('GITLAB_PROJECT_ID')) || ACE.gitlab.projectId,
+    branch: text_(properties.getProperty('GITLAB_BRANCH')) || ACE.gitlab.branch,
+  };
+}
+
+function gitlabRegistryUrl_() {
+  const properties = PropertiesService.getScriptProperties();
+  const gitlab = gitlabConfig_();
+  return text_(properties.getProperty('GITLAB_REGISTRY_URL'))
+    || `${gitlab.apiUrl}/projects/${encodeURIComponent(gitlab.projectId)}/repository/files/${encodeURIComponent(ACE.gitlab.registryPath)}/raw?ref=${encodeURIComponent(gitlab.branch)}`;
+}
+
+function refreshPublicSettings_() {
+  const sheet = SpreadsheetApp.getActive().getSheetByName(ACE.sheets.settings);
+  if (!sheet || sheet.getLastRow() < 2) return;
+  const rows = objects_(sheet);
+  const values = {
+    'Target Branch': gitlabConfig_().branch,
+    'Registry URL': gitlabRegistryUrl_(),
+    'Normal Publish Time': '3–6 minutes',
+  };
+  rows.forEach((row, index) => {
+    const value = values[text_(row.Setting)];
+    if (value) sheet.getRange(index + 2, 2).setValue(value);
+  });
 }
 
 function registrySeed_(force) {
@@ -315,15 +349,21 @@ function registrySeed_(force) {
   if (force) cache.remove('ace-content-registry');
   const cached = cache.get('ace-content-registry');
   if (cached) return JSON.parse(cached);
-  const url = settings_()['Registry URL'] || ACE.registryUrl;
-  const githubToken = PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN');
+  const properties = PropertiesService.getScriptProperties();
+  const url = gitlabRegistryUrl_();
+  const readToken = properties.getProperty('GITLAB_READ_TOKEN');
   const response = UrlFetchApp.fetch(url, {
     muteHttpExceptions: true,
-    headers: githubToken ? { Authorization: `Bearer ${githubToken}` } : {},
+    headers: readToken ? { 'PRIVATE-TOKEN': readToken } : {},
   });
-  if (response.getResponseCode() !== 200) throw new Error(`Registry download failed: ${response.getResponseCode()}`);
+  if (response.getResponseCode() !== 200) {
+    throw new Error(`GitLab registry download failed: ${response.getResponseCode()}. Check GITLAB_PROJECT_ID, GITLAB_BRANCH and GITLAB_READ_TOKEN.`);
+  }
   const registry = JSON.parse(response.getContentText());
-  cache.put('ace-content-registry', JSON.stringify(registry), 300);
+  const serialized = JSON.stringify(registry);
+  if (Utilities.newBlob(serialized).getBytes().length <= 90000) {
+    cache.put('ace-content-registry', serialized, 300);
+  }
   return registry;
 }
 

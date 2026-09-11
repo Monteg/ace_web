@@ -8,6 +8,9 @@ seo:
     Players choose a bet amount and Low, Medium, or High risk before starting
     the round.
 card: ../../assets/games/toy-story.webp
+cardLayers:
+  background: ../../assets/games/card-layers/toy-story-background.webp
+  logo: ../../assets/games/card-layers/toy-story-logo.webp
 hero: ../../assets/heroes/toy-story.webp
 specs:
   rtp: configurable

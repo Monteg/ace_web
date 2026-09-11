@@ -2,9 +2,9 @@ import siteEn from '../generated/content/site.en.json';
 import siteDe from '../generated/content/site.de.json';
 import sitePt from '../generated/content/site.pt.json';
 import siteEs from '../generated/content/site.es.json';
-import { DEFAULT_LOCALE, LOCALES, LOCALE_LABELS, type Locale } from '../../locales.mjs';
+import { DEFAULT_LOCALE, LOCALES, LOCALE_FLAGS, LOCALE_LABELS, type Locale } from '../../locales.mjs';
 
-export { DEFAULT_LOCALE, LOCALES, LOCALE_LABELS };
+export { DEFAULT_LOCALE, LOCALES, LOCALE_FLAGS, LOCALE_LABELS };
 export type { Locale };
 
 const messages: Record<Locale, Record<string, string>> = {

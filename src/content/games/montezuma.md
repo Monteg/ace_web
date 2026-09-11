@@ -9,6 +9,9 @@ seo:
     when 3 or more identical symbols land from left to right on an active
     payline.
 card: ../../assets/games/montezuma.webp
+cardLayers:
+  background: ../../assets/games/card-layers/montezuma-background.webp
+  logo: ../../assets/games/card-layers/montezuma-logo.webp
 hero: ../../assets/heroes/montezuma.webp
 specs:
   rtp: 0.956

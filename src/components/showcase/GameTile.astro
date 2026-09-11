@@ -38,7 +38,7 @@ const typeLabel = t(`global.game_type.${d.type}_single`, locale);
         class:list={['gt-background', { 'gt-background-single': !layeredArt }]}
         src={layeredArt?.background ?? d.card}
         alt={layeredArt ? '' : d.cardAlt}
-        widths={featured ? [640, 900, 1200] : [320, 460, 640]}
+        widths={featured ? [480, 640, 900, 1200] : [240, 320, 460, 640]}
         sizes={featured
           ? '(max-width: 768px) 92vw, (max-width: 1100px) 60vw, 640px'
           : '(max-width: 480px) 92vw, (max-width: 768px) 46vw, (max-width: 1100px) 31vw, 300px'}
@@ -51,7 +51,7 @@ const typeLabel = t(`global.game_type.${d.type}_single`, locale);
           class="gt-logo"
           src={layeredArt.logo}
           alt={d.cardAlt}
-          widths={[254, 306, 424]}
+          widths={[192, 254, 306, 424]}
           sizes="(max-width: 440px) 74vw, 306px"
           loading={eager ? 'eager' : 'lazy'}
         />
@@ -74,7 +74,6 @@ const typeLabel = t(`global.game_type.${d.type}_single`, locale);
     )}
 
     <div class="gt-bar">
-      <h3>{d.name}</h3>
       <dl class="gt-meta">
         <div class="gt-stat">
           <dt>{t('global.label.rtp', locale)}</dt>
@@ -305,24 +304,10 @@ const typeLabel = t(`global.game_type.${d.type}_single`, locale);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: var(--sp-3);
-    height: 145px;
+    height: 104px;
     padding: var(--sp-4) var(--sp-5);
     pointer-events: none;
     border-radius: inherit;
-  }
-  .gt-bar h3 {
-    overflow: hidden;
-    width: 100%;
-    margin: 0;
-    color: var(--fg);
-    font-family: 'JetBrains Mono Variable', monospace;
-    font-size: 22px;
-    font-weight: 700;
-    line-height: 27px;
-    text-align: center;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
   .gt-meta {
     display: grid;
@@ -360,8 +345,7 @@ const typeLabel = t(`global.game_type.${d.type}_single`, locale);
   .gt-volatility-heading .vmeter { flex-shrink: 0; }
 
   @container (max-width: 286px) {
-    .gt-bar { height: 140px; padding-inline: var(--sp-4); }
-    .gt-bar h3 { font-size: 19px; line-height: 24px; }
+    .gt-bar { height: 100px; padding-inline: var(--sp-4); }
     .gt-meta { grid-template-columns: minmax(76px, 0.72fr) minmax(0, 1.48fr); gap: var(--sp-2); }
     .gt-stat { padding-inline: 10px; }
     .gt-meta dt { font-size: 12px; }

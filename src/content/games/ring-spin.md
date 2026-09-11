@@ -6,6 +6,9 @@ seo:
   title: Ring Spin - slot game by Ace Games
   description: Ring Spin is played on a 6×5 grid where symbols pay anywhere on the field.
 card: ../../assets/games/ring-spin.webp
+cardLayers:
+  background: ../../assets/games/card-layers/ring-spin-background.webp
+  logo: ../../assets/games/card-layers/ring-spin-logo.webp
 hero: ../../assets/heroes/ring-spin.webp
 specs:
   rtp: 0.95

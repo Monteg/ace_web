@@ -8,6 +8,9 @@ seo:
     Ace City features a 5×3 grid with 11 fixed paylines where wins are formed by
     matching symbols from left to right.
 card: ../../assets/games/ace-city.webp
+cardLayers:
+  background: ../../assets/games/card-layers/ace-city-background.webp
+  logo: ../../assets/games/card-layers/ace-city-logo.webp
 hero: ../../assets/heroes/ace-city.webp
 specs:
   rtp: 0.953

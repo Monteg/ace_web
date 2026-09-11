@@ -1,5 +1,11 @@
 # Putting this site live
 
+> Current production releases are built and deployed from GitLab project
+> `money.energy/www` by `.gitlab-ci.yml`. The Webflow and Cloudflare Pages
+> steps below are retained as the original migration/rollback history. For the
+> current Google Sheets publication setup, use
+> `docs/GOOGLE-CONTENT-GITLAB-SETUP-RU.md`.
+
 Written to be followed start to finish. Roughly two hours of work spread over a
 few days, most of it waiting for DNS.
 

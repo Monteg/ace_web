@@ -6,6 +6,9 @@ seo:
   title: Jackpot Vibe - slot game by Ace Games
   description: Jackpot Vibe uses a 5×6 grid with a cluster-style payout system.
 card: ../../assets/games/jackpot-vibe.webp
+cardLayers:
+  background: ../../assets/games/card-layers/jackpot-vibe-background.webp
+  logo: ../../assets/games/card-layers/jackpot-vibe-logo.webp
 hero: ../../assets/heroes/jackpot-vibe.webp
 specs:
   rtp: 0.951

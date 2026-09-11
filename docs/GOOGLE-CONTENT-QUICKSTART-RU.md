@@ -4,7 +4,7 @@
 
 Google Sheet используется только редакторами. Посетители сайта никогда не загружают текст или изображения из Google Sheets/Drive: кнопка Publish создаёт неизменяемый snapshot, после чего Astro собирает обычный статический сайт.
 
-Сейчас в таблице уже находятся 315 строк сайта, 24 игры и 480 переводимых полей игр. English заполнен реальным контентом проекта; DE/PT/ES оставлены пустыми и поэтому показывают English fallback до перевода.
+Сейчас в таблице уже находятся 321 строка сайта, 24 игры и 480 переводимых полей игр. English заполнен реальным контентом проекта; DE/PT/ES оставлены пустыми и поэтому показывают English fallback до перевода.
 
 ## Что находится на листах
 
@@ -52,22 +52,26 @@ Demo не является готовой Play URL:
 
 При Publish importer скачивает файл, проверяет MIME, размер и dimensions, вычисляет SHA-256 и сохраняет deterministic asset внутри проекта. Production не hotlink'ит Google Drive. Старый файл не удаляется до успешной сборки. Исходник в Drive лучше не удалять, пока в `05 Publish Log` не появился `Published`.
 
-## Как подключить кнопку Publish один раз
+## Как подключить кнопку Publish к GitLab один раз
+
+Подробная пошаговая инструкция: [GOOGLE-CONTENT-GITLAB-SETUP-RU.md](./GOOGLE-CONTENT-GITLAB-SETUP-RU.md).
 
 Исходник Apps Script находится в `google-apps-script/Code.gs`, manifest — в `google-apps-script/appsscript.json`.
 
 1. Откройте таблицу, затем `Extensions → Apps Script`.
 2. Вставьте содержимое `Code.gs` в редактор, добавьте/замените `appsscript.json`.
 3. В `Project Settings → Script properties` добавьте:
-   - `GITHUB_TOKEN` — fine-grained token с правом Contents/Actions для `Monteg/ace_web`;
-   - `GITHUB_OWNER=Monteg`;
-   - `GITHUB_REPO=ace_web`;
-   - `GITHUB_BRANCH=main`;
+   - `GITLAB_API_URL=https://gitlab.com/api/v4`;
+   - `GITLAB_PROJECT_ID=86013072`;
+   - `GITLAB_BRANCH=main`;
+   - `GITLAB_TRIGGER_TOKEN` — Pipeline Trigger Token проекта `money.energy/www`;
+   - `GITLAB_READ_TOKEN` — отдельный read-only token со scope `read_repository`;
    - `PUBLISH_ALLOWLIST` — email владельцев через запятую;
-   - `SERVICE_ACCOUNT_EMAIL` — email service account из GitHub Secret.
-4. В GitHub repository secrets добавьте `GOOGLE_SERVICE_ACCOUNT_JSON`. Расшарьте создаваемые snapshot-файлы на `SERVICE_ACCOUNT_EMAIL` (скрипт делает это автоматически).
+   - `SERVICE_ACCOUNT_EMAIL` — email service account из GitLab variable.
+4. В GitLab `Settings → CI/CD → Variables` добавьте `GOOGLE_SERVICE_ACCOUNT_JSON` как `File` + `Protected`. Расшарьте создаваемые snapshot-файлы на `SERVICE_ACCOUNT_EMAIL` (скрипт делает это автоматически).
 5. Расшарьте саму Google Sheet на `SERVICE_ACCOUNT_EMAIL` с ролью Editor: CI должен записать итог в Publish Log и сбросить Changed только после успешной сборки.
-6. Перезагрузите Sheet и разрешите Apps Script доступ только к этой таблице, Drive-файлам, внешнему GitHub request и email текущего пользователя.
+6. В GitLab включите `Settings → CI/CD → Job token permissions → Allow Git push requests to the repository`.
+7. Перезагрузите Sheet и разрешите Apps Script доступ только к этой таблице, Drive-файлам, внешнему GitLab request и email текущего пользователя.
 
 Apps Script нельзя вложить в уже созданную таблицу через обычный Drive API: шаги 1–2 выполняются один раз вручную под Google-аккаунтом владельца. После этого меню `Ace Games` появляется автоматически при каждом открытии файла.
 
@@ -76,7 +80,7 @@ Apps Script нельзя вложить в уже созданную табли�
 1. В меню `Ace Games` запустите `Validate Translations` и `Validate Games`.
 2. Исправьте все `Error`. `Missing` не блокирует публикацию.
 3. Нажмите `Ace Games → Publish Changes`.
-4. Нормальное время — 1–3 минуты. GitHub Actions импортирует snapshot/media, выполняет `npm run check` и `npm run ship`, затем коммитит только прошедший проверки контент в main. Текущий production остаётся прежним при любой ошибке.
+4. Нормальное время — 3–6 минут. GitLab CI импортирует snapshot/media, выполняет `npm run check` и `npm run ship`, коммитит только прошедший проверки контент в main, собирает image и разворачивает его в production. Текущий production остаётся прежним при любой ошибке до deploy.
 5. Результат смотрите в `05 Publish Log`. При `Failed` откройте текст Error: Changed не сбрасывается. При `Published` технические hashes обновляются, а Changed у игр сбрасывается.
 
 Синхронизация новых code-slots выполняется через `Ace Games → Sync Content from Site`: новые keys добавляются, существующие переводы сохраняются, исчезнувшие keys помечаются `Inactive`.

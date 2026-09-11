@@ -8,6 +8,9 @@ seo:
     Players choose a bet amount and risk level before starting the round. Each
     step has its own multiplier and is resolved by the server.
 card: ../../assets/games/chicken-doom.webp
+cardLayers:
+  background: ../../assets/games/card-layers/chicken-doom-background.webp
+  logo: ../../assets/games/card-layers/chicken-doom-logo.webp
 hero: ../../assets/heroes/chicken-doom.webp
 specs:
   rtp: 0.97

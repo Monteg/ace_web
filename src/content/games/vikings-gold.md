@@ -6,6 +6,9 @@ seo:
   title: Vikings Gold - slot game by Ace Games
   description: Vikings Gold uses a cluster-style payout system on a 5×6 grid.
 card: ../../assets/games/vikings-gold.webp
+cardLayers:
+  background: ../../assets/games/card-layers/vikings-gold-background.webp
+  logo: ../../assets/games/card-layers/vikings-gold-logo.webp
 hero: ../../assets/heroes/vikings-gold.webp
 specs:
   rtp: 0.942

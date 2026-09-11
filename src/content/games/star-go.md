@@ -8,6 +8,9 @@ seo:
     Star Go: The game is played on a 36-cell closed board with four corners and
     four sides.
 card: ../../assets/games/star-go.webp
+cardLayers:
+  background: ../../assets/games/card-layers/star-go-background.webp
+  logo: ../../assets/games/card-layers/star-go-logo.webp
 hero: ../../assets/heroes/star-go.webp
 specs:
   rtp: 0.95

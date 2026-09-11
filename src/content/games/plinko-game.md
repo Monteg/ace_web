@@ -6,6 +6,9 @@ seo:
   title: Plinko - instant game by Ace Games
   description: 'In Plinko, players drop balls from the top of a triangular pin board.'
 card: ../../assets/games/plinko-game.webp
+cardLayers:
+  background: ../../assets/games/card-layers/plinko-game-background.webp
+  logo: ../../assets/games/card-layers/plinko-game-logo.webp
 hero: ../../assets/heroes/plinko-game.webp
 specs:
   rtp: 0.949

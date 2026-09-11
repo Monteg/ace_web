@@ -116,9 +116,9 @@ const settingsRows = [
   ['Default Locale', 'en'],
   ['Locales', 'en,de,pt,es'],
   ['Target Branch', 'main'],
-  ['Registry URL', 'https://raw.githubusercontent.com/Monteg/ace_web/main/content/sheets/seed.json'],
+  ['Registry URL', 'https://gitlab.com/api/v4/projects/86013072/repository/files/content%2Fsheets%2Fseed.json/raw?ref=main'],
   ['Production URL', 'https://acegames.io'],
-  ['Normal Publish Time', '1–3 minutes'],
+  ['Normal Publish Time', '3–6 minutes'],
   ['Markdown', 'Use Markdown in rich fields; HTML/script is rejected'],
   ['Image Limit', '20 MB per source image'],
 ];

@@ -231,15 +231,13 @@ number is a legal problem.
 
 ## 8. Deploy
 
-Full runbook in `DEPLOY.md`. The short form:
-
-1. Push the repo to GitHub.
-2. Cloudflare Pages, connect the repo, build command `npm run build`, output
-   `dist`, environment variable `NODE_VERSION` = `20`.
-3. Add the three secrets for the contact form: `RESEND_API_KEY`, `CONTACT_TO`,
-   `CONTACT_FROM` (see `.env.example`). Until they exist the form lands on
-   an honest "not connected yet" page.
-4. Every push to `main` deploys. Every other branch gets a preview URL.
+Production is deployed from `money.energy/www` on GitLab by `.gitlab-ci.yml`.
+Keep normal development commits in the working repository; push to GitLab
+`main` only for a release the owner has explicitly approved as production-ready.
+The GitLab pipeline runs Astro checks, `npm run ship`, packages `dist/` into
+nginx, deploys it to the gamma Kubernetes cluster, and optionally purges
+Cloudflare. Google Sheets publishing uses the same pipeline; setup is in
+`docs/GOOGLE-CONTENT-GITLAB-SETUP-RU.md`.
 
 Before any deploy: `npm run ship` passes every gate and `npx astro check` says 0 errors.
 

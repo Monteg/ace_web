@@ -60,13 +60,12 @@ export const social: { label: string; icon: string; href: string | null }[] = [
 export const partners: { name: string; src: string }[] = [];
 
 export const proofIntro =
-  'Ace Games builds casino games worldwide, combining design, audio, and technology to create high-performance slots and crash games';
+  'Royal Stars, our own live casino platform with 600,000+ unique players, generates real-time gameplay data that shows how bettors actually interact with each title, and shapes which games move into the B2B portfolio.';
 
 export const heroStats = [
-  { icon: 'proof-slot-777', value: '30+', label: 'Prototypes' },
-  { icon: 'proof-dice', value: '21', label: 'Game Releases' },
-  { icon: 'proof-users', value: '1M+', label: 'Players Reached' },
-  { icon: 'ph:briefcase-fill', value: 'PRIVATE', label: 'Operator Ecosystem' },
+  { icon: 'proof-users', value: '600,000+', label: 'Unique players' },
+  { icon: 'proof-dice', value: '114,500+', label: 'New players this period' },
+  { icon: 'proof-slot-777', value: '100+', label: 'Spins per active player' },
 ];
 
 export const integration = [
@@ -108,50 +107,51 @@ export const integration = [
 export const process = [
   {
     title: 'Expert Engineering Team',
-    body: 'Developers, mathematicians, and designers building high-performance casino games for scale and stability.',
+    body: '15+ years in game development: developers, mathematicians, and designers building high-performance casino games for scale and stability.',
     image: 'engineering',
   },
   {
-    title: 'Game Strategy & Product Design',
-    body: 'We align RTP models, volatility curves, and engagement mechanics with your business goals before development begins.',
+    title: 'Game Design & Testing',
+    body: "Every title starts with RTP models, volatility curves, and mechanics chosen for engagement, whether it's built for our own portfolio or for a partner brand.",
     image: 'strategy',
   },
   {
-    title: 'Build & Integrate',
-    body: 'We develop, test, and integrate games into your platform with fast deployment and stable performance.',
+    title: 'Live on Royal Stars First',
+    body: 'New releases run on Royal Stars before anything reaches an external operator. Real players, real gameplay data.',
     image: 'integration',
   },
   {
-    title: 'Monitor & Optimize',
-    body: 'Post-launch analytics and player behavior tracking help improve retention and operator profitability.',
+    title: 'Launch & Integrate',
+    body: 'Titles that perform move into the B2B portfolio and integrate with operators via API or through an aggregator, with post-launch data feeding the next release.',
     image: 'optimization',
   },
 ];
 
 export const why = [
   {
-    title: 'Trust at the Core',
-    body: 'Built on certified RNG standards and secure architecture, Ace Games delivers fair gameplay, stability, and regulatory readiness.',
+    title: 'Gameplay Designed to Grow LTV',
+    body: 'Runner, Plinko, mines, board-game logic: familiar interactions reworked for iGaming to drive engagement and grow player LTV.',
     image: 'trust',
   },
   {
-    title: 'Innovation That Drives Performance',
-    body: 'We create mechanics designed to increase retention, session length, and player lifetime value.',
+    title: 'Custom Games for Your Brand',
+    body: 'Want something made specifically for your business? Game Boutique turns your brand, audience, market, or idea into an exclusive game, ready to launch in one month.',
     image: 'innovation',
   },
   {
-    title: 'Retention Engineered for Scale',
-    body: 'Our games are built to keep players returning, with mechanics optimized for session time, repeat play, and operator revenue.',
+    title: 'Trust at the Core',
+    body: 'Every game is powered by a GLI-approved RNG, with secure architecture and stable performance built in from day one.',
     image: 'retention',
   },
 ];
 
 export const sectionCopy = {
-  portfolioTitle: 'DISCOVER ACE GAMES',
-  excellenceTitle: 'Redefining iGaming Excellence',
-  futureTitle: 'The Future of Gaming with Ace Games',
-  contactTitle: 'Contact our team today',
-  contactBody: 'Drop us a message!',
+  portfolioTitle: 'Discover Ace Games',
+  excellenceTitle: 'What Ace Games is built on',
+  futureTitle: 'How We Build and Grow Games',
+  contactTitle: "Let’s talk",
+  contactBody: "Whether it's our portfolio or a custom game through Game Boutique, reach out and we'll take it from there.",
+  contactPrompt: 'Drop us a message!',
 };
 
 /** Questions and answers carried over from the published Ace Games site. */

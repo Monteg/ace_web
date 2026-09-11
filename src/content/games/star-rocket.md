@@ -8,6 +8,9 @@ seo:
     Star Rocket: Players can place up to two independent bets before each round
     begins.
 card: ../../assets/games/star-rocket.webp
+cardLayers:
+  background: ../../assets/games/card-layers/star-rocket-background.webp
+  logo: ../../assets/games/card-layers/star-rocket-logo.webp
 hero: ../../assets/heroes/star-rocket.webp
 specs:
   rtp: 0.964

@@ -8,6 +8,9 @@ seo:
     Cyber Star is played on a 5×3 grid with 11 fixed paylines. Wins are formed
     by matching symbols from left to right along active paylines.
 card: ../../assets/games/cyber-star.webp
+cardLayers:
+  background: ../../assets/games/card-layers/cyber-star-background.webp
+  logo: ../../assets/games/card-layers/cyber-star-logo.webp
 hero: ../../assets/heroes/cyber-star.webp
 specs:
   rtp: 0.958

@@ -7,3 +7,10 @@ export const LOCALE_LABELS = {
   pt: 'Português',
   es: 'Español',
 };
+
+export const LOCALE_FLAGS = {
+  en: '/flags/en.svg',
+  de: '/flags/de.svg',
+  pt: '/flags/pt.svg',
+  es: '/flags/es.svg',
+};

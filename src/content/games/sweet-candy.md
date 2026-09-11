@@ -6,6 +6,9 @@ seo:
   title: Sweet Candy - slot game by Ace Games
   description: Sweet Candy uses a cluster-style payout system on a 5×6 grid.
 card: ../../assets/games/sweet-candy.webp
+cardLayers:
+  background: ../../assets/games/card-layers/sweet-candy-background.webp
+  logo: ../../assets/games/card-layers/sweet-candy-logo.webp
 hero: ../../assets/heroes/sweet-candy.webp
 specs:
   rtp: 0.96

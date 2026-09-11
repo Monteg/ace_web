@@ -1,0 +1,92 @@
+# What the CI pipeline of money.energy/www may do in this cluster. The deploy
+# job runs on the in-cluster gamma runner and authenticates as this dedicated
+# service account. Its bearer token is stored as the protected, hidden
+# ACEGAMES_KUBE_TOKEN project variable. The Role below is the whole of what it
+# can do.
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ci-deployer
+  namespace: acegames-www
+automountServiceAccountToken: false
+---
+# Kubernetes 1.24+ no longer creates a persistent service-account token
+# automatically. CI needs a credential that survives individual jobs, so this
+# bootstrap-only Secret asks the token controller to create one. It is never
+# consumed by a website pod.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ci-deployer-token
+  namespace: acegames-www
+  annotations:
+    kubernetes.io/service-account.name: ci-deployer
+type: kubernetes.io/service-account-token
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ci-deployer
+  namespace: acegames-www
+rules:
+  # helm keeps its release history in secrets; the rest is what the chart makes.
+  - apiGroups: [""]
+    resources: [secrets, services, serviceaccounts, configmaps]
+    verbs: [get, list, watch, create, update, patch, delete]
+  # --wait and `rollout status` watch these; nothing here creates a pod directly.
+  - apiGroups: [""]
+    resources: [pods, pods/log, events, endpoints]
+    verbs: [get, list, watch]
+  - apiGroups: ["apps"]
+    resources: [deployments, replicasets]
+    verbs: [get, list, watch, create, update, patch, delete]
+  - apiGroups: ["networking.k8s.io"]
+    resources: [ingresses]
+    verbs: [get, list, watch, create, update, patch, delete]
+  - apiGroups: ["policy"]
+    resources: [poddisruptionbudgets]
+    verbs: [get, list, watch, create, update, patch, delete]
+  - apiGroups: ["autoscaling"]
+    resources: [horizontalpodautoscalers]
+    verbs: [get, list, watch, create, update, patch, delete]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ci-deployer
+  namespace: acegames-www
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: ci-deployer
+subjects:
+  - kind: ServiceAccount
+    name: ci-deployer
+    namespace: acegames-www
+---
+# Namespaces are cluster-scoped, so a Role cannot cover the one read helm makes
+# before it installs. resourceNames keeps this to the single namespace.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: acegames-www-namespace-reader
+rules:
+  - apiGroups: [""]
+    resources: [namespaces]
+    resourceNames: [acegames-www]
+    verbs: [get]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: acegames-www-namespace-reader
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: acegames-www-namespace-reader
+subjects:
+  - kind: ServiceAccount
+    name: ci-deployer
+    namespace: acegames-www
+

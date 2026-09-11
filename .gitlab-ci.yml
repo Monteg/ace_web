@@ -1,0 +1,210 @@
+# Normal pushes to main build and deploy the static site. A Google Sheets
+# publication starts the same production pipeline through a GitLab trigger
+# token, validates the immutable snapshot, commits the generated content with
+# CI_JOB_TOKEN, and deploys exactly the dist/ that passed every gate.
+
+stages:
+  - build
+  - package
+  - deploy
+  - purge
+  - report
+
+variables:
+  NAMESPACE: acegames-www
+  RELEASE: www
+  KUBE_API_SERVER: https://kubernetes.default.svc
+  DEPLOY_IMAGE: alpine/k8s:1.35.8
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "trigger" && $ACE_CONTENT_PUBLISH == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+default:
+  interruptible: true
+
+.site-build-rule-set:
+  rules: &site-build-rules
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+.content-publish-rule-set:
+  rules: &content-publish-rules
+    - if: '$CI_PIPELINE_SOURCE == "trigger" && $ACE_CONTENT_PUBLISH == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+.node-cache-template:
+  cache: &node-cache
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+
+build:site:
+  stage: build
+  image: node:22-alpine
+  tags: [build]
+  rules: *site-build-rules
+  cache: *node-cache
+  script:
+    - npm ci --cache .npm --prefer-offline --no-audit --no-fund
+    - npx astro check
+    - npm run ship
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+
+content:publish:
+  stage: build
+  image: node:22-alpine
+  tags: [build]
+  rules: *content-publish-rules
+  cache: *node-cache
+  before_script:
+    - apk add --no-cache git
+  script:
+    - test -n "$SNAPSHOT_FILE_ID"
+    - test -n "$SPREADSHEET_ID"
+    - test -n "$PUBLISH_ID"
+    - test -n "$GOOGLE_SERVICE_ACCOUNT_JSON"
+    - npm ci --cache .npm --prefer-offline --no-audit --no-fund
+    - node scripts/content/publish-snapshot.mjs --snapshot-file "$SNAPSHOT_FILE_ID"
+    - npm run check
+    - npm run ship
+    - git config user.name "Ace Games Content Bot"
+    - git config user.email "content-bot@acegames.io"
+    - git add content/published content/sheets src/generated src/content/games src/assets/content
+    - |
+      if git diff --cached --quiet; then
+        echo "No generated content changes to commit"
+      else
+        git commit -m "content: publish Google Sheets snapshot [publish:${PUBLISH_ID}]"
+        git push "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git" "HEAD:${CI_DEFAULT_BRANCH}"
+      fi
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+
+.package-image:
+  stage: package
+  image: docker:28
+  tags: [build]
+  services:
+    - name: docker:28-dind
+      alias: docker
+      command: ["--tls=false", "--dns=10.20.8.10", "--mtu=1450"]
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_BUILDKIT: "1"
+  before_script:
+    - until docker info >/dev/null 2>&1; do echo "waiting for dockerd..."; sleep 1; done
+    - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+  script:
+    - test -f dist/index.html
+    - |
+      if [ "$ACE_CONTENT_PUBLISH" = "true" ]; then
+        IMAGE_TAG="content-${CI_PIPELINE_ID}"
+      else
+        IMAGE_TAG="$CI_COMMIT_SHORT_SHA"
+      fi
+      docker build --pull -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
+      if [ "$CI_PIPELINE_SOURCE" = "merge_request_event" ]; then
+        echo "merge request pipeline: image built and gates passed, not pushed"
+      else
+        docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG"
+      fi
+
+package:image:
+  extends: .package-image
+  rules: *site-build-rules
+  needs: ["build:site"]
+
+package:image:content:
+  extends: .package-image
+  rules: *content-publish-rules
+  needs: ["content:publish"]
+
+deploy:production:
+  stage: deploy
+  image: $DEPLOY_IMAGE
+  tags: [k8s-deploy-gamma]
+  needs:
+    - job: package:image
+      optional: true
+    - job: package:image:content
+      optional: true
+  resource_group: production
+  interruptible: false
+  environment:
+    name: production
+    deployment_tier: production
+    url: https://acegames.io
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "trigger" && $ACE_CONTENT_PUBLISH == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  before_script:
+    - test -n "$ACEGAMES_KUBE_TOKEN"
+    - test -r /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    - export KUBECONFIG="$CI_PROJECT_DIR/.kubeconfig"
+    - umask 077
+    - kubectl config set-cluster gamma --server="$KUBE_API_SERVER" --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt --embed-certs=true
+    - kubectl config set-credentials acegames-www-ci --token="$ACEGAMES_KUBE_TOKEN"
+    - kubectl config set-context acegames-www --cluster=gamma --user=acegames-www-ci --namespace="$NAMESPACE"
+    - kubectl config use-context acegames-www
+  script:
+    - kubectl config current-context
+    - |
+      if [ "$ACE_CONTENT_PUBLISH" = "true" ]; then
+        IMAGE_TAG="content-${CI_PIPELINE_ID}"
+      else
+        IMAGE_TAG="$CI_COMMIT_SHORT_SHA"
+      fi
+      helm upgrade --install "$RELEASE" ./helm/chart \
+        --namespace "$NAMESPACE" \
+        -f helm/env/production.yaml \
+        --set image.repository="$CI_REGISTRY_IMAGE" \
+        --set image.tag="$IMAGE_TAG" \
+        --wait --timeout 5m
+    - kubectl -n "$NAMESPACE" rollout status "deploy/$RELEASE" --timeout=5m
+  after_script:
+    - rm -f "$CI_PROJECT_DIR/.kubeconfig"
+
+purge:cloudflare:
+  stage: purge
+  image: $DEPLOY_IMAGE
+  tags: [k8s-deploy-gamma]
+  needs: ["deploy:production"]
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "trigger" && $ACE_CONTENT_PUBLISH == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CF_API_TOKEN && $CF_ZONE_ID'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CF_API_TOKEN && $CF_ZONE_ID'
+  script:
+    - |
+      curl --fail --silent --show-error \
+        -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
+        -H "Authorization: Bearer ${CF_API_TOKEN}" \
+        -H "Content-Type: application/json" \
+        --data '{"purge_everything":true}' > /dev/null
+    - echo "Cloudflare cache purged for zone ${CF_ZONE_ID}"
+
+report:content-success:
+  stage: report
+  image: node:22-alpine
+  tags: [build]
+  rules: *content-publish-rules
+  script:
+    - node scripts/content/report-publish.mjs --spreadsheet "$SPREADSHEET_ID" --status Published --build "$CI_PIPELINE_ID" --url "https://acegames.io"
+
+report:content-failure:
+  stage: report
+  image: node:22-alpine
+  tags: [build]
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "trigger" && $ACE_CONTENT_PUBLISH == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      when: on_failure
+  script:
+    - node scripts/content/report-publish.mjs --spreadsheet "$SPREADSHEET_ID" --status Failed --build "$CI_PIPELINE_ID" --url "$CI_PIPELINE_URL" --error "GitLab content publish failed. Open pipeline ${CI_PIPELINE_URL}"

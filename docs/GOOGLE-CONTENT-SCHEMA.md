@@ -2,7 +2,7 @@
 
 ## Architecture
 
-`Google Sheet → bound Apps Script validation/snapshot → repository_dispatch → media import → generated JSON + Astro content → check/ship → existing Git deploy`.
+`Google Sheet → bound Apps Script validation/snapshot → GitLab trigger pipeline → media import → generated JSON + Astro content → check/ship → content commit → image/package → production deploy`.
 
 The browser has no runtime dependency on Sheets, Drive, Apps Script or a database. Sheet values control content only; spacing, grid, animation, sticky behavior and component structure remain in Astro/CSS.
 
@@ -63,6 +63,8 @@ PNG/SVG/WebP alpha is preserved. No old asset is removed by the importer. Astro 
 
 ## CI contract
 
-`.github/workflows/publish-content.yml` receives `ace-content-publish`, checks out the configured branch, runs importer, `npm run check`, `npm run ship`, and only then commits validated content. The existing Git-connected host deploys that commit. Secrets are `GOOGLE_SERVICE_ACCOUNT_JSON` in GitHub and GitHub/allowlist values in Apps Script Properties—never Sheet cells.
+`.gitlab-ci.yml` accepts only trigger pipelines with `ACE_CONTENT_PUBLISH=true`. `content:publish` downloads the immutable Drive snapshot, runs importer, `npm run check`, `npm run ship`, and only then commits validated content to `main` with the short-lived `CI_JOB_TOKEN`. The same pipeline packages that exact `dist/`, deploys it, optionally purges Cloudflare, and reports `Published` only after all earlier stages succeed.
 
-The success reporter updates published hashes and clears game `Changed` only after the pipeline succeeds. A failing validation/import/build leaves production and all Changed flags untouched. The workflow marks a successful repository publication; provider-level deployment confirmation depends on the repository's existing hosting integration.
+Secrets are split by responsibility: `GOOGLE_SERVICE_ACCOUNT_JSON` is a protected GitLab File variable; `GITLAB_TRIGGER_TOKEN`, `GITLAB_READ_TOKEN`, `SERVICE_ACCOUNT_EMAIL`, and the publisher allowlist live in Apps Script Properties. No secret is stored in Sheet cells or the repository. See `GOOGLE-CONTENT-GITLAB-SETUP-RU.md`.
+
+The success reporter updates published hashes and clears game `Changed` only after package, production deploy, and any configured cache purge succeed. A failing validation/import/build/deploy leaves all Changed flags untouched and records `Failed` when the service account is available.

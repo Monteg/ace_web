@@ -8,6 +8,9 @@ seo:
     Players place one, two, or three separate bets before the deal, with each
     active position receiving its own two-card hand.
 card: ../../assets/games/blackjack.webp
+cardLayers:
+  background: ../../assets/games/card-layers/blackjack-background.webp
+  logo: ../../assets/games/card-layers/blackjack-logo.webp
 hero: ../../assets/heroes/blackjack.webp
 specs:
   rtp: configurable

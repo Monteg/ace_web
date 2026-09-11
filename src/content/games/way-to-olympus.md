@@ -6,6 +6,9 @@ seo:
   title: Way to Olympus - slot game by Ace Games
   description: Way to Olympus uses a 5×6 grid with a cluster-style payout system.
 card: ../../assets/games/way-to-olympus.webp
+cardLayers:
+  background: ../../assets/games/card-layers/way-to-olympus-background.webp
+  logo: ../../assets/games/card-layers/way-to-olympus-logo.webp
 hero: ../../assets/heroes/way-to-olympus.webp
 specs:
   rtp: 0.944

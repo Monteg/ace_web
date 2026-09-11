@@ -19,7 +19,7 @@ import { localeFromPath, localizePath, t } from '../lib/i18n';
 import { getSiteContent } from '../lib/site-content';
 
 const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
-const { faq, heroStats, proofIntro, sectionCopy, integration } = getSiteContent(locale);
+const { faq, heroStats, proofTitle, proofIntro, sectionCopy, integration } = getSiteContent(locale);
 
 const games = (await getCollection('games')).sort(
   (a, b) =>
@@ -27,6 +27,8 @@ const games = (await getCollection('games')).sort(
     a.data.order - b.data.order ||
     a.data.name.localeCompare(b.data.name),
 );
+const liveGames = games.filter((game) => game.data.status === 'live');
+const comingSoonGames = games.filter((game) => game.data.status === 'coming_soon');
 const mathsGames = games.filter(
   (game) => game.data.status === 'live' && typeof game.data.specs.rtp === 'number',
 );
@@ -59,7 +61,10 @@ const faqSchema = {
   <!-- ============ proof ============ -->
   <section class="proof cream" id="about-us" aria-labelledby="proof-title">
     <div class="wrap">
-      <h2 id="proof-title" class="proof-intro rv">{proofIntro}</h2>
+      <div class="proof-copy rv">
+        <h2 id="proof-title" class="d1">{proofTitle}</h2>
+        <p class="proof-intro">{proofIntro}</p>
+      </div>
       <div class="proof-in rv">
         {heroStats.map((s) => <StatTile {...s} />)}
       </div>
@@ -90,7 +95,7 @@ const faqSchema = {
 
       <p class="filter-note" data-filter-note aria-live="polite"></p>
       <div class="cat rv" id="gameGrid">
-        {games.map((g, i) => <GameTile game={g} eager={i < 4} />)}
+        {liveGames.map((g, i) => <GameTile game={g} eager={i < 4} />)}
       </div>
       <script is:inline>
         document.getElementById('gameGrid')?.setAttribute('data-progressive-ready', '');
@@ -101,6 +106,17 @@ const faqSchema = {
           <span class="disc" aria-hidden="true"><Icon name="ph:arrow-down" /></span>
         </button>
       </div>
+
+      {comingSoonGames.length > 0 && (
+        <div class="coming-soon-group">
+          <div class="sec-top home-section-heading rv">
+            <h2 class="d1">{t('home.portfolio.coming_soon_title', locale)}</h2>
+          </div>
+          <div class="cat coming-soon-grid rv">
+            {comingSoonGames.map((g) => <GameTile game={g} />)}
+          </div>
+        </div>
+      )}
     </div>
   </section>
 
@@ -194,9 +210,10 @@ const faqSchema = {
         <div class="contact-copy rv">
           <h2 class="contact-title">
             <span>{contactTitleLead}</span>
-            <span>{contactTitleMiddle}</span>
+            {contactTitleMiddle && <span>{contactTitleMiddle}</span>}
             <strong>{contactTitleAccent}</strong>
           </h2>
+          <p class="contact-lead">{sectionCopy.contactBody}</p>
         </div>
 
         <div class="contact-form-placement rv"><ContactForm /></div>
@@ -212,26 +229,31 @@ const faqSchema = {
     color: var(--cream-ink);
     border-block: 1px solid var(--cream-line);
   }
-  .proof-intro {
-    max-width: 1040px;
+  .proof-copy {
+    display: grid;
+    gap: var(--sp-4);
+    max-width: 980px;
     margin-inline: auto;
-    font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
-    font-size: clamp(1.55rem, 1.75vw, 1.85rem);
-    line-height: 1.3;
-    letter-spacing: 0.01em;
     text-align: center;
-    text-transform: uppercase;
     color: var(--cream-ink);
+  }
+  .proof-copy .d1 { color: inherit; }
+  .proof-intro {
+    max-width: 78ch;
+    margin-inline: auto;
+    font-size: clamp(1rem, 1.25vw, 1.18rem);
+    line-height: 1.55;
+    color: color-mix(in srgb, var(--cream-ink) 76%, transparent);
   }
   .proof-in {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-auto-flow: dense;
     gap: clamp(28px, 4vw, 72px);
     margin-top: var(--section-space-compact);
   }
   @media (max-width: 900px) {
-    .proof-intro { max-width: 720px; }
+    .proof-copy { max-width: 720px; }
     .proof-in {
       max-width: 720px;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -240,7 +262,7 @@ const faqSchema = {
     }
   }
   @media (max-width: 420px) {
-    .proof-intro { font-size: clamp(1.4rem, 6.4vw, 1.6rem); }
+    .proof-intro { font-size: 0.98rem; }
     .proof-in { column-gap: var(--sp-5); }
   }
 
@@ -273,6 +295,8 @@ const faqSchema = {
   }
   .load-games-row[hidden] { display: none; }
   .load-games { margin-inline: auto; }
+  .coming-soon-group { margin-top: var(--section-space-compact); }
+  .coming-soon-group .sec-top { margin-bottom: var(--sp-5); }
   @media (max-width: 1100px) { .cat { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   @media (max-width: 1100px) {
     .cat[data-progressive-ready]:not([data-progressive-managed]) > :nth-child(n + 10) { display: none; }
@@ -430,7 +454,7 @@ const faqSchema = {
     gap: clamp(36px, 4vw, 64px);
     align-items: center;
   }
-  .contact-copy { min-width: 0; }
+  .contact-copy { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; gap: var(--sp-5); }
   .contact-title {
     display: flex;
     flex-direction: column;
@@ -458,6 +482,14 @@ const faqSchema = {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+  .contact-lead {
+    max-width: 46ch;
+    margin: 0;
+    color: rgb(244 241 230 / 0.82);
+    font-size: clamp(1rem, 1.15vw, 1.12rem);
+    line-height: 1.55;
+    text-shadow: 0 3px 18px rgb(0 0 0 / 0.7);
+  }
   .contact-title span:nth-child(2) { margin-top: -0.05em; margin-left: 0.03em; }
   .contact-title strong {
     margin-top: -0.04em;
@@ -484,8 +516,6 @@ const faqSchema = {
     }
     .contact-grid { grid-template-columns: 1fr; gap: var(--sp-7); }
     .contact-copy {
-      display: flex;
-      flex-direction: column;
       justify-content: center;
       min-height: clamp(330px, 58vw, 510px);
     }

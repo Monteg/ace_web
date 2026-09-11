@@ -8,7 +8,7 @@ import { currentEvent } from '../data/events';
 import OrbitBorder from './showcase/OrbitBorder.astro';
 import { borderTrailDefaults } from '../data/border-trail-settings';
 import { getSiteContent } from '../lib/site-content';
-import { LOCALES, LOCALE_LABELS, localeFromPath, localizePath, stripLocale, t } from '../lib/i18n';
+import { LOCALES, LOCALE_FLAGS, LOCALE_LABELS, localeFromPath, localizePath, stripLocale, t } from '../lib/i18n';
 
 const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 const currentPath = stripLocale(Astro.url.pathname).replace(/\/$/, '').replace(/\.html$/, '') || '/';
@@ -73,12 +73,15 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
       </ul>
 
       <div class="nav-end">
-        <details class="language-switcher">
-          <summary aria-label={t('header.language.label', locale)}>{locale.toUpperCase()}</summary>
+        <details class="language-switcher" data-language-switcher>
+          <summary aria-label={`${t('header.language.label', locale)}: ${LOCALE_LABELS[locale]}`}>
+            <img class="language-flag" src={LOCALE_FLAGS[locale]} alt="" width="22" height="15" />
+          </summary>
           <div class="language-menu">
             {LOCALES.map((lang) => (
               <a href={localizePath(languagePath, lang)} lang={lang} hreflang={lang} aria-current={lang === locale ? 'page' : undefined}>
-                {LOCALE_LABELS[lang]}
+                <img class="language-flag" src={LOCALE_FLAGS[lang]} alt="" width="22" height="15" />
+                <span>{LOCALE_LABELS[lang]}</span>
               </a>
             ))}
           </div>
@@ -169,8 +172,9 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
   .language-switcher summary {
     display: grid; place-items: center; width: 40px; height: 40px; cursor: pointer;
     color: var(--fg-2); border: 1px solid var(--line-2); border-radius: var(--radius-pill);
-    list-style: none; text-transform: uppercase;
+    list-style: none;
   }
+  .language-flag { width: 22px; height: 15px; object-fit: cover; border-radius: 2px; box-shadow: 0 0 0 1px rgb(255 255 255 / 0.14); }
   .language-switcher summary::-webkit-details-marker { display: none; }
   .language-switcher[open] summary, .language-switcher summary:hover { color: var(--fg); border-color: var(--brand); }
   .language-menu {
@@ -179,7 +183,7 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
     background: var(--ink-2); border: 1px solid var(--line-2); border-radius: var(--radius);
     box-shadow: var(--shadow-2);
   }
-  .language-menu a { min-height: 36px; display: flex; align-items: center; padding: 0 10px; color: var(--fg-2); text-decoration: none; border-radius: var(--radius-s); }
+  .language-menu a { min-height: 36px; display: flex; align-items: center; gap: 9px; padding: 0 10px; color: var(--fg-2); text-decoration: none; border-radius: var(--radius-s); }
   .language-menu a:hover, .language-menu a[aria-current='page'] { color: var(--fg); background: var(--ink-3); }
   .site-header.is-compact .wrap { padding-top: 8px; }
   .site-header.is-compact .nav {
@@ -269,12 +273,14 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
   const burger = document.getElementById('burger');
   if (header && burger) {
     const dropdown = header.querySelector<HTMLElement>('[data-games-dropdown]');
+    const languageSwitcher = header.querySelector<HTMLDetailsElement>('[data-language-switcher]');
     const toggle = header.querySelector<HTMLButtonElement>('[data-games-toggle]');
     const gamesLink = header.querySelector<HTMLAnchorElement>('[data-games-link]');
     const desktop = window.matchMedia('(min-width: 1121px)');
     const hover = window.matchMedia('(hover: hover)');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const homepageHashes = new Set(['#about-us', '#our-benefits', '#why-ace-games', '#faq']);
+    const pendingHomeHashKey = 'ace:pending-home-hash';
     let closeTimer: ReturnType<typeof setTimeout>;
     let suppressFocusOpen = false;
     let openedFromFocus = false;
@@ -366,10 +372,21 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
 
     for (const link of header.querySelectorAll<HTMLAnchorElement>('[data-home-anchor]')) {
       link.addEventListener('click', (event) => {
+        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target) return;
         const url = new URL(link.href, window.location.href);
-        if (normalizePath(window.location.pathname) !== homePath || normalizePath(url.pathname) !== homePath || !homepageHashes.has(url.hash)) return;
+        if (normalizePath(url.pathname) !== homePath || !homepageHashes.has(url.hash)) return;
         const target = document.querySelector<HTMLElement>(url.hash);
-        if (!target) return;
+        if (normalizePath(window.location.pathname) !== homePath || !target) {
+          event.preventDefault();
+          closeMenu();
+          try {
+            sessionStorage.setItem(pendingHomeHashKey, url.hash);
+          } catch {
+            // The destination URL still carries the hash when storage is unavailable.
+          }
+          window.location.assign(`${url.pathname}${url.search}${url.hash}`);
+          return;
+        }
         event.preventDefault();
         closeMenu();
         scrollToTarget(target, url.hash);
@@ -398,11 +415,26 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
       });
     }
 
-    if (homepageHashes.has(window.location.hash) && normalizePath(window.location.pathname) === homePath) {
-      document.fonts.ready.then(() => requestAnimationFrame(() => {
-        const target = document.querySelector<HTMLElement>(window.location.hash);
-        if (target) scrollToTarget(target, window.location.hash, false);
-      }));
+    let initialHomeHash = window.location.hash;
+    if (normalizePath(window.location.pathname) === homePath) {
+      try {
+        const pendingHash = sessionStorage.getItem(pendingHomeHashKey);
+        if (pendingHash && homepageHashes.has(pendingHash)) {
+          initialHomeHash = pendingHash;
+          sessionStorage.removeItem(pendingHomeHashKey);
+          if (window.location.hash !== pendingHash) history.replaceState(null, '', pendingHash);
+        }
+      } catch {
+        // Hash navigation continues to work without session storage.
+      }
+    }
+    if (homepageHashes.has(initialHomeHash) && normalizePath(window.location.pathname) === homePath) {
+      const restoreInitialHomeAnchor = () => requestAnimationFrame(() => {
+        const target = document.querySelector<HTMLElement>(initialHomeHash);
+        if (target) scrollToTarget(target, initialHomeHash, false);
+      });
+      document.fonts.ready.then(restoreInitialHomeAnchor);
+      window.addEventListener('load', restoreInitialHomeAnchor, { once: true });
     }
 
     const COMPACT_START_Y = 96;
@@ -456,10 +488,18 @@ const borderTrailStyle = `--orbit-duration: ${borderTrailDefaults.orbitDuration}
       }
     });
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && header.classList.contains('menu-open')) {
-        closeMenu(true);
+      if (e.key === 'Escape') {
+        if (languageSwitcher?.open) {
+          languageSwitcher.open = false;
+          languageSwitcher.querySelector<HTMLElement>('summary')?.focus();
+        }
+        if (header.classList.contains('menu-open')) closeMenu(true);
       }
     });
-    document.addEventListener('click', (event) => { if (!header.contains(event.target as Node)) closeMenu(); });
+    document.addEventListener('click', (event) => {
+      const target = event.target as Node;
+      if (languageSwitcher?.open && !languageSwitcher.contains(target)) languageSwitcher.open = false;
+      if (!header.contains(target)) closeMenu();
+    });
   }
 </script>

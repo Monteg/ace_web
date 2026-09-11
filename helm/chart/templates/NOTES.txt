@@ -1,0 +1,15 @@
+{{ .Chart.Name }} {{ .Values.image.tag }} is installed as {{ .Release.Name }} in {{ .Release.Namespace }}.
+
+{{ if .Values.ingress.enabled -}}
+Reachable at:
+{{ range .Values.ingress.hosts }}  https://{{ .host }}
+{{ end }}
+{{- else -}}
+No ingress in this environment. Port-forward to look at it:
+
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "www.fullname" . }} 8080:{{ .Values.service.port }}
+{{- end }}
+
+Cloudflare holds the edge copy of every HTML page. If a deploy is live in the
+cluster but stale in a browser, the purge job did not run.
+
