@@ -9,9 +9,7 @@ import { localeFromPath, t } from '../lib/i18n';
 const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 
 const youtubeVideoId = 'oHg5SJYRHA0';
-const exactVideoUrl = 'https://youtu.be/oHg5SJYRHA0?list=RDoHg5SJYRHA0';
-const youtubeOrigin = Astro.url.origin;
-const youtubeEmbedUrl = `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&loop=1&playlist=${youtubeVideoId}&controls=0&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1&origin=${encodeURIComponent(youtubeOrigin)}`;
+const youtubeEmbedUrl = `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&loop=1&playlist=${youtubeVideoId}&controls=0&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1`;
 const localVideoPublicPath = '/media/rickroll-d-oHg5SJYRHA0.mp4';
 const localVideoExists = existsSync(
   fileURLToPath(new URL('../../public/media/rickroll-d-oHg5SJYRHA0.mp4', import.meta.url)),
@@ -52,19 +50,19 @@ const localVideoExists = existsSync(
           <iframe
             id="under18Player"
             data-under-18-video
-            src={youtubeEmbedUrl}
+            data-embed-url={youtubeEmbedUrl}
             title={t('under18.video_title', locale)}
             allow="autoplay; encrypted-media; picture-in-picture"
-            referrerpolicy="strict-origin-when-cross-origin"
+            referrerpolicy="origin-when-cross-origin"
             loading="eager"
             tabindex="-1"
           ></iframe>
         )}
 
         {!localVideoExists && (
-          <div class="under-18-video-fallback" data-under-18-video-fallback>
+          <div class="under-18-video-fallback" data-under-18-video-fallback hidden>
             <p>{t('under18.video_blocked', locale)}</p>
-            <a href={exactVideoUrl} target="_blank" rel="noreferrer">{t('under18.play_youtube', locale)}</a>
+            <button type="button" data-under-18-video-retry>{t('under18.tap_for_sound', locale)}</button>
           </div>
         )}
       </div>
@@ -233,7 +231,7 @@ const localVideoExists = existsSync(
     letter-spacing: 0.018em;
     text-transform: uppercase;
   }
-  .under-18-video-fallback a {
+  .under-18-video-fallback button {
     display: inline-flex;
     min-height: 44px;
     align-items: center;
@@ -244,10 +242,10 @@ const localVideoExists = existsSync(
     border-radius: var(--radius-pill);
     font-family: Tanker, 'Tanker Fallback', Arial, sans-serif;
     letter-spacing: var(--button-label-spacing);
-    text-decoration: none;
+    cursor: pointer;
     transition: transform var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
   }
-  .under-18-video-fallback a:hover { background: var(--brand-hover); transform: scale(1.035); }
+  .under-18-video-fallback button:hover { background: var(--brand-hover); transform: scale(1.035); }
   @keyframes video-reveal { to { opacity: 0; visibility: hidden; } }
   .under-18-actions {
     display: flex;
@@ -307,15 +305,36 @@ const localVideoExists = existsSync(
 <script is:inline>
   const soundToggle = document.querySelector('[data-under-18-sound]');
   const localVideo = document.querySelector('[data-under-18-local-video]');
+  const youtubeFrame = document.querySelector('[data-under-18-video]');
   const videoFallback = document.querySelector('[data-under-18-video-fallback]');
+  const videoRetry = document.querySelector('[data-under-18-video-retry]');
   let player = null;
   let fallbackTimer = 0;
   let loadFailureTimer = 0;
   let waitingForSoundGesture = true;
 
+  const redirectUnsupportedLocalOrigin = () => {
+    if (window.location.hostname !== '127.0.0.1') return false;
+    const localhostUrl = new URL(window.location.href);
+    localhostUrl.hostname = 'localhost';
+    window.location.replace(localhostUrl.toString());
+    return true;
+  };
+
+  const loadYoutubeFrame = () => {
+    if (!youtubeFrame?.dataset.embedUrl) return;
+    const embedUrl = new URL(youtubeFrame.dataset.embedUrl);
+    embedUrl.searchParams.set('origin', window.location.origin);
+    youtubeFrame.src = embedUrl.toString();
+  };
+
   const showVideoFallback = () => {
     if (videoFallback) videoFallback.hidden = false;
     if (soundToggle) soundToggle.hidden = true;
+  };
+
+  const hideVideoFallback = () => {
+    if (videoFallback) videoFallback.hidden = true;
   };
 
   const setSoundState = (soundIsOn, needsGesture = false) => {
@@ -361,13 +380,13 @@ const localVideoExists = existsSync(
 
   if (localVideo) void startLocalVideo();
 
-  window.onYouTubeIframeAPIReady = () => {
-    if (!window.YT || localVideo) return;
+  const createYoutubePlayer = () => {
+    if (!window.YT?.Player || localVideo || player || !youtubeFrame) return;
     player = new window.YT.Player('under18Player', {
       events: {
         onReady: ({ target }) => {
           window.clearTimeout(loadFailureTimer);
-          if (videoFallback) videoFallback.hidden = true;
+          hideVideoFallback();
           if (soundToggle) soundToggle.hidden = false;
           player = target;
           target.unMute();
@@ -392,14 +411,43 @@ const localVideoExists = existsSync(
   };
 
   if (!localVideo) {
-    const apiScript = document.createElement('script');
-    apiScript.src = 'https://www.youtube.com/iframe_api';
-    apiScript.async = true;
-    apiScript.addEventListener('error', showVideoFallback, { once: true });
-    document.head.append(apiScript);
-    loadFailureTimer = window.setTimeout(() => {
-      if (!player) showVideoFallback();
-    }, 8000);
+    if (!redirectUnsupportedLocalOrigin()) {
+      loadYoutubeFrame();
+
+      const previousYoutubeReady = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        if (typeof previousYoutubeReady === 'function') previousYoutubeReady();
+        createYoutubePlayer();
+      };
+
+      if (window.YT?.Player) {
+        createYoutubePlayer();
+      } else if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+        const apiScript = document.createElement('script');
+        apiScript.src = 'https://www.youtube.com/iframe_api';
+        apiScript.async = true;
+        apiScript.addEventListener('error', showVideoFallback, { once: true });
+        document.head.append(apiScript);
+      }
+
+      loadFailureTimer = window.setTimeout(() => {
+        if (!player) showVideoFallback();
+      }, 12000);
+    }
+  }
+
+  if (videoRetry) {
+    videoRetry.addEventListener('click', () => {
+      hideVideoFallback();
+      window.clearTimeout(loadFailureTimer);
+      if (player) {
+        player.mute();
+        player.playVideo();
+        return;
+      }
+      loadYoutubeFrame();
+      createYoutubePlayer();
+    });
   }
 
   if (soundToggle) {
