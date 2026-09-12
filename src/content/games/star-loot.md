@@ -7,7 +7,7 @@ seo:
   description: >-
     Star Loot: Players choose a bet amount and risk level before starting the
     round.
-card: ../../assets/games/star-loot.webp
+card: ../../assets/games/card-layers/star-loot-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/star-loot-background.webp
   logo: ../../assets/games/card-layers/star-loot-logo.webp
@@ -39,12 +39,15 @@ features:
     body: Toys act as slot symbols with different payout tiers.
   - title: VARIED WIN STATES
     body: Wins and losses use multiple animated outcomes.
+order: 100
 ---
 Toy Grabber is an arcade-style claw game where players place a bet and launch a swinging claw to grab a toy prize.
 
 Each round delivers a surprise toy outcome while the claw machine creates a fun skill-like gameplay illusion.
 
 ## Core Gameplay
+
+
 
 Players choose a bet amount and risk level before starting the round.
 
@@ -54,11 +57,15 @@ The round ends with a win animation, loss animation, or prize payout based on th
 
 ## Main Feature
 
+
+
 Arcade Claw Prize System
 
 The game combines server-based prize logic with a visual claw machine experience.
 
 ## Bonus Spins & Bonus Game
+
+
 
 ### RESULT STATES
 
@@ -72,6 +79,8 @@ Big Win and Jackpot results trigger enhanced celebration screens and stronger vi
 
 ## Multiple Payline Wins
 
+
+
 ### EXTRA FEATURE
 
 Risk Level Selection
@@ -79,6 +88,8 @@ Risk Level Selection
 Players can choose risk levels that adjust volatility, win frequency, and prize potential.
 
 ## Design & Atmosphere
+
+
 
 ### BUILDING AN ARCADE CLAW EXPERIENCE
 

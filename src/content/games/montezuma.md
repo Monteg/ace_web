@@ -8,7 +8,7 @@ seo:
     Montezuma is played on a 5×3 grid with 11 fixed paylines. Wins are formed
     when 3 or more identical symbols land from left to right on an active
     payline.
-card: ../../assets/games/montezuma.webp
+card: ../../assets/games/card-layers/montezuma-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/montezuma-background.webp
   logo: ../../assets/games/card-layers/montezuma-logo.webp
@@ -36,14 +36,19 @@ features:
     body: Vertical premium symbol stacks create bonus multiplier objects
   - title: PROGRESSIVE MULTIPLIER
     body: Winning objects increase the multiplier
+order: 100
 ---
 Montezuma is an Aztec-themed slot set on a 5×3 grid with 11 fixed paylines. The game blends classic line wins with the unique Vertical Premium Triple mechanic, increasing the multiplier and unlocking greater payout potential.
 
 ## Core Gameplay
 
+
+
 Montezuma is played on a 5×3 grid with 11 fixed paylines. Wins are formed when 3 or more identical symbols land from left to right on an active payline. Multiple paylines can win within the same spin, with all payouts combined to form the total reward.
 
 ## Main Feature
+
+
 
 ### Momentum Multiplier
 
@@ -51,15 +56,21 @@ Each spin generates a multiplier based on the number of winning objects. Both re
 
 ## Bonus Spins & Bonus Game
 
+
+
 Landing 3 or more Scatter symbols anywhere on the grid activates the Free Spins feature. Players receive 10 Free Spins when the bonus is triggered. During Free Spins the multiplier does not reset between spins. This allows players to build larger multipliers and dramatically increase the potential payout.
 
 ## Multiple Payline Wins
+
+
 
 ### Special Feature
 
 The game features a unique Vertical Premium Triple mechanic. When three identical premium symbols land vertically on a reel, they create a special bonus object that increases the multiplier.
 
 ## Design & Atmosphere
+
+
 
 ### BUILDING AN AZTEC SLOT WITH MULTIPLIER DYNAMICS
 

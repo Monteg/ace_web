@@ -6,10 +6,10 @@
     "context": "Skip link shown to keyboard users",
     "type": "aria",
     "en": "Skip to content",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Zum Inhalt springen",
+    "pt": "Saltar para o conteúdo",
+    "es": "Saltar al contenido",
+    "status": "Ready"
   },
   {
     "key": "global.cta.lets_talk",
@@ -18,10 +18,10 @@
     "context": "Primary contact call to action",
     "type": "button",
     "en": "Let's talk",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Sprechen wir darüber",
+    "pt": "Vamos conversar",
+    "es": "Hablemos",
+    "status": "Ready"
   },
   {
     "key": "global.action.view_games",
@@ -30,10 +30,10 @@
     "context": "Link to the games catalogue",
     "type": "button",
     "en": "View games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spiele ansehen",
+    "pt": "Ver jogos",
+    "es": "Ver juegos",
+    "status": "Ready"
   },
   {
     "key": "global.action.load_games",
@@ -42,10 +42,10 @@
     "context": "Loads more game cards",
     "type": "button",
     "en": "Load games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Weitere Spiele laden",
+    "pt": "Carregar mais jogos",
+    "es": "Cargar más juegos",
+    "status": "Ready"
   },
   {
     "key": "global.action.play",
@@ -54,10 +54,10 @@
     "context": "Quick play button",
     "type": "button",
     "en": "Play",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spielen",
+    "pt": "Jogar",
+    "es": "Jugar",
+    "status": "Ready"
   },
   {
     "key": "global.action.close",
@@ -66,10 +66,10 @@
     "context": "Close control accessible label",
     "type": "aria",
     "en": "Close",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Schließen",
+    "pt": "Fechar",
+    "es": "Cerrar",
+    "status": "Ready"
   },
   {
     "key": "global.action.copy_failed",
@@ -78,10 +78,10 @@
     "context": "Clipboard error feedback",
     "type": "plain",
     "en": "Copy failed",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Kopieren fehlgeschlagen",
+    "pt": "Falha ao copiar",
+    "es": "Error al copiar",
+    "status": "Ready"
   },
   {
     "key": "global.action.copied",
@@ -90,10 +90,10 @@
     "context": "Clipboard success feedback",
     "type": "plain",
     "en": "Copied",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Kopiert",
+    "pt": "Copiado",
+    "es": "Copiado",
+    "status": "Ready"
   },
   {
     "key": "global.filter.all",
@@ -102,10 +102,10 @@
     "context": "Show all game types",
     "type": "button",
     "en": "All",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Alle",
+    "pt": "Todos",
+    "es": "Todos",
+    "status": "Ready"
   },
   {
     "key": "catalogue.filter_aria",
@@ -114,10 +114,10 @@
     "context": "Accessible label for game type filters",
     "type": "aria",
     "en": "Filter games by type",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spiele nach Typ filtern",
+    "pt": "Filtrar jogos por tipo",
+    "es": "Filtrar juegos por tipo",
+    "status": "Ready"
   },
   {
     "key": "global.game_type.slot",
@@ -126,10 +126,10 @@
     "context": "Slot category label",
     "type": "plain",
     "en": "Slots",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Slots",
+    "pt": "Slots",
+    "es": "Tragamonedas",
+    "status": "Ready"
   },
   {
     "key": "global.game_type.instant",
@@ -138,10 +138,10 @@
     "context": "Instant category label",
     "type": "plain",
     "en": "Instant",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Sofortspiele",
+    "pt": "Jogos instantâneos",
+    "es": "Juegos instantáneos",
+    "status": "Ready"
   },
   {
     "key": "global.game_type.table",
@@ -150,10 +150,10 @@
     "context": "Table category label",
     "type": "plain",
     "en": "Table",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Tischspiele",
+    "pt": "Jogos de mesa",
+    "es": "Juegos de mesa",
+    "status": "Ready"
   },
   {
     "key": "global.game_type.slot_single",
@@ -162,10 +162,10 @@
     "context": "Single slot badge",
     "type": "plain",
     "en": "Slot",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Slot",
+    "pt": "Slot",
+    "es": "Tragamonedas",
+    "status": "Ready"
   },
   {
     "key": "global.game_type.instant_single",
@@ -174,10 +174,10 @@
     "context": "Single instant badge",
     "type": "plain",
     "en": "Instant",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Sofortspiel",
+    "pt": "Jogo instantâneo",
+    "es": "Juego instantáneo",
+    "status": "Ready"
   },
   {
     "key": "global.game_type.table_single",
@@ -186,10 +186,10 @@
     "context": "Single table badge",
     "type": "plain",
     "en": "Table",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Tischspiel",
+    "pt": "Jogo de mesa",
+    "es": "Juego de mesa",
+    "status": "Ready"
   },
   {
     "key": "global.label.rtp",
@@ -198,10 +198,10 @@
     "context": "Return to player abbreviation",
     "type": "plain",
     "en": "RTP",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "RTP",
+    "pt": "RTP",
+    "es": "RTP",
+    "status": "Ready"
   },
   {
     "key": "global.label.volatility",
@@ -210,10 +210,10 @@
     "context": "Volatility label",
     "type": "plain",
     "en": "Volatility",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Volatilität",
+    "pt": "Volatilidade",
+    "es": "Volatilidad",
+    "status": "Ready"
   },
   {
     "key": "global.label.max_win",
@@ -222,10 +222,10 @@
     "context": "Maximum win label",
     "type": "plain",
     "en": "Max win",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Maximalgewinn",
+    "pt": "Ganho máximo",
+    "es": "Ganancia máxima",
+    "status": "Ready"
   },
   {
     "key": "global.label.on_request",
@@ -234,10 +234,10 @@
     "context": "Value supplied on request",
     "type": "plain",
     "en": "On request",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Auf Anfrage",
+    "pt": "Mediante pedido",
+    "es": "Bajo petición",
+    "status": "Ready"
   },
   {
     "key": "global.label.bet_range",
@@ -246,10 +246,10 @@
     "context": "Bet range label",
     "type": "plain",
     "en": "Bet range",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Einsatzbereich",
+    "pt": "Intervalo de apostas",
+    "es": "Rango de apuestas",
+    "status": "Ready"
   },
   {
     "key": "global.label.layout",
@@ -258,10 +258,10 @@
     "context": "Game layout label",
     "type": "plain",
     "en": "Layout",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Layout",
+    "pt": "Disposição",
+    "es": "Disposición",
+    "status": "Ready"
   },
   {
     "key": "global.label.main_feature",
@@ -270,10 +270,10 @@
     "context": "Main feature label",
     "type": "plain",
     "en": "Main feature",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Hauptfunktion",
+    "pt": "Funcionalidade principal",
+    "es": "Función principal",
+    "status": "Ready"
   },
   {
     "key": "global.label.low",
@@ -282,10 +282,10 @@
     "context": "Low volatility label",
     "type": "plain",
     "en": "Low",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Niedrig",
+    "pt": "Baixo",
+    "es": "Bajo",
+    "status": "Ready"
   },
   {
     "key": "global.label.medium",
@@ -294,10 +294,10 @@
     "context": "Medium volatility label",
     "type": "plain",
     "en": "Medium",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Mittel",
+    "pt": "Médio",
+    "es": "Medio",
+    "status": "Ready"
   },
   {
     "key": "global.label.high",
@@ -306,10 +306,10 @@
     "context": "High volatility label",
     "type": "plain",
     "en": "High",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Hoch",
+    "pt": "Alto",
+    "es": "Alto",
+    "status": "Ready"
   },
   {
     "key": "global.label.very_high",
@@ -318,10 +318,10 @@
     "context": "Very high volatility label",
     "type": "plain",
     "en": "Very high",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Sehr hoch",
+    "pt": "Muito alto",
+    "es": "Muy alto",
+    "status": "Ready"
   },
   {
     "key": "global.label.coming_soon",
@@ -330,10 +330,10 @@
     "context": "Unreleased game badge",
     "type": "plain",
     "en": "Coming soon",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Demnächst",
+    "pt": "Em breve",
+    "es": "Próximamente",
+    "status": "Ready"
   },
   {
     "key": "global.label.preview",
@@ -342,7 +342,7 @@
     "context": "Released game page without a public demo",
     "type": "plain",
     "en": "Preview",
-    "de": "",
+    "de": "Vorschau",
     "pt": "Pré-visualização",
     "es": "Vista previa",
     "status": "Ready"
@@ -354,10 +354,10 @@
     "context": "Main navigation",
     "type": "plain",
     "en": "Games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spiele",
+    "pt": "Jogos",
+    "es": "Juegos",
+    "status": "Ready"
   },
   {
     "key": "header.nav.event",
@@ -366,10 +366,10 @@
     "context": "Main navigation",
     "type": "plain",
     "en": "Event",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Event",
+    "pt": "Evento",
+    "es": "Evento",
+    "status": "Ready"
   },
   {
     "key": "header.nav.about_us",
@@ -378,10 +378,10 @@
     "context": "Main navigation",
     "type": "plain",
     "en": "About Us",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Über uns",
+    "pt": "Sobre nós",
+    "es": "Sobre nosotros",
+    "status": "Ready"
   },
   {
     "key": "header.nav.our_benefits",
@@ -390,10 +390,10 @@
     "context": "Main navigation",
     "type": "plain",
     "en": "Our Benefits",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Unsere Vorteile",
+    "pt": "As nossas vantagens",
+    "es": "Nuestras ventajas",
+    "status": "Ready"
   },
   {
     "key": "header.nav.why_ace_games",
@@ -402,10 +402,10 @@
     "context": "Main navigation",
     "type": "plain",
     "en": "Why Ace Games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Warum Ace Games",
+    "pt": "Porquê a Ace Games",
+    "es": "Por qué Ace Games",
+    "status": "Ready"
   },
   {
     "key": "header.nav.faq",
@@ -414,10 +414,10 @@
     "context": "Main navigation",
     "type": "plain",
     "en": "FAQ",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "FAQ",
+    "pt": "Perguntas frequentes",
+    "es": "Preguntas frecuentes",
+    "status": "Ready"
   },
   {
     "key": "header.menu.open",
@@ -426,10 +426,10 @@
     "context": "Mobile menu accessible label",
     "type": "aria",
     "en": "Open menu",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Menü öffnen",
+    "pt": "Abrir menu",
+    "es": "Abrir menú",
+    "status": "Ready"
   },
   {
     "key": "header.menu.close",
@@ -438,10 +438,10 @@
     "context": "Mobile menu accessible label",
     "type": "aria",
     "en": "Close menu",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Menü schließen",
+    "pt": "Fechar menu",
+    "es": "Cerrar menú",
+    "status": "Ready"
   },
   {
     "key": "header.games_menu.open",
@@ -450,10 +450,10 @@
     "context": "Games submenu accessible label",
     "type": "aria",
     "en": "Open games menu",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spielemenü öffnen",
+    "pt": "Abrir menu de jogos",
+    "es": "Abrir menú de juegos",
+    "status": "Ready"
   },
   {
     "key": "header.language.label",
@@ -462,10 +462,10 @@
     "context": "Language selector accessible label",
     "type": "aria",
     "en": "Language",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Sprache",
+    "pt": "Idioma",
+    "es": "Idioma",
+    "status": "Ready"
   },
   {
     "key": "age_gate.kicker",
@@ -474,10 +474,10 @@
     "context": "Modal eyebrow",
     "type": "plain",
     "en": "Age verification",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Altersprüfung",
+    "pt": "Verificação de idade",
+    "es": "Verificación de edad",
+    "status": "Ready"
   },
   {
     "key": "age_gate.title",
@@ -486,10 +486,10 @@
     "context": "Modal title",
     "type": "plain",
     "en": "This content is intended for persons 18 years or older.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Dieser Inhalt richtet sich an Personen ab 18 Jahren.",
+    "pt": "Este conteúdo destina-se a pessoas com 18 anos ou mais.",
+    "es": "Este contenido está dirigido a personas mayores de 18 años.",
+    "status": "Ready"
   },
   {
     "key": "age_gate.description",
@@ -498,10 +498,10 @@
     "context": "Modal explanation",
     "type": "plain",
     "en": "Please confirm you meet the legal age requirement to continue.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Bitte bestätigen Sie, dass Sie das gesetzliche Mindestalter erreicht haben, um fortzufahren.",
+    "pt": "Confirme que cumpre o requisito legal de idade para continuar.",
+    "es": "Confirma que cumples el requisito legal de edad para continuar.",
+    "status": "Ready"
   },
   {
     "key": "age_gate.reject",
@@ -510,10 +510,10 @@
     "context": "Under-age action",
     "type": "button",
     "en": "No, take me back",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Nein, zurück",
+    "pt": "Não, voltar",
+    "es": "No, volver",
+    "status": "Ready"
   },
   {
     "key": "age_gate.confirm",
@@ -522,10 +522,10 @@
     "context": "Adult confirmation action",
     "type": "button",
     "en": "Yes, I'm 18 years or older",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ja, ich bin mindestens 18 Jahre alt",
+    "pt": "Sim, tenho 18 anos ou mais",
+    "es": "Sí, tengo 18 años o más",
+    "status": "Ready"
   },
   {
     "key": "home.seo.title",
@@ -534,10 +534,10 @@
     "context": "Browser and search title",
     "type": "seo_title",
     "en": "Ace Games | Casino Game Provider | Slots, Instant & Table Games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ace Games - Casinospiele: Slots, Sofort- und Tischspiele",
+    "pt": "Ace Games - Slots, jogos instantâneos e de mesa",
+    "es": "Ace Games - Tragamonedas, juegos instantáneos y de mesa",
+    "status": "Ready"
   },
   {
     "key": "home.seo.description",
@@ -546,10 +546,10 @@
     "context": "Search description",
     "type": "seo_description",
     "en": "25+ titles from a team with 15+ years in game development, built for repeat play. Integrate the portfolio or order a custom game via Game Boutique.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Über 25 Spiele, entwickelt mit über 15 Jahren Erfahrung für wiederholtes Spielen. Portfolio integrieren oder ein individuelles Spiel bei Game Boutique bestellen.",
+    "pt": "Mais de 25 jogos e 15 anos de experiência, pensados para voltar a jogar. Integre o portefólio ou encomende um jogo à medida na Game Boutique.",
+    "es": "Más de 25 juegos y 15 años de experiencia para volver a jugar. Integra el catálogo o encarga un juego a medida con Game Boutique.",
+    "status": "Ready"
   },
   {
     "key": "home.hero.title",
@@ -558,10 +558,10 @@
     "context": "Main heading, plain part",
     "type": "plain",
     "en": "25+ slots, instant, and table games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Über 25 Slots, Sofort- und Tischspiele",
+    "pt": "Mais de 25 slots, jogos instantâneos e de mesa",
+    "es": "Más de 25 tragamonedas, juegos instantáneos y de mesa",
+    "status": "Ready"
   },
   {
     "key": "home.hero.title_accent",
@@ -570,10 +570,10 @@
     "context": "Main heading, highlighted part",
     "type": "plain",
     "en": "built for engagement and repeat play",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "für Spielerbindung und wiederholtes Spielen entwickelt",
+    "pt": "criados para envolver os jogadores e fazê-los regressar",
+    "es": "creados para atraer a los jugadores y hacer que vuelvan",
+    "status": "Ready"
   },
   {
     "key": "home.hero.lead",
@@ -582,58 +582,10 @@
     "context": "First hero introduction paragraph",
     "type": "plain",
     "en": "Ace Games is a live-tested casino game provider combining familiar gaming mechanics with gambling formats. Better than Kings, and we prove it.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
-  },
-  {
-    "key": "home.hero.lead_secondary",
-    "page": "Home",
-    "section": "Hero",
-    "context": "Second hero introduction paragraph about Game Boutique",
-    "type": "plain",
-    "en": "Game Boutique builds custom titles, from concept to launch-ready in one month.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
-  },
-  {
-    "key": "home.hero.primary_cta",
-    "page": "Home",
-    "section": "Hero",
-    "context": "Primary hero action linking to contact",
-    "type": "button",
-    "en": "Talk to us",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
-  },
-  {
-    "key": "home.hero.secondary_cta",
-    "page": "Home",
-    "section": "Hero",
-    "context": "Secondary hero action linking to the games section",
-    "type": "button",
-    "en": "Explore games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
-  },
-  {
-    "key": "home.proof.title",
-    "page": "Home",
-    "section": "Proof",
-    "context": "Proof section heading",
-    "type": "plain",
-    "en": "Ace Games by the numbers",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ace Games ist ein im Live-Betrieb erprobter Casinospielanbieter, der vertraute Spielmechaniken mit Glücksspielformaten verbindet. Better than Kings - und wir beweisen es.",
+    "pt": "A Ace Games é um fornecedor de jogos de casino testados em ambiente real, que combina mecânicas familiares com formatos de jogo de fortuna ou azar. Better than Kings. E provamo-lo.",
+    "es": "Ace Games es un proveedor de juegos de casino probados en entornos reales que combina mecánicas conocidas con formatos de juegos de azar. Better than Kings, y lo demostramos.",
+    "status": "Ready"
   },
   {
     "key": "home.proof.intro",
@@ -642,10 +594,10 @@
     "context": "Proof section introduction",
     "type": "plain",
     "en": "Royal Stars, our own live casino platform with 600,000+ unique players, generates real-time gameplay data that shows how bettors actually interact with each title, and shapes which games move into the B2B portfolio.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Royal Stars, unsere eigene aktive Casinoplattform mit über 600.000 einzelnen Spielern, liefert Echtzeit-Spieldaten. Sie zeigen, wie Spieler tatsächlich mit jedem Titel interagieren, und bestimmen mit, welche Spiele in das B2B-Portfolio aufgenommen werden.",
+    "pt": "A Royal Stars, a nossa plataforma de casino em funcionamento com mais de 600 000 jogadores únicos, gera dados de jogo em tempo real que mostram como os apostadores interagem com cada título e ajudam a decidir que jogos entram no portefólio B2B.",
+    "es": "Royal Stars, nuestra propia plataforma de casino en activo con más de 600.000 jugadores únicos, genera datos de juego en tiempo real que muestran cómo interactúan los jugadores con cada título y ayudan a decidir qué juegos pasan al catálogo B2B.",
+    "status": "Ready"
   },
   {
     "key": "home.proof.prototypes",
@@ -654,10 +606,10 @@
     "context": "Statistic label",
     "type": "plain",
     "en": "Unique players",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Einzelne Spieler",
+    "pt": "Jogadores únicos",
+    "es": "Jugadores únicos",
+    "status": "Ready"
   },
   {
     "key": "home.proof.releases",
@@ -666,10 +618,10 @@
     "context": "Statistic label",
     "type": "plain",
     "en": "New players this period",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Neue Spieler in diesem Zeitraum",
+    "pt": "Novos jogadores neste período",
+    "es": "Nuevos jugadores en este periodo",
+    "status": "Ready"
   },
   {
     "key": "home.proof.players",
@@ -678,10 +630,10 @@
     "context": "Statistic label",
     "type": "plain",
     "en": "Spins per active player",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Drehungen pro aktivem Spieler",
+    "pt": "Rodadas por jogador ativo",
+    "es": "Tiradas por jugador activo",
+    "status": "Ready"
   },
   {
     "key": "home.proof.ecosystem",
@@ -690,10 +642,10 @@
     "context": "Statistic label",
     "type": "plain",
     "en": "Operator Ecosystem",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Betreiber-Ökosystem",
+    "pt": "Ecossistema de operadores",
+    "es": "Ecosistema de operadores",
+    "status": "Ready"
   },
   {
     "key": "home.excellence.title",
@@ -702,10 +654,10 @@
     "context": "Section heading",
     "type": "plain",
     "en": "What Ace Games is built on",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Worauf Ace Games aufbaut",
+    "pt": "Os pilares da Ace Games",
+    "es": "Los pilares de Ace Games",
+    "status": "Ready"
   },
   {
     "key": "home.excellence.trust_title",
@@ -714,10 +666,10 @@
     "context": "Benefit card heading",
     "type": "plain",
     "en": "Gameplay Designed to Grow LTV",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Gameplay für einen höheren Spieler-LTV",
+    "pt": "Jogabilidade concebida para aumentar o LTV",
+    "es": "Jugabilidad diseñada para aumentar el LTV",
+    "status": "Ready"
   },
   {
     "key": "home.excellence.trust_body",
@@ -726,10 +678,10 @@
     "context": "Benefit card body",
     "type": "plain",
     "en": "Runner, Plinko, mines, board-game logic: familiar interactions reworked for iGaming to drive engagement and grow player LTV.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Runner, Plinko, Mines, Brettspiellogik: vertraute Interaktionen, für iGaming neu gedacht, um die Spielerbindung zu stärken und den Spieler-LTV zu erhöhen.",
+    "pt": "Runner, Plinko, minas, lógica de jogos de tabuleiro: interações familiares adaptadas ao iGaming para aumentar o envolvimento e o LTV dos jogadores.",
+    "es": "Runner, Plinko, minas, lógica de juegos de mesa: interacciones conocidas adaptadas al iGaming para aumentar la participación y el LTV de los jugadores.",
+    "status": "Ready"
   },
   {
     "key": "home.excellence.innovation_title",
@@ -738,10 +690,10 @@
     "context": "Benefit card heading",
     "type": "plain",
     "en": "Custom Games for Your Brand",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Individuelle Spiele für Ihre Marke",
+    "pt": "Jogos à medida da sua marca",
+    "es": "Juegos a medida para tu marca",
+    "status": "Ready"
   },
   {
     "key": "home.excellence.innovation_body",
@@ -750,10 +702,10 @@
     "context": "Benefit card body",
     "type": "plain",
     "en": "Want something made specifically for your business? Game Boutique turns your brand, audience, market, or idea into an exclusive game, ready to launch in one month.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Sie möchten etwas speziell für Ihr Unternehmen? Game Boutique macht aus Ihrer Marke, Zielgruppe, Ihrem Markt oder Ihrer Idee ein exklusives Spiel - in einem Monat startbereit.",
+    "pt": "Procura algo criado especificamente para o seu negócio? A Game Boutique transforma a sua marca, público, mercado ou ideia num jogo exclusivo, pronto a lançar num mês.",
+    "es": "¿Buscas algo creado específicamente para tu negocio? Game Boutique transforma tu marca, público, mercado o idea en un juego exclusivo, listo para lanzar en un mes.",
+    "status": "Ready"
   },
   {
     "key": "home.excellence.retention_title",
@@ -762,10 +714,10 @@
     "context": "Benefit card heading",
     "type": "plain",
     "en": "Trust at the Core",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Vertrauen als Grundlage",
+    "pt": "Confiança como base",
+    "es": "La confianza como base",
+    "status": "Ready"
   },
   {
     "key": "home.excellence.retention_body",
@@ -774,10 +726,10 @@
     "context": "Benefit card body",
     "type": "plain",
     "en": "Every game is powered by a GLI-approved RNG, with secure architecture and stable performance built in from day one.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Jedes Spiel nutzt einen von GLI zugelassenen RNG und bietet von Anfang an eine sichere Architektur und stabile Leistung.",
+    "pt": "Todos os jogos utilizam um RNG aprovado pela GLI, com uma arquitetura segura e desempenho estável desde o primeiro dia.",
+    "es": "Todos los juegos utilizan un RNG aprobado por GLI, con una arquitectura segura y un rendimiento estable desde el primer día.",
+    "status": "Ready"
   },
   {
     "key": "home.portfolio.title",
@@ -786,22 +738,10 @@
     "context": "Section heading",
     "type": "plain",
     "en": "Discover Ace Games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
-  },
-  {
-    "key": "home.portfolio.coming_soon_title",
-    "page": "Home",
-    "section": "Discover Games",
-    "context": "Heading above unreleased games",
-    "type": "plain",
-    "en": "Coming soon",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ace Games entdecken",
+    "pt": "Descubra a Ace Games",
+    "es": "Descubre Ace Games",
+    "status": "Ready"
   },
   {
     "key": "home.maths.title",
@@ -810,10 +750,10 @@
     "context": "Section heading",
     "type": "plain",
     "en": "Every game, by the numbers",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Jedes Spiel in Zahlen",
+    "pt": "Cada jogo em números",
+    "es": "Cada juego en cifras",
+    "status": "Ready"
   },
   {
     "key": "home.maths.lead",
@@ -822,10 +762,10 @@
     "context": "Section introduction",
     "type": "plain",
     "en": "All our games on one board: each lane is a volatility level, each game sits at its published RTP. Hover a game for the figures, click to open it.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Alle unsere Spiele in einer Übersicht: Jede Reihe steht für eine Volatilitätsstufe, jedes Spiel ist bei seinem veröffentlichten RTP eingeordnet. Mit der Maus über ein Spiel fahren, um die Werte zu sehen, und klicken, um es zu öffnen.",
+    "pt": "Todos os nossos jogos num só painel: cada faixa representa um nível de volatilidade e cada jogo está posicionado no seu RTP publicado. Passe o cursor sobre um jogo para ver os valores e clique para o abrir.",
+    "es": "Todos nuestros juegos en un panel: cada fila representa un nivel de volatilidad y cada juego se sitúa en su RTP publicado. Pasa el cursor sobre un juego para ver las cifras y haz clic para abrirlo.",
+    "status": "Ready"
   },
   {
     "key": "home.maths.caption",
@@ -834,10 +774,10 @@
     "context": "Chart caption",
     "type": "plain",
     "en": "Published RTP and volatility for every title. RTP bands and volatility modes are configuration, set per operator and per market.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Veröffentlichter RTP und Volatilität für jeden Titel. RTP-Bereiche und Volatilitätsmodi werden je Betreiber und Markt konfiguriert.",
+    "pt": "RTP publicado e volatilidade de cada título. Os intervalos de RTP e os modos de volatilidade são configurados por operador e mercado.",
+    "es": "RTP publicado y volatilidad de cada título. Los rangos de RTP y los modos de volatilidad se configuran por operador y mercado.",
+    "status": "Ready"
   },
   {
     "key": "home.maths.hint",
@@ -846,10 +786,10 @@
     "context": "Axis explanation",
     "type": "plain",
     "en": "Further right, more returned to players. Higher up, bigger swings.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Weiter rechts: höhere Rückzahlung an Spieler. Weiter oben: stärkere Schwankungen.",
+    "pt": "Mais à direita, maior retorno aos jogadores. Mais acima, maiores oscilações.",
+    "es": "Más a la derecha, mayor retorno a los jugadores. Más arriba, mayores fluctuaciones.",
+    "status": "Ready"
   },
   {
     "key": "home.maths.adjustable",
@@ -858,10 +798,10 @@
     "context": "Chart legend",
     "type": "plain",
     "en": "Adjustable volatility",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Anpassbare Volatilität",
+    "pt": "Volatilidade ajustável",
+    "es": "Volatilidad ajustable",
+    "status": "Ready"
   },
   {
     "key": "home.maths.open_game",
@@ -870,10 +810,10 @@
     "context": "Chart tooltip action",
     "type": "plain",
     "en": "Open the game",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spiel öffnen",
+    "pt": "Abrir o jogo",
+    "es": "Abrir el juego",
+    "status": "Ready"
   },
   {
     "key": "home.future.title",
@@ -882,10 +822,10 @@
     "context": "Section heading",
     "type": "plain",
     "en": "How We Build and Grow Games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Wie wir Spiele entwickeln und weiterentwickeln",
+    "pt": "Como criamos e fazemos evoluir os jogos",
+    "es": "Cómo creamos y hacemos crecer los juegos",
+    "status": "Ready"
   },
   {
     "key": "home.future.engineering_title",
@@ -894,10 +834,10 @@
     "context": "Process card heading",
     "type": "plain",
     "en": "Expert Engineering Team",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Erfahrenes Entwicklungsteam",
+    "pt": "Equipa de engenharia especializada",
+    "es": "Equipo de ingeniería especializado",
+    "status": "Ready"
   },
   {
     "key": "home.future.engineering_body",
@@ -906,10 +846,10 @@
     "context": "Process card body",
     "type": "plain",
     "en": "15+ years in game development: developers, mathematicians, and designers building high-performance casino games for scale and stability.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Über 15 Jahre Spieleentwicklung: Entwickler, Mathematiker und Designer entwickeln leistungsstarke Casinospiele für Skalierbarkeit und Stabilität.",
+    "pt": "Mais de 15 anos de desenvolvimento de jogos: programadores, matemáticos e designers criam jogos de casino de alto desempenho, preparados para escalar com estabilidade.",
+    "es": "Más de 15 años desarrollando juegos: programadores, matemáticos y diseñadores crean juegos de casino de alto rendimiento, preparados para escalar con estabilidad.",
+    "status": "Ready"
   },
   {
     "key": "home.future.strategy_title",
@@ -918,10 +858,10 @@
     "context": "Process card heading",
     "type": "plain",
     "en": "Game Design & Testing",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spieldesign und Tests",
+    "pt": "Design e testes de jogos",
+    "es": "Diseño y pruebas de juegos",
+    "status": "Ready"
   },
   {
     "key": "home.future.strategy_body",
@@ -930,10 +870,10 @@
     "context": "Process card body",
     "type": "plain",
     "en": "Every title starts with RTP models, volatility curves, and mechanics chosen for engagement, whether it's built for our own portfolio or for a partner brand.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Jeder Titel beginnt mit RTP-Modellen, Volatilitätskurven und Mechaniken zur Spielerbindung - ob für unser eigenes Portfolio oder eine Partnermarke.",
+    "pt": "Cada título começa com modelos de RTP, curvas de volatilidade e mecânicas escolhidas para envolver os jogadores, quer seja para o nosso portefólio ou para uma marca parceira.",
+    "es": "Cada título parte de modelos de RTP, curvas de volatilidad y mecánicas elegidas para atraer a los jugadores, tanto para nuestro catálogo como para una marca asociada.",
+    "status": "Ready"
   },
   {
     "key": "home.future.integration_title",
@@ -942,10 +882,10 @@
     "context": "Process card heading",
     "type": "plain",
     "en": "Live on Royal Stars First",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Zuerst live auf Royal Stars",
+    "pt": "Primeiro na Royal Stars",
+    "es": "Primero en Royal Stars",
+    "status": "Ready"
   },
   {
     "key": "home.future.integration_body",
@@ -954,10 +894,10 @@
     "context": "Process card body",
     "type": "plain",
     "en": "New releases run on Royal Stars before anything reaches an external operator. Real players, real gameplay data.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Neue Titel laufen auf Royal Stars, bevor sie externe Betreiber erreichen. Echte Spieler, echte Spieldaten.",
+    "pt": "Os novos lançamentos passam pela Royal Stars antes de chegarem a qualquer operador externo. Jogadores reais, dados de jogo reais.",
+    "es": "Los nuevos lanzamientos pasan por Royal Stars antes de llegar a cualquier operador externo. Jugadores reales, datos de juego reales.",
+    "status": "Ready"
   },
   {
     "key": "home.future.optimization_title",
@@ -966,10 +906,10 @@
     "context": "Process card heading",
     "type": "plain",
     "en": "Launch & Integrate",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Launch und Integration",
+    "pt": "Lançamento e integração",
+    "es": "Lanzamiento e integración",
+    "status": "Ready"
   },
   {
     "key": "home.future.optimization_body",
@@ -978,10 +918,10 @@
     "context": "Process card body",
     "type": "plain",
     "en": "Titles that perform move into the B2B portfolio and integrate with operators via API or through an aggregator, with post-launch data feeding the next release.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Erfolgreiche Titel werden in das B2B-Portfolio aufgenommen und per API oder Aggregator bei Betreibern integriert. Daten nach dem Launch fließen in die nächste Veröffentlichung ein.",
+    "pt": "Os títulos com bons resultados entram no portefólio B2B e são integrados nos operadores por API ou através de um agregador. Os dados após o lançamento ajudam a preparar o próximo título.",
+    "es": "Los títulos con buenos resultados pasan al catálogo B2B y se integran con los operadores mediante API o un agregador. Los datos posteriores al lanzamiento sirven para preparar el siguiente título.",
+    "status": "Ready"
   },
   {
     "key": "home.faq.title",
@@ -990,10 +930,10 @@
     "context": "Section heading",
     "type": "plain",
     "en": "Frequently asked questions",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Häufig gestellte Fragen",
+    "pt": "Perguntas frequentes",
+    "es": "Preguntas frecuentes",
+    "status": "Ready"
   },
   {
     "key": "home.faq.1.question",
@@ -1002,10 +942,10 @@
     "context": "Accordion question",
     "type": "plain",
     "en": "What types of casino games do you develop?",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Welche Arten von Casinospielen entwickeln Sie?",
+    "pt": "Que tipos de jogos de casino desenvolvem?",
+    "es": "¿Qué tipos de juegos de casino desarrolláis?",
+    "status": "Ready"
   },
   {
     "key": "home.faq.1.answer",
@@ -1014,10 +954,10 @@
     "context": "Accordion answer",
     "type": "rich",
     "en": "We develop a wide range of casino products including slot, instant, and table games, plus custom mechanics tailored to operator needs. Each game is designed to maximize engagement, retention, and revenue performance.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Wir entwickeln ein breites Spektrum an Casinoprodukten, darunter Slots, Sofort- und Tischspiele sowie individuelle Mechaniken nach den Anforderungen der Betreiber. Jedes Spiel ist auf maximale Spielerbindung, Wiederkehrraten und Umsatzleistung ausgelegt.",
+    "pt": "Desenvolvemos uma vasta gama de produtos de casino, incluindo slots, jogos instantâneos e de mesa, além de mecânicas à medida das necessidades dos operadores. Cada jogo é concebido para maximizar o envolvimento, a retenção e o desempenho das receitas.",
+    "es": "Desarrollamos una amplia gama de productos de casino, como tragamonedas, juegos instantáneos y de mesa, además de mecánicas adaptadas a las necesidades de los operadores. Cada juego está diseñado para maximizar la participación, la retención y los ingresos.",
+    "status": "Ready"
   },
   {
     "key": "home.faq.2.question",
@@ -1026,10 +966,10 @@
     "context": "Accordion question",
     "type": "plain",
     "en": "How long does it take to develop a casino game?",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Wie lange dauert die Entwicklung eines Casinospiels?",
+    "pt": "Quanto tempo demora o desenvolvimento de um jogo de casino?",
+    "es": "¿Cuánto tiempo se tarda en desarrollar un juego de casino?",
+    "status": "Ready"
   },
   {
     "key": "home.faq.2.answer",
@@ -1037,11 +977,11 @@
     "section": "FAQ",
     "context": "Accordion answer",
     "type": "rich",
-    "en": "Development timelines depend on complexity. Standard slot projects typically take 3–6 months, while advanced mechanics or custom game concepts may require 6–12 months.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "en": "Development timelines depend on complexity. Standard slot projects typically take 3-6 months, while advanced mechanics or custom game concepts may require 6-12 months.",
+    "de": "Die Entwicklungsdauer hängt von der Komplexität ab. Standard-Slotprojekte dauern in der Regel 3-6 Monate, während anspruchsvolle Mechaniken oder individuelle Spielkonzepte 6-12 Monate erfordern können.",
+    "pt": "O prazo depende da complexidade. Os projetos de slots convencionais demoram normalmente 3-6 meses, enquanto mecânicas avançadas ou conceitos à medida podem exigir 6-12 meses.",
+    "es": "El plazo depende de la complejidad. Los proyectos de tragamonedas estándar suelen tardar entre 3 y 6 meses, mientras que las mecánicas avanzadas o los conceptos a medida pueden requerir entre 6 y 12 meses.",
+    "status": "Ready"
   },
   {
     "key": "home.faq.3.question",
@@ -1050,10 +990,10 @@
     "context": "Accordion question",
     "type": "plain",
     "en": "Can I order a fully customized casino game?",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Kann ich ein vollständig individuelles Casinospiel bestellen?",
+    "pt": "Posso encomendar um jogo de casino totalmente personalizado?",
+    "es": "¿Puedo encargar un juego de casino totalmente personalizado?",
+    "status": "Ready"
   },
   {
     "key": "home.faq.3.answer",
@@ -1062,10 +1002,10 @@
     "context": "Accordion answer",
     "type": "rich",
     "en": "Yes. We design fully customized games aligned with your brand, audience, and platform requirements, from theme and visuals to mechanics and reward systems.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ja. Wir entwickeln vollständig individuelle Spiele passend zu Ihrer Marke, Zielgruppe und Plattform - von Thema und Grafik bis zu Mechaniken und Belohnungssystemen.",
+    "pt": "Sim. Criamos jogos totalmente personalizados, alinhados com a sua marca, público e requisitos da plataforma, desde o tema e os elementos visuais às mecânicas e aos sistemas de recompensas.",
+    "es": "Sí. Creamos juegos totalmente personalizados y adaptados a tu marca, público y requisitos de plataforma, desde la temática y los gráficos hasta las mecánicas y los sistemas de recompensas.",
+    "status": "Ready"
   },
   {
     "key": "home.faq.4.question",
@@ -1074,10 +1014,10 @@
     "context": "Accordion question",
     "type": "plain",
     "en": "How do you ensure game quality and fairness?",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Wie gewährleisten Sie Spielqualität und Fairness?",
+    "pt": "Como garantem a qualidade e a imparcialidade dos jogos?",
+    "es": "¿Cómo garantizáis la calidad y la equidad de los juegos?",
+    "status": "Ready"
   },
   {
     "key": "home.faq.4.answer",
@@ -1086,10 +1026,10 @@
     "context": "Accordion answer",
     "type": "rich",
     "en": "Every game undergoes extensive testing including functional QA, performance testing, and RNG validation to ensure fair gameplay and stable performance.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Jedes Spiel durchläuft umfangreiche Tests, darunter funktionale Qualitätssicherung, Leistungstests und RNG-Validierung, um faires Gameplay und stabile Leistung sicherzustellen.",
+    "pt": "Cada jogo é submetido a testes rigorosos, incluindo controlo de qualidade funcional, testes de desempenho e validação do RNG, para garantir um jogo justo e um desempenho estável.",
+    "es": "Cada juego pasa por pruebas exhaustivas de calidad funcional, rendimiento y validación del RNG para garantizar un juego justo y un rendimiento estable.",
+    "status": "Ready"
   },
   {
     "key": "home.faq.5.question",
@@ -1098,10 +1038,10 @@
     "context": "Accordion question",
     "type": "plain",
     "en": "Do you provide post-launch support?",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Bieten Sie Support nach dem Launch?",
+    "pt": "Disponibilizam apoio após o lançamento?",
+    "es": "¿Ofrecéis soporte después del lanzamiento?",
+    "status": "Ready"
   },
   {
     "key": "home.faq.5.answer",
@@ -1110,10 +1050,10 @@
     "context": "Accordion answer",
     "type": "rich",
     "en": "Yes. We provide ongoing support, updates, and performance optimization to ensure games remain competitive and profitable over time.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ja. Wir bieten laufenden Support, Updates und Leistungsoptimierungen, damit die Spiele langfristig wettbewerbsfähig und profitabel bleiben.",
+    "pt": "Sim. Prestamos apoio contínuo, atualizações e otimização do desempenho para manter os jogos competitivos e rentáveis ao longo do tempo.",
+    "es": "Sí. Ofrecemos soporte continuo, actualizaciones y optimización del rendimiento para que los juegos sigan siendo competitivos y rentables a largo plazo.",
+    "status": "Ready"
   },
   {
     "key": "contact.title",
@@ -1122,22 +1062,10 @@
     "context": "Contact section and modal heading",
     "type": "plain",
     "en": "Let’s talk",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
-  },
-  {
-    "key": "contact.body",
-    "page": "Global",
-    "section": "Contact",
-    "context": "Contact section introduction shown beside the form",
-    "type": "plain",
-    "en": "Whether it's our portfolio or a custom game through Game Boutique, reach out and we'll take it from there.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Sprechen wir darüber",
+    "pt": "Vamos conversar",
+    "es": "Hablemos",
+    "status": "Ready"
   },
   {
     "key": "contact.prompt",
@@ -1146,10 +1074,10 @@
     "context": "Handwritten prompt near submit button",
     "type": "plain",
     "en": "Drop us a message!",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Schreiben Sie uns!",
+    "pt": "Envie-nos uma mensagem!",
+    "es": "¡Envíanos un mensaje!",
+    "status": "Ready"
   },
   {
     "key": "contact.name",
@@ -1158,10 +1086,10 @@
     "context": "Form label",
     "type": "plain",
     "en": "Your name",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ihr Name",
+    "pt": "O seu nome",
+    "es": "Tu nombre",
+    "status": "Ready"
   },
   {
     "key": "contact.company",
@@ -1170,10 +1098,10 @@
     "context": "Form label",
     "type": "plain",
     "en": "Company",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Unternehmen",
+    "pt": "Empresa",
+    "es": "Empresa",
+    "status": "Ready"
   },
   {
     "key": "contact.email",
@@ -1182,10 +1110,10 @@
     "context": "Form label",
     "type": "plain",
     "en": "Work email",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Geschäftliche E-Mail-Adresse",
+    "pt": "Email profissional",
+    "es": "Correo profesional",
+    "status": "Ready"
   },
   {
     "key": "contact.email_placeholder",
@@ -1194,10 +1122,10 @@
     "context": "Work email input example",
     "type": "plain",
     "en": "you@operator.com",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "you@operator.com",
+    "pt": "you@operator.com",
+    "es": "you@operator.com",
+    "status": "Ready"
   },
   {
     "key": "contact.message",
@@ -1206,10 +1134,10 @@
     "context": "Form label",
     "type": "plain",
     "en": "What are you looking for?",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Wonach suchen Sie?",
+    "pt": "O que procura?",
+    "es": "¿Qué buscas?",
+    "status": "Ready"
   },
   {
     "key": "contact.consent_before",
@@ -1218,10 +1146,10 @@
     "context": "Privacy note before policy link",
     "type": "plain",
     "en": "We use what you send here only to answer you. See the",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Wir verwenden Ihre Angaben nur, um Ihnen zu antworten. Lesen Sie unsere",
+    "pt": "Utilizamos os dados enviados apenas para lhe responder. Consulte a",
+    "es": "Utilizamos los datos que envías solo para responderte. Consulta la",
+    "status": "Ready"
   },
   {
     "key": "contact.privacy_link",
@@ -1230,10 +1158,10 @@
     "context": "Privacy note link",
     "type": "plain",
     "en": "privacy policy",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Datenschutzerklärung",
+    "pt": "política de privacidade",
+    "es": "política de privacidad",
+    "status": "Ready"
   },
   {
     "key": "contact.modal.close",
@@ -1242,10 +1170,10 @@
     "context": "Close button accessible label",
     "type": "aria",
     "en": "Close contact form",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Kontaktformular schließen",
+    "pt": "Fechar formulário de contacto",
+    "es": "Cerrar formulario de contacto",
+    "status": "Ready"
   },
   {
     "key": "games.seo.title",
@@ -1254,10 +1182,10 @@
     "context": "Browser and search title",
     "type": "seo_title",
     "en": "Casino games: slots, instant and table games | Ace Games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Casinospiele: Slots, Sofort- und Tischspiele - Ace Games",
+    "pt": "Jogos de casino: slots, instantâneos e de mesa - Ace Games",
+    "es": "Casino: tragamonedas, juegos instantáneos y de mesa - Ace Games",
+    "status": "Ready"
   },
   {
     "key": "games.seo.description",
@@ -1266,10 +1194,10 @@
     "context": "{count} is total game count",
     "type": "seo_description",
     "en": "Explore all {count} Ace Games titles with published RTP, volatility and playable demos where available. Slot, instant and table games for licensed operators.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Entdecken Sie {count} Ace Games-Titel mit RTP, Volatilität und verfügbaren Demos. Slots, Sofort- und Tischspiele für lizenzierte Betreiber.",
+    "pt": "Explore {count} jogos Ace Games com RTP, volatilidade e demos disponíveis. Slots, jogos instantâneos e de mesa para operadores licenciados.",
+    "es": "Explora {count} juegos Ace Games con RTP, volatilidad y demos disponibles. Tragamonedas, juegos instantáneos y de mesa para operadores con licencia.",
+    "status": "Ready"
   },
   {
     "key": "games.hero.eyebrow",
@@ -1278,10 +1206,10 @@
     "context": "Hero eyebrow",
     "type": "plain",
     "en": "Games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spiele",
+    "pt": "Jogos",
+    "es": "Juegos",
+    "status": "Ready"
   },
   {
     "key": "games.hero.title",
@@ -1290,10 +1218,10 @@
     "context": "Hero heading, plain part",
     "type": "plain",
     "en": "Every game we have",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Alle Spiele, die wir",
+    "pt": "Todos os jogos que",
+    "es": "Todos los juegos que hemos",
+    "status": "Ready"
   },
   {
     "key": "games.hero.title_accent",
@@ -1302,10 +1230,10 @@
     "context": "Hero heading, highlighted part",
     "type": "plain",
     "en": "built",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "entwickelt haben",
+    "pt": "criámos",
+    "es": "creado",
+    "status": "Ready"
   },
   {
     "key": "games.hero.lead",
@@ -1314,10 +1242,10 @@
     "context": "Catalogue introduction",
     "type": "plain",
     "en": "Published RTP and volatility on each title, and a demo you can play without talking to anyone first. Configuration is per operator and per market.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "RTP und Volatilität sind für jeden Titel veröffentlicht. Verfügbare Demos können Sie ohne vorheriges Gespräch spielen. Die Konfiguration erfolgt je Betreiber und Markt.",
+    "pt": "RTP e volatilidade publicados para cada título, com uma demo que pode jogar sem ter de falar connosco primeiro. A configuração é feita por operador e mercado.",
+    "es": "RTP y volatilidad publicados para cada título, con una demo que puedes probar sin hablar antes con nadie. La configuración se realiza por operador y mercado.",
+    "status": "Ready"
   },
   {
     "key": "games.tail.title",
@@ -1326,10 +1254,10 @@
     "context": "Custom game prompt heading",
     "type": "plain",
     "en": "Missing a mechanic?",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Fehlt eine Mechanik?",
+    "pt": "Falta alguma mecânica?",
+    "es": "¿Falta alguna mecánica?",
+    "status": "Ready"
   },
   {
     "key": "games.tail.body",
@@ -1338,10 +1266,10 @@
     "context": "Custom game prompt body",
     "type": "plain",
     "en": "Tell us what your lobby is short of and we will design the maths around it rather than reskinning something we already made.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Sagen Sie uns, was in Ihrer Lobby fehlt. Wir entwickeln die Mathematik passend dazu, statt nur einem bestehenden Spiel einen neuen Look zu geben.",
+    "pt": "Diga-nos o que falta no seu catálogo e desenvolveremos a matemática à medida, em vez de apenas mudar o aspeto de algo que já criámos.",
+    "es": "Dinos qué falta en tu catálogo y diseñaremos las matemáticas a medida, en lugar de cambiar solo el aspecto de un juego que ya hemos creado.",
+    "status": "Ready"
   },
   {
     "key": "game.card.play_aria",
@@ -1350,10 +1278,10 @@
     "context": "{name} is the game name",
     "type": "aria",
     "en": "Play {name} demo in a new tab",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Demo von {name} in einem neuen Tab spielen",
+    "pt": "Jogar a demo de {name} num novo separador",
+    "es": "Jugar a la demo de {name} en una pestaña nueva",
+    "status": "Ready"
   },
   {
     "key": "game.detail.breadcrumb.games",
@@ -1362,10 +1290,10 @@
     "context": "Catalogue breadcrumb",
     "type": "plain",
     "en": "Games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spiele",
+    "pt": "Jogos",
+    "es": "Juegos",
+    "status": "Ready"
   },
   {
     "key": "game.detail.play_demo",
@@ -1374,10 +1302,10 @@
     "context": "Jump to demo button",
     "type": "button",
     "en": "Play the demo",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Demo spielen",
+    "pt": "Jogar a demo",
+    "es": "Jugar a la demo",
+    "status": "Ready"
   },
   {
     "key": "game.detail.in_development",
@@ -1386,10 +1314,10 @@
     "context": "Unreleased game heading",
     "type": "plain",
     "en": "In development",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "In Entwicklung",
+    "pt": "Em desenvolvimento",
+    "es": "En desarrollo",
+    "status": "Ready"
   },
   {
     "key": "game.detail.demo_on_request",
@@ -1398,10 +1326,10 @@
     "context": "No public demo heading",
     "type": "plain",
     "en": "Demo on request",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Demo auf Anfrage",
+    "pt": "Demo mediante pedido",
+    "es": "Demo bajo petición",
+    "status": "Ready"
   },
   {
     "key": "game.detail.unreleased_body",
@@ -1410,10 +1338,10 @@
     "context": "{name} is the game name",
     "type": "plain",
     "en": "{name} is not released yet. Ask us for the current build and the maths sheet, and we will send them over.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "{name} ist noch nicht veröffentlicht. Fragen Sie nach der aktuellen Version und dem Mathematik-Datenblatt - wir senden Ihnen beides zu.",
+    "pt": "{name} ainda não foi lançado. Peça-nos a versão atual e a ficha matemática e enviar-lhe-emos ambas.",
+    "es": "{name} aún no se ha lanzado. Pídenos la versión actual y la ficha matemática y te las enviaremos.",
+    "status": "Ready"
   },
   {
     "key": "game.detail.demo_request_body",
@@ -1422,10 +1350,10 @@
     "context": "{name} is the game name",
     "type": "plain",
     "en": "A playable build of {name} is available on request.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Eine spielbare Version von {name} ist auf Anfrage erhältlich.",
+    "pt": "Está disponível uma versão jogável de {name} mediante pedido.",
+    "es": "Hay una versión jugable de {name} disponible bajo petición.",
+    "status": "Ready"
   },
   {
     "key": "game.detail.specs",
@@ -1434,10 +1362,10 @@
     "context": "Specifications panel heading",
     "type": "plain",
     "en": "Game stats & specs",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spielwerte und Spezifikationen",
+    "pt": "Estatísticas e especificações do jogo",
+    "es": "Estadísticas y especificaciones del juego",
+    "status": "Ready"
   },
   {
     "key": "game.detail.specs_aria",
@@ -1446,10 +1374,10 @@
     "context": "{name} is the game name",
     "type": "aria",
     "en": "{name} game specifications",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spielspezifikationen von {name}",
+    "pt": "Especificações do jogo {name}",
+    "es": "Especificaciones del juego {name}",
+    "status": "Ready"
   },
   {
     "key": "game.detail.overview",
@@ -1458,10 +1386,10 @@
     "context": "Overview section heading",
     "type": "plain",
     "en": "Overview",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Übersicht",
+    "pt": "Visão geral",
+    "es": "Descripción general",
+    "status": "Ready"
   },
   {
     "key": "game.detail.features",
@@ -1470,10 +1398,10 @@
     "context": "Features panel heading",
     "type": "plain",
     "en": "Features",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Features",
+    "pt": "Funcionalidades",
+    "es": "Funciones",
+    "status": "Ready"
   },
   {
     "key": "game.detail.more_games",
@@ -1482,10 +1410,10 @@
     "context": "{type} is a localized lowercase game type",
     "type": "plain",
     "en": "More {type} games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Weitere Spiele: {type}",
+    "pt": "Mais jogos: {type}",
+    "es": "Más juegos: {type}",
+    "status": "Ready"
   },
   {
     "key": "game.detail.core_gameplay",
@@ -1494,10 +1422,10 @@
     "context": "Gameplay subsection heading",
     "type": "plain",
     "en": "Core gameplay",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Grundlegendes Gameplay",
+    "pt": "Jogabilidade base",
+    "es": "Jugabilidad básica",
+    "status": "Ready"
   },
   {
     "key": "game.detail.bonus",
@@ -1506,10 +1434,10 @@
     "context": "Bonus subsection heading",
     "type": "plain",
     "en": "Bonus spins & bonus game",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Bonusdrehungen und Bonusspiel",
+    "pt": "Rodadas de bónus e jogo de bónus",
+    "es": "Tiradas de bonificación y juego de bonificación",
+    "status": "Ready"
   },
   {
     "key": "game.detail.multiplier",
@@ -1518,10 +1446,10 @@
     "context": "Multiplier subsection heading",
     "type": "plain",
     "en": "Multiplier wins",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Multiplikatorgewinne",
+    "pt": "Ganhos com multiplicadores",
+    "es": "Ganancias con multiplicadores",
+    "status": "Ready"
   },
   {
     "key": "game.detail.design",
@@ -1530,10 +1458,10 @@
     "context": "Design subsection heading",
     "type": "plain",
     "en": "Design & atmosphere",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Design und Atmosphäre",
+    "pt": "Design e ambiente",
+    "es": "Diseño y ambiente",
+    "status": "Ready"
   },
   {
     "key": "game.media.play_tab",
@@ -1542,10 +1470,10 @@
     "context": "Demo tab label",
     "type": "button",
     "en": "Play",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spielen",
+    "pt": "Jogar",
+    "es": "Jugar",
+    "status": "Ready"
   },
   {
     "key": "game.media.gallery_tab",
@@ -1554,10 +1482,10 @@
     "context": "Gallery tab label",
     "type": "button",
     "en": "Gallery",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Galerie",
+    "pt": "Galeria",
+    "es": "Galería",
+    "status": "Ready"
   },
   {
     "key": "game.media.play_title",
@@ -1566,10 +1494,10 @@
     "context": "{name} is the game name",
     "type": "button",
     "en": "Play {name}",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "{name} spielen",
+    "pt": "Jogar {name}",
+    "es": "Jugar a {name}",
+    "status": "Ready"
   },
   {
     "key": "game.media.free_play",
@@ -1578,10 +1506,10 @@
     "context": "Free-play disclaimer",
     "type": "plain",
     "en": "Free play only. No real money and no prizes.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Nur kostenloses Spielen. Kein Echtgeld und keine Preise.",
+    "pt": "Apenas jogo gratuito. Sem dinheiro real nem prémios.",
+    "es": "Solo juego gratuito. Sin dinero real ni premios.",
+    "status": "Ready"
   },
   {
     "key": "game.media.loading",
@@ -1590,10 +1518,10 @@
     "context": "{name} is the game name",
     "type": "plain",
     "en": "Loading {name}",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "{name} wird geladen",
+    "pt": "A carregar {name}",
+    "es": "Cargando {name}",
+    "status": "Ready"
   },
   {
     "key": "game.media.evaluation",
@@ -1602,10 +1530,10 @@
     "context": "Evaluation disclaimer",
     "type": "plain",
     "en": "Demo for evaluation only. No real money, no prizes.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Demo nur zur Bewertung. Kein Echtgeld, keine Preise.",
+    "pt": "Demo apenas para avaliação. Sem dinheiro real nem prémios.",
+    "es": "Demo solo para evaluación. Sin dinero real ni premios.",
+    "status": "Ready"
   },
   {
     "key": "game.media.operator_only",
@@ -1614,10 +1542,10 @@
     "context": "Business-to-business disclaimer",
     "type": "plain",
     "en": "Ace Games supplies licensed operators and does not offer gambling to consumers.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ace Games beliefert lizenzierte Betreiber und bietet Verbrauchern kein Glücksspiel an.",
+    "pt": "A Ace Games fornece jogos a operadores licenciados e não disponibiliza jogos de fortuna ou azar aos consumidores.",
+    "es": "Ace Games suministra juegos a operadores con licencia y no ofrece juegos de azar a los consumidores.",
+    "status": "Ready"
   },
   {
     "key": "game.media.copy_link",
@@ -1626,10 +1554,10 @@
     "context": "Copy demo action",
     "type": "button",
     "en": "Copy demo link",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Demo-Link kopieren",
+    "pt": "Copiar ligação da demo",
+    "es": "Copiar enlace de la demo",
+    "status": "Ready"
   },
   {
     "key": "game.media.controls_aria",
@@ -1638,7 +1566,7 @@
     "context": "Accessible label for demo utility controls",
     "type": "aria",
     "en": "Demo controls",
-    "de": "",
+    "de": "Demo-Steuerung",
     "pt": "Controles da demo",
     "es": "Controles de la demo",
     "status": "Ready"
@@ -1650,7 +1578,7 @@
     "context": "Accessible label for demo viewport selector",
     "type": "aria",
     "en": "Preview device",
-    "de": "",
+    "de": "Vorschaugerät",
     "pt": "Dispositivo de pré-visualização",
     "es": "Dispositivo de vista previa",
     "status": "Ready"
@@ -1662,7 +1590,7 @@
     "context": "Desktop viewport control",
     "type": "button",
     "en": "Desktop",
-    "de": "",
+    "de": "Desktop",
     "pt": "Desktop",
     "es": "Escritorio",
     "status": "Ready"
@@ -1674,7 +1602,7 @@
     "context": "Mobile viewport control",
     "type": "button",
     "en": "Mobile",
-    "de": "",
+    "de": "Mobil",
     "pt": "Telemóvel",
     "es": "Móvil",
     "status": "Ready"
@@ -1686,7 +1614,7 @@
     "context": "Enter fullscreen demo control",
     "type": "button",
     "en": "Fullscreen",
-    "de": "",
+    "de": "Vollbild",
     "pt": "Ecrã inteiro",
     "es": "Pantalla completa",
     "status": "Ready"
@@ -1698,7 +1626,7 @@
     "context": "Exit fullscreen demo control",
     "type": "button",
     "en": "Exit fullscreen",
-    "de": "",
+    "de": "Vollbild beenden",
     "pt": "Sair do ecrã inteiro",
     "es": "Salir de pantalla completa",
     "status": "Ready"
@@ -1710,7 +1638,7 @@
     "context": "Accessible label for game detail tabs",
     "type": "aria",
     "en": "Game details",
-    "de": "",
+    "de": "Spieldetails",
     "pt": "Detalhes do jogo",
     "es": "Detalles del juego",
     "status": "Ready"
@@ -1722,7 +1650,7 @@
     "context": "Accessible label for horizontally scrollable related games",
     "type": "aria",
     "en": "Related games",
-    "de": "",
+    "de": "Ähnliche Spiele",
     "pt": "Jogos relacionados",
     "es": "Juegos relacionados",
     "status": "Ready"
@@ -1734,10 +1662,10 @@
     "context": "{name} is the game name",
     "type": "button",
     "en": "Play {name}",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "{name} spielen",
+    "pt": "Jogar {name}",
+    "es": "Jugar a {name}",
+    "status": "Ready"
   },
   {
     "key": "demo.loading",
@@ -1746,10 +1674,10 @@
     "context": "{name} is the game name",
     "type": "plain",
     "en": "Loading {name}",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "{name} wird geladen",
+    "pt": "A carregar {name}",
+    "es": "Cargando {name}",
+    "status": "Ready"
   },
   {
     "key": "demo.loading_aria",
@@ -1758,10 +1686,10 @@
     "context": "{name} is the game name",
     "type": "aria",
     "en": "Loading {name}",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "{name} wird geladen",
+    "pt": "A carregar {name}",
+    "es": "Cargando {name}",
+    "status": "Ready"
   },
   {
     "key": "demo.free_play",
@@ -1770,10 +1698,10 @@
     "context": "Demo disclaimer",
     "type": "plain",
     "en": "Free play only. No real money and no prizes.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Nur kostenloses Spielen. Kein Echtgeld und keine Preise.",
+    "pt": "Apenas jogo gratuito. Sem dinheiro real nem prémios.",
+    "es": "Solo juego gratuito. Sin dinero real ni premios.",
+    "status": "Ready"
   },
   {
     "key": "demo.evaluation",
@@ -1782,10 +1710,10 @@
     "context": "Demo disclaimer",
     "type": "plain",
     "en": "Demo for evaluation only. No real money, no prizes.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Demo nur zur Bewertung. Kein Echtgeld, keine Preise.",
+    "pt": "Demo apenas para avaliação. Sem dinheiro real nem prémios.",
+    "es": "Demo solo para evaluación. Sin dinero real ni premios.",
+    "status": "Ready"
   },
   {
     "key": "demo.operator_only",
@@ -1794,10 +1722,10 @@
     "context": "B2B disclaimer",
     "type": "plain",
     "en": "Ace Games supplies licensed operators and does not offer gambling to consumers.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ace Games beliefert lizenzierte Betreiber und bietet Verbrauchern kein Glücksspiel an.",
+    "pt": "A Ace Games fornece jogos a operadores licenciados e não disponibiliza jogos de fortuna ou azar aos consumidores.",
+    "es": "Ace Games suministra juegos a operadores con licencia y no ofrece juegos de azar a los consumidores.",
+    "status": "Ready"
   },
   {
     "key": "demo.copy_link",
@@ -1806,10 +1734,10 @@
     "context": "Copy action",
     "type": "button",
     "en": "Copy demo link",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Demo-Link kopieren",
+    "pt": "Copiar ligação da demo",
+    "es": "Copiar enlace de la demo",
+    "status": "Ready"
   },
   {
     "key": "footer.company",
@@ -1818,10 +1746,10 @@
     "context": "Footer column heading",
     "type": "plain",
     "en": "Company",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Unternehmen",
+    "pt": "Empresa",
+    "es": "Empresa",
+    "status": "Ready"
   },
   {
     "key": "footer.contact",
@@ -1830,10 +1758,10 @@
     "context": "Footer link",
     "type": "plain",
     "en": "Contact",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Kontakt",
+    "pt": "Contacto",
+    "es": "Contacto",
+    "status": "Ready"
   },
   {
     "key": "footer.legal",
@@ -1842,10 +1770,10 @@
     "context": "Footer column heading",
     "type": "plain",
     "en": "Legal",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Rechtliches",
+    "pt": "Informações legais",
+    "es": "Información legal",
+    "status": "Ready"
   },
   {
     "key": "footer.privacy",
@@ -1854,10 +1782,10 @@
     "context": "Footer link",
     "type": "plain",
     "en": "Privacy policy",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Datenschutzerklärung",
+    "pt": "Política de privacidade",
+    "es": "Política de privacidad",
+    "status": "Ready"
   },
   {
     "key": "footer.terms",
@@ -1866,10 +1794,10 @@
     "context": "Footer link",
     "type": "plain",
     "en": "Terms and conditions",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Allgemeine Geschäftsbedingungen",
+    "pt": "Termos e condições",
+    "es": "Términos y condiciones",
+    "status": "Ready"
   },
   {
     "key": "footer.follow",
@@ -1878,10 +1806,10 @@
     "context": "Footer column heading",
     "type": "plain",
     "en": "Follow Us",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Folgen Sie uns",
+    "pt": "Siga-nos",
+    "es": "Síguenos",
+    "status": "Ready"
   },
   {
     "key": "footer.social_intro",
@@ -1890,10 +1818,10 @@
     "context": "Social links introduction",
     "type": "plain",
     "en": "Stay updated with our latest games, news, and partnerships.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Bleiben Sie über unsere neuesten Spiele, Neuigkeiten und Partnerschaften informiert.",
+    "pt": "Acompanhe os nossos jogos, novidades e parcerias mais recentes.",
+    "es": "Mantente al día de nuestros últimos juegos, novedades y colaboraciones.",
+    "status": "Ready"
   },
   {
     "key": "footer.company_intro",
@@ -1902,10 +1830,10 @@
     "context": "Company description",
     "type": "plain",
     "en": "Custom slot, instant and table game development for licensed operators. Maths, art and engineering in-house.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Individuelle Entwicklung von Slots, Sofort- und Tischspielen für lizenzierte Betreiber. Mathematik, Grafik und Technik aus einer Hand.",
+    "pt": "Desenvolvimento de slots, jogos instantâneos e de mesa à medida para operadores licenciados. Matemática, arte e engenharia desenvolvidas internamente.",
+    "es": "Desarrollo a medida de tragamonedas, juegos instantáneos y de mesa para operadores con licencia. Matemáticas, arte e ingeniería propios.",
+    "status": "Ready"
   },
   {
     "key": "legal.last_updated",
@@ -1914,10 +1842,10 @@
     "context": "{date} is the document update date",
     "type": "plain",
     "en": "Last updated: {date}",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Zuletzt aktualisiert: {date}",
+    "pt": "Última atualização: {date}",
+    "es": "Última actualización: {date}",
+    "status": "Ready"
   },
   {
     "key": "thanks.seo.title",
@@ -1926,10 +1854,10 @@
     "context": "Browser title",
     "type": "seo_title",
     "en": "Thank you | Ace Games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Vielen Dank - Ace Games",
+    "pt": "Obrigado - Ace Games",
+    "es": "Gracias - Ace Games",
+    "status": "Ready"
   },
   {
     "key": "thanks.seo.description",
@@ -1938,10 +1866,10 @@
     "context": "Search description",
     "type": "seo_description",
     "en": "Your message has reached the Ace Games team. We answer in one working day.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ihre Nachricht ist beim Ace Games-Team eingegangen. Wir antworten innerhalb eines Arbeitstages.",
+    "pt": "A sua mensagem chegou à equipa da Ace Games. Respondemos no prazo de um dia útil.",
+    "es": "Tu mensaje ha llegado al equipo de Ace Games. Respondemos en un día laborable.",
+    "status": "Ready"
   },
   {
     "key": "thanks.sent",
@@ -1950,10 +1878,10 @@
     "context": "Success eyebrow",
     "type": "plain",
     "en": "Message sent",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Nachricht gesendet",
+    "pt": "Mensagem enviada",
+    "es": "Mensaje enviado",
+    "status": "Ready"
   },
   {
     "key": "thanks.title",
@@ -1962,10 +1890,10 @@
     "context": "Success heading",
     "type": "plain",
     "en": "Thank you for your submission!",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Vielen Dank für Ihre Nachricht!",
+    "pt": "Obrigado pela sua mensagem!",
+    "es": "¡Gracias por tu mensaje!",
+    "status": "Ready"
   },
   {
     "key": "thanks.body",
@@ -1974,10 +1902,10 @@
     "context": "Success message",
     "type": "plain",
     "en": "It is with the team now and we answer in one working day. If it is urgent, mail us directly and it lands in the same inbox.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ihre Nachricht liegt unserem Team vor. Wir antworten innerhalb eines Arbeitstages. Wenn es dringend ist, schreiben Sie uns direkt per E-Mail - sie landet im selben Postfach.",
+    "pt": "A sua mensagem já está com a equipa. Respondemos no prazo de um dia útil. Se for urgente, envie-nos um email diretamente para a mesma caixa de correio.",
+    "es": "El equipo ya tiene tu mensaje y responderá en un día laborable. Si es urgente, escríbenos directamente por correo: llegará al mismo buzón.",
+    "status": "Ready"
   },
   {
     "key": "thanks.not_sent",
@@ -1986,10 +1914,10 @@
     "context": "Error eyebrow",
     "type": "plain",
     "en": "Not sent",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Nicht gesendet",
+    "pt": "Não enviada",
+    "es": "No enviado",
+    "status": "Ready"
   },
   {
     "key": "thanks.error_title",
@@ -1998,10 +1926,10 @@
     "context": "Error heading",
     "type": "plain",
     "en": "That did not send",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Senden fehlgeschlagen",
+    "pt": "Não foi possível enviar",
+    "es": "No se ha podido enviar",
+    "status": "Ready"
   },
   {
     "key": "thanks.back_to_form",
@@ -2010,10 +1938,10 @@
     "context": "Error action",
     "type": "button",
     "en": "Back to the form",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Zurück zum Formular",
+    "pt": "Voltar ao formulário",
+    "es": "Volver al formulario",
+    "status": "Ready"
   },
   {
     "key": "thanks.error.invalid",
@@ -2022,10 +1950,10 @@
     "context": "Invalid form error",
     "type": "plain",
     "en": "Some fields were missing, or the email address did not look right.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Einige Felder fehlen oder die E-Mail-Adresse scheint ungültig zu sein.",
+    "pt": "Faltam alguns campos ou o endereço de email parece incorreto.",
+    "es": "Faltan algunos campos o la dirección de correo parece incorrecta.",
+    "status": "Ready"
   },
   {
     "key": "thanks.error.unconfigured",
@@ -2034,10 +1962,10 @@
     "context": "Unconfigured form error",
     "type": "plain",
     "en": "The contact form is not connected to an inbox yet.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Das Kontaktformular ist noch nicht mit einem Postfach verbunden.",
+    "pt": "O formulário de contacto ainda não está ligado a uma caixa de correio.",
+    "es": "El formulario de contacto aún no está conectado a un buzón.",
+    "status": "Ready"
   },
   {
     "key": "thanks.error.send_failed",
@@ -2046,10 +1974,10 @@
     "context": "Delivery error",
     "type": "plain",
     "en": "The message could not be delivered just now.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Die Nachricht konnte gerade nicht zugestellt werden.",
+    "pt": "Não foi possível entregar a mensagem neste momento.",
+    "es": "No se ha podido entregar el mensaje en este momento.",
+    "status": "Ready"
   },
   {
     "key": "thanks.error.unreadable",
@@ -2058,10 +1986,10 @@
     "context": "Unreadable form error",
     "type": "plain",
     "en": "The form could not be read.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Das Formular konnte nicht gelesen werden.",
+    "pt": "Não foi possível ler o formulário.",
+    "es": "No se ha podido leer el formulario.",
+    "status": "Ready"
   },
   {
     "key": "thanks.error.unknown",
@@ -2070,10 +1998,10 @@
     "context": "Unknown error",
     "type": "plain",
     "en": "Something went wrong on the way.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Bei der Übermittlung ist etwas schiefgelaufen.",
+    "pt": "Ocorreu um erro durante o envio.",
+    "es": "Se ha producido un error durante el envío.",
+    "status": "Ready"
   },
   {
     "key": "thanks.error.suffix",
@@ -2082,10 +2010,10 @@
     "context": "Instruction appended to error reason",
     "type": "plain",
     "en": "Mail us directly and we will pick it up from there.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Schreiben Sie uns direkt per E-Mail, dann kümmern wir uns darum.",
+    "pt": "Envie-nos um email diretamente e trataremos do assunto.",
+    "es": "Escríbenos directamente por correo y nos encargaremos.",
+    "status": "Ready"
   },
   {
     "key": "not_found.seo.title",
@@ -2094,10 +2022,10 @@
     "context": "Browser title",
     "type": "seo_title",
     "en": "Page not found | Ace Games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Seite nicht gefunden - Ace Games",
+    "pt": "Página não encontrada - Ace Games",
+    "es": "Página no encontrada - Ace Games",
+    "status": "Ready"
   },
   {
     "key": "not_found.seo.description",
@@ -2106,10 +2034,10 @@
     "context": "Search description",
     "type": "seo_description",
     "en": "That page does not exist. Browse our games or get in touch.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Diese Seite existiert nicht. Entdecken Sie unsere Spiele oder kontaktieren Sie uns.",
+    "pt": "Esta página não existe. Explore os nossos jogos ou entre em contacto.",
+    "es": "Esta página no existe. Explora nuestros juegos o ponte en contacto.",
+    "status": "Ready"
   },
   {
     "key": "not_found.title",
@@ -2118,10 +2046,10 @@
     "context": "Page heading",
     "type": "plain",
     "en": "That page does not exist",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Diese Seite existiert nicht",
+    "pt": "Esta página não existe",
+    "es": "Esta página no existe",
+    "status": "Ready"
   },
   {
     "key": "not_found.body",
@@ -2130,10 +2058,10 @@
     "context": "Page explanation",
     "type": "plain",
     "en": "It may have moved, or the link may be wrong. The Games page is the fastest way back.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Sie wurde möglicherweise verschoben oder der Link ist falsch. Über die Spieleseite finden Sie am schnellsten zurück.",
+    "pt": "A página pode ter mudado de endereço ou a ligação pode estar incorreta. A página de Jogos é a forma mais rápida de voltar.",
+    "es": "Puede que la página se haya movido o que el enlace sea incorrecto. La página de Juegos es la forma más rápida de volver.",
+    "status": "Ready"
   },
   {
     "key": "under18.seo.title",
@@ -2142,10 +2070,10 @@
     "context": "Browser title",
     "type": "seo_title",
     "en": "Ace-rolled | Ace Games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ace-rolled - Ace Games",
+    "pt": "Ace-rolled - Ace Games",
+    "es": "Ace-rolled - Ace Games",
+    "status": "Ready"
   },
   {
     "key": "under18.seo.description",
@@ -2154,10 +2082,10 @@
     "context": "Search description",
     "type": "seo_description",
     "en": "The Ace Games response to a declined age verification.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Die Antwort von Ace Games auf eine abgelehnte Altersbestätigung.",
+    "pt": "A resposta da Ace Games a uma verificação de idade recusada.",
+    "es": "La respuesta de Ace Games a una verificación de edad rechazada.",
+    "status": "Ready"
   },
   {
     "key": "under18.eyebrow",
@@ -2166,10 +2094,10 @@
     "context": "Top message",
     "type": "plain",
     "en": "Come back when you are 18",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Komm wieder, wenn du 18 bist",
+    "pt": "Volta quando tiveres 18 anos",
+    "es": "Vuelve cuando tengas 18 años",
+    "status": "Ready"
   },
   {
     "key": "under18.title_lead",
@@ -2178,10 +2106,10 @@
     "context": "Joke heading lead",
     "type": "plain",
     "en": "Nice try, you just got",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Netter Versuch, du wurdest gerade",
+    "pt": "Boa tentativa, acabaste de ser",
+    "es": "Buen intento, acabas de ser",
+    "status": "Ready"
   },
   {
     "key": "under18.title_accent",
@@ -2190,10 +2118,10 @@
     "context": "Joke heading accent",
     "type": "plain",
     "en": "Ace-rolled",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ace-rolled",
+    "pt": "Ace-rolled",
+    "es": "Ace-rolled",
+    "status": "Ready"
   },
   {
     "key": "under18.tap_for_sound",
@@ -2202,10 +2130,10 @@
     "context": "Sound action",
     "type": "button",
     "en": "Tap for sound",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Für Ton tippen",
+    "pt": "Toca para ouvir",
+    "es": "Toca para activar el sonido",
+    "status": "Ready"
   },
   {
     "key": "under18.sound_on",
@@ -2214,10 +2142,10 @@
     "context": "Sound enabled action",
     "type": "button",
     "en": "Sound on",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ton an",
+    "pt": "Som ligado",
+    "es": "Sonido activado",
+    "status": "Ready"
   },
   {
     "key": "under18.sound_off",
@@ -2226,10 +2154,10 @@
     "context": "Sound disabled action",
     "type": "button",
     "en": "Sound off",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ton aus",
+    "pt": "Som desligado",
+    "es": "Sonido desactivado",
+    "status": "Ready"
   },
   {
     "key": "under18.leave",
@@ -2238,10 +2166,10 @@
     "context": "Exit link",
     "type": "button",
     "en": "Leave site",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Website verlassen",
+    "pt": "Sair do site",
+    "es": "Salir del sitio",
+    "status": "Ready"
   },
   {
     "key": "under18.video_blocked",
@@ -2250,10 +2178,10 @@
     "context": "YouTube embed failure",
     "type": "plain",
     "en": "YouTube blocked embedded playback",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "YouTube hat die eingebettete Wiedergabe blockiert",
+    "pt": "O YouTube bloqueou a reprodução incorporada",
+    "es": "YouTube ha bloqueado la reproducción insertada",
+    "status": "Ready"
   },
   {
     "key": "under18.play_youtube",
@@ -2262,10 +2190,10 @@
     "context": "Fallback external link",
     "type": "button",
     "en": "Play RickRoll'D on YouTube",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "RickRoll'D auf YouTube abspielen",
+    "pt": "Ver RickRoll'D no YouTube",
+    "es": "Ver RickRoll'D en YouTube",
+    "status": "Ready"
   },
   {
     "key": "global.aria.main_navigation",
@@ -2274,10 +2202,10 @@
     "context": "Accessible name for the primary navigation",
     "type": "aria",
     "en": "Main navigation",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Hauptnavigation",
+    "pt": "Navegação principal",
+    "es": "Navegación principal",
+    "status": "Ready"
   },
   {
     "key": "global.aria.game_types",
@@ -2286,10 +2214,10 @@
     "context": "Accessible name for a list of game categories",
     "type": "aria",
     "en": "Game types",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spieltypen",
+    "pt": "Tipos de jogos",
+    "es": "Tipos de juegos",
+    "status": "Ready"
   },
   {
     "key": "footer.nav.maths",
@@ -2298,10 +2226,10 @@
     "context": "Footer link to the maths section",
     "type": "plain",
     "en": "Maths",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Mathematik",
+    "pt": "Matemática",
+    "es": "Matemáticas",
+    "status": "Ready"
   },
   {
     "key": "footer.nav.studio",
@@ -2310,10 +2238,10 @@
     "context": "Footer link to the studio section",
     "type": "plain",
     "en": "Studio",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Studio",
+    "pt": "Estúdio",
+    "es": "Estudio",
+    "status": "Ready"
   },
   {
     "key": "footer.nav.integration",
@@ -2322,10 +2250,10 @@
     "context": "Footer link to the integration section",
     "type": "plain",
     "en": "Integration",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Integration",
+    "pt": "Integração",
+    "es": "Integración",
+    "status": "Ready"
   },
   {
     "key": "event.announcement.dismiss",
@@ -2334,10 +2262,10 @@
     "context": "Screen-reader label for closing the event announcement",
     "type": "aria",
     "en": "Dismiss event announcement",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Event-Ankündigung schließen",
+    "pt": "Fechar anúncio do evento",
+    "es": "Cerrar anuncio del evento",
+    "status": "Ready"
   },
   {
     "key": "game.detail.breadcrumb_aria",
@@ -2346,10 +2274,10 @@
     "context": "Accessible name for game breadcrumb navigation",
     "type": "aria",
     "en": "Breadcrumb",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Brotkrümelnavigation",
+    "pt": "Navegação de localização",
+    "es": "Ruta de navegación",
+    "status": "Ready"
   },
   {
     "key": "game.detail.classification_aria",
@@ -2358,10 +2286,10 @@
     "context": "Accessible name for game type and status labels",
     "type": "aria",
     "en": "Game classification",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spielklassifizierung",
+    "pt": "Classificação do jogo",
+    "es": "Clasificación del juego",
+    "status": "Ready"
   },
   {
     "key": "home.maths.volatility_axis",
@@ -2370,10 +2298,10 @@
     "context": "Vertical axis title on the maths explorer",
     "type": "plain",
     "en": "Volatility",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Volatilität",
+    "pt": "Volatilidade",
+    "es": "Volatilidad",
+    "status": "Ready"
   },
   {
     "key": "home.partners.title",
@@ -2382,10 +2310,10 @@
     "context": "Heading shown above real operator logos",
     "type": "plain",
     "en": "Live with",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Live bei",
+    "pt": "Disponíveis em",
+    "es": "Disponibles en",
+    "status": "Ready"
   },
   {
     "key": "home.craft.title",
@@ -2394,10 +2322,10 @@
     "context": "Heading for the in-house production section",
     "type": "plain",
     "en": "Maths, art and engine, all under one roof",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Mathematik, Grafik und Engine unter einem Dach",
+    "pt": "Matemática, arte e motor de jogo, tudo na mesma casa",
+    "es": "Matemáticas, arte y motor de juego bajo un mismo techo",
+    "status": "Ready"
   },
   {
     "key": "home.craft.lead",
@@ -2406,10 +2334,10 @@
     "context": "Intro beneath the in-house production heading",
     "type": "plain",
     "en": "Every title is designed, drawn, coded and served by the same team, so nothing waits on a third party.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Jeder Titel wird vom selben Team konzipiert, gestaltet, programmiert und bereitgestellt. So muss nichts auf Dritte warten.",
+    "pt": "Cada título é concebido, desenhado, programado e disponibilizado pela mesma equipa, sem ficar à espera de terceiros.",
+    "es": "Cada título lo diseña, ilustra, programa y ofrece el mismo equipo, sin depender de terceros.",
+    "status": "Ready"
   },
   {
     "key": "home.craft.maths.title",
@@ -2418,10 +2346,10 @@
     "context": "Maths capability card title",
     "type": "plain",
     "en": "Maths",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Mathematik",
+    "pt": "Matemática",
+    "es": "Matemáticas",
+    "status": "Ready"
   },
   {
     "key": "home.craft.maths.body_1",
@@ -2430,10 +2358,10 @@
     "context": "First paragraph in the maths capability card",
     "type": "plain",
     "en": "RTP bands, volatility modes and bet ranges are configuration, certified per market.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "RTP-Bereiche, Volatilitätsmodi und Einsatzbereiche sind konfigurierbar und je Markt zertifiziert.",
+    "pt": "Os intervalos de RTP, os modos de volatilidade e os limites de aposta são configuráveis e certificados por mercado.",
+    "es": "Los rangos de RTP, los modos de volatilidad y los límites de apuesta son configurables y se certifican por mercado.",
+    "status": "Ready"
   },
   {
     "key": "home.craft.maths.body_2",
@@ -2442,10 +2370,10 @@
     "context": "Second paragraph in the maths capability card",
     "type": "plain",
     "en": "The maths sheet ships with the game as part of the deliverable.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Das Mathematik-Datenblatt wird als Teil des Lieferumfangs mit dem Spiel bereitgestellt.",
+    "pt": "A ficha matemática é entregue com o jogo como parte do produto.",
+    "es": "La ficha matemática se entrega junto con el juego como parte del producto.",
+    "status": "Ready"
   },
   {
     "key": "home.craft.maths.alt",
@@ -2454,10 +2382,10 @@
     "context": "Alternative text for the maths capability artwork",
     "type": "alt",
     "en": "Zeus Run key art",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Hauptmotiv von Zeus Run",
+    "pt": "Imagem principal de Zeus Run",
+    "es": "Imagen principal de Zeus Run",
+    "status": "Ready"
   },
   {
     "key": "home.craft.art.title",
@@ -2466,10 +2394,10 @@
     "context": "Art capability card title",
     "type": "plain",
     "en": "Art",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Grafik",
+    "pt": "Arte",
+    "es": "Arte",
+    "status": "Ready"
   },
   {
     "key": "home.craft.art.body_1",
@@ -2478,10 +2406,10 @@
     "context": "First paragraph in the art capability card",
     "type": "plain",
     "en": "Characters, symbols and animation are drawn by our own artists.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Charaktere, Symbole und Animationen werden von unseren eigenen Künstlern gestaltet.",
+    "pt": "As personagens, os símbolos e as animações são criados pelos nossos artistas.",
+    "es": "Nuestros artistas crean los personajes, símbolos y animaciones.",
+    "status": "Ready"
   },
   {
     "key": "home.craft.art.body_2",
@@ -2490,10 +2418,10 @@
     "context": "Second paragraph in the art capability card",
     "type": "plain",
     "en": "A theme can be reskinned for your brand or built from scratch.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ein Thema kann an Ihre Marke angepasst oder von Grund auf neu entwickelt werden.",
+    "pt": "Um tema pode ser adaptado à sua marca ou criado de raiz.",
+    "es": "Una temática puede adaptarse a tu marca o crearse desde cero.",
+    "status": "Ready"
   },
   {
     "key": "home.craft.art.alt",
@@ -2502,10 +2430,10 @@
     "context": "Alternative text for the art capability artwork",
     "type": "alt",
     "en": "Vikings Gold key art",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Hauptmotiv von Vikings Gold",
+    "pt": "Imagem principal de Vikings Gold",
+    "es": "Imagen principal de Vikings Gold",
+    "status": "Ready"
   },
   {
     "key": "home.craft.engine.title",
@@ -2514,10 +2442,10 @@
     "context": "Engine capability card title",
     "type": "plain",
     "en": "Engine",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Engine",
+    "pt": "Motor de jogo",
+    "es": "Motor de juego",
+    "status": "Ready"
   },
   {
     "key": "home.craft.engine.body_1",
@@ -2526,10 +2454,10 @@
     "context": "First paragraph in the engine capability card",
     "type": "plain",
     "en": "An HTML5 client running on our own RGS.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ein HTML5-Client auf unserem eigenen RGS.",
+    "pt": "Um cliente HTML5 executado no nosso próprio RGS.",
+    "es": "Un cliente HTML5 que funciona en nuestro propio RGS.",
+    "status": "Ready"
   },
   {
     "key": "home.craft.engine.body_2",
@@ -2538,10 +2466,10 @@
     "context": "Second paragraph in the engine capability card",
     "type": "plain",
     "en": "One integration switches on the whole portfolio.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Eine Integration aktiviert das gesamte Portfolio.",
+    "pt": "Uma única integração disponibiliza todo o portefólio.",
+    "es": "Una sola integración activa todo el catálogo.",
+    "status": "Ready"
   },
   {
     "key": "home.craft.engine.alt",
@@ -2550,10 +2478,10 @@
     "context": "Alternative text for the engine capability artwork",
     "type": "alt",
     "en": "Star Rocket key art",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Hauptmotiv von Star Rocket",
+    "pt": "Imagem principal de Star Rocket",
+    "es": "Imagen principal de Star Rocket",
+    "status": "Ready"
   },
   {
     "key": "home.integration.title",
@@ -2562,10 +2490,10 @@
     "context": "Compliance and integration section heading",
     "type": "plain",
     "en": "The answers your compliance team asks for",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Die Antworten für Ihr Compliance-Team",
+    "pt": "As respostas que a sua equipa de conformidade procura",
+    "es": "Las respuestas que necesita tu equipo de cumplimiento",
+    "status": "Ready"
   },
   {
     "key": "home.integration.lead",
@@ -2574,10 +2502,10 @@
     "context": "Compliance and integration section intro",
     "type": "plain",
     "en": "Everything a game acquisition team needs before booking a call. Documentation and certificates on request.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Alles, was ein Team für Spielebeschaffung vor einem Gespräch benötigt. Dokumentation und Zertifikate auf Anfrage.",
+    "pt": "Tudo o que uma equipa de aquisição de jogos precisa antes de marcar uma chamada. Documentação e certificados mediante pedido.",
+    "es": "Todo lo que necesita un equipo de adquisición de juegos antes de concertar una llamada. Documentación y certificados bajo petición.",
+    "status": "Ready"
   },
   {
     "key": "home.integration.integration.title",
@@ -2586,10 +2514,10 @@
     "context": "Integration facts group heading",
     "type": "plain",
     "en": "Integration",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Integration",
+    "pt": "Integração",
+    "es": "Integración",
+    "status": "Ready"
   },
   {
     "key": "home.integration.integration.method.label",
@@ -2598,10 +2526,10 @@
     "context": "Integration method row label",
     "type": "plain",
     "en": "Method",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Methode",
+    "pt": "Método",
+    "es": "Método",
+    "status": "Ready"
   },
   {
     "key": "home.integration.integration.method.hint",
@@ -2610,10 +2538,10 @@
     "context": "Expected integration method information",
     "type": "plain",
     "en": "Direct REST API, seamless wallet, or both",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Direkte REST API, Seamless Wallet oder beides",
+    "pt": "API REST direta, carteira integrada ou ambos",
+    "es": "API REST directa, monedero integrado o ambos",
+    "status": "Ready"
   },
   {
     "key": "home.integration.integration.aggregators.label",
@@ -2622,10 +2550,10 @@
     "context": "Aggregators row label",
     "type": "plain",
     "en": "Aggregators",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Aggregatoren",
+    "pt": "Agregadores",
+    "es": "Agregadores",
+    "status": "Ready"
   },
   {
     "key": "home.integration.integration.aggregators.hint",
@@ -2634,10 +2562,10 @@
     "context": "Expected aggregator information",
     "type": "plain",
     "en": "The aggregators you are live on",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Aggregatoren, auf denen Sie bereits live sind",
+    "pt": "Os agregadores em que já está presente",
+    "es": "Los agregadores en los que ya estás presente",
+    "status": "Ready"
   },
   {
     "key": "home.integration.integration.documentation.label",
@@ -2646,10 +2574,10 @@
     "context": "Documentation row label",
     "type": "plain",
     "en": "Documentation",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Dokumentation",
+    "pt": "Documentação",
+    "es": "Documentación",
+    "status": "Ready"
   },
   {
     "key": "home.integration.integration.documentation.hint",
@@ -2658,10 +2586,10 @@
     "context": "Expected documentation information",
     "type": "plain",
     "en": "Link to the integration docs",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Link zur Integrationsdokumentation",
+    "pt": "Ligação para a documentação de integração",
+    "es": "Enlace a la documentación de integración",
+    "status": "Ready"
   },
   {
     "key": "home.integration.integration.time.label",
@@ -2670,10 +2598,10 @@
     "context": "Go-live time row label",
     "type": "plain",
     "en": "Time to go live",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Zeit bis zum Go-live",
+    "pt": "Prazo até ao lançamento",
+    "es": "Plazo hasta el lanzamiento",
+    "status": "Ready"
   },
   {
     "key": "home.integration.integration.time.hint",
@@ -2682,10 +2610,10 @@
     "context": "Expected go-live timing information",
     "type": "plain",
     "en": "Typical days from credentials to lobby",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Übliche Anzahl an Tagen von den Zugangsdaten bis zur Lobby",
+    "pt": "Prazo habitual, em dias, das credenciais à disponibilização no catálogo",
+    "es": "Plazo habitual en días desde las credenciales hasta la disponibilidad en el catálogo",
+    "status": "Ready"
   },
   {
     "key": "home.integration.compliance.title",
@@ -2694,10 +2622,10 @@
     "context": "Compliance facts group heading",
     "type": "plain",
     "en": "Compliance",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Compliance",
+    "pt": "Conformidade",
+    "es": "Cumplimiento normativo",
+    "status": "Ready"
   },
   {
     "key": "home.integration.compliance.testing.label",
@@ -2706,10 +2634,10 @@
     "context": "Testing laboratory row label",
     "type": "plain",
     "en": "Testing laboratory",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Prüflabor",
+    "pt": "Laboratório de testes",
+    "es": "Laboratorio de pruebas",
+    "status": "Ready"
   },
   {
     "key": "home.integration.compliance.testing.hint",
@@ -2718,10 +2646,10 @@
     "context": "Expected testing laboratory information",
     "type": "plain",
     "en": "GLI, iTech Labs, BMM, whichever is true",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "GLI, iTech Labs, BMM - je nachdem, was zutrifft",
+    "pt": "GLI, iTech Labs ou BMM, conforme aplicável",
+    "es": "GLI, iTech Labs o BMM, según corresponda",
+    "status": "Ready"
   },
   {
     "key": "home.integration.compliance.certified.label",
@@ -2730,10 +2658,10 @@
     "context": "Certification row label",
     "type": "plain",
     "en": "Certified to",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Zertifiziert nach",
+    "pt": "Certificado segundo",
+    "es": "Certificado conforme a",
+    "status": "Ready"
   },
   {
     "key": "home.integration.compliance.certified.hint",
@@ -2742,10 +2670,10 @@
     "context": "Expected certification information",
     "type": "plain",
     "en": "Standard and certificate numbers",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Norm und Zertifikatsnummern",
+    "pt": "Norma e números dos certificados",
+    "es": "Norma y números de certificado",
+    "status": "Ready"
   },
   {
     "key": "home.integration.compliance.jurisdictions.label",
@@ -2754,10 +2682,10 @@
     "context": "Jurisdictions row label",
     "type": "plain",
     "en": "Jurisdictions",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Rechtsräume",
+    "pt": "Jurisdições",
+    "es": "Jurisdicciones",
+    "status": "Ready"
   },
   {
     "key": "home.integration.compliance.jurisdictions.hint",
@@ -2766,10 +2694,10 @@
     "context": "Expected jurisdiction information",
     "type": "plain",
     "en": "Markets approved today",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Aktuell zugelassene Märkte",
+    "pt": "Mercados atualmente aprovados",
+    "es": "Mercados aprobados actualmente",
+    "status": "Ready"
   },
   {
     "key": "home.integration.compliance.legal.label",
@@ -2778,10 +2706,10 @@
     "context": "Legal entity row label",
     "type": "plain",
     "en": "Legal entity",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Juristische Person",
+    "pt": "Entidade jurídica",
+    "es": "Entidad jurídica",
+    "status": "Ready"
   },
   {
     "key": "home.integration.commercial.title",
@@ -2790,10 +2718,10 @@
     "context": "Commercial facts group heading",
     "type": "plain",
     "en": "Commercial and product",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Geschäftsmodell und Produkt",
+    "pt": "Condições comerciais e produto",
+    "es": "Condiciones comerciales y producto",
+    "status": "Ready"
   },
   {
     "key": "home.integration.commercial.model.label",
@@ -2802,10 +2730,10 @@
     "context": "Commercial model row label",
     "type": "plain",
     "en": "Model",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Modell",
+    "pt": "Modelo",
+    "es": "Modelo",
+    "status": "Ready"
   },
   {
     "key": "home.integration.commercial.model.hint",
@@ -2814,10 +2742,10 @@
     "context": "Expected commercial model information",
     "type": "plain",
     "en": "Revenue share, licence fee, or both",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Umsatzbeteiligung, Lizenzgebühr oder beides",
+    "pt": "Partilha de receitas, taxa de licença ou ambos",
+    "es": "Reparto de ingresos, cuota de licencia o ambos",
+    "status": "Ready"
   },
   {
     "key": "home.integration.commercial.languages.label",
@@ -2826,10 +2754,10 @@
     "context": "Languages row label",
     "type": "plain",
     "en": "Languages",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Sprachen",
+    "pt": "Idiomas",
+    "es": "Idiomas",
+    "status": "Ready"
   },
   {
     "key": "home.integration.commercial.languages.hint",
@@ -2838,10 +2766,10 @@
     "context": "Expected localization information",
     "type": "plain",
     "en": "Localisations shipped",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Verfügbare Lokalisierungen",
+    "pt": "Localizações disponibilizadas",
+    "es": "Localizaciones disponibles",
+    "status": "Ready"
   },
   {
     "key": "home.integration.commercial.currencies.label",
@@ -2850,10 +2778,10 @@
     "context": "Currencies row label",
     "type": "plain",
     "en": "Currencies",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Währungen",
+    "pt": "Moedas",
+    "es": "Monedas",
+    "status": "Ready"
   },
   {
     "key": "home.integration.commercial.currencies.hint",
@@ -2862,10 +2790,10 @@
     "context": "Expected currency information",
     "type": "plain",
     "en": "Fiat and crypto support",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Unterstützung für Fiat- und Kryptowährungen",
+    "pt": "Suporte para moedas fiduciárias e criptomoedas",
+    "es": "Compatibilidad con monedas fiduciarias y criptomonedas",
+    "status": "Ready"
   },
   {
     "key": "home.integration.commercial.platforms.label",
@@ -2874,10 +2802,10 @@
     "context": "Platforms row label",
     "type": "plain",
     "en": "Platforms",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Plattformen",
+    "pt": "Plataformas",
+    "es": "Plataformas",
+    "status": "Ready"
   },
   {
     "key": "home.integration.commercial.platforms.value",
@@ -2886,10 +2814,10 @@
     "context": "Supported platforms value",
     "type": "plain",
     "en": "HTML5, portrait and landscape, mobile first",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "HTML5, Hoch- und Querformat, für Mobilgeräte optimiert",
+    "pt": "HTML5, orientação vertical e horizontal, com prioridade ao telemóvel",
+    "es": "HTML5, orientación vertical y horizontal, con prioridad al móvil",
+    "status": "Ready"
   },
   {
     "key": "under18.brand_aria",
@@ -2898,10 +2826,10 @@
     "context": "Accessible name for the standalone brand header",
     "type": "aria",
     "en": "Ace Games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ace Games",
+    "pt": "Ace Games",
+    "es": "Ace Games",
+    "status": "Ready"
   },
   {
     "key": "under18.logo_alt",
@@ -2910,10 +2838,10 @@
     "context": "Alternative text for the Ace Games logo",
     "type": "alt",
     "en": "Ace Games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ace Games",
+    "pt": "Ace Games",
+    "es": "Ace Games",
+    "status": "Ready"
   },
   {
     "key": "under18.video_aria",
@@ -2922,10 +2850,10 @@
     "context": "Accessible name for the local video",
     "type": "aria",
     "en": "RickRoll'D",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "RickRoll'D",
+    "pt": "RickRoll'D",
+    "es": "RickRoll'D",
+    "status": "Ready"
   },
   {
     "key": "under18.video_title",
@@ -2934,10 +2862,10 @@
     "context": "Title for the embedded YouTube player",
     "type": "aria",
     "en": "RickRoll'D: oHg5SJYRHA0",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "RickRoll'D: oHg5SJYRHA0",
+    "pt": "RickRoll'D: oHg5SJYRHA0",
+    "es": "RickRoll'D: oHg5SJYRHA0",
+    "status": "Ready"
   },
   {
     "key": "event.location",
@@ -2946,10 +2874,10 @@
     "context": "Event city shown beside dates",
     "type": "plain",
     "en": "Lisbon",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Lissabon",
+    "pt": "Lisboa",
+    "es": "Lisboa",
+    "status": "Ready"
   },
   {
     "key": "event.seo.title",
@@ -2958,10 +2886,10 @@
     "context": "Search and browser title; {event} is the event name",
     "type": "seo_title",
     "en": "Meet Ace Games at {event}",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Treffen Sie Ace Games auf {event}",
+    "pt": "Conheça a Ace Games no {event}",
+    "es": "Conoce a Ace Games en {event}",
+    "status": "Ready"
   },
   {
     "key": "event.seo.description",
@@ -2970,10 +2898,10 @@
     "context": "Search description; {event} and {dates} are inserted automatically",
     "type": "seo_description",
     "en": "Meet the Ace Games team at {event}, {dates}. Explore our games, custom game development and book a meeting with the team.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Treffen Sie Ace Games auf {event}, {dates}. Entdecken Sie unsere Spiele und individuelle Entwicklung. Vereinbaren Sie einen Termin.",
+    "pt": "Conheça a Ace Games no {event}, {dates}. Descubra os nossos jogos e desenvolvimento à medida. Marque uma reunião com a equipa.",
+    "es": "Conoce a Ace Games en {event}, {dates}. Descubre nuestros juegos y el desarrollo a medida. Reserva una reunión con el equipo.",
+    "status": "Ready"
   },
   {
     "key": "event.announcement.desktop",
@@ -2982,10 +2910,10 @@
     "context": "Desktop announcement; {event} and {dates} are inserted automatically",
     "type": "plain",
     "en": "Meet Ace Games at {event} · {dates}",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Treffen Sie Ace Games auf {event} · {dates}",
+    "pt": "Conheça a Ace Games no {event} · {dates}",
+    "es": "Conoce a Ace Games en {event} · {dates}",
+    "status": "Ready"
   },
   {
     "key": "event.announcement.mobile",
@@ -2994,10 +2922,10 @@
     "context": "Mobile announcement; {event} is inserted automatically",
     "type": "plain",
     "en": "Meet us at {event}",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Treffen Sie uns auf {event}",
+    "pt": "Encontre-nos no {event}",
+    "es": "Nos vemos en {event}",
+    "status": "Ready"
   },
   {
     "key": "event.hero.heading",
@@ -3006,10 +2934,10 @@
     "context": "Heading shown before the event name",
     "type": "plain",
     "en": "Meet Ace Games at",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Treffen Sie Ace Games auf",
+    "pt": "Conheça a Ace Games no",
+    "es": "Conoce a Ace Games en",
+    "status": "Ready"
   },
   {
     "key": "event.hero.tagline",
@@ -3018,10 +2946,10 @@
     "context": "Event hero tagline",
     "type": "plain",
     "en": "Games shaped by 15+ years in game development and tested with real players.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spiele aus über 15 Jahren Entwicklungserfahrung, getestet mit echten Spielern.",
+    "pt": "Jogos moldados por mais de 15 anos de experiência e testados com jogadores reais.",
+    "es": "Juegos creados con más de 15 años de experiencia y probados con jugadores reales.",
+    "status": "Ready"
   },
   {
     "key": "event.hero.introduction",
@@ -3030,10 +2958,10 @@
     "context": "Event hero introductory paragraph",
     "type": "rich",
     "en": "Meet the Ace Games team in Lisbon to explore the portfolio, discuss a tailored game for your business, and talk through the route to launch.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Treffen Sie das Ace Games-Team in Lissabon, entdecken Sie unser Portfolio, besprechen Sie ein individuelles Spiel für Ihr Unternehmen und den Weg zum Launch.",
+    "pt": "Conheça a equipa da Ace Games em Lisboa para explorar o portefólio, discutir um jogo à medida do seu negócio e planear o caminho até ao lançamento.",
+    "es": "Conoce al equipo de Ace Games en Lisboa para explorar el catálogo, hablar de un juego a medida para tu negocio y planificar el lanzamiento.",
+    "status": "Ready"
   },
   {
     "key": "event.hero.art_aria",
@@ -3042,10 +2970,10 @@
     "context": "Accessible name for the hero game artwork group",
     "type": "aria",
     "en": "Ace Games titles coming to Lisbon",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ace Games-Titel für Lissabon",
+    "pt": "Jogos da Ace Games a caminho de Lisboa",
+    "es": "Juegos de Ace Games que llevaremos a Lisboa",
+    "status": "Ready"
   },
   {
     "key": "event.booking.cta",
@@ -3054,10 +2982,10 @@
     "context": "Primary event booking button",
     "type": "button",
     "en": "Book a meeting",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Termin vereinbaren",
+    "pt": "Marcar uma reunião",
+    "es": "Reservar una reunión",
+    "status": "Ready"
   },
   {
     "key": "event.why.title",
@@ -3066,10 +2994,10 @@
     "context": "Section heading",
     "type": "plain",
     "en": "Why meet Ace Games?",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Warum Ace Games treffen?",
+    "pt": "Porquê reunir com a Ace Games?",
+    "es": "¿Por qué reunirte con Ace Games?",
+    "status": "Ready"
   },
   {
     "key": "event.why.1.title",
@@ -3078,10 +3006,10 @@
     "context": "First reason title",
     "type": "plain",
     "en": "Explore a different kind of game",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Entdecken Sie eine andere Art von Spiel",
+    "pt": "Descubra um tipo de jogo diferente",
+    "es": "Descubre un tipo de juego diferente",
+    "status": "Ready"
   },
   {
     "key": "event.why.1.body",
@@ -3090,10 +3018,10 @@
     "context": "First reason description",
     "type": "rich",
     "en": "Ace combines familiar gaming mechanics with iGaming formats: intuitive to enter, with the risk and reward of gambling, and fresh enough to keep players engaged and coming back for the gameplay itself.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ace verbindet vertraute Spielmechaniken mit iGaming-Formaten: intuitiver Einstieg, das Risiko und die Belohnungen des Glücksspiels und genug Neues, damit Spieler wegen des Gameplays selbst bleiben und zurückkehren.",
+    "pt": "A Ace combina mecânicas familiares com formatos de iGaming: fáceis de começar, com o risco e a recompensa dos jogos de fortuna ou azar e novidades que mantêm os jogadores envolvidos e os fazem regressar pela própria jogabilidade.",
+    "es": "Ace combina mecánicas conocidas con formatos de iGaming: fáciles de empezar, con el riesgo y la recompensa de los juegos de azar y suficientes novedades para que los jugadores sigan participando y vuelvan por la propia jugabilidad.",
+    "status": "Ready"
   },
   {
     "key": "event.why.2.title",
@@ -3102,10 +3030,10 @@
     "context": "Second reason title",
     "type": "plain",
     "en": "Tested with real players",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Mit echten Spielern getestet",
+    "pt": "Testados com jogadores reais",
+    "es": "Probados con jugadores reales",
+    "status": "Ready"
   },
   {
     "key": "event.why.2.body",
@@ -3114,10 +3042,10 @@
     "context": "Second reason description",
     "type": "rich",
     "en": "We test games in our own live environment before taking them to external operators. This gives us real data on how each game performs with players: from return rates, bet patterns, and session activity to how individual mechanics work in practice.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Wir testen Spiele in unserer eigenen Live-Umgebung, bevor wir sie externen Betreibern anbieten. So erhalten wir echte Daten zum Spielerverhalten: von Rückkehrraten, Einsatzmustern und Sitzungsaktivität bis zur praktischen Wirkung einzelner Mechaniken.",
+    "pt": "Testamos os jogos no nosso próprio ambiente real antes de os apresentar a operadores externos. Isto dá-nos dados reais sobre o desempenho de cada jogo junto dos jogadores: taxas de regresso, padrões de aposta, atividade das sessões e funcionamento das mecânicas na prática.",
+    "es": "Probamos los juegos en nuestro propio entorno real antes de ofrecerlos a operadores externos. Así obtenemos datos reales de cada título: tasas de retorno de jugadores, patrones de apuesta, actividad de las sesiones y funcionamiento de cada mecánica en la práctica.",
+    "status": "Ready"
   },
   {
     "key": "event.why.3.title",
@@ -3126,10 +3054,10 @@
     "context": "Third reason title",
     "type": "plain",
     "en": "Exclusive games for your brand",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Exklusive Spiele für Ihre Marke",
+    "pt": "Jogos exclusivos para a sua marca",
+    "es": "Juegos exclusivos para tu marca",
+    "status": "Ready"
   },
   {
     "key": "event.why.3.body",
@@ -3138,10 +3066,10 @@
     "context": "Third reason description",
     "type": "rich",
     "en": "Our team develops branded games around your goals, audience, and market. We handle the full process from concept to a launch-ready title in one month.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Unser Team entwickelt Markenspiele passend zu Ihren Zielen, Ihrer Zielgruppe und Ihrem Markt. Wir übernehmen den gesamten Prozess - vom Konzept bis zum startbereiten Titel in einem Monat.",
+    "pt": "A nossa equipa desenvolve jogos de marca alinhados com os seus objetivos, público e mercado. Tratamos de todo o processo, do conceito ao jogo pronto a lançar, num mês.",
+    "es": "Nuestro equipo desarrolla juegos de marca adaptados a tus objetivos, público y mercado. Nos encargamos de todo el proceso, desde el concepto hasta un título listo para lanzar en un mes.",
+    "status": "Ready"
   },
   {
     "key": "event.stats.aria",
@@ -3150,10 +3078,10 @@
     "context": "Accessible name for the statistics section",
     "type": "aria",
     "en": "Ace Games in numbers",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ace Games in Zahlen",
+    "pt": "A Ace Games em números",
+    "es": "Ace Games en cifras",
+    "status": "Ready"
   },
   {
     "key": "event.stats.1.label",
@@ -3162,10 +3090,10 @@
     "context": "First statistic label",
     "type": "plain",
     "en": "games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spiele",
+    "pt": "jogos",
+    "es": "juegos",
+    "status": "Ready"
   },
   {
     "key": "event.stats.2.label",
@@ -3174,10 +3102,10 @@
     "context": "Second statistic label",
     "type": "plain",
     "en": "years of game-development experience",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Jahre Erfahrung in der Spieleentwicklung",
+    "pt": "anos de experiência no desenvolvimento de jogos",
+    "es": "años de experiencia en desarrollo de juegos",
+    "status": "Ready"
   },
   {
     "key": "event.stats.3.label",
@@ -3186,10 +3114,10 @@
     "context": "Third statistic label",
     "type": "plain",
     "en": "unique players testing our games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "einzelne Spieler, die unsere Spiele testen",
+    "pt": "jogadores únicos a testar os nossos jogos",
+    "es": "jugadores únicos que prueban nuestros juegos",
+    "status": "Ready"
   },
   {
     "key": "event.games.title",
@@ -3198,10 +3126,10 @@
     "context": "Section heading",
     "type": "plain",
     "en": "A taste of what we’ll bring to Lisbon",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ein Vorgeschmack auf unsere Spiele für Lissabon",
+    "pt": "Uma amostra do que vamos levar a Lisboa",
+    "es": "Un avance de lo que llevaremos a Lisboa",
+    "status": "Ready"
   },
   {
     "key": "event.games.explore_all",
@@ -3210,10 +3138,10 @@
     "context": "Link to the full game catalogue",
     "type": "button",
     "en": "Explore all games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Alle Spiele entdecken",
+    "pt": "Explorar todos os jogos",
+    "es": "Explorar todos los juegos",
+    "status": "Ready"
   },
   {
     "key": "event.game.explore_aria",
@@ -3222,10 +3150,10 @@
     "context": "Game artwork link label; {game} is inserted automatically",
     "type": "aria",
     "en": "Explore {game}",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "{game} entdecken",
+    "pt": "Explorar {game}",
+    "es": "Explorar {game}",
+    "status": "Ready"
   },
   {
     "key": "event.game.art_alt",
@@ -3234,10 +3162,10 @@
     "context": "Game artwork alternative text; {game} is inserted automatically",
     "type": "alt",
     "en": "{game} game artwork",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spielgrafik von {game}",
+    "pt": "Ilustração do jogo {game}",
+    "es": "Ilustración del juego {game}",
+    "status": "Ready"
   },
   {
     "key": "event.games.ace-city.name",
@@ -3246,10 +3174,10 @@
     "context": "Ace City display name in the event selection",
     "type": "plain",
     "en": "Ace City",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ace City",
+    "pt": "Ace City",
+    "es": "Ace City",
+    "status": "Ready"
   },
   {
     "key": "event.games.ace-city.description",
@@ -3258,10 +3186,10 @@
     "context": "Ace City event card description",
     "type": "plain",
     "en": "Crime, style, and rising stakes. A cinematic urban slot where every win builds the multiplier.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Verbrechen, Stil und steigende Einsätze. Ein cineastischer Großstadt-Slot, bei dem jeder Gewinn den Multiplikator erhöht.",
+    "pt": "Crime, estilo e apostas cada vez mais altas. Uma slot urbana cinematográfica em que cada ganho aumenta o multiplicador.",
+    "es": "Crimen, estilo y apuestas cada vez más altas. Una tragamonedas urbana de estilo cinematográfico en la que cada ganancia aumenta el multiplicador.",
+    "status": "Ready"
   },
   {
     "key": "event.games.zeus-run.name",
@@ -3270,10 +3198,10 @@
     "context": "Zeus Run display name in the event selection",
     "type": "plain",
     "en": "Zeus Runner",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Zeus Runner",
+    "pt": "Zeus Runner",
+    "es": "Zeus Runner",
+    "status": "Ready"
   },
   {
     "key": "event.games.zeus-run.description",
@@ -3282,10 +3210,10 @@
     "context": "Zeus Run event card description",
     "type": "plain",
     "en": "A fast, high-stakes runner built around split-second choices. Pick a path, build the multiplier, and decide how far you’re willing to push before cashing out.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ein schneller Runner mit hohem Risiko und Entscheidungen in Sekundenbruchteilen. Wählen Sie einen Weg, steigern Sie den Multiplikator und entscheiden Sie, wie weit Sie vor dem Cashout gehen.",
+    "pt": "Um runner rápido e de alto risco, com decisões numa fração de segundo. Escolha um caminho, aumente o multiplicador e decida até onde quer ir antes de recolher os ganhos.",
+    "es": "Un runner rápido y de alto riesgo, con decisiones en una fracción de segundo. Elige un camino, aumenta el multiplicador y decide hasta dónde llegar antes de cobrar.",
+    "status": "Ready"
   },
   {
     "key": "event.games.plinko-game.name",
@@ -3294,10 +3222,10 @@
     "context": "Plinko display name in the event selection",
     "type": "plain",
     "en": "Plinko",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Plinko",
+    "pt": "Plinko",
+    "es": "Plinko",
+    "status": "Ready"
   },
   {
     "key": "event.games.plinko-game.description",
@@ -3306,10 +3234,10 @@
     "context": "Plinko event card description",
     "type": "plain",
     "en": "A familiar arcade mechanic with adjustable risk. Choose the board setup, drop the balls, and see which multiplier slots they land in.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Eine vertraute Arcade-Mechanik mit anpassbarem Risiko. Wählen Sie die Spielfeldkonfiguration, lassen Sie die Kugeln fallen und sehen Sie, in welchen Multiplikatorfächern sie landen.",
+    "pt": "Uma mecânica de arcade familiar com risco ajustável. Escolha a configuração do tabuleiro, largue as bolas e veja em que casas de multiplicadores caem.",
+    "es": "Una mecánica arcade conocida con riesgo ajustable. Elige la configuración del tablero, suelta las bolas y observa en qué casillas de multiplicadores caen.",
+    "status": "Ready"
   },
   {
     "key": "event.games.chicken-doom.name",
@@ -3318,10 +3246,10 @@
     "context": "Chicken Doom display name in the event selection",
     "type": "plain",
     "en": "Chicken Doom",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Chicken Doom",
+    "pt": "Chicken Doom",
+    "es": "Chicken Doom",
+    "status": "Ready"
   },
   {
     "key": "event.games.chicken-doom.description",
@@ -3330,10 +3258,10 @@
     "context": "Chicken Doom event card description",
     "type": "plain",
     "en": "Take the chicken through a series of enemy encounters, with each successful step unlocking a higher multiplier. Cash out after any safe step or keep going for more.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Führen Sie das Huhn durch eine Reihe von Gegnerbegegnungen. Jeder erfolgreiche Schritt schaltet einen höheren Multiplikator frei. Nach jedem sicheren Schritt können Sie auszahlen oder weitermachen.",
+    "pt": "Guie a galinha por uma série de encontros com inimigos. Cada passo bem-sucedido desbloqueia um multiplicador maior. Recolha os ganhos após um passo seguro ou continue para ganhar mais.",
+    "es": "Guía a la gallina por una serie de encuentros con enemigos. Cada paso superado desbloquea un multiplicador mayor. Cobra tras cualquier paso seguro o sigue avanzando.",
+    "status": "Ready"
   },
   {
     "key": "event.team.title",
@@ -3342,10 +3270,10 @@
     "context": "Section heading",
     "type": "plain",
     "en": "Meet the team in Lisbon",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Treffen Sie das Team in Lissabon",
+    "pt": "Conheça a equipa em Lisboa",
+    "es": "Conoce al equipo en Lisboa",
+    "status": "Ready"
   },
   {
     "key": "event.team.angelina.expertise",
@@ -3354,10 +3282,10 @@
     "context": "Angelina expertise description",
     "type": "plain",
     "en": "Partnerships, markets, and game boutique",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Partnerschaften, Märkte und Game Boutique",
+    "pt": "Parcerias, mercados e Game Boutique",
+    "es": "Colaboraciones, mercados y Game Boutique",
+    "status": "Ready"
   },
   {
     "key": "event.team.timur.expertise",
@@ -3366,10 +3294,10 @@
     "context": "Timur expertise description",
     "type": "plain",
     "en": "Game development, product, and player behaviour",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spieleentwicklung, Produkt und Spielerverhalten",
+    "pt": "Desenvolvimento de jogos, produto e comportamento dos jogadores",
+    "es": "Desarrollo de juegos, producto y comportamiento de los jugadores",
+    "status": "Ready"
   },
   {
     "key": "event.team.mykola.expertise",
@@ -3378,10 +3306,10 @@
     "context": "Mykola expertise description",
     "type": "plain",
     "en": "Gaming engineering, scale, and pragmatic technology",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spieltechnik, Skalierung und praxisnahe Technologie",
+    "pt": "Engenharia de jogos, escala e tecnologia pragmática",
+    "es": "Ingeniería de juegos, escala y tecnología práctica",
+    "status": "Ready"
   },
   {
     "key": "event.team.portrait_pending_aria",
@@ -3390,10 +3318,10 @@
     "context": "Accessible placeholder text; {name} is inserted automatically",
     "type": "aria",
     "en": "{name}: portrait to be supplied",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "{name}: Porträt wird noch bereitgestellt",
+    "pt": "{name}: retrato por disponibilizar",
+    "es": "{name}: retrato pendiente",
+    "status": "Ready"
   },
   {
     "key": "event.team.portrait_pending",
@@ -3402,10 +3330,10 @@
     "context": "Visible portrait placeholder text",
     "type": "plain",
     "en": "Portrait coming soon",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Porträt folgt in Kürze",
+    "pt": "Retrato em breve",
+    "es": "Retrato próximamente",
+    "status": "Ready"
   },
   {
     "key": "event.team.linkedin_aria",
@@ -3414,10 +3342,10 @@
     "context": "LinkedIn link label; {name} is inserted automatically",
     "type": "aria",
     "en": "{name} on LinkedIn (opens in a new tab)",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "{name} auf LinkedIn (öffnet in einem neuen Tab)",
+    "pt": "{name} no LinkedIn (abre num novo separador)",
+    "es": "{name} en LinkedIn (se abre en una pestaña nueva)",
+    "status": "Ready"
   },
   {
     "key": "event.team.meet_cta",
@@ -3426,10 +3354,10 @@
     "context": "Team member booking button; {name} is inserted automatically",
     "type": "button",
     "en": "Meet {name} at SBC",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Treffen Sie {name} auf der SBC",
+    "pt": "Conheça {name} na SBC",
+    "es": "Conoce a {name} en SBC",
+    "status": "Ready"
   },
   {
     "key": "event.topics.title",
@@ -3438,10 +3366,10 @@
     "context": "Section heading",
     "type": "plain",
     "en": "What can we talk about in Lisbon?",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Worüber können wir in Lissabon sprechen?",
+    "pt": "Sobre o que podemos falar em Lisboa?",
+    "es": "¿De qué podemos hablar en Lisboa?",
+    "status": "Ready"
   },
   {
     "key": "event.topics.1.title",
@@ -3450,10 +3378,10 @@
     "context": "First topic title",
     "type": "plain",
     "en": "Player acquisition & retention",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spielergewinnung und -bindung",
+    "pt": "Aquisição e retenção de jogadores",
+    "es": "Captación y retención de jugadores",
+    "status": "Ready"
   },
   {
     "key": "event.topics.1.description",
@@ -3462,10 +3390,10 @@
     "context": "First topic description",
     "type": "plain",
     "en": "How game mechanics, formats, and visuals can help keep acquired players engaged.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Wie Spielmechaniken, Formate und Grafik dazu beitragen können, gewonnene Spieler langfristig zu binden.",
+    "pt": "Como as mecânicas, os formatos e os elementos visuais podem ajudar a manter envolvidos os jogadores adquiridos.",
+    "es": "Cómo las mecánicas, los formatos y los gráficos pueden ayudar a mantener el interés de los jugadores captados.",
+    "status": "Ready"
   },
   {
     "key": "event.topics.2.title",
@@ -3474,10 +3402,10 @@
     "context": "Second topic title",
     "type": "plain",
     "en": "Custom games",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Individuelle Spiele",
+    "pt": "Jogos à medida",
+    "es": "Juegos a medida",
+    "status": "Ready"
   },
   {
     "key": "event.topics.2.description",
@@ -3486,10 +3414,10 @@
     "context": "Second topic description",
     "type": "plain",
     "en": "Games built around a specific brand, market, and audience.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spiele für eine bestimmte Marke, einen Markt und eine Zielgruppe.",
+    "pt": "Jogos criados para uma marca, mercado e público específicos.",
+    "es": "Juegos creados para una marca, mercado y público específicos.",
+    "status": "Ready"
   },
   {
     "key": "event.topics.3.title",
@@ -3498,10 +3426,10 @@
     "context": "Third topic title",
     "type": "plain",
     "en": "Game formats",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Spielformate",
+    "pt": "Formatos de jogo",
+    "es": "Formatos de juego",
+    "status": "Ready"
   },
   {
     "key": "event.topics.3.description",
@@ -3510,10 +3438,10 @@
     "context": "Third topic description",
     "type": "plain",
     "en": "Mechanics for different player behaviours, markets, and product goals.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Mechaniken für unterschiedliches Spielerverhalten, verschiedene Märkte und Produktziele.",
+    "pt": "Mecânicas para diferentes comportamentos de jogadores, mercados e objetivos de produto.",
+    "es": "Mecánicas para distintos comportamientos de jugadores, mercados y objetivos de producto.",
+    "status": "Ready"
   },
   {
     "key": "event.topics.4.title",
@@ -3522,10 +3450,10 @@
     "context": "Fourth topic title",
     "type": "plain",
     "en": "Integration & distribution",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Integration und Vertrieb",
+    "pt": "Integração e distribuição",
+    "es": "Integración y distribución",
+    "status": "Ready"
   },
   {
     "key": "event.topics.4.description",
@@ -3534,10 +3462,10 @@
     "context": "Fourth topic description",
     "type": "plain",
     "en": "Ways to bring Ace Games to your platform.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Wege, Ace Games auf Ihre Plattform zu bringen.",
+    "pt": "Formas de levar a Ace Games à sua plataforma.",
+    "es": "Formas de llevar Ace Games a tu plataforma.",
+    "status": "Ready"
   },
   {
     "key": "event.booking.title",
@@ -3546,10 +3474,10 @@
     "context": "Section heading",
     "type": "plain",
     "en": "Book your meeting in Lisbon",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Vereinbaren Sie Ihren Termin in Lissabon",
+    "pt": "Marque a sua reunião em Lisboa",
+    "es": "Reserva tu reunión en Lisboa",
+    "status": "Ready"
   },
   {
     "key": "event.booking.intro",
@@ -3558,10 +3486,10 @@
     "context": "Booking introduction",
     "type": "plain",
     "en": "Meet the Ace Games team during SBC Lisbon.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Treffen Sie das Ace Games-Team während der SBC Lisbon.",
+    "pt": "Reúna com a equipa da Ace Games durante a SBC Lisbon.",
+    "es": "Reúnete con el equipo de Ace Games durante SBC Lisbon.",
+    "status": "Ready"
   },
   {
     "key": "event.booking.description",
@@ -3570,10 +3498,10 @@
     "context": "Booking description",
     "type": "rich",
     "en": "Choose a convenient time below and tell us what you’d like to discuss. We’ll confirm the meeting details directly.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Wählen Sie unten einen passenden Termin und teilen Sie uns mit, was Sie besprechen möchten. Wir bestätigen die Details direkt.",
+    "pt": "Escolha abaixo um horário conveniente e diga-nos o que gostaria de discutir. Confirmaremos os detalhes da reunião diretamente.",
+    "es": "Elige un horario conveniente e indícanos qué te gustaría tratar. Confirmaremos los detalles de la reunión directamente.",
+    "status": "Ready"
   },
   {
     "key": "event.booking.calendar_title",
@@ -3582,10 +3510,10 @@
     "context": "External calendar heading",
     "type": "plain",
     "en": "Find a time that works for you",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Finden Sie einen passenden Termin",
+    "pt": "Encontre um horário conveniente",
+    "es": "Encuentra un horario que te venga bien",
+    "status": "Ready"
   },
   {
     "key": "event.booking.calendar_cta",
@@ -3594,10 +3522,10 @@
     "context": "External calendar button",
     "type": "button",
     "en": "Choose a meeting time",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Besprechungszeit wählen",
+    "pt": "Escolher horário da reunião",
+    "es": "Elegir horario de reunión",
+    "status": "Ready"
   },
   {
     "key": "event.booking.form.note",
@@ -3606,10 +3534,10 @@
     "context": "Instruction shown above the booking form",
     "type": "plain",
     "en": "Request your preferred time by email. The team will confirm availability directly.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Fragen Sie Ihren Wunschtermin per E-Mail an. Das Team bestätigt die Verfügbarkeit direkt.",
+    "pt": "Peça o horário pretendido por email. A equipa confirmará a disponibilidade diretamente.",
+    "es": "Solicita tu horario preferido por correo. El equipo confirmará la disponibilidad directamente.",
+    "status": "Ready"
   },
   {
     "key": "event.booking.form.member",
@@ -3618,10 +3546,10 @@
     "context": "Team member selector label",
     "type": "plain",
     "en": "Who would you like to meet?",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Wen möchten Sie treffen?",
+    "pt": "Com quem gostaria de reunir?",
+    "es": "¿Con quién te gustaría reunirte?",
+    "status": "Ready"
   },
   {
     "key": "event.booking.form.team",
@@ -3630,10 +3558,10 @@
     "context": "Whole team option",
     "type": "plain",
     "en": "Ace Games team",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ace Games-Team",
+    "pt": "Equipa da Ace Games",
+    "es": "Equipo de Ace Games",
+    "status": "Ready"
   },
   {
     "key": "event.booking.form.day",
@@ -3642,10 +3570,10 @@
     "context": "Preferred day field label",
     "type": "plain",
     "en": "Preferred day",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Bevorzugter Tag",
+    "pt": "Dia preferido",
+    "es": "Día preferido",
+    "status": "Ready"
   },
   {
     "key": "event.booking.form.choose_day",
@@ -3654,10 +3582,10 @@
     "context": "Empty preferred day option",
     "type": "plain",
     "en": "Choose a day",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Tag auswählen",
+    "pt": "Escolher um dia",
+    "es": "Elegir un día",
+    "status": "Ready"
   },
   {
     "key": "event.booking.form.time",
@@ -3666,10 +3594,10 @@
     "context": "Time field label",
     "type": "plain",
     "en": "Time in Lisbon (optional)",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Uhrzeit in Lissabon (optional)",
+    "pt": "Hora em Lisboa (opcional)",
+    "es": "Hora en Lisboa (opcional)",
+    "status": "Ready"
   },
   {
     "key": "event.booking.form.message",
@@ -3678,10 +3606,10 @@
     "context": "Discussion message label",
     "type": "plain",
     "en": "What would you like to discuss?",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Was möchten Sie besprechen?",
+    "pt": "O que gostaria de discutir?",
+    "es": "¿Qué te gustaría tratar?",
+    "status": "Ready"
   },
   {
     "key": "event.booking.form.prepare",
@@ -3690,10 +3618,10 @@
     "context": "Prepare email submit button",
     "type": "button",
     "en": "Prepare meeting email",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Termin-E-Mail vorbereiten",
+    "pt": "Preparar email para a reunião",
+    "es": "Preparar correo para la reunión",
+    "status": "Ready"
   },
   {
     "key": "event.booking.form.fine_print",
@@ -3702,10 +3630,10 @@
     "context": "Explanation shown before the privacy link",
     "type": "plain",
     "en": "This prepares an email, not a confirmed booking. Send the draft from your email app to request your meeting.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Hiermit wird eine E-Mail vorbereitet, kein Termin bestätigt. Senden Sie den Entwurf aus Ihrem E-Mail-Programm, um die Besprechung anzufragen.",
+    "pt": "Esta ação prepara um email, não confirma uma marcação. Envie o rascunho a partir da sua aplicação de email para solicitar a reunião.",
+    "es": "Esta acción prepara un correo, no confirma una reserva. Envía el borrador desde tu aplicación de correo para solicitar la reunión.",
+    "status": "Ready"
   },
   {
     "key": "event.booking.form.draft_ready",
@@ -3714,10 +3642,10 @@
     "context": "Status shown after generating an email",
     "type": "plain",
     "en": "Your meeting email is ready. Open it in your email app, then send it to the team.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ihre Termin-E-Mail ist fertig. Öffnen Sie sie in Ihrem E-Mail-Programm und senden Sie sie an das Team.",
+    "pt": "O seu email para a reunião está pronto. Abra-o na sua aplicação de email e envie-o à equipa.",
+    "es": "Tu correo para la reunión está listo. Ábrelo en tu aplicación de correo y envíalo al equipo.",
+    "status": "Ready"
   },
   {
     "key": "event.booking.form.open_email",
@@ -3726,10 +3654,10 @@
     "context": "Open email application button",
     "type": "button",
     "en": "Open email app",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "E-Mail-Programm öffnen",
+    "pt": "Abrir aplicação de email",
+    "es": "Abrir aplicación de correo",
+    "status": "Ready"
   },
   {
     "key": "event.booking.form.view_message",
@@ -3738,10 +3666,10 @@
     "context": "Expandable email preview summary",
     "type": "plain",
     "en": "View or copy your message",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Nachricht ansehen oder kopieren",
+    "pt": "Ver ou copiar a mensagem",
+    "es": "Ver o copiar el mensaje",
+    "status": "Ready"
   },
   {
     "key": "event.booking.email.subject",
@@ -3750,10 +3678,10 @@
     "context": "Email subject template; {event} and {company} are inserted automatically",
     "type": "plain",
     "en": "{event}: meeting request from {company}",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "{event}: Terminanfrage von {company}",
+    "pt": "{event}: pedido de reunião de {company}",
+    "es": "{event}: solicitud de reunión de {company}",
+    "status": "Ready"
   },
   {
     "key": "event.booking.email.greeting",
@@ -3762,10 +3690,10 @@
     "context": "Email greeting",
     "type": "plain",
     "en": "Hello Ace Games,",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Hallo Ace Games,",
+    "pt": "Olá, Ace Games,",
+    "es": "Hola, Ace Games:",
+    "status": "Ready"
   },
   {
     "key": "event.booking.email.request",
@@ -3774,10 +3702,10 @@
     "context": "Meeting request sentence; {event} is inserted automatically",
     "type": "plain",
     "en": "I’d like to request a meeting at {event}.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Ich möchte einen Termin auf {event} anfragen.",
+    "pt": "Gostaria de solicitar uma reunião no {event}.",
+    "es": "Me gustaría solicitar una reunión en {event}.",
+    "status": "Ready"
   },
   {
     "key": "event.booking.email.member",
@@ -3786,10 +3714,10 @@
     "context": "Selected team member label",
     "type": "plain",
     "en": "Meet",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Treffen mit",
+    "pt": "Reunir com",
+    "es": "Reunión con",
+    "status": "Ready"
   },
   {
     "key": "event.booking.email.time",
@@ -3798,10 +3726,10 @@
     "context": "Preferred time label",
     "type": "plain",
     "en": "Preferred time (Lisbon)",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Bevorzugte Uhrzeit (Lissabon)",
+    "pt": "Horário preferido (Lisboa)",
+    "es": "Horario preferido (Lisboa)",
+    "status": "Ready"
   },
   {
     "key": "event.booking.email.flexible",
@@ -3810,10 +3738,10 @@
     "context": "Fallback when no time is selected",
     "type": "plain",
     "en": "Flexible",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Flexibel",
+    "pt": "Flexível",
+    "es": "Flexible",
+    "status": "Ready"
   },
   {
     "key": "event.booking.email.topics",
@@ -3822,10 +3750,10 @@
     "context": "Discussion topics heading",
     "type": "plain",
     "en": "Topics to discuss",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Gesprächsthemen",
+    "pt": "Temas a discutir",
+    "es": "Temas a tratar",
+    "status": "Ready"
   },
   {
     "key": "event.booking.email.topics_fallback",
@@ -3834,10 +3762,10 @@
     "context": "Fallback discussion topic",
     "type": "plain",
     "en": "Portfolio and partnership opportunities",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Portfolio und Partnerschaftsmöglichkeiten",
+    "pt": "Portefólio e oportunidades de parceria",
+    "es": "Catálogo y oportunidades de colaboración",
+    "status": "Ready"
   },
   {
     "key": "event.booking.email.confirm",
@@ -3846,9 +3774,81 @@
     "context": "Final confirmation request",
     "type": "plain",
     "en": "Please confirm the time and meeting location.",
-    "de": "",
-    "pt": "",
-    "es": "",
-    "status": "Missing"
+    "de": "Bitte bestätigen Sie Zeit und Treffpunkt.",
+    "pt": "Confirme, por favor, o horário e o local da reunião.",
+    "es": "Confirma, por favor, la hora y el lugar de la reunión.",
+    "status": "Ready"
+  },
+  {
+    "key": "home.hero.lead_secondary",
+    "page": "Home",
+    "section": "Hero",
+    "context": "Second hero introduction paragraph about Game Boutique",
+    "type": "plain",
+    "en": "Game Boutique builds custom titles, from concept to launch-ready in one month.",
+    "de": "Game Boutique entwickelt individuelle Titel - vom Konzept bis zum startbereiten Spiel in einem Monat.",
+    "pt": "A Game Boutique cria jogos à medida, do conceito ao lançamento num mês.",
+    "es": "Game Boutique crea juegos a medida, desde el concepto hasta el lanzamiento en un mes.",
+    "status": "Ready"
+  },
+  {
+    "key": "home.hero.primary_cta",
+    "page": "Home",
+    "section": "Hero",
+    "context": "Primary hero action linking to contact",
+    "type": "button",
+    "en": "Talk to us",
+    "de": "Sprechen Sie mit uns",
+    "pt": "Fale connosco",
+    "es": "Habla con nosotros",
+    "status": "Ready"
+  },
+  {
+    "key": "home.hero.secondary_cta",
+    "page": "Home",
+    "section": "Hero",
+    "context": "Secondary hero action linking to the games section",
+    "type": "button",
+    "en": "Explore games",
+    "de": "Spiele entdecken",
+    "pt": "Explorar jogos",
+    "es": "Explorar juegos",
+    "status": "Ready"
+  },
+  {
+    "key": "home.proof.title",
+    "page": "Home",
+    "section": "Proof",
+    "context": "Proof section heading",
+    "type": "plain",
+    "en": "Ace Games by the numbers",
+    "de": "Ace Games in Zahlen",
+    "pt": "A Ace Games em números",
+    "es": "Ace Games en cifras",
+    "status": "Ready"
+  },
+  {
+    "key": "home.portfolio.coming_soon_title",
+    "page": "Home",
+    "section": "Discover Games",
+    "context": "Heading above unreleased games",
+    "type": "plain",
+    "en": "Coming soon",
+    "de": "Demnächst",
+    "pt": "Em breve",
+    "es": "Próximamente",
+    "status": "Ready"
+  },
+  {
+    "key": "contact.body",
+    "page": "Global",
+    "section": "Contact",
+    "context": "Contact section introduction shown beside the form",
+    "type": "plain",
+    "en": "Whether it's our portfolio or a custom game through Game Boutique, reach out and we'll take it from there.",
+    "de": "Ob unser Portfolio oder ein individuelles Spiel von Game Boutique - kontaktieren Sie uns, wir kümmern uns um den Rest.",
+    "pt": "Quer procure o nosso portefólio ou um jogo à medida através da Game Boutique, entre em contacto e trataremos dos próximos passos.",
+    "es": "Tanto si te interesa nuestro catálogo como un juego a medida con Game Boutique, ponte en contacto y nos encargaremos de los siguientes pasos.",
+    "status": "Ready"
   }
 ]

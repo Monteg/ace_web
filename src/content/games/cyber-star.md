@@ -7,7 +7,7 @@ seo:
   description: >-
     Cyber Star is played on a 5×3 grid with 11 fixed paylines. Wins are formed
     by matching symbols from left to right along active paylines.
-card: ../../assets/games/cyber-star.webp
+card: ../../assets/games/card-layers/cyber-star-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/cyber-star-background.webp
   logo: ../../assets/games/card-layers/cyber-star-logo.webp
@@ -39,14 +39,19 @@ features:
     body: >-
       Heroes change positions between spins, opening new combinations and
       strategies
+order: 100
 ---
 Cyber Star is a futuristic slot where powerful Hero Sticky Wilds take control of the reels. During the bonus game, three heroes move across the grid, upgrading their multipliers and amplifying winning paylines.
 
 ## Core Gameplay
 
+
+
 Cyber Star is played on a 5×3 grid with 11 fixed paylines. Wins are formed by matching symbols from left to right along active paylines. The game's main excitement comes from Hero Sticky Wilds that enhance winning lines and grow stronger during the bonus game.
 
 ## Main Feature
+
+
 
 ### Hero Sticky Wild System
 
@@ -54,15 +59,21 @@ Three special Hero Wild symbols remain on the reels during Free Spins, increasin
 
 ## Bonus Spins & Bonus Game
 
+
+
 The bonus game is triggered when three Scatter symbols appear on the reels. Players receive a set number of Free Spins where three Hero Sticky Wilds remain active on the grid. Each time a Hero Wild participates in a winning payline, its multiplier increases. Between spins, the heroes randomly move across the reels, creating new winning opportunities.
 
 ## Multiple Payline Wins
+
+
 
 ### Dynamic Hero Movement
 
 After each spin, Hero Sticky Wilds randomly change their positions on the grid, constantly reshaping the potential paylines.
 
 ## Design & Atmosphere
+
+
 
 ### BUILDING A HERO-DRIVEN BONUS SYSTEM
 

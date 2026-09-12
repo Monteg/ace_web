@@ -7,7 +7,7 @@ seo:
   description: >-
     Players choose a bet amount and Low, Medium, or High risk before starting
     the round.
-card: ../../assets/games/good-staf.webp
+card: ../../assets/games/card-layers/good-staf-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/good-staf-background.webp
   logo: ../../assets/games/card-layers/good-staf-logo.webp
@@ -34,12 +34,15 @@ features:
     body: Cash out the reward or continue for a higher payout.
   - title: THREE RISK LEVELS
     body: 'Choose Low, Medium, or High gameplay.'
+order: 100
 ---
 Toy Story is a crash-style claw game where players grab toys step by step while building a rising payout multiplier.
 
 After every successful grab, collect the current reward with Cash Out or risk another attempt for a higher return.
 
 ## Core Gameplay
+
+
 
 Players choose a bet amount and Low, Medium, or High risk before starting the round.
 
@@ -49,11 +52,15 @@ The final payout is awarded only when the player uses Cash Out during an active 
 
 ## Main Feature
 
+
+
 Grabber Crash Progression
 
 Each successful toy grab advances the round and raises the multiplier, creating a new risk-or-collect decision after every step.
 
 ## Bonus Spins & Bonus Game
+
+
 
 ### ROUND FLOW
 
@@ -67,6 +74,8 @@ A failed grab ends the round with no payout, while Cash Out secures the accumula
 
 ## Multiple Payline Wins
 
+
+
 ### EXTRA FEATURE
 
 Three Risk Levels
@@ -74,6 +83,8 @@ Three Risk Levels
 Low, Medium, and High modes adjust successful grab frequency and multiplier growth.
 
 ## Design & Atmosphere
+
+
 
 ### BUILDING A GRABBER CRASH EXPERIENCE
 

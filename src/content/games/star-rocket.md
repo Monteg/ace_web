@@ -7,7 +7,7 @@ seo:
   description: >-
     Star Rocket: Players can place up to two independent bets before each round
     begins.
-card: ../../assets/games/star-rocket.webp
+card: ../../assets/games/card-layers/star-rocket-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/star-rocket-background.webp
   logo: ../../assets/games/card-layers/star-rocket-logo.webp
@@ -41,29 +41,40 @@ features:
     body: >-
       Quick gameplay cycles designed for nonstop action and rapid
       decision-making.
+order: 100
 ---
 Star Rocket is a fast-paced multiplayer crash instant game where players launch rockets and cash out before the crash. Watch the multiplier rise in real time and decide exactly when to secure your winnings.
 
 ## Core Gameplay
+
+
 
 Players can place up to two independent bets before each round begins. s the rocket launches, the multiplier increases continuously until a random crash point is reached.
 Cash out before the explosion to secure the payout, or risk losing the entire bet.
 
 ## Main Feature
 
+
+
 The game features a real-time shared multiplier visible to all players in the same round. Every second increases both the tension and the potential reward.
 
 ## Bonus Spins & Bonus Game
 
+
+
 Star Rocket includes a dual-bet system for advanced risk management and strategy. Each bet can be configured independently within the same round. Players may combine safe and aggressive betting approaches simultaneously. The fast round cycle keeps gameplay highly dynamic and engaging.
 
 ## Multiple Payline Wins
+
+
 
 ### EXTRA FEATURE
 
 A live crash history feed displays the latest multipliers from previous rounds. Players can track streaks, analyze patterns, and react instantly to momentum shifts.
 
 ## Design & Atmosphere
+
+
 
 ### BUILDING A HIGH-SPEED CRASH EXPERIENCE
 

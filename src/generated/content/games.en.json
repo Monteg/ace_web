@@ -289,7 +289,7 @@
     "display_name": "Star go",
     "short_description": "Star Go: The game is played on a 36-cell closed board with four corners and four sides.",
     "overview": "Star Go is a risk-driven board dice game where players roll two dice, move across a dynamic board, and multiply their bet.\n\nEach turn creates a choice between continuing the run for higher rewards or securing the current result.",
-    "gameplay": "The game is played on a 36-cell closed board with four corners and four sides.\n\nPlayers roll two dice, move forward by 2–12 cells, and trigger the result of the landed cell.\n\nAfter each move, players can continue playing or collect their current winnings.",
+    "gameplay": "The game is played on a 36-cell closed board with four corners and four sides.\n\nPlayers roll two dice, move forward by 2-12 cells, and trigger the result of the landed cell.\n\nAfter each move, players can continue playing or collect their current winnings.",
     "main_feature_label": "Dynamic Board Progression",
     "main_feature_body": "Dynamic Board Progression\n\nAfter every full loop around the board, regular cells regenerate with a new reward distribution.",
     "bonus": "Two corner cells are x0 risk zones that end the round and remove the current bet.\n\nOne Wheel of Fortune corner uses 6 fixed sectors with equal 60-degree segments.\n\nThe second Wheel of Fortune corner uses dynamic sectors based on configured reward chances.\n\nBoth wheels offer bonus payouts ranging from x5 to x100.",

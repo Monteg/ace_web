@@ -7,7 +7,7 @@ seo:
   description: >-
     Star Go: The game is played on a 36-cell closed board with four corners and
     four sides.
-card: ../../assets/games/star-go.webp
+card: ../../assets/games/card-layers/star-go-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/star-go-background.webp
   logo: ../../assets/games/card-layers/star-go-logo.webp
@@ -38,6 +38,7 @@ features:
     body: Continue after each move or secure the current winnings.
   - title: DYNAMIC BOARD REGENERATION
     body: Complete a full loop to refresh regular cell values.
+order: 100
 ---
 Star Go is a risk-driven board dice game where players roll two dice, move across a dynamic board, and multiply their bet.
 
@@ -45,19 +46,25 @@ Each turn creates a choice between continuing the run for higher rewards or secu
 
 ## Core Gameplay
 
+
+
 The game is played on a 36-cell closed board with four corners and four sides.
 
-Players roll two dice, move forward by 2–12 cells, and trigger the result of the landed cell.
+Players roll two dice, move forward by 2-12 cells, and trigger the result of the landed cell.
 
 After each move, players can continue playing or collect their current winnings.
 
 ## Main Feature
+
+
 
 Dynamic Board Progression
 
 After every full loop around the board, regular cells regenerate with a new reward distribution.
 
 ## Bonus Spins & Bonus Game
+
+
 
 Two corner cells are x0 risk zones that end the round and remove the current bet.
 
@@ -69,6 +76,8 @@ Both wheels offer bonus payouts ranging from x5 to x100.
 
 ## Multiple Payline Wins
 
+
+
 ### EXTRA FEATURE
 
 Chance Cell Events
@@ -76,6 +85,8 @@ Chance Cell Events
 Chance cells trigger instant effects such as Jump, Reroll, or Extra Spin.
 
 ## Design & Atmosphere
+
+
 
 ### BUILDING A RISK-DRIVEN BOARD SYSTEM
 

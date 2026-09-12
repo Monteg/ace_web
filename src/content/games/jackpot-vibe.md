@@ -5,7 +5,7 @@ status: live
 seo:
   title: Jackpot Vibe - slot game by Ace Games
   description: Jackpot Vibe uses a 5×6 grid with a cluster-style payout system.
-card: ../../assets/games/jackpot-vibe.webp
+card: ../../assets/games/card-layers/jackpot-vibe-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/jackpot-vibe-background.webp
   logo: ../../assets/games/card-layers/jackpot-vibe-logo.webp
@@ -38,14 +38,19 @@ features:
     body: >-
       The multiplier continues to grow during Free Spins, boosting the final
       payout
+order: 100
 ---
 Jackpot Vibe is a high-energy slot built on a 5×6 grid using a cluster-based payout system and cascading gameplay. Wins start from 8 matching symbols anywhere on the grid while a progressive multiplier system boosts rewards and becomes even more powerful during Free Spins.
 
 ## Core Gameplay
 
+
+
 Jackpot Vibe uses a 5×6 grid with a cluster-style payout system. Wins occur when 8 or more identical symbols appear anywhere on the grid without needing to touch each other. Winning symbols disappear and trigger cascades as new symbols fall into place, creating additional win opportunities within the same spin.
 
 ## Main Feature
+
+
 
 ### Progressive Win Multiplier
 
@@ -53,15 +58,21 @@ Each winning cluster increases the multiplier, boosting the total payout potenti
 
 ## Bonus Spins & Bonus Game
 
+
+
 The Free Spins feature is activated when 4 or more Scatter symbols appear anywhere on the grid. The number of awarded Free Spins depends on the number of Scatter symbols that land. During the bonus round the progressive multiplier does not reset between spins. This allows players to build increasingly powerful multipliers and unlock significantly larger win potential.
 
 ## Multiple Payline Wins
+
+
 
 ### Cascade Chain Reactions
 
 Winning clusters disappear and new symbols drop into place, allowing multiple wins to occur within a single spin.
 
 ## Design & Atmosphere
+
+
 
 ### BUILDING A JACKPOT-STYLE MOMENTUM SLOT
 

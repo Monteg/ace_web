@@ -7,7 +7,7 @@ seo:
   description: >-
     Each round starts at 1.00x and the multiplier changes in real time during
     active gameplay.
-card: ../../assets/games/meme-star.webp
+card: ../../assets/games/card-layers/meme-star-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/meme-star-background.webp
   logo: ../../assets/games/card-layers/meme-star-logo.webp
@@ -38,12 +38,15 @@ features:
     body: Secure winnings manually or at a pre-set multiplier.
   - title: AUTO BET SYSTEM
     body: Automatically enter future rounds with the selected bet amount.
+order: 100
 ---
 Meme Star is a real-time multiplier game where players place a bet before the round starts and watch the coefficient move live.
 
 Cash out before the multiplier reaches 0.00x to secure the current payout.
 
 ## Core Gameplay
+
+
 
 Each round starts at 1.00x and the multiplier changes in real time during active gameplay.
 
@@ -53,11 +56,15 @@ If the multiplier reaches 0.00x before Cash Out, the active bet is lost.
 
 ## Main Feature
 
+
+
 Real-Time Cash Out System
 
 Players can manually cash out during the round or use Auto Cash Out to secure winnings at a selected multiplier.
 
 ## Bonus Spins & Bonus Game
+
+
 
 ### ROUND FLOW
 
@@ -71,6 +78,8 @@ The round ends when the multiplier reaches 0.00x, after which results are added 
 
 ## Multiple Payline Wins
 
+
+
 ### EXTRA FEATURE
 
 Auto Bet Mode
@@ -78,6 +87,8 @@ Auto Bet Mode
 Players can enable Auto Bet to automatically place the selected stake in upcoming rounds.
 
 ## Design & Atmosphere
+
+
 
 ### BUILDING A REAL-TIME MULTIPLIER EXPERIENCE
 

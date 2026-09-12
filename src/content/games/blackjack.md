@@ -7,7 +7,7 @@ seo:
   description: >-
     Players place one, two, or three separate bets before the deal, with each
     active position receiving its own two-card hand.
-card: ../../assets/games/blackjack.webp
+card: ../../assets/games/card-layers/blackjack-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/blackjack-background.webp
   logo: ../../assets/games/card-layers/blackjack-logo.webp
@@ -32,12 +32,15 @@ features:
     body: 'Use Hit, Stand, Double, and Split for each hand.'
   - title: INDIVIDUAL HAND RESULTS
     body: Every hand is compared with the dealer and paid separately.
+order: 100
 ---
 Blackjack is a fast-paced table game where players can play up to three independent hands against one dealer.
 
 Build each hand toward 21, use strategic actions, and beat the dealer without going bust.
 
 ## Core Gameplay
+
+
 
 Players place one, two, or three separate bets before the deal, with each active position receiving its own two-card hand.
 
@@ -47,11 +50,15 @@ After all player decisions are complete, the dealer draws according to the table
 
 ## Main Feature
 
+
+
 Three-Hand Blackjack
 
 Play up to three independent hands with different bet amounts against the same dealer in one round.
 
 ## Bonus Spins & Bonus Game
+
+
 
 ### ROUND FLOW
 
@@ -65,6 +72,8 @@ The dealer reveals the hidden card, completes the dealer hand, and settles every
 
 ## Multiple Payline Wins
 
+
+
 ### EXTRA FEATURE
 
 Independent Split System
@@ -72,6 +81,8 @@ Independent Split System
 Eligible pairs can be split into separate hands, with each active betting position supporting its own Split decisions.
 
 ## Design & Atmosphere
+
+
 
 ### BUILDING A MULTI-HAND BLACKJACK EXPERIENCE
 

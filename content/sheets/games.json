@@ -8,13 +8,13 @@
     "type": "slot",
     "rtp": 0.953,
     "volatility": "high",
-    "maxWinValue": 150000,
+    "maxWinValue": "150000",
     "maxWinUnit": "coins",
     "maxWinApprox": true,
     "betMin": 1,
     "betMax": 5000,
-    "demoMode": "adapter",
     "demoEnabled": true,
+    "demoMode": "adapter",
     "demoGameId": "a3531b43-cb52-4aed-b596-c4c94170d2ad",
     "demoBuild": "",
     "demoVersion": "",
@@ -24,7 +24,7 @@
     "heroImage": "../../assets/heroes/ace-city.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "blackjack",
@@ -35,13 +35,13 @@
     "type": "table",
     "rtp": "configurable",
     "volatility": "medium",
-    "maxWinValue": 50,
+    "maxWinValue": "50",
     "maxWinUnit": "x",
     "maxWinApprox": false,
     "betMin": 3,
     "betMax": 500,
-    "demoMode": "",
     "demoEnabled": false,
+    "demoMode": "",
     "demoGameId": "",
     "demoBuild": "",
     "demoVersion": "",
@@ -51,7 +51,7 @@
     "heroImage": "../../assets/heroes/blackjack.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "chicken-doom",
@@ -62,13 +62,13 @@
     "type": "instant",
     "rtp": 0.97,
     "volatility": "low, medium, high",
-    "maxWinValue": 50,
+    "maxWinValue": "50",
     "maxWinUnit": "x",
     "maxWinApprox": false,
     "betMin": 3,
     "betMax": 500,
-    "demoMode": "direct",
     "demoEnabled": true,
+    "demoMode": "direct",
     "demoGameId": "",
     "demoBuild": "doom",
     "demoVersion": 57,
@@ -78,7 +78,7 @@
     "heroImage": "../../assets/heroes/chicken-doom.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "cyber-star",
@@ -89,13 +89,13 @@
     "type": "slot",
     "rtp": 0.958,
     "volatility": "very_high",
-    "maxWinValue": 100000,
+    "maxWinValue": "100000",
     "maxWinUnit": "coins",
     "maxWinApprox": false,
     "betMin": 1,
     "betMax": 5000,
-    "demoMode": "adapter",
     "demoEnabled": true,
+    "demoMode": "adapter",
     "demoGameId": "71ab6fdd-acc2-4b6b-87d3-3c8bc393c4cd",
     "demoBuild": "",
     "demoVersion": "",
@@ -105,7 +105,7 @@
     "heroImage": "../../assets/heroes/cyber-star.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "gold-of-ra",
@@ -116,13 +116,13 @@
     "type": "slot",
     "rtp": 0.94,
     "volatility": "medium, high",
-    "maxWinValue": 120000,
+    "maxWinValue": "120000",
     "maxWinUnit": "coins",
     "maxWinApprox": true,
     "betMin": 1,
     "betMax": 5000,
-    "demoMode": "adapter",
     "demoEnabled": true,
+    "demoMode": "adapter",
     "demoGameId": "23c82a10-dd24-4ce1-89aa-1ceee5a8e39a",
     "demoBuild": "",
     "demoVersion": "",
@@ -132,7 +132,7 @@
     "heroImage": "../../assets/heroes/gold-of-ra.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "good-staf",
@@ -143,13 +143,13 @@
     "type": "instant",
     "rtp": "configurable",
     "volatility": "low, medium, high",
-    "maxWinValue": 50,
+    "maxWinValue": "50",
     "maxWinUnit": "x",
     "maxWinApprox": false,
     "betMin": 3,
     "betMax": 500,
-    "demoMode": "",
     "demoEnabled": false,
+    "demoMode": "",
     "demoGameId": "",
     "demoBuild": "",
     "demoVersion": "",
@@ -159,7 +159,7 @@
     "heroImage": "../../assets/heroes/good-staf.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "jackpot-vibe",
@@ -170,13 +170,13 @@
     "type": "slot",
     "rtp": 0.951,
     "volatility": "medium, high",
-    "maxWinValue": 120000,
+    "maxWinValue": "120000",
     "maxWinUnit": "coins",
     "maxWinApprox": true,
     "betMin": 1,
     "betMax": 5000,
-    "demoMode": "adapter",
     "demoEnabled": true,
+    "demoMode": "adapter",
     "demoGameId": "020b6c5f-6423-45f0-a291-247ef746d168",
     "demoBuild": "",
     "demoVersion": "",
@@ -186,7 +186,7 @@
     "heroImage": "../../assets/heroes/jackpot-vibe.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "meme-star",
@@ -197,13 +197,13 @@
     "type": "instant",
     "rtp": 0.974,
     "volatility": "medium, high",
-    "maxWinValue": 50,
+    "maxWinValue": "50",
     "maxWinUnit": "x",
     "maxWinApprox": false,
     "betMin": 3,
     "betMax": 500,
-    "demoMode": "direct",
     "demoEnabled": true,
+    "demoMode": "direct",
     "demoGameId": "",
     "demoBuild": "trading",
     "demoVersion": 20,
@@ -213,7 +213,7 @@
     "heroImage": "../../assets/heroes/meme-star.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "montezuma",
@@ -224,13 +224,13 @@
     "type": "slot",
     "rtp": 0.956,
     "volatility": "high",
-    "maxWinValue": 150000,
+    "maxWinValue": "150000",
     "maxWinUnit": "coins",
     "maxWinApprox": true,
     "betMin": 1,
     "betMax": 5000,
-    "demoMode": "adapter",
     "demoEnabled": true,
+    "demoMode": "adapter",
     "demoGameId": "747da38a-a637-4383-bac5-032b8f43882c",
     "demoBuild": "",
     "demoVersion": "",
@@ -240,7 +240,7 @@
     "heroImage": "../../assets/heroes/montezuma.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "pigeon-road",
@@ -251,13 +251,13 @@
     "type": "instant",
     "rtp": 0.97,
     "volatility": "low, medium, high",
-    "maxWinValue": 50,
+    "maxWinValue": "50",
     "maxWinUnit": "x",
     "maxWinApprox": false,
     "betMin": 3,
     "betMax": 500,
-    "demoMode": "direct",
     "demoEnabled": true,
+    "demoMode": "direct",
     "demoGameId": "",
     "demoBuild": "pigeon_road",
     "demoVersion": 21,
@@ -267,7 +267,7 @@
     "heroImage": "../../assets/heroes/pigeon-road.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "pirates-rush",
@@ -278,13 +278,13 @@
     "type": "slot",
     "rtp": 0.948,
     "volatility": "medium, high",
-    "maxWinValue": 120000,
+    "maxWinValue": "120000",
     "maxWinUnit": "coins",
     "maxWinApprox": true,
     "betMin": 1,
     "betMax": 5000,
-    "demoMode": "adapter",
     "demoEnabled": true,
+    "demoMode": "adapter",
     "demoGameId": "8c3f1a7e-4b6d-4e9a-9f21-5d0c8a2b7e64",
     "demoBuild": "",
     "demoVersion": "",
@@ -294,7 +294,7 @@
     "heroImage": "../../assets/heroes/pirates-rush.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "plinko-game",
@@ -305,13 +305,13 @@
     "type": "instant",
     "rtp": 0.949,
     "volatility": "low, very_high",
-    "maxWinValue": 1700,
+    "maxWinValue": "1700",
     "maxWinUnit": "x",
     "maxWinApprox": false,
     "betMin": 1,
     "betMax": 100,
-    "demoMode": "adapter",
     "demoEnabled": true,
+    "demoMode": "adapter",
     "demoGameId": "264c592a-900c-412a-9a5c-3fe3b41dc7f8",
     "demoBuild": "",
     "demoVersion": "",
@@ -321,7 +321,7 @@
     "heroImage": "../../assets/heroes/plinko-game.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "ring-spin",
@@ -332,13 +332,13 @@
     "type": "slot",
     "rtp": 0.95,
     "volatility": "medium, high",
-    "maxWinValue": 120000,
+    "maxWinValue": "120000",
     "maxWinUnit": "coins",
     "maxWinApprox": true,
     "betMin": 1,
     "betMax": 5000,
-    "demoMode": "adapter",
     "demoEnabled": true,
+    "demoMode": "adapter",
     "demoGameId": "6933d543-d589-4bd8-9a55-a94a37e9fe91",
     "demoBuild": "",
     "demoVersion": "",
@@ -348,7 +348,7 @@
     "heroImage": "../../assets/heroes/ring-spin.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "star-go",
@@ -359,13 +359,13 @@
     "type": "instant",
     "rtp": 0.95,
     "volatility": "medium, high",
-    "maxWinValue": 50,
+    "maxWinValue": "50",
     "maxWinUnit": "x",
     "maxWinApprox": false,
     "betMin": 3,
     "betMax": 500,
-    "demoMode": "direct",
     "demoEnabled": true,
+    "demoMode": "direct",
     "demoGameId": "",
     "demoBuild": "monopoly",
     "demoVersion": 31,
@@ -375,7 +375,7 @@
     "heroImage": "../../assets/heroes/star-go.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "star-loot",
@@ -386,13 +386,13 @@
     "type": "instant",
     "rtp": 0.974,
     "volatility": "low, medium, high",
-    "maxWinValue": 50,
+    "maxWinValue": "50",
     "maxWinUnit": "x",
     "maxWinApprox": false,
     "betMin": 3,
     "betMax": 500,
-    "demoMode": "direct",
     "demoEnabled": true,
+    "demoMode": "direct",
     "demoGameId": "",
     "demoBuild": "grabber",
     "demoVersion": 36,
@@ -402,7 +402,7 @@
     "heroImage": "../../assets/heroes/star-loot.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "star-miner",
@@ -418,8 +418,8 @@
     "maxWinApprox": false,
     "betMin": 1,
     "betMax": 5000,
-    "demoMode": "direct",
     "demoEnabled": true,
+    "demoMode": "direct",
     "demoGameId": "",
     "demoBuild": "miner",
     "demoVersion": 29,
@@ -429,7 +429,7 @@
     "heroImage": "../../assets/heroes/star-miner.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "star-rocket",
@@ -440,13 +440,13 @@
     "type": "instant",
     "rtp": 0.964,
     "volatility": "low, medium, high",
-    "maxWinValue": 1000,
+    "maxWinValue": "1000",
     "maxWinUnit": "x",
     "maxWinApprox": false,
     "betMin": 10,
     "betMax": 100,
-    "demoMode": "direct",
     "demoEnabled": true,
+    "demoMode": "direct",
     "demoGameId": "",
     "demoBuild": "rocket",
     "demoVersion": 34,
@@ -456,7 +456,7 @@
     "heroImage": "../../assets/heroes/star-rocket.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "stars-digger",
@@ -472,8 +472,8 @@
     "maxWinApprox": false,
     "betMin": "",
     "betMax": "",
-    "demoMode": "",
     "demoEnabled": false,
+    "demoMode": "",
     "demoGameId": "",
     "demoBuild": "",
     "demoVersion": "",
@@ -483,7 +483,7 @@
     "heroImage": "../../assets/heroes/stars-digger.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "sweet-candy",
@@ -494,13 +494,13 @@
     "type": "slot",
     "rtp": 0.96,
     "volatility": "very_high",
-    "maxWinValue": 200000,
+    "maxWinValue": "200000",
     "maxWinUnit": "coins",
     "maxWinApprox": true,
     "betMin": 1,
     "betMax": 5000,
-    "demoMode": "adapter",
     "demoEnabled": true,
+    "demoMode": "adapter",
     "demoGameId": "0cfe9e4f-5e64-4a1c-85df-22d32ff24088",
     "demoBuild": "",
     "demoVersion": "",
@@ -510,7 +510,7 @@
     "heroImage": "../../assets/heroes/sweet-candy.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "toy-story",
@@ -521,13 +521,13 @@
     "type": "instant",
     "rtp": "configurable",
     "volatility": "low, medium, high",
-    "maxWinValue": 50,
+    "maxWinValue": "50",
     "maxWinUnit": "x",
     "maxWinApprox": false,
     "betMin": 3,
     "betMax": 500,
-    "demoMode": "",
     "demoEnabled": false,
+    "demoMode": "",
     "demoGameId": "",
     "demoBuild": "",
     "demoVersion": "",
@@ -537,7 +537,7 @@
     "heroImage": "../../assets/heroes/toy-story.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "vikings-gold",
@@ -548,13 +548,13 @@
     "type": "slot",
     "rtp": 0.942,
     "volatility": "medium, high",
-    "maxWinValue": 200000,
+    "maxWinValue": "200000",
     "maxWinUnit": "coins",
     "maxWinApprox": true,
     "betMin": 1,
     "betMax": 5000,
-    "demoMode": "adapter",
     "demoEnabled": true,
+    "demoMode": "adapter",
     "demoGameId": "68ba7a6d-311a-4a4a-8b4c-962032781450",
     "demoBuild": "",
     "demoVersion": "",
@@ -564,7 +564,7 @@
     "heroImage": "../../assets/heroes/vikings-gold.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "way-to-olympus",
@@ -575,13 +575,13 @@
     "type": "slot",
     "rtp": 0.944,
     "volatility": "medium, high",
-    "maxWinValue": 180000,
+    "maxWinValue": "180000",
     "maxWinUnit": "coins",
     "maxWinApprox": true,
     "betMin": 1,
     "betMax": 5000,
-    "demoMode": "adapter",
     "demoEnabled": true,
+    "demoMode": "adapter",
     "demoGameId": "894f0236-fdb6-465e-b1ab-cecf8685983c",
     "demoBuild": "",
     "demoVersion": "",
@@ -591,7 +591,7 @@
     "heroImage": "../../assets/heroes/way-to-olympus.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "wild-wwst",
@@ -602,13 +602,13 @@
     "type": "slot",
     "rtp": 0.958,
     "volatility": "very_high",
-    "maxWinValue": 100000,
+    "maxWinValue": "100000",
     "maxWinUnit": "coins",
     "maxWinApprox": false,
     "betMin": 1,
     "betMax": 5000,
-    "demoMode": "adapter",
     "demoEnabled": true,
+    "demoMode": "adapter",
     "demoGameId": "b3e8f6c2-1a4d-4c97-9e6f-7d2b5a1c8f43",
     "demoBuild": "",
     "demoVersion": "",
@@ -618,7 +618,7 @@
     "heroImage": "../../assets/heroes/wild-wwst.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   },
   {
     "id": "zeus-run",
@@ -629,13 +629,13 @@
     "type": "slot",
     "rtp": 0.945,
     "volatility": "low, high",
-    "maxWinValue": 100000,
+    "maxWinValue": "100000",
     "maxWinUnit": "coins",
     "maxWinApprox": true,
     "betMin": 2,
     "betMax": 500,
-    "demoMode": "direct",
     "demoEnabled": true,
+    "demoMode": "direct",
     "demoGameId": "",
     "demoBuild": "zeus-crash-client",
     "demoVersion": 62,
@@ -645,6 +645,6 @@
     "heroImage": "../../assets/heroes/zeus-run.webp",
     "changed": false,
     "publish": true,
-    "statusLabel": "Ready"
+    "statusLabel": "Published"
   }
 ]

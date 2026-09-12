@@ -8,7 +8,7 @@ seo:
     Pirates Rush is played on a 5×3 grid with 11 fixed paylines. Winning
     combinations are formed by matching symbols from left to right along active
     lines.
-card: ../../assets/games/pirates-rush.webp
+card: ../../assets/games/card-layers/pirates-rush-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/pirates-rush-background.webp
   logo: ../../assets/games/card-layers/pirates-rush-logo.webp
@@ -37,26 +37,37 @@ features:
     body: 'In bonus mode, the multiplier carries over between spins'
   - title: Multiple Payline Wins
     body: Up to 11 paylines can combine to boost the multiplier and total payout
+order: 100
 ---
 Pirates Rush drops players into a high-seas treasure hunt filled with danger and opportunity. With progressive multipliers, powerful Free Spins, and classic pirate-themed symbols, every spin brings the chance for explosive rewards.
 
 ## Core Gameplay
 
+
+
 Pirates Rush is played on a 5×3 grid with 11 fixed paylines. Winning combinations are formed by matching symbols from left to right along active lines. Each spin can produce multiple winning lines, contributing to the round multiplier and boosting the total payout.
 
 ## Main Feature
+
+
 
 Every winning line increases the multiplier for the current spin. The more winning combinations appear simultaneously, the higher the multiplier grows, significantly increasing the final payout.
 
 ## Bonus Spins & Bonus Game
 
+
+
 Free Spins are triggered when three or more Scatter symbols appear anywhere on the reels. The feature awards 10 Free Spins. During the bonus round the multiplier continues to grow and does not reset between spins. This allows players to build powerful multiplier chains and unlock significantly larger wins.
 
 ## Multiple Payline Wins
 
+
+
 Multiple paylines can trigger simultaneously in a single spin, increasing the multiplier and amplifying the final payout. This mechanic rewards high-impact rounds with stacked rewards.
 
 ## Design & Atmosphere
+
+
 
 Pirates Rush delivers a vibrant pirate adventure filled with treasure, danger, and high-seas excitement. Rich visual details and charismatic pirate characters bring the world to life. Dynamic animations keep the action flowing throughout every spin.
 

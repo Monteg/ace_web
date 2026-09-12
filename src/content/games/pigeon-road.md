@@ -7,7 +7,7 @@ seo:
   description: >-
     Players choose a bet amount and risk level before starting the round. Each
     step has its own multiplier and is resolved by the server.
-card: ../../assets/games/pigeon-road.webp
+card: ../../assets/games/card-layers/pigeon-road-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/pigeon-road-background.webp
   logo: ../../assets/games/card-layers/pigeon-road-logo.webp
@@ -39,12 +39,15 @@ features:
     body: Collect after a successful step or continue for more.
   - title: THREE RISK LEVELS
     body: 'Choose Low, Medium, or High gameplay.'
+order: 100
 ---
 Pigeon Road is a step multiplier game where players move through a road of rising coefficients.
 
 After each successful step, players can collect the current payout or continue for a higher multiplier.
 
 ## Core Gameplay
+
+
 
 Players choose a bet amount and risk level before starting the round.
 
@@ -54,11 +57,15 @@ If a step fails before Cash Out, the round ends and the bet is lost.
 
 ## Main Feature
 
+
+
 Step Multiplier Progression
 
 Each successful step unlocks a higher coefficient and increases the potential payout.
 
 ## Bonus Spins & Bonus Game
+
+
 
 ### ROUND FLOW
 
@@ -72,6 +79,8 @@ The round ends after Cash Out or after a failed step.
 
 ## Multiple Payline Wins
 
+
+
 ### EXTRA FEATURE
 
 Risk Level System
@@ -79,6 +88,8 @@ Risk Level System
 Low, Medium, and High modes change step count, multiplier growth, and win probability.
 
 ## Design & Atmosphere
+
+
 
 ### BUILDING A STEP MULTIPLIER EXPERIENCE
 

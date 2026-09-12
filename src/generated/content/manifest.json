@@ -1,6 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceHash": "ef61a11a474a262db10d50478ee69af689d3f5369e4c40b9fc0fa193ab328862",
+  "publishedAt": "2026-09-12T00:44:29.964Z",
+  "publishId": "5c6dc992-623a-43ea-b43a-a7bc5e3b223b",
+  "sourceHash": "f2dd98b6f33c2947bb30f213845202a1ce5fd6fd6139e602b4d1af29c4f8b78f",
   "locales": [
     "en",
     "de",
@@ -9,5 +11,271 @@
   ],
   "siteTranslationCount": 321,
   "gameCount": 24,
-  "gameTranslationCount": 480
+  "gameTranslationCount": 480,
+  "media": {
+    "ace-city": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/ace-city-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/ace-city.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/ace-city-logo.webp"
+      }
+    },
+    "blackjack": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/blackjack-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/blackjack.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/blackjack-logo.webp"
+      }
+    },
+    "chicken-doom": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/chicken-doom-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/chicken-doom.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/chicken-doom-logo.webp"
+      }
+    },
+    "cyber-star": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/cyber-star-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/cyber-star.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/cyber-star-logo.webp"
+      }
+    },
+    "gold-of-ra": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/gold-of-ra-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/gold-of-ra.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/gold-of-ra-logo.webp"
+      }
+    },
+    "good-staf": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/good-staf-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/good-staf.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/good-staf-logo.webp"
+      }
+    },
+    "jackpot-vibe": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/jackpot-vibe-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/jackpot-vibe.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/jackpot-vibe-logo.webp"
+      }
+    },
+    "meme-star": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/meme-star-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/meme-star.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/meme-star-logo.webp"
+      }
+    },
+    "montezuma": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/montezuma-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/montezuma.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/montezuma-logo.webp"
+      }
+    },
+    "pigeon-road": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/pigeon-road-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/pigeon-road.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/pigeon-road-logo.webp"
+      }
+    },
+    "pirates-rush": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/pirates-rush-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/pirates-rush.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/pirates-rush-logo.webp"
+      }
+    },
+    "plinko-game": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/plinko-game-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/plinko-game.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/plinko-game-logo.webp"
+      }
+    },
+    "ring-spin": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/ring-spin-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/ring-spin.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/ring-spin-logo.webp"
+      }
+    },
+    "star-go": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/star-go-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/star-go.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/star-go-logo.webp"
+      }
+    },
+    "star-loot": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/star-loot-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/star-loot.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/star-loot-logo.webp"
+      }
+    },
+    "star-miner": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/star-miner-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/star-miner.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/star-miner-logo.webp"
+      }
+    },
+    "star-rocket": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/star-rocket-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/star-rocket.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/star-rocket-logo.webp"
+      }
+    },
+    "stars-digger": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/stars-digger-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/stars-digger.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/stars-digger-logo.webp"
+      }
+    },
+    "sweet-candy": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/sweet-candy-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/sweet-candy.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/sweet-candy-logo.webp"
+      }
+    },
+    "toy-story": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/toy-story-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/toy-story.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/toy-story-logo.webp"
+      }
+    },
+    "vikings-gold": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/vikings-gold-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/vikings-gold.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/vikings-gold-logo.webp"
+      }
+    },
+    "way-to-olympus": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/way-to-olympus-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/way-to-olympus.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/way-to-olympus-logo.webp"
+      }
+    },
+    "wild-wwst": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/wild-wwst-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/wild-wwst.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/wild-wwst-logo.webp"
+      }
+    },
+    "zeus-run": {
+      "cardBackground": {
+        "reference": "../../assets/games/card-layers/zeus-run-background.webp"
+      },
+      "heroImage": {
+        "reference": "../../assets/heroes/zeus-run.webp"
+      },
+      "cardLogo": {
+        "reference": "../../assets/games/card-layers/zeus-run-logo.webp"
+      }
+    }
+  }
 }

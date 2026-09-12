@@ -8,7 +8,7 @@ seo:
     The game is played on a 5×5 grid where each cell hides a reward or a mine.
     Players select cells to reveal multipliers that increase their current
     winnings.
-card: ../../assets/games/star-miner.webp
+card: ../../assets/games/card-layers/star-miner-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/star-miner-background.webp
   logo: ../../assets/games/card-layers/star-miner-logo.webp
@@ -35,28 +35,39 @@ features:
     body: Secure winnings at any point before triggering a losing cell.
   - title: BONUS WHEEL MECHANIC
     body: Trigger a guaranteed reward round with enhanced payout potential.
+order: 100
 ---
 Miner is a risk-based grid game where players uncover hidden rewards while avoiding mines. Each successful pick increases the multiplier, allowing players to continue or secure their winnings at any time.
 
 ## Core Gameplay
 
+
+
 The game is played on a 5×5 grid where each cell hides a reward or a mine. Players select cells to reveal multipliers that increase their current winnings. At any moment, players can choose to continue or cash out before hitting a mine.
 
 ## Main Feature
+
+
 
 Progressive Multiplier System. Each successful reveal increases the total multiplier, creating escalating risk and reward with every move.
 
 ## Bonus Spins & Bonus Game
 
+
+
 Special ticket symbols unlock the Wheel of Fortune bonus round. The bonus guarantees a reward and introduces higher-value outcomes compared to the base game. Players spin the wheel to receive multipliers or premium rewards. All winnings from the bonus are added to the current session total.
 
 ## Multiple Payline Wins
+
+
 
 ### EXTRA FEATURE
 
 Flexible Risk Levels. Players can choose between different risk modes, adjusting the number of mines and reward distribution.
 
 ## Design & Atmosphere
+
+
 
 ### BUILDING A RISK-DRIVEN MINES SYSTEM
 

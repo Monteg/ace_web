@@ -7,7 +7,7 @@ seo:
   description: >-
     Ace City features a 5×3 grid with 11 fixed paylines where wins are formed by
     matching symbols from left to right.
-card: ../../assets/games/ace-city.webp
+card: ../../assets/games/card-layers/ace-city-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/ace-city-background.webp
   logo: ../../assets/games/card-layers/ace-city-logo.webp
@@ -39,14 +39,19 @@ features:
     body: >-
       In bonus mode, the multiplier carries over between spins, unlocking
       explosive win potential
+order: 100
 ---
 Ace City drops players into a stylish urban underworld where power and opportunity collide. With expanding premium symbols, progressive multipliers, and rewarding free spins, every round builds toward bigger payouts.
 
 ## Core Gameplay
 
+
+
 Ace City features a 5×3 grid with 11 fixed paylines where wins are formed by matching symbols from left to right. Each spin can create multiple winning lines, which combine to increase the round multiplier. Premium vertical combinations introduce an additional layer of reward potential.
 
 ## Main Feature
+
+
 
 ### Vertical Premium Triple
 
@@ -54,15 +59,21 @@ Landing three identical premium symbols stacked vertically creates a special bon
 
 ## Bonus Spins & Bonus Game
 
+
+
 Free Spins are activated when 3 or more Scatter symbols appear anywhere on the reels. The feature awards 10 Free Spins. During Free Spins the multiplier continues to grow and does not reset between spins. Every winning object increases the multiplier, allowing players to build powerful chains of wins.
 
 ## Multiple Payline Wins
+
+
 
 ### Progressive Round Multiplier
 
 Each spin calculates the number of winning objects, paylines and vertical premium triples. The multiplier equals this number, dramatically increasing total payouts when multiple wins occur simultaneously.
 
 ## Design & Atmosphere
+
+
 
 Ace City blends sleek modern visuals with a cinematic crime-world atmosphere. Stylish characters and bold urban design create a distinctive identity. Dynamic animations keep the gameplay engaging from spin to spin.
 

@@ -7,7 +7,7 @@ seo:
   description: >-
     The game is played on a 5×3 reel layout with fixed paylines. Wins are formed
     from left to right along active lines and are summed across the reels.
-card: ../../assets/games/wild-wwst.webp
+card: ../../assets/games/card-layers/wild-wwst-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/wild-wwst-background.webp
   logo: ../../assets/games/card-layers/wild-wwst-logo.webp
@@ -35,28 +35,39 @@ features:
     body: Scatter symbols trigger a bonus mode with enhanced win potential.
   - title: MULTIPLIER PROGRESSION
     body: Multipliers grow and combine across winning lines during the bonus.
+order: 100
 ---
 Wild West is a classic line-based slot with a bonus system driven by Sticky Wild multipliers. Set in a frontier theme, it combines steady base gameplay with high-potential bonus rounds.
 
 ## Core Gameplay
 
+
+
 The game is played on a 5×3 reel layout with fixed paylines. Wins are formed from left to right along active lines and are summed across the reels. Only the highest win per line is paid, creating consistent base game payouts.
 
 ## Main Feature
+
+
 
 Sticky Wild symbols remain on the reels and increase their multipliers during wins. Their values grow across spins, significantly boosting total payouts.
 
 ## Bonus Spins & Bonus Game
 
+
+
 Free Spins are triggered by landing 3 or more Scatter symbols anywhere on the reels. During the bonus, Sticky Wilds appear and persist between spins. Wild multipliers increase along winning lines, enhancing total rewards. All multipliers and wins accumulate throughout the bonus session.
 
 ## Multiple Payline Wins
+
+
 
 ### EXTRA FEATURE
 
 Wild symbols substitute for all regular symbols to complete winning combinations. Scatter symbols pay anywhere and contribute to total winnin
 
 ## Design & Atmosphere
+
+
 
 ### BUILDING A WILD WEST BONUS SLOT
 

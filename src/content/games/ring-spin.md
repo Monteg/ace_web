@@ -5,7 +5,7 @@ status: live
 seo:
   title: Ring Spin - slot game by Ace Games
   description: Ring Spin is played on a 6×5 grid where symbols pay anywhere on the field.
-card: ../../assets/games/ring-spin.webp
+card: ../../assets/games/card-layers/ring-spin-background.webp
 cardLayers:
   background: ../../assets/games/card-layers/ring-spin-background.webp
   logo: ../../assets/games/card-layers/ring-spin-logo.webp
@@ -36,14 +36,19 @@ features:
       payouts
   - title: DUAL SCATTER TRIGGER
     body: Different Scatter types activate different reward counters
+order: 100
 ---
 Ring Spin brings players into a vibrant carnival-style slot where every spin builds toward an exciting bonus experience. Special symbols collect points into reward counters, which later power a dynamic ball-drop bonus game.
 
 ## Core Gameplay
 
+
+
 Ring Spin is played on a 6×5 grid where symbols pay anywhere on the field. Winning combinations are formed when 8 or more identical symbols appear, creating flexible cluster-style payouts. Each spin can generate multiple wins that combine into the total round reward.
 
 ## Main Feature
+
+
 
 ### Reward Counter System
 
@@ -51,17 +56,23 @@ Special symbols appear on the reels and add points to personal reward counters, 
 
 ## Bonus Spins & Bonus Game
 
+
+
 ### JACKPOT SYSTEM
 
 The bonus game is triggered when four identical Scatter symbols appear anywhere on the grid. The type of Scatter determines which reward counter will be used during the bonus. Players drop a set of balls from the top of the board, where they land in multiplier slots. The final win equals the combined payout from all balls.
 
 ## Multiple Payline Wins
 
+
+
 ### Dual Reward Counters
 
 Two types of Special Symbols contribute points to separate reward counters, allowing different bonus outcomes depending on which Scatter triggers the game.
 
 ## Design & Atmosphere
+
+
 
 ### BUILDING A CARNIVAL BONUS SLOT
 
