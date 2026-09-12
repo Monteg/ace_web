@@ -2,7 +2,7 @@
 
 Эта инструкция настраивает рабочую цепочку:
 
-`Google Sheet → Apps Script → GitLab pipeline → проверка контента → commit в main → Docker image → Kubernetes production → Publish Log`.
+`Google Sheet → Apps Script → GitLab pipeline → проверка контента → commit в main → Docker image → Kubernetes production + preview → Publish Log`.
 
 Проект GitLab: `money.energy/www`, Project ID: `86013072`, production: `https://acegames.io`.
 
@@ -10,7 +10,7 @@
 
 - `google-apps-script/Code.gs` запускает GitLab pipeline через Trigger API и читает registry из GitLab Repository Files API.
 - `.gitlab-ci.yml` принимает snapshot, запускает importer, `npm run check` и `npm run ship`, затем коммитит только проверенный контент.
-- Этот же pipeline собирает Docker image, разворачивает его в production и только после успешного deploy записывает `Published` в `05 Publish Log`.
+- Этот же pipeline собирает один Docker image, разворачивает его в production и preview и только после обоих успешных deploy записывает `Published` в `05 Publish Log`.
 - GitHub workflow публикации удалён, поэтому две системы одновременно контент не публикуют.
 
 ## 1. Создать Pipeline Trigger Token в GitLab
@@ -98,11 +98,12 @@ Apps Script должен читать `content/sheets/seed.json` из прива
    - `content:publish`
    - `package:image:content`
    - `deploy:production`
+   - `deploy:preview`
    - при настроенном Cloudflare: `purge:cloudflare`
    - `report:content-success`
 
 6. После deploy в Google Sheet появится `Published`, а Changed-флаги сбросятся.
-7. Проверьте изменение на `https://acegames.io`.
+7. Проверьте изменение на `https://preview.acegames.io`. Это проверочный адрес того же content-image, который pipeline разворачивает в production.
 
 ## Если публикация упала
 
@@ -110,7 +111,7 @@ Apps Script должен читать `content/sheets/seed.json` из прива
 - `401/404` при `Sync Content from Site`: проверьте `GITLAB_PROJECT_ID` и `GITLAB_READ_TOKEN` со scope `read_repository`.
 - `403` на `git push`: включите `Allow Git push requests to the repository` и проверьте права владельца trigger token на защищённую `main`.
 - Ошибка чтения snapshot: проверьте `SERVICE_ACCOUNT_EMAIL`, доступ этого email к snapshot и GitLab variable `GOOGLE_SERVICE_ACCOUNT_JSON`.
-- Ошибка deploy: смотрите `deploy:production`; старый production остаётся активным, а Sheet получит статус `Failed`.
+- Ошибка deploy: смотрите `deploy:production` и `deploy:preview`; предыдущие релизы остаются активными, а Sheet получит статус `Failed`.
 
 ## Правила безопасности
 

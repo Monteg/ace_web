@@ -80,7 +80,7 @@ Apps Script нельзя вложить в уже созданную табли�
 1. В меню `Ace Games` запустите `Validate Translations` и `Validate Games`.
 2. Исправьте все `Error`. `Missing` не блокирует публикацию.
 3. Нажмите `Ace Games → Publish Changes`.
-4. Нормальное время — 3–6 минут. GitLab CI импортирует snapshot/media, выполняет `npm run check` и `npm run ship`, коммитит только прошедший проверки контент в main, собирает image и разворачивает его в production. Текущий production остаётся прежним при любой ошибке до deploy.
+4. Нормальное время — 3–6 минут. GitLab CI импортирует snapshot/media, выполняет `npm run check` и `npm run ship`, коммитит только прошедший проверки контент в main, собирает image и разворачивает один и тот же проверенный image в production и на `preview.acegames.io`. Текущие релизы остаются прежними при любой ошибке до deploy.
 5. Результат смотрите в `05 Publish Log`. При `Failed` откройте текст Error: Changed не сбрасывается. При `Published` технические hashes обновляются, а Changed у игр сбрасывается.
 
 Синхронизация новых code-slots выполняется через `Ace Games → Sync Content from Site`: новые keys добавляются, существующие переводы сохраняются, исчезнувшие keys помечаются `Inactive`.

@@ -1,0 +1,33 @@
+# Preview overlay: gamma cluster, namespace acegames-www.
+#
+# Google Sheets publishing deploys the same immutable content image to this
+# release and to production. The preview hostname therefore shows exactly the
+# translations that passed the content validation and build gates.
+
+replicaCount: 1
+
+podDisruptionBudget:
+  enabled: false
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+  hosts:
+    - host: preview.acegames.io
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: preview-acegames-io-tls
+      hosts:
+        - preview.acegames.io
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    cpu: 500m
+    memory: 128Mi
