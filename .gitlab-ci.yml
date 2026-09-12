@@ -76,7 +76,11 @@ content:publish:
     - npm run ship
     - git config user.name "Ace Games Content Bot"
     - git config user.email "content-bot@acegames.io"
-    - git add content/published content/sheets src/generated src/content/games src/assets/content
+    - git add -A -- content/published content/sheets src/generated src/content/games
+    - |
+      if [ -d src/assets/content ] || [ -n "$(git ls-files -- src/assets/content)" ]; then
+        git add -A -- src/assets/content
+      fi
     - |
       if git diff --cached --quiet; then
         echo "No generated content changes to commit"
