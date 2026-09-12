@@ -9,7 +9,7 @@ import { localeFromPath, t } from '../lib/i18n';
 const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 
 const youtubeVideoId = 'oHg5SJYRHA0';
-const youtubeEmbedUrl = `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&loop=1&playlist=${youtubeVideoId}&controls=0&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1`;
+const youtubeEmbedUrl = `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=0&loop=1&playlist=${youtubeVideoId}&controls=0&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1`;
 const localVideoPublicPath = '/media/rickroll-d-oHg5SJYRHA0.mp4';
 const localVideoExists = existsSync(
   fileURLToPath(new URL('../../public/media/rickroll-d-oHg5SJYRHA0.mp4', import.meta.url)),
@@ -365,6 +365,7 @@ const localVideoExists = existsSync(
   const startLocalVideo = async () => {
     if (!localVideo) return;
     if (soundToggle) soundToggle.hidden = false;
+    localVideo.volume = 1;
     localVideo.muted = false;
     try {
       await localVideo.play();
@@ -389,6 +390,7 @@ const localVideoExists = existsSync(
           hideVideoFallback();
           if (soundToggle) soundToggle.hidden = false;
           player = target;
+          target.setVolume(100);
           target.unMute();
           target.playVideo();
           waitingForSoundGesture = false;
@@ -441,8 +443,11 @@ const localVideoExists = existsSync(
       hideVideoFallback();
       window.clearTimeout(loadFailureTimer);
       if (player) {
-        player.mute();
+        player.setVolume(100);
+        player.unMute();
         player.playVideo();
+        waitingForSoundGesture = false;
+        setSoundState(true);
         return;
       }
       loadYoutubeFrame();
@@ -464,7 +469,10 @@ const localVideoExists = existsSync(
       window.clearTimeout(fallbackTimer);
       const nextSoundIsOn = player.isMuted();
       waitingForSoundGesture = false;
-      if (nextSoundIsOn) player.unMute();
+      if (nextSoundIsOn) {
+        player.setVolume(100);
+        player.unMute();
+      }
       else player.mute();
       player.playVideo();
       setSoundState(nextSoundIsOn);
