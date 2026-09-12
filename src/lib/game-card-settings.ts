@@ -156,6 +156,9 @@ function mountSettingsSync() {
 }
 
 export function mountGameCardSettings(root: ParentNode = document) {
-  applyGameCardSettings(readGameCardSettings() ?? gameCardDefaults, root);
-  mountSettingsSync();
+  applyGameCardSettings(
+    import.meta.env.DEV ? readGameCardSettings() ?? gameCardDefaults : gameCardDefaults,
+    root,
+  );
+  if (import.meta.env.DEV) mountSettingsSync();
 }

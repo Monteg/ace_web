@@ -11,7 +11,7 @@ const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 
 <section aria-labelledby="event-games-title">
   <div class="wrap">
-    <div class="sec-top rv"><h2 class="d1" id="event-games-title">{event.gamesTitle}</h2></div>
+    <div class="sec-top event-section-title-wrap rv"><h2 class="d1 event-section-title" id="event-games-title">{event.gamesTitle}</h2></div>
     <div class="event-games-grid">
       {event.featuredGames.map((item, index) => (
         <EventGameCard game={games.find(game => game.id === item.id)!} name={item.name} description={item.description} lead={index === 0} />
@@ -22,7 +22,7 @@ const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 </section>
 
 <style>
-  .sec-top { max-width: 49rem; }
+  .sec-top { max-width: none; }
   .event-games-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-5); }
   .games-cta { margin-top: var(--sp-6); }
   @media (max-width: 992px) { .event-games-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

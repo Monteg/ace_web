@@ -75,6 +75,9 @@ function mountSettingsSync() {
 }
 
 export function mountBorderTrailSettings(root: ParentNode = document) {
-  applyBorderTrailSettings(readBorderTrailSettings() ?? borderTrailDefaults, root);
-  mountSettingsSync();
+  applyBorderTrailSettings(
+    import.meta.env.DEV ? readBorderTrailSettings() ?? borderTrailDefaults : borderTrailDefaults,
+    root,
+  );
+  if (import.meta.env.DEV) mountSettingsSync();
 }

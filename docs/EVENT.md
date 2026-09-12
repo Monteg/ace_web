@@ -43,7 +43,9 @@ contact handler needs hosting secrets and does not run in the Astro dev server.
 The event form therefore prepares a real `mailto:` draft without sending data,
 claiming a reservation or displaying artificial availability. The visitor must
 send it from an email application. The requested person, day, Lisbon time,
-company and discussion topics are included. The draft can also be copied.
+company and discussion topics are included. Meeting choices run from 09:00 to
+18:00 Lisbon time in 30-minute ranges; the final option is 17:30–18:00. The
+draft can also be copied.
 
 Setting the common booking URL replaces this form with a link to the real
 scheduler. Individual profile URLs take precedence over the common URL.
@@ -67,7 +69,7 @@ Run the normal Astro diagnostics and `npm run ship`. With Node 24 or newer:
 node --test scripts/event.test.mjs
 ```
 
-These tests cover dates, expiry in the actual early script, valid member
-selection, booking URL precedence and safe email-draft encoding. When `dist`
+These tests cover dates, working-hour meeting ranges, expiry in the actual early
+script, valid member selection, booking URL precedence and safe email-draft encoding. When `dist`
 exists, they also verify the built Event header and canonical URL; build first
 so this check uses the latest source.

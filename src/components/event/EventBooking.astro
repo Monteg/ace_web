@@ -2,13 +2,14 @@
 import { Icon } from 'astro-icon/components';
 import type { EventData } from '../../data/events';
 import { company } from '../../data/site';
-import { eventDateRange, meetingDays } from '../../lib/event';
+import { eventDateRange, meetingDays, meetingTimeSlots } from '../../lib/event';
 import { localeFromPath, localizePath, t } from '../../lib/i18n';
 import type { MeetingEmailCopy } from '../../lib/event-booking';
 interface Props { event: EventData }
 const { event } = Astro.props;
 const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 const days = meetingDays(event, locale);
+const timeSlots = meetingTimeSlots(event);
 const emailCopy = {
   subject: t('event.booking.email.subject', locale),
   greeting: t('event.booking.email.greeting', locale),
@@ -53,7 +54,7 @@ const emailCopy = {
         <p class="field"><label for="meeting-member">{t('event.booking.form.member', locale)}</label><select id="meeting-member" name="member"><option value="team">{t('event.booking.form.team', locale)}</option>{event.team.map(member => <option value={member.id}>{member.name}</option>)}</select></p>
         <div class="form-pair">
           <p class="field"><label for="meeting-day">{t('event.booking.form.day', locale)}</label><select id="meeting-day" name="day" required><option value="">{t('event.booking.form.choose_day', locale)}</option>{days.map(day => <option value={day.value}>{day.label}</option>)}</select></p>
-          <p class="field"><label for="meeting-time">{t('event.booking.form.time', locale)}</label><input id="meeting-time" name="time" type="time" /></p>
+          <p class="field"><label for="meeting-time">{t('event.booking.form.time', locale)}</label><select id="meeting-time" name="time" required><option value="">{t('event.booking.form.time', locale)}</option>{timeSlots.map(slot => <option value={slot.value}>{slot.label}</option>)}</select></p>
         </div>
         <p class="field"><label for="meeting-message">{t('event.booking.form.message', locale)}</label><textarea id="meeting-message" name="message" rows="4" maxlength="5000"></textarea></p>
         <button class="btn btn-primary" type="submit" data-event-track="book_meeting_final">{t('event.booking.form.prepare', locale)}<Icon name="ph:arrow-up-right" aria-hidden="true" /></button>

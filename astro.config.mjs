@@ -3,6 +3,20 @@ import icon from 'astro-icon';
 import sitemap from '@astrojs/sitemap';
 import { DEFAULT_LOCALE, LOCALES } from './locales.mjs';
 
+const devOnlyEffectsLab = {
+  name: 'ace-games-dev-only-effects-lab',
+  hooks: {
+    'astro:config:setup': ({ command, injectRoute }) => {
+      if (command !== 'dev') return;
+      injectRoute({
+        pattern: '/effects-lab',
+        entrypoint: new URL('./src/dev/effects-lab.astro', import.meta.url),
+        prerender: true,
+      });
+    },
+  },
+};
+
 export default defineConfig({
   site: 'https://acegames.io',
   trailingSlash: 'never',
@@ -18,6 +32,7 @@ export default defineConfig({
     },
   },
   integrations: [
+    devOnlyEffectsLab,
     icon({ include: { ph: ['*'] } }),
     sitemap({
       filter: (page) => !/^\/(?:[a-z]{2}\/)?(?:404|effects-lab|under-18)$/.test(new URL(page).pathname),

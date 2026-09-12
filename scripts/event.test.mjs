@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 import { currentEvent } from '../src/data/events.ts';
-import { eventDateRange, isCampaignActive, meetingDays, memberBookingUrl } from '../src/lib/event.ts';
+import { eventDateRange, isCampaignActive, meetingDays, meetingTimeSlots, memberBookingUrl } from '../src/lib/event.ts';
 import { buildMeetingEmail, selectMeetingMember } from '../src/lib/event-booking.ts';
 
 const builtEvent = new URL('../dist/event.html', import.meta.url);
@@ -35,6 +35,13 @@ test('booking dates and person links come from the event configuration', () => {
   assert.equal(memberBookingUrl(currentEvent, member), '/event?member=angelina#book-meeting');
   assert.equal(memberBookingUrl({ ...currentEvent, bookingUrl: 'https://example.com/team' }, member), 'https://example.com/team');
   assert.equal(memberBookingUrl(currentEvent, { ...member, bookingUrl: 'https://example.com/person' }), 'https://example.com/person');
+});
+
+test('booking offers only 30-minute working-hour slots', () => {
+  const slots = meetingTimeSlots(currentEvent);
+  assert.equal(slots.length, 18);
+  assert.deepEqual(slots[0], { value: '09:00–09:30', label: '09:00–09:30' });
+  assert.deepEqual(slots.at(-1), { value: '17:30–18:00', label: '17:30–18:00' });
 });
 
 test('person preselection accepts only configured options', () => {

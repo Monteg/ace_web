@@ -52,8 +52,8 @@ export const CTA = { label: "Let's talk", href: '/#contact' };
 export const socialIntro = 'Stay updated with our latest games, news, and partnerships.';
 
 export const social: { label: string; icon: string; href: string | null }[] = [
-  { label: 'Instagram', icon: 'ph:instagram-logo', href: null },
-  { label: 'LinkedIn', icon: 'ph:linkedin-logo', href: null },
+  { label: 'Instagram', icon: 'ph:instagram-logo', href: 'https://www.instagram.com/acegamesio' },
+  { label: 'LinkedIn', icon: 'ph:linkedin-logo', href: 'https://www.linkedin.com/company/acegamesio' },
 ];
 
 /** Operator and aggregator logos, SVG files in public/partners/. Empty renders nothing. */

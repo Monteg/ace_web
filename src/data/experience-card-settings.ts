@@ -22,8 +22,8 @@ export const EXPERIENCE_CARD_SETTINGS_EVENT = 'ace:experience-card-settings';
 
 export const experienceCardDefaults: ExperienceCardSettings = {
   autoMotionEnabled: true,
-  tiltMax: 12,
-  hoverScale: 1.015,
+  tiltMax: 10.5,
+  hoverScale: 1.03,
   perspective: 2200,
   response: 0.9,
   autoSweepDuration: 3.15,

@@ -176,8 +176,9 @@ Things that are deliberate and should stay unless the owner asks:
 
 ### 6.1. Tune the interactive effects
 
-Open `/effects-lab` locally. This is a technical, `noindex` route without the
-public Header or Footer and it must stay out of navigation and the sitemap.
+Run `npm run dev`, then open `/effects-lab` locally. The route is injected only
+for the dev server from `src/dev/effects-lab.astro`; it is absent from production
+builds as well as public navigation and the sitemap.
 
 The first tool controls the three cards in **Redefining iGaming Excellence**:
 maximum tilt, hover scale, perspective, response time, artwork depth, text
@@ -196,7 +197,8 @@ in the current browser and dispatches a same-tab update. The storage keys are:
 
 Defaults live in their matching `src/data/*-settings.ts` file. Runtime
 normalization and application live in `src/lib/experience-card-motion.ts` and
-`src/lib/border-trail.ts`. Do not add the Border Trail to the card or combine
+`src/lib/border-trail.ts`. Production always uses these built-in defaults and
+does not read a browser's old lab presets. Do not add the Border Trail to the card or combine
 the two settings objects. Every range in the lab has a paired numeric input;
 changing either control updates the other. Its inline Reset returns only that
 value to the latest applied browser preset, while Reset to defaults restores

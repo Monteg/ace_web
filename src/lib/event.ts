@@ -32,3 +32,27 @@ export function meetingDays(event: EventData, locale: Locale = 'en') {
   }
   return days;
 }
+
+function minutesFromTime(value: string) {
+  const [hours, minutes] = value.split(':').map(Number);
+  return hours * 60 + minutes;
+}
+
+function timeFromMinutes(value: number) {
+  return `${String(Math.floor(value / 60)).padStart(2, '0')}:${String(value % 60).padStart(2, '0')}`;
+}
+
+export function meetingTimeSlots(event: EventData) {
+  const start = minutesFromTime(event.meetingHours.start);
+  const end = minutesFromTime(event.meetingHours.end);
+  const interval = event.meetingHours.intervalMinutes;
+  const slots: { value: string; label: string }[] = [];
+
+  for (let at = start; at + interval <= end; at += interval) {
+    const from = timeFromMinutes(at);
+    const to = timeFromMinutes(at + interval);
+    slots.push({ value: `${from}–${to}`, label: `${from}–${to}` });
+  }
+
+  return slots;
+}

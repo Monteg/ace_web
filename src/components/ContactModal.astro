@@ -86,7 +86,10 @@ const { sectionCopy } = getSiteContent(locale);
     }
     for (const trigger of triggers) {
       trigger.hidden = false;
-      trigger.addEventListener('click', () => openDialog(trigger));
+      trigger.addEventListener('click', (event) => {
+        event.preventDefault();
+        openDialog(trigger);
+      });
     }
     document.addEventListener('ace:open-contact', (event: Event) => {
       const detail = (event as CustomEvent<{ opener?: HTMLElement }>).detail;

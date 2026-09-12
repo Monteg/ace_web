@@ -54,7 +54,8 @@ src/lib/*-motion.ts             browser-side experience card and border trail be
 src/layouts/Base.astro          head, SEO, canonical, JSON-LD, skip link, reveal
 src/components/                 Header, Footer, ContactForm, ContactModal, StatTile, DemoEmbed
 src/components/showcase/        the design layer, listed below
-src/pages/                      index, games, portfolio/[slug], event, effects-lab, [legal], thanks, 404
+src/pages/                      public index, games, portfolio/[slug], event, [legal], thanks, 404
+src/dev/effects-lab.astro       dev-only effect controls, injected only by `astro dev`
 src/styles/tokens.css           every colour, size, radius and duration
 src/styles/base.css             type, buttons, chips, icon tiles, the cream block
 src/assets/games/*.webp         key art, one per game (any size)
@@ -146,8 +147,8 @@ tints (`--tint-*`) for icon tiles and type badges, nothing else.
 - Motion only on `transform` and `opacity`, only with a reason (hierarchy,
   storytelling, feedback), always gated behind `prefers-reduced-motion`.
 - `/effects-lab` tunes experience-card motion and navigation Border Trail as
-  two independent effects with separate Apply, Copy and Reset actions. Do not
-  merge them or expose this technical route in public navigation.
+  two independent effects with separate Apply, Copy and Reset actions. It is
+  injected only by `astro dev`; production builds must not contain this route.
 - Buttons are pills. Cards use `--radius-l`. Do not mix.
 - No em-dashes anywhere in copy. Use a comma, a full stop, or a colon.
 - No emoji in markup or copy. Icons come from `astro-icon` (`ph:` Phosphor).

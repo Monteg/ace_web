@@ -8,7 +8,7 @@ The single runtime locale list is `locales.mjs`: `en`, `it`, `pt`, `es`. Both `s
 - DE: `/de`, `/de/games`, `/de/portfolio/pirates-rush`
 - PT and ES follow the same pattern.
 
-Slugs are never translated. Astro's native i18n fallback generates localized games, event, legal, thanks, under-18, 404 and every game route; explicit locale index pages provide `/de`, `/pt`, and `/es`. `effects-lab` is intentionally excluded from the sitemap.
+Slugs are never translated. Astro's native i18n fallback generates localized games, event, legal, thanks, under-18, 404 and every game route; explicit locale index pages provide `/de`, `/pt`, and `/es`. `effects-lab` is injected only by the local dev server and never enters a production build.
 
 ## Field-level fallback
 

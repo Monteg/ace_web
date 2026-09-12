@@ -3,11 +3,13 @@ import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import logo from '../assets/brand/logo.webp';
 import { company, social } from '../data/site';
-import { localeFromPath, localizePath, t } from '../lib/i18n';
+import { localeFromPath, localizePath, stripLocale, t } from '../lib/i18n';
 import { getSiteContent } from '../lib/site-content';
 
 const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 const { nav, socialIntro } = getSiteContent(locale);
+const currentPath = stripLocale(Astro.url.pathname).replace(/\/$/, '').replace(/\.html$/, '') || '/';
+const isHomePage = currentPath === '/';
 ---
 
 <footer class="site-footer">
@@ -26,9 +28,17 @@ const { nav, socialIntro } = getSiteContent(locale);
         <h2>{t('footer.company', locale)}</h2>
         <ul>
           {nav.map((item) => (
-            <li><a href={item.href}>{item.label}</a></li>
+            <li><a href={item.href} data-home-anchor={item.href.includes('#') ? '' : undefined}>{item.label}</a></li>
           ))}
-          <li><a href={localizePath('/#contact', locale)}>{t('footer.contact', locale)}</a></li>
+          <li>
+            <a
+              href={localizePath('/#contact', locale)}
+              data-home-anchor={isHomePage ? '' : undefined}
+              data-contact-open={!isHomePage ? '' : undefined}
+              aria-haspopup={!isHomePage ? 'dialog' : undefined}
+              aria-controls={!isHomePage ? 'contact-dialog' : undefined}
+            >{t('footer.contact', locale)}</a>
+          </li>
         </ul>
       </div>
 

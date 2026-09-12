@@ -108,8 +108,11 @@ function mountSettingsSync() {
 }
 
 export function mountExperienceCardMotion(root: ParentNode = document) {
-  applyExperienceCardSettings(readExperienceCardSettings() ?? experienceCardDefaults, root);
-  mountSettingsSync();
+  applyExperienceCardSettings(
+    import.meta.env.DEV ? readExperienceCardSettings() ?? experienceCardDefaults : experienceCardDefaults,
+    root,
+  );
+  if (import.meta.env.DEV) mountSettingsSync();
 
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
   const compactLayout = window.matchMedia('(max-width: 992px)');

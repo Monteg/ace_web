@@ -6,7 +6,7 @@ const { event } = Astro.props;
 
 <section class="event-why section-continuation" aria-labelledby="why-event-title">
   <div class="wrap">
-    <div class="sec-top rv"><h2 class="d1" id="why-event-title">{event.whyTitle}</h2></div>
+    <div class="sec-top event-section-title-wrap rv"><h2 class="d1 event-section-title" id="why-event-title">{event.whyTitle}</h2></div>
     <ol class="why-grid">
       {event.reasons.map((reason, index) => (
         <li class="reason rv">

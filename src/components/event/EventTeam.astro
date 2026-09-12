@@ -7,7 +7,7 @@ const { event } = Astro.props;
 
 <section class="event-team section-continuation" aria-labelledby="event-team-title">
   <div class="wrap">
-    <div class="sec-top rv"><h2 class="d1" id="event-team-title">{event.teamTitle}</h2></div>
+    <div class="sec-top event-section-title-wrap rv"><h2 class="d1 event-section-title" id="event-team-title">{event.teamTitle}</h2></div>
     <div class="team-grid">{event.team.map(member => <EventTeamMember member={member} event={event} />)}</div>
   </div>
 </section>

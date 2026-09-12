@@ -28,6 +28,7 @@ export const sbcLisbon = {
   introduction: 'Meet the Ace Games team in Lisbon to explore the portfolio, discuss a tailored game for your business, and talk through the route to launch.',
   bookingLabel: 'Book a meeting',
   bookingAnchor: '#book-meeting',
+  meetingHours: { start: '09:00', end: '18:00', intervalMinutes: 30 },
   // Set a real booking URL here, or on an individual team member, when supplied.
   bookingUrl: null as string | null,
   whyTitle: 'Why meet Ace Games?',

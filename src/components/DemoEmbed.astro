@@ -66,7 +66,7 @@ const fullscreenDefault = t('game.media.fullscreen', locale);
 
       <button class="tool-button" type="button" data-copy={src} aria-label={copyDefault}>
         <Icon name="ph:link-simple" aria-hidden="true" />
-        <span data-copy-label>{copyDefault}</span>
+        <span data-copy-label aria-live="polite">{copyDefault}</span>
       </button>
       <button class="tool-button" type="button" data-fullscreen aria-label={fullscreenDefault} hidden>
         <Icon name="ph:corners-out" aria-hidden="true" />
@@ -297,6 +297,28 @@ const fullscreenDefault = t('game.media.fullscreen', locale);
 </style>
 
 <script>
+  async function copyText(value: string) {
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(value);
+        return;
+      } catch {
+        // Continue with the selection-based fallback for restricted browsers.
+      }
+    }
+
+    const field = document.createElement('textarea');
+    field.value = value;
+    field.setAttribute('readonly', '');
+    field.style.position = 'fixed';
+    field.style.opacity = '0';
+    document.body.append(field);
+    field.select();
+    const copied = document.execCommand('copy');
+    field.remove();
+    if (!copied) throw new Error('Clipboard copy was rejected');
+  }
+
   for (const experience of document.querySelectorAll<HTMLElement>('[data-demo-experience]')) {
     const stage = experience.querySelector<HTMLElement>('[data-demo-stage]');
     const demo = experience.querySelector<HTMLElement>('.demo[data-src]');
@@ -318,7 +340,7 @@ const fullscreenDefault = t('game.media.fullscreen', locale);
     copy?.addEventListener('click', async () => {
       const label = copy.querySelector<HTMLElement>('[data-copy-label]');
       try {
-        await navigator.clipboard.writeText(copy.dataset.copy ?? '');
+        await copyText(copy.dataset.copy ?? '');
         if (label) label.textContent = experience.dataset.copied ?? 'Copied';
       } catch {
         if (label) label.textContent = experience.dataset.copyFailed ?? 'Copy failed';

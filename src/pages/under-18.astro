@@ -10,7 +10,8 @@ const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 
 const youtubeVideoId = 'oHg5SJYRHA0';
 const exactVideoUrl = 'https://youtu.be/oHg5SJYRHA0?list=RDoHg5SJYRHA0';
-const youtubeEmbedUrl = `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1`;
+const youtubeOrigin = Astro.url.origin;
+const youtubeEmbedUrl = `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&loop=1&playlist=${youtubeVideoId}&controls=0&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1&origin=${encodeURIComponent(youtubeOrigin)}`;
 const localVideoPublicPath = '/media/rickroll-d-oHg5SJYRHA0.mp4';
 const localVideoExists = existsSync(
   fileURLToPath(new URL('../../public/media/rickroll-d-oHg5SJYRHA0.mp4', import.meta.url)),
@@ -61,7 +62,7 @@ const localVideoExists = existsSync(
         )}
 
         {!localVideoExists && (
-          <div class="under-18-video-fallback" data-under-18-video-fallback hidden>
+          <div class="under-18-video-fallback" data-under-18-video-fallback>
             <p>{t('under18.video_blocked', locale)}</p>
             <a href={exactVideoUrl} target="_blank" rel="noreferrer">{t('under18.play_youtube', locale)}</a>
           </div>
@@ -69,7 +70,7 @@ const localVideoExists = existsSync(
       </div>
 
       <div class="under-18-actions">
-        <button class="sound-toggle" type="button" data-under-18-sound aria-pressed="false" data-label-tap={t('under18.tap_for_sound', locale)} data-label-on={t('under18.sound_on', locale)} data-label-off={t('under18.sound_off', locale)}>{t('under18.tap_for_sound', locale)}</button>
+        <button class="sound-toggle" type="button" data-under-18-sound aria-pressed="false" data-label-tap={t('under18.tap_for_sound', locale)} data-label-on={t('under18.sound_on', locale)} data-label-off={t('under18.sound_off', locale)} hidden={!localVideoExists}>{t('under18.tap_for_sound', locale)}</button>
       </div>
     </section>
 
@@ -77,7 +78,6 @@ const localVideoExists = existsSync(
       <a href="https://www.google.com/" rel="noreferrer">{t('under18.leave', locale)}</a>
     </footer>
   </div>
-</Base>
 
 <style>
   :global(html),
@@ -221,7 +221,7 @@ const localVideoExists = existsSync(
     color: var(--fg);
     background:
       linear-gradient(rgb(8 8 8 / 0.42), rgb(8 8 8 / 0.86)),
-      url('https://i.ytimg.com/vi/oHg5SJYRHA0/maxresdefault.jpg') center / cover no-repeat,
+      url('https://i.ytimg.com/vi/oHg5SJYRHA0/hqdefault.jpg') center / cover no-repeat,
       var(--ink-2);
     text-align: center;
   }
@@ -304,46 +304,21 @@ const localVideoExists = existsSync(
   }
 </style>
 
-<script is:inline src="https://www.youtube.com/iframe_api"></script>
-<script>
-  interface YouTubePlayer {
-    playVideo: () => void;
-    seekTo: (seconds: number, allowSeekAhead?: boolean) => void;
-    mute: () => void;
-    unMute: () => void;
-    isMuted: () => boolean;
-    getPlayerState: () => number;
-  }
-
-  interface YouTubeApi {
-    Player: new (
-      target: string,
-      options: {
-        events: {
-          onReady: (event: { target: YouTubePlayer }) => void;
-          onStateChange: (event: { data: number; target: YouTubePlayer }) => void;
-          onError: () => void;
-        };
-      },
-    ) => YouTubePlayer;
-    PlayerState: { ENDED: number; PLAYING: number };
-  }
-
-  declare global {
-    interface Window {
-      YT?: YouTubeApi;
-      onYouTubeIframeAPIReady?: () => void;
-    }
-  }
-
-  const soundToggle = document.querySelector<HTMLButtonElement>('[data-under-18-sound]');
-  const localVideo = document.querySelector<HTMLVideoElement>('[data-under-18-local-video]');
-  const videoFallback = document.querySelector<HTMLElement>('[data-under-18-video-fallback]');
-  let player: YouTubePlayer | null = null;
+<script is:inline>
+  const soundToggle = document.querySelector('[data-under-18-sound]');
+  const localVideo = document.querySelector('[data-under-18-local-video]');
+  const videoFallback = document.querySelector('[data-under-18-video-fallback]');
+  let player = null;
   let fallbackTimer = 0;
+  let loadFailureTimer = 0;
   let waitingForSoundGesture = true;
 
-  const setSoundState = (soundIsOn: boolean, needsGesture = false) => {
+  const showVideoFallback = () => {
+    if (videoFallback) videoFallback.hidden = false;
+    if (soundToggle) soundToggle.hidden = true;
+  };
+
+  const setSoundState = (soundIsOn, needsGesture = false) => {
     if (!soundToggle) return;
     soundToggle.textContent = needsGesture
       ? soundToggle.dataset.labelTap ?? 'Tap for sound'
@@ -370,6 +345,7 @@ const localVideoExists = existsSync(
 
   const startLocalVideo = async () => {
     if (!localVideo) return;
+    if (soundToggle) soundToggle.hidden = false;
     localVideo.muted = false;
     try {
       await localVideo.play();
@@ -390,6 +366,9 @@ const localVideoExists = existsSync(
     player = new window.YT.Player('under18Player', {
       events: {
         onReady: ({ target }) => {
+          window.clearTimeout(loadFailureTimer);
+          if (videoFallback) videoFallback.hidden = true;
+          if (soundToggle) soundToggle.hidden = false;
           player = target;
           target.unMute();
           target.playVideo();
@@ -407,13 +386,21 @@ const localVideoExists = existsSync(
             target.playVideo();
           }
         },
-        onError: () => {
-          if (videoFallback) videoFallback.hidden = false;
-          if (soundToggle) soundToggle.hidden = true;
-        },
+        onError: showVideoFallback,
       },
     });
   };
+
+  if (!localVideo) {
+    const apiScript = document.createElement('script');
+    apiScript.src = 'https://www.youtube.com/iframe_api';
+    apiScript.async = true;
+    apiScript.addEventListener('error', showVideoFallback, { once: true });
+    document.head.append(apiScript);
+    loadFailureTimer = window.setTimeout(() => {
+      if (!player) showVideoFallback();
+    }, 8000);
+  }
 
   if (soundToggle) {
     soundToggle.addEventListener('click', () => {
@@ -440,3 +427,4 @@ const localVideoExists = existsSync(
     if (!document.hidden) player?.playVideo();
   });
 </script>
+</Base>

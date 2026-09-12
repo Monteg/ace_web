@@ -34,3 +34,16 @@ const description = t('event.seo.description', locale, {
   <EventTopics event={localizedEvent} />
   <EventBooking event={localizedEvent} />
 </Base>
+
+<style is:global>
+  .event-section-title-wrap { max-width: none; }
+  .event-section-title {
+    max-width: none;
+    font-size: clamp(2.6rem, 4vw, 3.5rem);
+    line-height: 0.96;
+    white-space: nowrap;
+  }
+  @media (max-width: 900px) {
+    .event-section-title { white-space: normal; text-wrap: balance; }
+  }
+</style>

@@ -11,7 +11,7 @@ no runtime JavaScript framework, no CMS subscription, no vendor-hosted assets.
 
 The 5 September 2026 checkpoint contains 24 game records and builds 32 static
 pages. In addition to the public home, catalogue, game, event and legal routes,
-it includes the private technical route `/effects-lab`. The lab is excluded
+it includes the private technical route `/effects-lab` in dev mode only. The lab is excluded
 from navigation and the sitemap, carries `noindex`, and lets an editor tune two
 independent browser-side effects:
 
@@ -95,7 +95,8 @@ src/
   lib/format.ts     RTP, max win, volatility and demo URL formatting
   lib/*-motion.ts   card motion and navigation Border Trail behavior
   layouts/Base.astro  head, SEO, canonical, JSON-LD, skip link, scroll reveal
-  pages/            index, games, portfolio/[slug], event, effects-lab, legal, utility routes
+  pages/            public index, games, portfolio/[slug], event, legal and utility routes
+  dev/              dev-only Effects Lab route source
   styles/           tokens.css, base.css, fonts.css
 functions/
   api/contact.ts    the contact form handler, a Cloudflare Pages Function
