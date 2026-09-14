@@ -13,9 +13,13 @@ interface Props {
   eager?: boolean;
   /** Renders larger art and copy; used for the first tile of the grid. */
   featured?: boolean;
+  /** Keeps the shared card artwork and interactions while omitting RTP/volatility. */
+  showStats?: boolean;
+  /** Optional localized copy rendered in the footer instead of statistics. */
+  description?: string;
 }
 
-const { game, eager = false, featured = false } = Astro.props;
+const { game, eager = false, featured = false, showStats = true, description } = Astro.props;
 const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
 const d = getLocalizedGame(game, locale);
 const soon = d.status === 'coming_soon';
@@ -27,7 +31,7 @@ const quickPlayUrl = d.demo ? demoUrl(d.demo, game.id, company.origin) : null;
 const typeLabel = t(`global.game_type.${d.type}_single`, locale);
 ---
 
-<article class:list={['gt', { 'gt-featured': featured, 'gt-layered': layeredArt, 'gt-soon': soon }]} data-game-card data-type={d.type} data-status={d.status}>
+<article class:list={['gt', { 'gt-featured': featured, 'gt-layered': layeredArt, 'gt-soon': soon, 'gt-no-stats': !showStats }]} data-game-card data-type={d.type} data-status={d.status}>
   <div class="gt-surface">
     <a class="gt-link" href={href}>
       <span class="sr-only">{d.name}, {typeLabel}{soon ? `, ${t('global.label.coming_soon', locale)}` : ''}</span>
@@ -73,23 +77,31 @@ const typeLabel = t(`global.game_type.${d.type}_single`, locale);
       </a>
     )}
 
-    <div class="gt-bar">
-      <dl class="gt-meta">
-        <div class="gt-stat">
-          <dt>{t('global.label.rtp', locale)}</dt>
-          <dd class:list={['gt-rtp', 'tnum', { 'gt-rtp-configurable': d.specs.rtp === 'configurable' }]}>{rtp(d.specs.rtp)}</dd>
-        </div>
-        <div class="gt-stat">
-          <dt class="gt-volatility-heading">
-            <span class="vmeter" aria-hidden="true">
-              {bands.map((b) => <i class:list={{ on: d.specs.volatility.includes(b) }}></i>)}
-            </span>
-            <span>{t('global.label.volatility', locale)}</span>
-          </dt>
-          <dd class="gt-volatility">{cardVolatility}</dd>
-        </div>
-      </dl>
-    </div>
+    {showStats && (
+      <div class="gt-bar">
+        <dl class="gt-meta">
+          <div class="gt-stat">
+            <dt>{t('global.label.rtp', locale)}</dt>
+            <dd class:list={['gt-rtp', 'tnum', { 'gt-rtp-configurable': d.specs.rtp === 'configurable' }]}>{rtp(d.specs.rtp)}</dd>
+          </div>
+          <div class="gt-stat">
+            <dt class="gt-volatility-heading">
+              <span class="vmeter" aria-hidden="true">
+                {bands.map((b) => <i class:list={{ on: d.specs.volatility.includes(b) }}></i>)}
+              </span>
+              <span>{t('global.label.volatility', locale)}</span>
+            </dt>
+            <dd class="gt-volatility">{cardVolatility}</dd>
+          </div>
+        </dl>
+      </div>
+    )}
+
+    {!showStats && description && (
+      <div class="gt-description">
+        <p>{description}</p>
+      </div>
+    )}
   </div>
 </article>
 
@@ -344,6 +356,25 @@ const typeLabel = t(`global.game_type.${d.type}_single`, locale);
   .gt-volatility-heading { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
   .gt-volatility-heading .vmeter { flex-shrink: 0; }
 
+  .gt-description {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 4;
+    min-height: 124px;
+    display: flex;
+    align-items: flex-start;
+    padding: var(--sp-5);
+    pointer-events: none;
+    border-radius: 0 0 var(--gc-radius, var(--radius)) var(--gc-radius, var(--radius));
+    background: linear-gradient(180deg, rgb(17 18 20 / 0.9), #111214 34%);
+  }
+  .gt-description p {
+    margin: 0;
+    color: var(--fg-2);
+    font-size: clamp(0.86rem, 4.35cqi, 1rem);
+    line-height: 1.55;
+  }
+
   @container (max-width: 286px) {
     .gt-bar { height: 100px; padding-inline: var(--sp-4); }
     .gt-meta { grid-template-columns: minmax(76px, 0.72fr) minmax(0, 1.48fr); gap: var(--sp-2); }
@@ -353,6 +384,7 @@ const typeLabel = t(`global.game_type.${d.type}_single`, locale);
     .gt-volatility { font-size: 16px; }
     .gt-volatility-heading { gap: 6px; }
     .gt-volatility-heading .vmeter { transform: scale(0.86); transform-origin: left center; margin-right: -4px; }
+    .gt-description { min-height: 116px; padding: var(--sp-4); }
   }
 
   @media (prefers-reduced-motion: reduce) {

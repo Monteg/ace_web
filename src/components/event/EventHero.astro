@@ -25,11 +25,33 @@ const art = ['ace-city', 'zeus-run', 'chicken-doom'].map(id => games.find(game =
       </a>
     </div>
     <div class="hero-art" aria-label={t('event.hero.art_aria', locale)}>
-      {art.map((game, index) => (
-        <div class:list={['hero-art-tile', { 'hero-art-main': index === 0 }]}>
-          <Image src={game.data.card} alt={gameText(game.id, 'card_logo_alt', locale, `${game.data.name} game artwork`)} widths={[320, 460, 640]} sizes={index === 0 ? '(max-width: 768px) 55vw, 340px' : '(max-width: 768px) 35vw, 220px'} loading={index === 0 ? 'eager' : 'lazy'} fetchpriority={index === 0 ? 'high' : 'auto'} />
-        </div>
-      ))}
+      {art.map((game, index) => {
+        const layers = game.data.cardLayers;
+        const alt = gameText(game.id, 'card_logo_alt', locale, `${game.data.name} game artwork`);
+        return (
+          <div class:list={['hero-art-tile', `hero-art-${game.id}`, { 'hero-art-main': index === 0 }]}>
+            <Image
+              class="hero-art-background"
+              src={layers?.background ?? game.data.card}
+              alt={layers ? '' : alt}
+              widths={[320, 460, 640]}
+              sizes={index === 0 ? '(max-width: 768px) 55vw, 340px' : '(max-width: 768px) 35vw, 220px'}
+              loading={index === 0 ? 'eager' : 'lazy'}
+              fetchpriority={index === 0 ? 'high' : 'auto'}
+            />
+            {layers && (
+              <Image
+                class="hero-art-logo"
+                src={layers.logo}
+                alt={alt}
+                widths={[180, 260, 360, 480]}
+                sizes={index === 0 ? '(max-width: 768px) 44vw, 280px' : '(max-width: 768px) 29vw, 180px'}
+                loading={index === 0 ? 'eager' : 'lazy'}
+              />
+            )}
+          </div>
+        );
+      })}
     </div>
   </div>
 </section>
@@ -45,9 +67,24 @@ const art = ['ace-city', 'zeus-run', 'chicken-doom'].map(id => games.find(game =
   .hero-tagline { font-size: var(--step-1); font-weight: 500; line-height: 1.45; max-width: 40ch; }
   .hero-intro { font-size: 1rem; line-height: 1.65; }
   .hero-art { display: grid; grid-template-columns: 1.15fr 0.85fr; grid-template-rows: 1fr 1fr; gap: var(--sp-3); aspect-ratio: 1.1; }
-  .hero-art-tile { overflow: hidden; border-radius: var(--radius-l); background: var(--ink-2); min-height: 0; box-shadow: var(--shadow-1); }
+  .hero-art-tile { position: relative; overflow: hidden; border-radius: var(--radius-l); background: var(--ink-2); min-height: 0; box-shadow: var(--shadow-1); }
   .hero-art-main { grid-row: 1 / -1; margin-block: var(--sp-5); }
-  .hero-art-tile :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .hero-art-tile :global(.hero-art-background) { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+  .hero-art-tile :global(.hero-art-logo) {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    bottom: -10%;
+    width: 60.2%;
+    height: auto;
+    object-fit: contain;
+    transform: translateX(-50%);
+    filter: drop-shadow(0 12px 20px rgb(0 0 0 / 0.5));
+    pointer-events: none;
+  }
+  .hero-art-main :global(.hero-art-logo) { width: 104%; bottom: -10%; }
+  .hero-art-zeus-run :global(.hero-art-logo) { width: 66.22%; bottom: -5%; }
+  .hero-art-chicken-doom :global(.hero-art-logo) { bottom: -5%; }
   @media (max-width: 768px) {
     .event-hero-grid { grid-template-columns: 1fr; gap: var(--sp-6); }
     .hero-copy { gap: var(--sp-4); }

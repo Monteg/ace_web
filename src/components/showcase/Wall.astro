@@ -106,7 +106,13 @@ const rows = [0, 1, 2].map((r) => Array.from({ length: 7 }, (_, i) => pool[(r * 
     opacity: 0.86;
     contain: paint;
   }
-  .wall-tile :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .wall-tile :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 0%;
+  }
 
   /* three speeds, two directions: the depth cue */
   .wall-row-0 { animation: drift-l 64s linear infinite; }

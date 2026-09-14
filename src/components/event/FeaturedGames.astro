@@ -2,6 +2,8 @@
 import { Icon } from 'astro-icon/components';
 import type { CollectionEntry } from 'astro:content';
 import type { EventData } from '../../data/events';
+import aceCityFeatured from '../../assets/event/games/ace-city-featured.png';
+import GameTile from '../showcase/GameTile.astro';
 import EventGameCard from './EventGameCard.astro';
 import { localeFromPath, localizePath, t } from '../../lib/i18n';
 interface Props { event: EventData; games: CollectionEntry<'games'>[] }
@@ -13,9 +15,13 @@ const locale = localeFromPath(Astro.url.pathname, Astro.currentLocale);
   <div class="wrap">
     <div class="sec-top event-section-title-wrap rv"><h2 class="d1 event-section-title" id="event-games-title">{event.gamesTitle}</h2></div>
     <div class="event-games-grid">
-      {event.featuredGames.map((item, index) => (
-        <EventGameCard game={games.find(game => game.id === item.id)!} name={item.name} description={item.description} lead={index === 0} />
-      ))}
+      {event.featuredGames.map((item, index) => {
+        const game = games.find(entry => entry.id === item.id);
+        if (!game) return null;
+        return index === 0
+          ? <EventGameCard game={game} name={item.name} description={item.description} lead image={aceCityFeatured} />
+          : <GameTile game={game} showStats={false} description={item.description} />;
+      })}
     </div>
     <a class="btn btn-ghost games-cta rv" href={localizePath('/games', locale)} data-event-track="explore_all_games">{t('event.games.explore_all', locale)}<span class="disc" aria-hidden="true"><Icon name="ph:arrow-right" /></span></a>
   </div>
